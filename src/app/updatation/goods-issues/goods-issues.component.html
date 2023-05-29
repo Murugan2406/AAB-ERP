@@ -1,0 +1,503 @@
+<div class="gWrapper ">
+    <div *ngIf="header == 'RT_TO_SUP'">
+        <app-header back="true" Titleheader="EMPTY CYLINDER RETURN" (BackClick)="backNavigation()"> </app-header>
+    </div>
+    <div *ngIf="header != 'RETURN' && header != 'RT_TO_SUP'">
+
+        <app-header back="true" Titleheader=" {{header}} ISSUE" (BackClick)="backNavigation()"> </app-header>
+
+    </div>
+    <div *ngIf="header === 'RETURN'">
+        <app-header back="true" Titleheader="GOODS RETURN" (BackClick)="backNavigation()"> </app-header>
+    </div>
+
+
+    <div class="gContent mx-1 row justify-content-center">
+        <div class=" gContent1" *ngIf="isSelection">
+            <div class=" col-12 col-md-8 col-xl-5 px-4">
+                <div class="gcardContainer mt-3" id="ordertype" *ngIf="isOption == 'IssueSave' && header == 'RT_TO_SUP'">
+
+
+                    <div *ngIf="header == 'RT_TO_SUP'" class="gTitle mb-4">
+                        EMPTY CYLINDER RETURN
+                    </div>
+                    <div *ngIf="header != 'RETURN' && header != 'RT_TO_SUP'" class="gTitle mb-4">
+
+                        {{header}} ISSUE
+
+                    </div>
+                    <div *ngIf="header === 'RETURN'" class="gTitle mb-4">
+                        GOODS RETURN
+                    </div>
+                    <div class="gcardBody">
+                        <div class="row " style="margin-top: 1%;">
+                            <div class="col-12 col-md-6  col-xl-4 py-md-2 ">
+                                <label class="gInputLable">Supplier Name</label>
+                            </div>
+                            <div class="col-12 col-md-6 col-xl-8 py-md-2">
+                                <input class="gInnerInput-border" [formControl]="supSearchControl" [matAutocomplete]="auto2" id="suppname" name="suppname">
+                                <mat-autocomplete #auto2="matAutocomplete" (optionSelected)="getSelectsupplier($event.option.viewValue)" class="gAutoCompleteContainer">
+                                    <mat-option *ngFor="let item of suplist" [value]="item?.Branch_Name" class="gSelectOption">{{ item?.Branch_Name }}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <!-- <input type="text" [(ngModel)]="issueTo" class="gInnerInput-border" id="suppname"  name="suppname" > -->
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-md-6  col-xl-4 py-md-2 ">
+                                <label class="gInputLable">Vehicle.No</label>
+                            </div>
+                            <div class="col-12 col-md-6 col-xl-8 py-md-2">
+                                <input type="text" [(ngModel)]="approvedBy" class="gInnerInput-border" id="vehnum" name="vehnum" autocomplete="off">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-md-6  col-xl-4 py-md-2 ">
+                        </div>
+                        <div class="col-12 col-md-6 col-xl-8 py-md-2">
+                            <div class="d-flex justify-content-between">
+                                <div class="p-2 ">
+                                    <button id="next" style="vertical-align:middle;" class="gSaveButton" (click)="selectNext()">Next </button>
+                                </div>
+                                <div class="p-2 "></div>
+                                <div class="p-2 ">
+                                    <button id="view" style="vertical-align:middle" class="gSaveButton" (click)="selectView()">View</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gcardContainer " id="ordertype" *ngIf="isOption === 'IssueSave' && header !== 'RT_TO_SUP'">
+
+                    <div *ngIf="header == 'RT_TO_SUP'" class="gTitle mb-4">
+                        EMPTY CYLINDER RETURN
+                    </div>
+                    <div *ngIf="header != 'RETURN' && header != 'RT_TO_SUP'" class="gTitle mb-4">
+
+                        {{header}} ISSUE
+
+                    </div>
+                    <div *ngIf="header === 'RETURN'" class="gTitle mb-4">
+                        GOODS RETURN
+                    </div>
+                    <div class="gcardBody">
+                        <div class="row " *ngIf="header !== 'WASTAGE'">
+                            <div class="col-12 col-md-6  col-xl-4 py-md-2 " style="margin-top: auto; margin-bottom: auto;">
+                                <label class="gInputLable" *ngIf="header === 'BROKEN'"> Broken Name </label>
+                                <label class="gInputLable" *ngIf="header === 'COMPLEMENTORY'"> Customer </label>
+                                <label class="gInputLable" *ngIf="header === 'FUEL'"> Issue To </label>
+                                <label class="gInputLable" *ngIf="header === 'SAMPLE'"> Customer </label>
+                                <label class="gInputLable" *ngIf="header === 'STAFF'"> Issue To </label>
+                                <label class="gInputLable" *ngIf="header === 'RETURN'"> Destination </label>
+                            </div>
+                            <div class="col-12 col-md-6 col-xl-8 py-md-2">
+                                <div class="">
+                                    <input matInput [formControl]="issueControl" [matAutocomplete]="auto" id="issueToselect" name="issueToselect" autofocus class="gInnerInput-border">
+                                    <mat-autocomplete #auto="matAutocomplete" id="matauto" name="matauto" (optionSelected)='getSelectedCode($event.option.viewValue)' class="gAutoCompleteContainer">
+                                        <mat-option *ngFor="let option of issueToList " [value]="option.brname" class="gSelectOption">
+                                            {{option.brname}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" *ngIf="header !== 'BROKEN' && header !== 'RETURN'">
+                            <div class="col-12 col-md-6  col-xl-4 py-md-2 ">
+                                <label class="gInputLable" *ngIf="header === 'COMPLEMENTORY'">Recommanded By </label>
+                                <label class="gInputLable" *ngIf="header === 'FUEL'">Current Meter </label>
+                                <label class="gInputLable" *ngIf="header === 'SAMPLE'">Employee Code</label>
+                                <label class="gInputLable" *ngIf="header === 'STAFF' || header === 'WASTAGE'">Reason</label>
+                            </div>
+
+                            <div class="col-12 col-md-6 col-xl-8 py-md-2" *ngIf="header === 'WASTAGE' || header === 'COMPLEMENTORY' || header === 'FUEL' || header === 'STAFF'">
+                                <input type="text" class="gInnerInput-border" [(ngModel)]="issueOption" id="isueoption" (keydown)="enterIssueOption($event)"
+                                 (keypress)="changeMeeterValue($event)" autocomplete="off">
+                            </div>
+                            <div class="col-12 col-md-6 col-xl-8 py-md-2" *ngIf="header === 'SAMPLE'">
+                                <div class="row ">
+                                    <div class="col-8 ">
+                                        <input type="text" class="gInnerInput-border " id="empCode" [(ngModel)]="issueOption"
+                                         (keydown)="enterToempcode($event)" autocomplete="off" autocomplete="off">
+                                        <div class="staff mt-2 d-flex gap-2 align-baseline" *ngIf="empname !='' ||empname != null ||empname != undefined  || empname">
+                                            <!-- <span>{{empname}}</span> -->
+                                            <input type="text " *ngIf="empname" readonly class="gInnerInput-border " [value]="empname" autocomplete="off">
+                                            <i class="fa fa-user" aria-hidden="true" *ngIf="empname"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 ">
+                                        <button id="itemCheck" class="gSaveButton " (click)="getEmpDetils()">
+                    <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                  </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" *ngIf="header === 'RETURN'">
+                            <div class="col-12 col-md-6  col-xl-4 py-md-2 ">
+                                <label class="gInputLable">Vehicle No </label>
+                            </div>
+                            <div class="col-12 col-md-6 col-xl-8 py-md-2">
+                                <div class="">
+                                    <input matInput [formControl]="vehSearchControl" [matAutocomplete]="auto5" id="vehicle" name="vehicle" autofocus class="gInnerInput-border">
+                                    <mat-autocomplete #auto5="matAutocomplete" (optionSelected)="selectVeh($event.option.value)" id="matauto2" name="matauto2" class="gAutoCompleteContainer">
+                                        <mat-option *ngFor="let option of vehList " [value]="option.vehicleno" class="gSelectOption">
+                                            {{option.vehicleno}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" *ngIf="header !== 'RETURN'">
+                            <div class="col-12 col-md-6  col-xl-4 py-md-2 ">
+                                <label class="gInputLable" *ngIf="header === 'BROKEN' || header === 'COMPLEMENTORY' || header === 'STAFF' || header === 'WASTAGE'">Approved
+                By </label>
+                                <label class="gInputLable" *ngIf="header === 'FUEL'">Current Fuel Stock</label>
+                                <label class="gInputLable" *ngIf="header === 'SAMPLE' ">Reason</label>
+                            </div>
+                            <div class="col-12 col-md-6 col-xl-8 py-md-2" *ngIf="header === 'BROKEN' || header === 'COMPLEMENTORY' || header === 'STAFF' || header === 'WASTAGE'">
+                                <div class="row ">
+                                    <div class="col-8 ">
+                                        <input type="text" class="gInnerInput-border" [(ngModel)]="approvedBy" id="approvedBy" name="approvedBy" disabled>
+                                    </div>
+                                    <div class="col-4 ">
+                                        <button id="getApprovedBy" class="gSaveButton " (click)="openApprDialog()">
+                    <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                  </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-xl-8 py-md-2" *ngIf="header === 'FUEL' || header === 'SAMPLE'">
+                                <input type="text" class="gInnerInput-border" [(ngModel)]="approvedBy" id="reason" name="reason" 
+                                (keydown)="enterApprBy($event)" (keypress)="changeValue($event)" autocomplete="off">
+                            </div>
+                        </div>
+
+                        <div class="row" *ngIf="header === 'RETURN'">
+                            <div class="col-12 col-md-6  col-xl-4 py-md-2 ">
+                                <label class="gInputLable">Reason</label>
+                            </div>
+                            <div class="col-12 col-md-6 col-xl-8 py-md-2">
+                                <input type="text" class="gInnerInput-border" [(ngModel)]="issueOption" id="reason" name="reason"
+                                 (keydown)="enterApprBy($event)" autocomplete="off" autocomplete="off">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+
+                        <div class="col-12">
+                            <div class="d-flex justify-content-center gap-2">
+                                <div class="p-2 ">
+                                    <button id="next" type="button" style="vertical-align:middle;" class="gSaveButton" (click)="selectNext()">Next </button>
+                                </div>
+
+                                <div class="p-2 ">
+                                    <button id="view"  type="button" style="vertical-align:middle" class="gSaveButton" (click)="selectView()">View</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="gcardContainer mx-xl-5" *ngIf="isOption === 'IssueView'">
+                    <div *ngIf="header != 'RETURN' && header != 'RT_TO_SUP'" class="gTitle mb-4">
+
+                        {{header}} ISSUE
+
+                    </div>
+
+                    <div class="row ">
+                        <div class="col-12 col-md-6  col-xl-4 py-md-2 " style="margin-top: auto; margin-bottom: auto;">
+                            <label class="gInputLable" style="top: 2%;"> From Date </label>
+                        </div>
+                        <div class="col-12 col-md-6 col-xl-8 py-md-2">
+                            <div class="gOuterInput">
+                                <input matInput [matDatepicker]="picker1" [max]="today" (change)="selectFocus('toDate')" [(ngModel)]="trnFrdate" required class="gInnerInput">
+
+                                <mat-datepicker-toggle matSuffix [for]="picker1" class="gInputButton">
+                                    <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #picker1></mat-datepicker>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-md-6  col-xl-4 py-md-2 " style="margin-top: auto; margin-bottom: auto;">
+                            <label class="gInputLable" style="top: 2%;"> To Date </label>
+                        </div>
+                        <div class="col-12 col-md-6 col-xl-8 py-md-2">
+                            <div class="gOuterInput">
+                                <input matInput [matDatepicker]="picker2" id="toDate" (change)="selectFocus('viewNExt')" [max]="today" [(ngModel)]="trntodate" required class="gInnerInput">
+                                <mat-datepicker-toggle matSuffix [for]="picker2" class="gInputButton">
+                                    <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #picker2></mat-datepicker>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+
+
+                        <div class="col-12 d-flex justify-content-center gap-3">
+                            <div class="p-2 ">
+                                <button id="viewNExt" style="vertical-align:middle" class="gSaveButton" (click)="getViwelist()">View getViwelist</button>
+                            </div>
+
+                            <div class="p-2 ">
+                                <button id="cancel" style="vertical-align:middle" class="gSaveButton" (click)="selectCancel()">Cancel</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div  *ngIf="isItems && isOption === 'IssueSave'">
+            <!-- <div class=" gcardContainer mt-2 py-2"> -->
+            <app-select-items></app-select-items>
+            <div class="row justify-content-center">
+                <button mat-raised-button class="gSaveButton col-2" (click)="saveOption()">Save</button>
+            </div>
+        </div>
+
+        <div *ngIf="isItems && isOption === 'IssueView'" class="gTableSection mt-2">
+            <div class="gInnerTable1 gInnerTable ">
+                <table width="100" class="gNormalTable-sm table">
+                    <thead>
+                        <tr>
+                            <th>SNO</th>
+                            <th *ngIf="header != 'WASTAGE'">
+                                <div *ngIf="header === 'BROKEN'"> Broken To </div>
+                                <div *ngIf="header === 'COMPLEMENTORY'||header === 'SAMPLE'||header === 'STAFF'"> Customer </div>
+                                <div *ngIf="header === 'FUEL'">Vehicle</div>
+                                <div *ngIf="header === 'RETURN'">Destination</div>
+                                <div *ngIf="header === 'RT_TO_SUP'">Supplier</div>
+                            </th>
+                            <th>Issue No</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Option</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let issue of individuals; let i = index">
+                            <td (click)="getviweByid(issue.todaydate,issue.TrnNo)"> {{i+1}} </td>
+                            <td (click)="getviweByid(issue.todaydate,issue.TrnNo)" *ngIf="header != 'WASTAGE'">
+                                {{issue.DestiBrname}} </td>
+                            <td (click)="getviweByid(issue.todaydate,issue.TrnNo)"> {{issue.TrnNo}} </td>
+                            <td (click)="getviweByid(issue.todaydate,issue.TrnNo)"> {{issue.todaydate |date: 'dd/MM/yyyy'}} </td>
+                            <td (click)="getviweByid(issue.todaydate,issue.TrnNo)"> {{issue.TrnTime }} </td>
+                            <td (click)="openDialog(issue.TrnNo, i)">
+                                <button mat-icon-button class="gDeleteIcon">
+                                    <i class="material-icons">delete </i>
+                                </button>
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+        <div *ngIf="isView">
+            <div class="d-flex row justify-content-center" style="margin-top: 1%;">
+                <img src=".\assets\gImg\a2b2.png" class="viewLogo">
+            </div>
+            <div class="d-flex row justify-content-between" style="margin-left: 1px;margin-right: 1px;">
+                <div class="col-4 " *ngIf="header != 'WASTAGE' && header != 'RT_TO_SUP'">
+                    <div class="d-flex justify-content-between">
+                        <div class="p-2 " style="color: #806359;" *ngIf="header === 'BROKEN'"> Broken To: </div>
+                        <div class="p-2 " style="color: #806359;" *ngIf="header === 'COMPLEMENTORY'||header === 'SAMPLE'">
+                            Customer: </div>
+                        <div class="p-2 " style="color: #806359;" *ngIf="header === 'STAFF'"> Issue To: </div>
+                        <div class="p-2 " style="color: #806359;" *ngIf="header === 'FUEL'"> Vehicle: </div>
+                        <div class="p-2 " style="color: #806359;" *ngIf="header === 'RETURN'"> Destination: </div>
+                        <div class="p-2 " style="color: #01579B;font-size: 14px;">{{datalist[0].DestiBrname}} </div>
+                        <div class="p-2 "></div>
+                    </div>
+                </div>
+
+                <div *ngIf="header === 'RT_TO_SUP'" class="col-4 ">
+                    <div class="d-flex justify-content-between">
+                        <div class="p-2 " style="color: #806359;"> Supplier: </div>
+                        <div class="p-2 " style="color: #01579B;font-size: 14px;">{{datalist[0].Supp}} </div>
+                    </div>
+                </div>
+
+                <div class="col-4 ">
+                    <div class="d-flex justify-content-between">
+                        <div class="p-2 " style="color: #806359;"> Trn No:</div>
+                        <div class="p-2 " style="color: #01579B;font-size: 14px;">{{datalist[0].TrnNo}}</div>
+                        <div class="p-2 "></div>
+                    </div>
+                </div>
+                <div class="col-4 ">
+                    <div class="d-flex justify-content-between">
+                        <div class="p-2 " style="color: #806359;"> Date</div>
+                        <div class="p-2 " style="color: #01579B;font-size: 14px;">{{datalist[0].todaydate}} {{datalist[0].TrnTime}}
+                        </div>
+                        <div class="p-2 "></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-responsive" id="table_list">
+                <table style="table-layout: auto" class="table table-hover view-Table table-sm shadow-sm p-3 mb-5 bg-white roundede">
+                    <thead>
+                        <tr>
+                            <th>SNO</th>
+                            <th>Icode</th>
+                            <th>Particulars</th>
+                            <th style="text-align: right">QTY</th>
+                            <th>Uom</th>
+                            <th style="text-align: right">Tray</th>
+                            <th>TUom</th>
+                            <th style="text-align: right">Rate</th>
+                            <th style="text-align: right">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let list of datalist;let i = index" class="noBorder">
+                            <td>{{i+1}}</td>
+                            <td>{{list.icode}}</td>
+                            <td>{{list.iname}}</td>
+                            <td style="text-align: right">{{list.qty}}</td>
+                            <td>{{list.uom}}</td>
+                            <td style="text-align: right">{{list.TrayCnt}}</td>
+                            <td>{{list.TrayUom}}</td>
+                            <td style="text-align: right">{{list.irate |currency:'INR'}}</td>
+                            <td style="text-align: right">{{list.qty*list.irate |currency:'INR'}}</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td>TotItems: </td>
+                            <td>{{datalist.length}}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td style="text-align: right;border-bottom:2px dashed #DEE2E6;" class="catname">Grand</td>
+                            <td style="border-bottom:2px dashed #DEE2E6;" class="catname">Total</td>
+                            <td style="border-bottom:2px dashed #DEE2E6;" class="catname"></td>
+                            <td style="text-align: right;border-bottom:2px dashed #DEE2E6;" class="catname">{{printTotal |currency:'INR'}}
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <div class=" row " style="margin-left: 1px;margin-right: 1px;" *ngIf="header==='WASTAGE'||header==='STAFF'||header==='SAMPLE'">
+                <div class="col-12 col-lg-6 col-md-8 d-flex justify-content-between">
+                    <div class="p-2 " style="color: #806359;"> Reason</div>
+                    <div class="p-2 " style="color: #01579B;font-size: 14px;" *ngIf="header==='WASTAGE'||header==='STAFF'">
+                        {{datalist[0].DriverName}}</div>
+                    <div class="p-2 " style="color: #01579B;font-size: 14px;" *ngIf="header==='SAMPLE'">
+                        {{datalist[0].VehicleNo}}</div>
+                    <div class="p-2 "></div>
+                </div>
+            </div>
+
+            <div class=" row " style="margin-left: 1px;margin-right: 1px;" *ngIf="header === 'RETURN'">
+                <div class="col-12 col-lg-6 col-md-8 d-flex justify-content-between">
+                    <div class="p-2 " style="color: #806359;"> Vehicle </div>
+                    <div class="p-2 " style="color: #01579B;font-size: 14px;">{{datalist[0].VehicleNo}}</div>
+                    <div class="p-2 "></div>
+                </div>
+            </div>
+
+            <div class=" row " style="margin-left: 1px;margin-right: 1px;" *ngIf="header === 'COMPLEMENTORY'||header === 'BROKEN'||header === 'WASTAGE'||header==='STAFF' ">
+                <div class="col-12 col-lg-6 col-md-8 d-flex justify-content-between">
+                    <div class="p-2 " style="color: #806359;"> Approved By</div>
+                    <div class="p-2 " style="color: #01579B;font-size: 14px;">{{datalist[0].VehicleNo}}</div>
+                    <div class="p-2 "></div>
+                </div>
+            </div>
+
+            <div class="" style="margin-top: 2%;">
+                <button mat-raised-button class="gSaveButton col-2" id="print_trn" (click)="printDiv(datalist[0].todaydate,datalist[0].TrnNo)">Print</button>
+            </div>
+        </div>
+
+        <div id="Print_Section" #print hidden>
+            <div class="">
+                <img src=".\assets\gImg\a2b2.png" class="pntLogo">
+            </div>
+            <div class=" pntHead">
+                {{header}} ISSUE NOTE
+            </div>
+            <div class="d-flex mb-3 pntdate">
+                <div class="me-auto p-2 ">GTN: {{dcoutItems.TrnNo}} </div>
+                <div class="p-2 ">Date: {{dcoutItems.todaydate }}</div>
+                <div class="p-2 ">Time: {{dcoutItems.TrnTime }}</div>
+            </div>
+            <div class="table-responsive" id="table_list">
+                <table style="table-layout: auto" class="table table-sm print-table">
+                    <thead>
+                        <tr>
+                            <th>SNO</th>
+                            <th>Icode</th>
+                            <th>Particulars</th>
+                            <th style="text-align: right">QTY</th>
+                            <th>Uom</th>
+                            <th style="text-align: right">Tray</th>
+                            <th>TUom</th>
+                            <th style="text-align: right">Rate</th>
+                            <th style="text-align: right">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let list of datalist; let i = index" class="noBorder">
+                            <td>{{i+1}}</td>
+                            <td>{{list.icode}}</td>
+                            <td>{{list.iname}}</td>
+                            <td style="text-align: right">{{list.qty}}</td>
+                            <td>{{list.uom}}</td>
+                            <td style="text-align: right">{{list.TrayCnt}}</td>
+                            <td>{{list.TrayUom}}</td>
+                            <td style="text-align: right">{{list.irate |currency:'INR'}}</td>
+                            <td style="text-align: right">{{list.qty*list.irate |currency:'INR'}}</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td>TotItems: </td>
+                            <td>{{datalist.length}}</td>
+                            <td style="text-align: right"></td>
+                            <td></td>
+                            <td></td>
+                            <td style="text-align: right;border-bottom:2px dashed black;" class="catname">Grand</td>
+                            <td style="border-bottom:2px dashed black;" class="catname">Total</td>
+                            <td style="border-bottom:2px dashed black;" class="catname"></td>
+                            <td style="text-align: right;border-bottom:2px dashed black;" class="catname">{{printTotal | currency:'INR'}}
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="d-flex justify-content-start pntUsr">
+                <div class="p-2 ">{{dcoutItems.Usr}}</div>
+            </div>
+            <div class="d-flex justify-content-between pntdc" style="font-size: 18px">
+                <div class="p-2 ">Prepared By</div>
+                <div class="p-2 ">Checked By</div>
+                <div class="p-2 ">Passed By</div>
+                <div class="p-2 ">Receivers Sign and Seal</div>
+            </div>
+            <hr>
+        </div>
+        <button class="btn btn-primary " style="visibility: hidden;" id="print_btn" [elementToPrint]="print" ngPrint>Print</button>
+    </div>
+
+
+    <div *ngIf="progressval == 'indeterminate'" class="loading">
+        <mat-progress-spinner [mode]="progressval"> </mat-progress-spinner>
+    </div>
+</div>

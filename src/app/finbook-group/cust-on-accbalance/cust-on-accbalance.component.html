@@ -1,0 +1,142 @@
+<div class="wrapper wrapper1">
+    <div class="header">
+        <mat-toolbar color="warn">
+            <mat-toolbar-row class="header-nav">
+                <button mat-button routerLink="/dashboard" type="button">BACK</button>
+
+                <span>
+                    <button mat-button routerLink="/dashboard" type="button">
+                        <mat-icon style="color: #fff">home</mat-icon>
+                    </button>
+                    <button mat-button disabled type="button">
+                        <img class="png-icon" src=".\assets\gImg\a2b2.png" style="max-width: 16px; min-width: 56px" />
+                    </button>
+                </span>
+            </mat-toolbar-row>
+        </mat-toolbar>
+    </div>
+
+
+    <section class="containerSection">
+        <div class="row">
+            <span class="title text-center">Customer On Accouasddasdnt Balance</span>
+        </div>
+        <form class="form row my-3">
+            <div class="col-xl-4 col-sm-6 col-12 mb-2 col-md-4 formFieldsOuter">
+                <div class="p-0">
+                    <label for="inputLabel" class="inputLabel">Location/ Branch</label>
+                </div>
+
+                <div class="outerInput">
+                    <input class="innerInput" (input)="sortBranchName($event.target.value)" (keydown)="keytab($event)" [matAutocomplete]="autocmpsingle" [formControl]="BranchName" matInput />
+                    <mat-autocomplete id="autocmpsingle" #autocmpsingle="matAutocomplete" [displayWith]="displayBr">
+                        <mat-option *ngFor="let option of branchLists" [value]="option" (onSelectionChange)="BrSelected($event)">
+                            {{ option.brname}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-sm-6 col-12 mb-2 col-md-4 formFieldsOuter">
+                <div class="p-0">
+                    <label for="inputLabel" class="inputLabel">Customer Name</label>
+                </div>
+                <div class="outerInput">
+                    <input class="innerInput" (input)="sortCustomerName($event.target.value)" id="customerName" (keydown)="keytab($event)" [matAutocomplete]="autoCustomer" [formControl]="CustomerName" matInput />
+                    <mat-autocomplete #autoCustomer="matAutocomplete" [displayWith]="displayCustomer">
+                        <mat-option *ngFor="let option of customerList" [value]="option" (onSelectionChange)="CustomerSelected($event)">
+                            {{ option.name }}
+                        </mat-option>
+                    </mat-autocomplete>
+                    <button type="button" id="goButton" mat-button class="goButton" (click)="checkvalidation()">
+                        &#x21bb;
+                    </button>
+                </div>
+            </div>
+            <div class="col-xl-4 col-sm-12 col-12 col-md-4 createsearch d-flex">
+                <form role="search" class="search-form mx-2">
+                    <input type="search" name="Search" class="search-text" #input (ngModelChange)="applyFilter($event)" [(ngModel)]="searchTemp" autocomplete="off" />
+                </form>
+            </div>
+        </form>
+
+        <section class="tableSection">
+            <table class="table table-striped" mat-table [dataSource]="datasource">
+                <ng-container *ngFor="let col of displayedColumns" [matColumnDef]="col">
+                    <th mat-header-cell *matHeaderCellDef>
+                        <span *ngIf="col === 'S.No'" style="max-width: 40px !important">S.No</span>
+                        <span *ngIf="col === 'Custcode'">Customer Code</span>
+                        <span *ngIf="col === 'Customer'">Customer Name</span>
+                        <span *ngIf="col === 'AdvBal'">Advance Amount</span>
+                        <span *ngIf="col === 'Action'">Action</span>
+                    </th>
+                    <td mat-cell *matCellDef="let row; let i = index">
+                        <span *ngIf="col === 'S.No'" style="max-width: 40px !important">{{i + 1}}</span>
+                        <span *ngIf="col !== 'SNo' && col !== 'Action'">{{ row[col] }}</span>
+                        <span *ngIf="col === 'Action'" style="min-width: 40px">
+                            <button mat-icon-button class="editbutton" color="primary"
+                                (click)="EditPopUp(EditAccBalance)" matTooltip="Edit">
+                                &#xf304;
+                            </button>
+                            <button mat-icon-button class="editbutton" color="primary" (click)="ViewMore(row)"
+                                matTooltip="View">
+                                <mat-icon>View</mat-icon>
+                            </button>
+                        </span>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell text-center" *ngIf="!loading" [attr.colspan]="displayedColumns.length + 1">
+                        No records found.
+                    </td>
+                </tr>
+            </table>
+            <div class="item" *ngIf="loading">
+                <ngx-skeleton-loader count="5"></ngx-skeleton-loader>
+            </div>
+        </section>
+
+        <ng-template #EditAccBalance>
+            <h1 class="popUptitle">Edit Customer On Account Amount</h1>
+            <form [formGroup]="CreateAccBalance" class="row form1">
+                <mat-form-field class="col-12 forminput1">
+                    <mat-label>Customer Name</mat-label>
+                    <input type="text" formControlName="CustName" matInput [matAutocomplete]="autopoup" (keydown)="keytab($event)" />
+                    <mat-autocomplete #autopoup="matAutocomplete" [displayWith]="displayFn">
+                        <mat-option *ngFor="let option of ViewCampNameOptionsListOne" [value]="option">
+                            {{ option.company }}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+                <mat-form-field class="col-12 forminput1">
+                    <mat-label>Current Amount</mat-label>
+                    <input type="text" class="" formControlName="CurrAmt" matInput autocomplete="off" (keydown)="keytab($event)" />
+                </mat-form-field>
+
+                <mat-form-field class="col-12 forminput1">
+                    <mat-label>New Amount</mat-label>
+                    <input matInput type="text" formControlName="NewAmt" autocomplete="off" (keydown)="keytab($event)" />
+                </mat-form-field>
+                <mat-form-field class="col-12 forminput1">
+                    <mat-label>Different Adjust Amount</mat-label>
+                    <input matInput type="text" formControlName="diffAdjAmt" autocomplete="off" (keydown)="keytab($event)" />
+                </mat-form-field>
+
+                <div class="col-12 mb-2 d-flex text-center justify-content-center">
+                    <button type="button" id="submit" mat-button class="Savebutton" (click)="popUpSubmit()">
+                        Update
+                    </button>
+
+                    <button type="button" id="submit" mat-button class="Closebuttons" (click)="dialog.closeAll()">
+                        &#x2715;
+                    </button>
+                </div>
+            </form>
+        </ng-template>
+    </section>
+</div>

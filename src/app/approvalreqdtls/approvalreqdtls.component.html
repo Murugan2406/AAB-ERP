@@ -1,0 +1,52 @@
+<div class="wrapper">
+<!-- <div layout="column" layout-fill> -->
+
+    <div class="header">
+      <mat-toolbar color ="warn">
+        <mat-toolbar-row>
+          <button mat-button routerLink="/approvalreqcons"> BACK</button>
+            <span class="example-spacer"></span>
+            <mat-chip-list>
+              <mat-chip color="basic" selected="true" routerLink="/orderdtls">Items</mat-chip>
+              <mat-chip color="primary" selected="true" (click)="approveRequest()">Approve</mat-chip>
+              <mat-chip color="primary" selected="true" (click)="showCancellReasonDiv()">Reject</mat-chip>
+            </mat-chip-list>
+        </mat-toolbar-row>
+      </mat-toolbar>
+  </div>
+
+  <div class="content">
+        <!-- Reject Reason -->
+        <div class="container" *ngIf="reasonVisible == true" >
+        <br>
+        <form novalidate #f ="ngForm" (ngSubmit)="onSubmit(f)" >
+            <div class="">
+                <label>Reject Reason</label>
+                <input type="text" class="form-control" [(ngModel)]="lguser.reason" name ="reason" #reasonInput="ngModel" required />
+            </div>
+
+        <div *ngIf="reasonInput.errors?.required && reasonInput.touched" class="alert alert.danger"> Reason is required </div>
+        <input type="submit" class="btn btn-success" vaalue ="Submit" />
+        </form>
+        </div>
+      <!-- Reject Reason -->
+
+      <!-- LOADING ICON -->
+      <div *ngIf="mode == 'indeterminate'" class="loading">
+            <mat-progress-spinner [mode]="progressval">
+            </mat-progress-spinner>
+      </div>
+       <!-- LOADING ICON -->
+
+
+        <table class="table table-sm table-hover">
+        <tr *ngFor="let recordg of getApprovalData">
+            <td>{{recordg?.HeaderG}}</td>
+            <td>{{recordg?.ValueG}}</td>
+        </tr>
+        </table>
+
+  </div>
+<!-- </div> -->
+
+</div>

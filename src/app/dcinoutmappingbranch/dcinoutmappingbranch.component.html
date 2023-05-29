@@ -1,0 +1,103 @@
+
+<div class=" d-flex align-items-center justify-content-center " *ngIf="progressval == 'indeterminate'"  style="position: fixed; top:0; bottom: 0; left: 0; right: 0; z-index: 10001 !important; backdrop-filter: blur(2px);">
+    <mat-spinner></mat-spinner>
+</div>
+
+
+<div class="gWrapper">
+    <app-header back="true" (BackClick)="backNavigation()" Titleheader="DC IN-OUT BRANCH MAPPING"></app-header>
+    <div class="example-container">
+
+        <div class="row mx-2 mt-2">
+            <div class="col-3 col-lg-2 col-md-2 col-xl-1 ">
+                <label class="gInputLable"> Location</label>
+            </div>
+            <div class="col-9 col-lg-4 col-md-4 col-xl-3 ">
+                <input type="text" id="fromlocate" aria-label="Number" matInput [formControl]="locationControl"
+                    [matAutocomplete]="auto1" class="gInnerInput">
+                <mat-autocomplete #auto1="matAutocomplete" class="gAutoCompleteContainer"
+                    (optionSelected)='changeFromlocation($event.option.viewValue)'>
+                    <mat-option *ngFor="let item of locations" [value]="item?.brname" class="gSelectOption">
+                        {{ item?.brname }}
+                    </mat-option>
+                </mat-autocomplete>
+            </div>
+
+            <div class="col-3 col-lg-2 col-md-2 col-xl-1 ">
+                <label class="gInputLable"> Trn Type</label>
+            </div>
+            <div class="col-9 col-lg-4 col-md-4 col-xl-3 ">
+
+                <mat-select [(value)]="trnType" class="gInnerInput" id="trnType" (selectionChange)="onChangeTrntype()">
+                    <div *ngFor="let reg of trnTypes">
+                        <mat-option [value]="reg.TrnType" class="gSelectOption">
+                            {{reg.TrnType}}
+                        </mat-option>
+                    </div>
+                </mat-select>
+
+            </div>
+
+            <div class="col-3 col-lg-2 col-md-2 col-xl-1 ">
+                <label class="gInputLable"> Add New </label>
+            </div>
+            <div class="col-9 col-lg-4 col-md-4 col-xl-3 ">
+                <div class="gOuterInput">
+                    <input type="text" id="fromFacts" aria-label="Number" matInput [formControl]="branchControl"
+                        [matAutocomplete]="auto2" class="gInnerInput">
+                    <mat-autocomplete #auto2="matAutocomplete" class="gAutoCompleteContainer"
+                        (optionSelected)='changeTolocation($event.option.viewValue)'>
+                        <mat-option *ngFor="let item of branches" [value]="item?.brname" class="gSelectOption">
+                            {{ item?.brname }}
+                        </mat-option>
+                    </mat-autocomplete>
+                    <button class="gInputButton" mat-button id="addbtn" (click)="checkOptions()">
+                        <mat-icon>add</mat-icon> </button>
+                </div>
+            </div>
+            <div class="col-3  ">
+
+            </div>
+        </div>
+
+
+        <div class="gTableSection mx-2 mt-2">
+            <div class="gTableActionheaders">
+                <form role="search" class="search-form ml-3">
+                    <input type="search" name="Search" class="gSearchText" #input autocomplete="off"
+                        [(ngModel)]="viewSearch" />
+                </form>
+            </div>
+            <div class="gInnerTable" id="table_list" style="max-height: calc(100vh - 130px);">
+                <table class="gNormalTable-sm table">
+                    <thead>
+                        <tr>
+                            <th>S.no</th>
+                            <th>Brcode</th>
+                            <th>Branch Name</th>
+                            <th style="text-align: center;">Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of List |filter:viewSearch;let i = index">
+                            <td>{{i+1}}</td>
+                            <td> {{item.tobrcode}}</td>
+                            <td> {{item.brname}}</td>
+                            <td style="text-align: center;">
+                                <button mat-icon-button class="gDeleteIcon"  (click)="confirmation(item.brname, 'Delete',item)" >
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+            </td>
+                        </tr>
+                        <tr *ngIf="List.length === 0">
+                            <td colspan="5" class="text-center">No record found</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+  
+
+    </div>
+</div>

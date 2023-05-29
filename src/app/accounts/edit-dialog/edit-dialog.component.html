@@ -1,0 +1,55 @@
+
+    <div class="gDialogTitle">
+        <span></span>
+        <span class="">Add New Card Settlement</span>
+
+        <button type="button" id="submit" mat-button class="gDialogCloseButton" (click)="onNoClick()">
+            <mat-icon style="line-height: 1 !important;">close</mat-icon>
+        </button>
+    </div>
+
+
+    <form [formGroup]="EmployeeForm" class="row gDialogContainer mx-2">
+        <div class=" col-xl-6 col-md-6 col-sm-12 mt-2">
+            <mat-label class="gInputLable">BankName</mat-label>
+            <input type="text" class="gInnerInput-border" (keydown)="keytab1($event,'TId')" (input)="onSearchChange($event.target.value)" formControlName="BankName"  matInput [matAutocomplete]="auto">
+            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" class="gAutoCompleteContainer">
+                <mat-option *ngFor="let option of filteredOptions" [value]="option.BankName" (click)="setValue(option.BankName)" class="gSelectOption">
+                    {{option.BankName}}
+                </mat-option>
+            </mat-autocomplete>
+
+        </div>
+        <div class=" col-xl-6 col-md-6 col-sm-12 mt-2">
+            <mat-label class="gInputLable">TId</mat-label>
+            <input type="text" class="gInnerInput-border" (valuechanges)="setMidAccNo($event.value)" (keydown)="keytab1($event,'RunFrom')" (input)="onSearchTid($event.target.value)" id="TId" formControlName="TId"  matInput [matAutocomplete]="autoTid">
+            <mat-autocomplete autoActiveFirstOption #autoTid="matAutocomplete" class="gAutoCompleteContainer">
+                <mat-option *ngFor="let option of filteredTids " [value]="option.Tid" class="gSelectOption">
+                    {{option.Tid}}
+                </mat-option>
+            </mat-autocomplete>
+        </div>
+
+        <div class="col-xl-6 col-md-6 col-sm-12 mt-2">
+            <mat-label class="gInputLable">RunFrom </mat-label>
+            <input matInput type="text"  class="gInnerInput-border"formControlName="RunFrom" (keydown)="keytab1($event,'RunTo')" id="RunFrom"  autocomplete="off">
+        </div>
+
+        <div class="col-xl-6 col-md-6 col-sm-12 mt-2">
+            <mat-label class="gInputLable">RunTo </mat-label>
+            <input matInput type="text" class="gInnerInput-border" formControlName="RunTo" (keydown)="keytab1($event,'Amount')" id="RunTo" autocomplete="off">
+        </div>
+
+        <div class="col-xl-6 col-md-6 col-sm-12 mt-2">
+            <mat-label class="gInputLable">Amount</mat-label>
+            <input matInput type="number" class="gInnerInput-border" formControlName="Amount" (keydown)="keytab1($event,'savebtn')" id="Amount">
+        </div>
+
+
+        <div class="col-12 d-flex justify-content-center mt-4 gap-3"  >
+
+        <button mat-button cdkFocusInitial type="submit" id="savebtn" class="gSaveButton" (click)="addnew()">Save</button>
+        <button mat-button type="button" class="gDeleteButton"  (click)="onNoClick()">Cancel</button>
+    </div>
+    </form>
+

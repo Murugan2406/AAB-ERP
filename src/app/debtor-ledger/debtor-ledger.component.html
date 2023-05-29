@@ -1,0 +1,1106 @@
+<div class="wrapper">
+    <div class="header">
+        <mat-toolbar color="warn">
+            <mat-toolbar-row>
+                <button mat-button (click)="backNavigation()">BACK</button>
+                <span class="example-spacer"></span>
+                <span class="example-spacer"></span>
+                <button mat-button (click)="home()">
+                    <span class="material-icons">home</span>
+                </button>
+                <button mat-button disabled>
+                    <img class="png-icon" src=".\assets\gImg\a2b2.png" style="max-width: 56px; min-width: 56px" />
+                </button>
+            </mat-toolbar-row>
+        </mat-toolbar>
+    </div>
+    <div class="content" *ngIf="isSelect === 'form'">
+        <div class="container-fluid">
+            <h3 *ngIf="option === 'debtor'" class="text-center title">Debtor Ledger</h3>
+            <h3 *ngIf="option === 'creditor'" class="text-center title1">Creditor Ledger</h3>
+            <div class="card">
+                <form [formGroup]="DebtorForm" (ngSubmit)="proceed()">
+                    <div class="row">
+                        <mat-form-field class=" col-md-4">
+                            <mat-label>Financial Year</mat-label>
+                            <mat-select formControlName="defaultYear" (selectionChange)="YearOnChange()"
+                                (keydown)="keytab($event)">
+                                <mat-option class="option" *ngFor="let year of fYear" [value]="year.fyear">
+                                    {{year.fyear}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field class=" col-md-4">
+                            <mat-label>From</mat-label>
+                            <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker"
+                                formControlName="fdate" required (keydown)="keytab($event)" autocomplete="off">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-error>Invalid from date.</mat-error>
+                            <mat-datepicker #picker (opened)="onOpen()">
+                            </mat-datepicker>
+                        </mat-form-field>
+                        <div style="display: none">
+                            <div class="datepicker-footer" #datepickerFooter>
+                                <button mat-raised-button color="primary" (click)="today('fdate')">
+                                    Today
+                                </button>
+                            </div>
+                        </div>
+                        <!-- *ngIf="this.DebtorForm.get('fdate').value > this.DebtorForm.get('tdate').value
+                                || this.DebtorForm.get('tdate').value < this.DebtorForm.get('fdate').value" -->
+                        <mat-form-field class=" col-md-4">
+                            <mat-label>To</mat-label>
+                            <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker1"
+                                formControlName="tdate" required (keydown)="keytab($event)" autocomplete="off">
+                            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                            <mat-error>Invalid To date.</mat-error>
+                            <mat-datepicker #picker1 (opened)="onOpen1()">
+                            </mat-datepicker>
+                        </mat-form-field>
+                        <div style="display: none">
+                            <div class="datepicker-footer" #datepickerFooter1>
+                                <button mat-raised-button color="primary" (click)="today('tdate')">
+                                    Today
+                                </button>
+                            </div>
+                        </div>
+                        <mat-form-field class=" col-md-4">
+                            <mat-label>State</mat-label>
+                            <mat-select formControlName="stateValue" (selectionChange)="StateOnChange($event)"
+                                (keydown)="keytab($event)">
+                                <mat-option class="option" *ngFor="let state of stateLoad" [value]="state.state_reg">
+                                    {{state.state_reg}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field class=" col-md-4" *ngIf="option == 'debtor'">
+                            <mat-label>Location</mat-label>
+                            <input type="text" matInput [formControl]="DebtorlocControl" [matAutocomplete]="auto"
+                                [(ngModel)]="DLocation" (keydown)="keytab($event)">
+                            <mat-autocomplete #auto="matAutocomplete">
+                                <mat-option class="option" *ngFor="let branch of DbrhLoad"
+                                    (onSelectionChange)="DebtorBranchOnChange($event,branch)" [value]="branch.brname">
+                                    {{branch.brname}}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                        <mat-form-field class=" col-md-4" *ngIf="option == 'creditor'">
+                            <mat-label>Finbook</mat-label>
+                            <input type="text" matInput [formControl]="CreditorlocControl" [matAutocomplete]="auto2"
+                                [(ngModel)]="CLocation" (keydown)="keytab($event)">
+                            <mat-autocomplete #auto2="matAutocomplete">
+                                <mat-option class="option" *ngFor="let branch of CbrhLoad"
+                                    (onSelectionChange)="CreditorBranchOnChange($event,branch)" [value]="branch.FB_ID">
+                                    {{branch.FB_ID}}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+
+                        <mat-form-field class=" col-md-4" *ngIf="option == 'debtor'">
+                            <mat-label>Debtors</mat-label>
+                            <input type="text" matInput [formControl]="debtorControl" [matAutocomplete]="auto1"
+                                [(ngModel)]="debtor" (keydown)="keytab($event)">
+                            <mat-autocomplete #auto1="matAutocomplete">
+                                <mat-option class="option" *ngFor="let option of debtorList"
+                                    (onSelectionChange)="detorOnChange(option)" [value]="option.CustomerName">
+                                    {{option.CustomerName}}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+
+                        <mat-form-field class=" col-md-4" *ngIf="option == 'creditor'">
+                            <mat-label>Creditors</mat-label>
+                            <input type="text" matInput [formControl]="creditorControl" [matAutocomplete]="auto3"
+                                [(ngModel)]="creditor" (keydown)="keytab($event)">
+                            <mat-autocomplete #auto3="matAutocomplete">
+                                <mat-option class="option" *ngFor="let option of creditorList"
+                                    (onSelectionChange)="creditorOnChange(option)" [value]="option.Suppliername">
+                                    {{option.Suppliername}}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+
+                        <mat-form-field class=" col-md-4">
+                            <mat-label>View</mat-label>
+                            <mat-select [(value)]="SelectedView" (selectionChange)="ViewOnChange($event)"
+                                (keydown)="keytab($event)">
+                                <mat-option value="Monthly">Monthly</mat-option>
+                                <mat-option value="Consolidated">Consolidated</mat-option>
+                                <mat-option *ngIf="debtor != 'ALL' && creditor != 'ALL'" value="InvDetailed">Detailed
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field class=" col-md-4" *ngIf="SelectedView === 'Consolidated'">
+                            <mat-label>Option</mat-label>
+                            <mat-select [(value)]="SelectedType" (keydown)="keytab($event)">
+                                <mat-option value="Closing Balance">Closing Balance</mat-option>
+                                <mat-option value="OP|DR|CR|CL">OP|DR|CR|CL</mat-option>
+
+                            </mat-select>
+                        </mat-form-field>
+                        <div class="text-center spinner-button col-md-12">
+                            <button mat-flat-button type="submit" [disabled]="loading">
+                                <span>Proceed</span>
+                                <mat-spinner diameter="20" *ngIf="loading" class="mat-spinner-color">
+                                </mat-spinner>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="content" *ngIf="isSelect === 'ListTblMonthly'">
+        <div class="monthview">
+            <!-- Monthly Table-->
+            <div class="row" *ngIf="option == 'debtor'">
+                <div class="col-12 col-md-12">
+                    <h4 class="heading">{{DebtorForm.value.fdate | date:'dd-MMM-yyyy'}} to {{DebtorForm.value.tdate |
+                        date:'dd-MMM-yyyy'}} | Reg : {{DebtorForm.value.stateValue}} | Loc :
+                        {{branchname}} | Debtors : {{customername}} </h4>
+                </div>
+            </div>
+            <div class="row" *ngIf="option == 'creditor'">
+                <div class="col-12 col-md-12">
+                    <h4 class="heading">{{DebtorForm.value.fdate | date:'dd-MMM-yyyy'}} to {{DebtorForm.value.tdate |
+                        date:'dd-MMM-yyyy'}} | Reg : {{DebtorForm.value.stateValue}} | Loc :
+                        {{CLocation}} | Creditors : {{CreditorS_name}} </h4>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-borderless Monthly" id="info_monthly">
+                    <thead>
+                        <tr>
+                            <th style="width: 10%;">Particulars</th>
+                            <th style="width: 48%;"></th>
+                            <th style="width: 6%;"><i class="fa fa-hand-o-right"></i></th>
+                            <th class="text-end" style="width: 12%;" *ngIf="option == 'debtor'">Sales [Dr]</th>
+                            <th class="text-end" style="width: 12%;" *ngIf="option == 'creditor'">Paid</th>
+                            <th class="text-end" style="width: 12%;" *ngIf="option == 'debtor'">Receipts [Cr]</th>
+                            <th class="text-end" style="width: 12%;" *ngIf="option == 'creditor'">Purchased</th>
+                            <th class="text-end" style="width: 12%;">Closing Balance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><b>Opening Balance</b></td>
+                            <td></td>
+                            <td></td>
+                            <td class="text-end">
+                                <div *ngIf="openStk > 0 ">
+                                    {{openStk.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}
+                                </div>
+                            </td>
+                            <td class="text-end">
+                                <div *ngIf="openstkdr > 0 ">
+                                    {{openstkdr.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}
+                                </div>
+                            </td>
+                            <td class="text-end"></td>
+                        </tr>
+                        <tr class="pointer" *ngFor="let data of MonthlyData ;let i = index" (click)="highlgtMonth(i)"
+                            [class.active]="data.Month == HighlightRow || data == HighlightRow">
+                            <ng-container *ngIf="data.Sales != null && data.Receipts != null ">
+                                <td>{{data.Month}}</td>
+                                <td>{{data.Year}}</td>
+                                <td (click)="ShowContable(data)"><span class="material-icons mi">
+                                        skip_next
+                                    </span></td>
+                                <td class="text-end" *ngIf="data.Sales != 0;else nextblock">
+                                    {{data.Sales.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}
+                                </td>
+                                <ng-template #nextblock>
+                                    <td class="text-end"></td>
+                                </ng-template>
+                                <td class="text-end" *ngIf="data.Receipts != 0;else nextblock1">
+                                    {{data.Receipts.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}
+                                </td>
+                                <ng-template #nextblock1>
+                                    <td class="text-end"></td>
+                                </ng-template>
+                                <td class="text-end">{{data.Closing}}</td>
+                            </ng-container>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td><b>Current Total (Rs)</b></td>
+                            <td></td>
+                            <td class="text-end">
+                                <b>{{debittot.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}</b>
+                            </td>
+                            <td class="text-end">
+                                <b>{{credittot.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}</b>
+                            </td>
+                            <td class="text-end"></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td *ngIf="option == 'debtor'">
+                                <div *ngIf="ClosingReceivable">
+                                    <b>Closing Balance Receivable (Rs)</b>
+                                </div>
+                                <div *ngIf="ClosingPayable">
+                                    <b> Closing Balance Payable (Rs)</b>
+                                </div>
+                                <div *ngIf="closingBal">
+                                    <b> Closing Balance (Rs)</b>
+                                </div>
+                            </td>
+                            <td *ngIf="option == 'creditor'">
+                                <div *ngIf="ClosingReceivable">
+                                    <b>Closing Balance (Rs)</b>
+                                </div>
+                                <div *ngIf="ClosingPayable">
+                                    <b> Closing Balance (Rs)</b>
+                                </div>
+                                <div *ngIf="closingBal">
+                                    <b> Closing Balance (Rs)</b>
+                                </div>
+                            </td>
+                            <td></td>
+                            <td class="text-end">
+                                <b>{{
+                                    ClosingPayable.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}</b>
+                            </td>
+                            <td class="text-end">
+                                <b>{{
+                                    ClosingReceivable.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}</b>
+                            </td>
+                            <td class="text-end">
+                                <b>{{closingBal.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}</b>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="loader" *ngIf="isloader">
+                    <mat-spinner diameter="30" color="primary">
+                    </mat-spinner>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content" *ngIf="isSelect === 'ListTblConstd'">
+        <div class="Accounts2">
+            <!--  Consolidated Table -->
+            <div class="row" *ngIf="option == 'debtor'">
+                <div class="col-10 col-md-10" *ngIf="MonthFdate && MonthTdate; else next">
+                    <h4 class="heading">{{MonthFdate}} to {{MonthTdate}} | Reg : {{DebtorForm.value.stateValue}} | Loc :
+                        {{branchname}} | Debtors : {{customername}}</h4>
+                </div>
+                <ng-template #next>
+                    <div class="col-10 col-md-10">
+                        <h4 class="heading">{{DebtorForm.value.fdate | date:'dd-MMM-yyyy'}} to {{DebtorForm.value.tdate
+                            | date:'dd-MMM-yyyy'}} | Reg : {{DebtorForm.value.stateValue}} | Loc :
+                            {{branchname}} | Debtors : {{customername}} </h4>
+                    </div>
+                </ng-template>
+                <div class="col-2 col-md-2  text-end">
+                    <i class="fa fa-file-excel-o" (click)="consoltdexcel()"></i>
+                </div>
+            </div>
+            <div class="row" *ngIf="option == 'creditor'">
+                <div class=" col-10 col-md-10" *ngIf="MonthFdate && MonthTdate; else next">
+                    <h4 class="heading">{{MonthFdate}} to {{MonthTdate}} | Reg : {{DebtorForm.value.stateValue}} | Loc :
+                        {{CLocation}} | Creditors : {{CreditorS_name}}</h4>
+                </div>
+                <ng-template #next>
+                    <div class=" col-10 col-md-10">
+                        <h4 class="heading">{{DebtorForm.value.fdate | date:'dd-MMM-yyyy'}} to {{DebtorForm.value.tdate
+                            | date:'dd-MMM-yyyy'}} | Reg : {{DebtorForm.value.stateValue}} | Loc :
+                            {{CLocation}} | Creditors : {{CreditorS_name}} </h4>
+                    </div>
+                </ng-template>
+                <div class="col-2 col-md-2 text-end">
+                    <i class="fa fa-file-excel-o" (click)="consoltdexcel()"></i>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <div class="fixed-header">
+                    <div *ngIf="SelectedType == 'Closing Balance'">
+                        <table class="table table-borderless cons" *ngIf="option == 'debtor'" id="info_consolidate">
+                            <thead>
+                                <tr>
+                                    <th style="width: 5%;">SNo</th>
+                                    <th style="width: 20%;">Branch</th>
+                                    <th style="width: 36%;">Debtors</th>
+                                    <th style="width: 13%;">CCode</th>
+                                    <th style="width: 2%;" class="text-center"><i class="fa fa-hand-o-right"></i></th>
+                                    <th class="text-end" style="width: 12%;">Payables</th>
+                                    <th class="text-end" style="width: 12%;">Receivables</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="pointer" *ngFor="let getItem of ConsolidatedData; let i=index"
+                                    [class.active]=" getItem == HighlightRow1" (click)="highlgtCon(i)">
+                                    <!-- getItem.Debtors == HighlightRow1 || -->
+                                    <td>{{i+1}}</td>
+                                    <td>{{getItem.Brname}}/td>
+                                    <td>{{getItem.Debtors}}</td>
+                                    <td>{{getItem.CCode}}</td>
+                                    <td class="text-center" (click)="ShowDettable(getItem)"><span
+                                            class="material-icons mi">
+                                            skip_next
+                                        </span></td>
+                                    <td class="text-end" *ngIf="getItem.Payables != 0;else nextblock2">
+                                        {{getItem.Payables.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}
+                                    </td>
+                                    <ng-template #nextblock2>
+                                        <td class="text-end"></td>
+                                    </ng-template>
+                                    <td class="text-end" *ngIf="getItem.Receivables != 0;else nextblock3">
+                                        {{getItem.Receivables.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}
+                                    </td>
+                                    <ng-template #nextblock3>
+                                        <td class="text-end"></td>
+                                    </ng-template>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td><b>Current Total (Rs)</b></td>
+                                    <td></td>
+                                    <td class="text-end">
+                                        <b>{{(payablestot).toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}</b>
+                                    </td>
+                                    <td class="text-end">
+                                        <b>{{(receivabletot).toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}</b>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table class="table table-borderless cons" *ngIf="option == 'creditor'" id="info_consolidate">
+                            <thead>
+                                <tr>
+                                    <th style="width: 5%;">SNo</th>
+                                    <th style="width: 41%;">Creditors</th>
+                                    <th style="width: 20%" *ngIf="CLocation === 'All'">Finbook</th>
+                                    <th style="width: 8%;">CCode</th>
+                                    <th style="width: 2%;" class="text-center"><i class="fa fa-hand-o-right"></i></th>
+                                    <th class="text-end" style="width: 12%;">Paid </th>
+                                    <th class="text-end" style="width: 12%;">Purchased</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="pointer" *ngFor="let getItem of ConsolidatedData; let i=index"
+                                    [class.active]=" getItem == HighlightRow1" (click)="highlgtCon(i)">
+                                    <!-- getItem.Creditors == HighlightRow1 || -->
+                                    <td>{{i+1}}</td>
+                                    <td>{{getItem.Creditors}}</td>
+                                    <td *ngIf="CLocation === 'All'">{{getItem.Location}}</td>
+                                    <td>{{getItem.CCode}}</td>
+                                    <td class="text-center" (click)="ShowDettable(getItem)"><span
+                                            class="material-icons mi">
+                                            skip_next
+                                        </span></td>
+                                    <td class="text-end" *ngIf="getItem.Payables != 0;else nextblock2">
+                                        {{getItem.Payables.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}
+                                    </td>
+                                    <ng-template #nextblock2>
+                                        <td class="text-end"></td>
+                                    </ng-template>
+                                    <td class="text-end" *ngIf="getItem.Receivables != 0;else nextblock3">
+                                        {{getItem.Receivables.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}
+                                    </td>
+                                    <ng-template #nextblock3>
+                                        <td class="text-end"></td>
+                                    </ng-template>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td><b>Current Total (Rs)</b></td>
+                                    <td></td>
+                                    <td *ngIf="CLocation === 'All'"></td>
+                                    <td class="text-end">
+                                        <b>{{(payablestot).toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}</b>
+                                    </td>
+                                    <td class="text-end">
+                                        <b>{{(receivabletot).toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}</b>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div *ngIf="SelectedType == 'OP|DR|CR|CL'">
+                        <table class="table table-borderless cons" *ngIf="option == 'debtor'" id="info_consolidate">
+                            <thead>
+                                <tr>
+                                    <th style="width: 5%;">SNo</th>
+                                    <th style="width: 32%;">Debtors</th>
+                                    <th style="width: 13%;">CCode</th>
+                                    <th style="width: 2%;" class="text-center"><i class="fa fa-hand-o-right"></i></th>
+                                    <th class="text-end" style="width: 8%;">Opn [Dr]</th>
+                                    <th class="text-end" style="width: 8%;">Opn [Cr]</th>
+                                    <th class="text-end" style="width: 8%;">Sales</th>
+                                    <th class="text-end" style="width: 8%;">Receipts</th>
+                                    <th class="text-end" style="width: 8%;">Cls [Dr]</th>
+                                    <th class="text-end" style="width: 8%;">Cls [Cr]</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="pointer" *ngFor="let getItem of ConsolidatedData; let i=index"
+                                    [class.active]="getItem == HighlightRow1" (click)="highlgtCon(i)">
+                                    <!-- getItem.Debtors  == HighlightRow1 ||  -->
+                                    <td>{{i+1}}</td>
+                                    <td>{{getItem.Debtors}}</td>
+                                    <td>{{getItem.CCode}}</td>
+                                    <td class="text-center" (click)="ShowDettable(getItem)"><span
+                                            class="material-icons mi">
+                                            skip_next
+                                        </span></td>
+                                    <td class="text-end" *ngIf="getItem.OpnPayable != 0;else block1">
+                                        {{getItem.OpnPayable.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}
+                                    </td>
+                                    <ng-template #block1>
+                                        <td class="text-end"></td>
+                                    </ng-template>
+                                    <td class="text-end" *ngIf="getItem.OpnRecvble != 0;else block2">
+                                        {{getItem.OpnRecvble.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}
+                                    </td>
+                                    <ng-template #block2>
+                                        <td class="text-end"></td>
+                                    </ng-template>
+                                    <td class="text-end" *ngIf="getItem.Sales != 0;else block3">
+                                        {{getItem.Sales.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}
+                                    </td>
+                                    <ng-template #block3>
+                                        <td class="text-end"></td>
+                                    </ng-template>
+                                    <td class="text-end" *ngIf="getItem.Receipts != 0;else block4">
+                                        {{getItem.Receipts.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}
+                                    </td>
+                                    <ng-template #block4>
+                                        <td class="text-end"></td>
+                                    </ng-template>
+                                    <td class="text-end" *ngIf="getItem.Payable != 0;else nextblock2">
+                                        {{getItem.Payable.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}
+                                    </td>
+                                    <ng-template #nextblock2>
+                                        <td class="text-end"></td>
+                                    </ng-template>
+                                    <td class="text-end" *ngIf="getItem.Receivable != 0;else nextblock3">
+                                        {{getItem.Receivable.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}
+                                    </td>
+                                    <ng-template #nextblock3>
+                                        <td class="text-end"></td>
+                                    </ng-template>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td><b>Current Total (Rs)</b></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="text-end">
+                                        <b>{{(payablestot).toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}</b>
+                                    </td>
+                                    <td class="text-end">
+                                        <b>{{(receivabletot).toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}</b>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table class="table table-borderless cons" *ngIf="option == 'creditor'" id="info_consolidate">
+                            <thead>
+                                <tr>
+                                    <th style="width: 5%;">SNo</th>
+                                    <th style="width: 27%;">Creditors</th>
+                                    <th style="width: 10%" *ngIf="CLocation === 'All'">Finbook</th>
+                                    <th style="width: 8%;">SupCode</th>
+                                    <th style="width: 2%;" class="text-center"><i class="fa fa-hand-o-right"></i></th>
+                                    <th class="text-end" style="width: 8%;">Opn [Dr]</th>
+                                    <th class="text-end" style="width: 8%;">Opn [Cr]</th>
+                                    <th class="text-end" style="width: 8%;">Payable</th>
+                                    <th class="text-end" style="width: 8%;">Purchase</th>
+                                    <th class="text-end" style="width: 8%;">Cls [Dr]</th>
+                                    <th class="text-end" style="width: 8%;">Cls [Cr]</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="pointer" *ngFor="let getItem of ConsolidatedData; let i=index"
+                                    [class.active]=" getItem == HighlightRow1" (click)="highlgtCon(i)">
+                                    <!-- getItem.Creditors == HighlightRow1 || -->
+                                    <td>{{i+1}}</td>
+                                    <td>{{getItem.Creditors}}</td>
+                                    <td *ngIf="CLocation === 'All'">{{getItem.Location}}</td>
+                                    <td>{{getItem.Supcode}}</td>
+                                    <td class="text-center" (click)="ShowDettable(getItem)"><span
+                                            class="material-icons mi">
+                                            skip_next
+                                        </span></td>
+                                    <td class="text-end" *ngIf="getItem.OpnPayment != 0;else blck1">
+                                        {{getItem.OpnPayment.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}
+                                    </td>
+                                    <ng-template #blck1>
+                                        <td class="text-end"></td>
+                                    </ng-template>
+                                    <td class="text-end" *ngIf="getItem.OpnPurchase != 0;else blck2">
+                                        {{getItem.OpnPurchase.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}
+                                    </td>
+                                    <ng-template #blck2>
+                                        <td class="text-end"></td>
+                                    </ng-template>
+
+                                    <td class="text-end" *ngIf="getItem.Payable != 0;else nextblck2">
+                                        {{getItem.Payable.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}
+                                    </td>
+                                    <ng-template #nextblck2>
+                                        <td class="text-end"></td>
+                                    </ng-template>
+                                    <td class="text-end" *ngIf="getItem.Purchase != 0;else nextblck3">
+                                        {{getItem.Purchase.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}
+                                    </td>
+                                    <ng-template #nextblck3>
+                                        <td class="text-end"></td>
+                                    </ng-template>
+                                    <td class="text-end" *ngIf="getItem.ClosingPayble != 0;else nextblck4">
+                                        {{getItem.ClosingPayble.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}
+                                    </td>
+                                    <ng-template #nextblck4>
+                                        <td class="text-end"></td>
+                                    </ng-template>
+                                    <td class="text-end" *ngIf="getItem.ClosingPurchase != 0;else nextblck5">
+                                        {{getItem.ClosingPurchase.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}
+                                    </td>
+                                    <ng-template #nextblck5>
+                                        <td class="text-end"></td>
+                                    </ng-template>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td><b>Current Total (Rs)</b></td>
+                                    <td></td>
+                                    <td *ngIf="CLocation === 'All'"></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="text-end">
+                                        <b>{{(payablestot).toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}</b>
+                                    </td>
+                                    <td class="text-end">
+                                        <b>{{(receivabletot).toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}</b>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="loader" *ngIf="isloader">
+                    <mat-spinner diameter="30" color="primary">
+                    </mat-spinner>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content" *ngIf="isSelect ==='ListTblDetailed'">
+        <div class="Accounts3">
+            <!--  Detailed Table -->
+            <div class="row" *ngIf="option == 'debtor'">
+                <div class="col-10 col-md-10"
+                    *ngIf="value != 'Detailed' && SelectedView =='InvDetailed'; else nextblock">
+                    <h4 class="heading"> Debtors : {{customername}} | {{DebtorForm.value.fdate | date:'dd-MMM-yyyy'}} to
+                        {{DebtorForm.value.tdate | date:'dd-MMM-yyyy'}} | Reg :
+                        {{DebtorForm.value.stateValue}} | Loc :
+                        {{branchname}} </h4>
+                </div>
+                <ng-template #nextblock>
+                    <div class="col-10 col-md-10"
+                        *ngIf="value == 'Detailed' && SelectedView =='InvDetailed'; else nextblock45">
+                        <h4 class="heading">Debtors : {{debtorname}} | {{DebtorForm.value.fdate | date:'dd-MMM-yyyy'}}
+                            to
+                            {{DebtorForm.value.tdate | date:'dd-MMM-yyyy'}} | Reg : {{DebtorForm.value.stateValue}} |
+                            Loc :
+                            {{debtorLoc}}</h4>
+                    </div>
+                </ng-template>
+                <ng-template #nextblock45>
+                    <div class="col-10 col-md-10">
+                        <h4 class="heading">Debtors : {{debtorname}} | {{MonthFdate}} to {{MonthTdate}} | Reg :
+                            {{DebtorForm.value.stateValue}} | Loc :
+                            {{debtorLoc}}</h4>
+                    </div>
+                </ng-template>
+                <div class="col-2 col-md-2 text-end">
+                    <i class="fa fa-file-excel-o" (click)="Detailedexcel()"></i>
+                </div>
+                <div class="table-responsive col-12 col-md-12">
+                    <div class="fixed-header">
+                        <table class="table table-borderless det" id="info_detailed">
+                            <thead>
+                                <tr>
+                                    <th style="width: 10%;">Date</th>
+                                    <th style="width: 53%;">Particulars</th>
+                                    <th style="width: 15%;">Trans</th>
+                                    <th class="text-end" style="width: 10%;">Sales [Dr]</th>
+                                    <th class="text-end" style="width: 10%;">Receipts [Cr]</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let getItem of DetailedData; let i = index" class="pointer"
+                                    [class.active]="getItem == HighlightRow2" (click)="highlgtdet(i)">
+                                    <ng-container *ngIf="getItem.Sales != null && getItem.Receipts != null">
+                                        <td>{{getItem.Dbtdate | date:'dd-MMM-yyyy'}}</td>
+                                        <td>{{getItem.Particulars}}</td>
+                                        <td>{{getItem.Trans}}</td>
+
+
+                                        <td class="text-end" *ngIf="getItem.Sales  != 0 ;else nextblock4">
+                                            {{getItem.Sales.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}
+                                        </td>
+
+                                        <ng-template #nextblock4>
+                                            <td class="text-end"></td>
+                                        </ng-template>
+                                        <td class="text-end" *ngIf="getItem.Receipts != 0;else nextblock5">
+                                            {{getItem.Receipts.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}
+                                        </td>
+
+                                        <ng-template #nextblock5>
+                                            <td class="text-end"></td>
+                                        </ng-template>
+                                    </ng-container>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <div *ngIf="OpenBalreceivable">
+                                            <b>Opening Balance Receivable (Rs)</b>
+                                        </div>
+                                        <div *ngIf="OpenBalpayable">
+                                            <b>Opening Balance Payable (Rs)</b>
+                                        </div>
+                                        <div *ngIf="openingAmt === 0">
+                                            <b>Opening Balance (Rs)</b>
+                                        </div>
+                                    </td>
+
+                                    <td></td>
+
+                                    <td *ngIf="OpenBalpayable" class="text-end">
+                                        <b>{{
+                                            OpenBalpayable.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}</b>
+                                    </td>
+                                    <td></td>
+                                    <td class="text-end">
+                                        <div *ngIf="OpenBalreceivable">
+                                            <b>{{
+                                                OpenBalreceivable.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}</b>
+                                        </div>
+                                        <div *ngIf="openingAmt === 0">
+                                            <b>{{openingAmt.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}</b>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td><b>Current Total (Rs)</b></td>
+                                    <td></td>
+
+                                    <td class="text-end">
+                                        <b>{{detsalestot.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}</b>
+                                    </td>
+
+                                    <td class="text-end">
+                                        <b>{{detreceipttot.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}</b>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <div *ngIf="InvDetailedreceivable">
+                                            <b>Closing Balance Receivable (Rs)</b>
+                                        </div>
+                                        <div *ngIf="InvDetailedpayable">
+                                            <b> Closing Balance Payable (Rs)</b>
+                                        </div>
+                                        <div *ngIf="InvDetailedcloBal === 0">
+                                            <b> Closing Balance (Rs)</b>
+                                        </div>
+                                    </td>
+
+                                    <td></td>
+
+                                    <td *ngIf="InvDetailedpayable" class="text-end">
+                                        <b>{{InvDetailedpayable.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}</b>
+                                    </td>
+                                    <td></td>
+                                    <td class="text-end">
+                                        <div *ngIf="InvDetailedreceivable">
+                                            <b>{{InvDetailedreceivable.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}</b>
+                                        </div>
+                                        <div *ngIf="InvDetailedcloBal === 0">
+                                            <b>{{InvDetailedcloBal.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}</b>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="loader" *ngIf="isloader">
+                            <mat-spinner diameter="30" color="primary">
+                            </mat-spinner>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="row" *ngIf="option == 'creditor'">
+                <div class="col-10 col-md-10"
+                    *ngIf="value != 'Detailed' && SelectedView =='InvDetailed'; else nextblock50">
+                    <h4 class="heading">Creditors : {{CreditorS_name}} | {{DebtorForm.value.fdate |
+                        date:'dd-MMM-yyyy'}} to {{DebtorForm.value.tdate | date:'dd-MMM-yyyy'}} | Reg :
+                        {{DebtorForm.value.stateValue}} | Loc :
+                        {{CLocation}} </h4>
+                </div>
+                <ng-template #nextblock50>
+                    <div class="col-10 col-md-10"
+                        *ngIf="value == 'Detailed' && SelectedView =='InvDetailed'; else nextblock100">
+                        <h4 class="heading">Creditors : {{creditorname}} | {{DebtorForm.value.fdate |
+                            date:'dd-MMM-yyyy'}} to {{DebtorForm.value.tdate | date:'dd-MMM-yyyy'}} | Reg :
+                            {{DebtorForm.value.stateValue}} | Loc :
+                            {{credLocation}} </h4>
+                    </div>
+                </ng-template>
+                <ng-template #nextblock100>
+                    <div class="col-10 col-md-10">
+                        <h4 class="heading">Creditors : {{creditorname}} | {{MonthFdate}} to {{MonthTdate}} | Reg :
+                            {{DebtorForm.value.stateValue}} | Loc :
+                            {{credLocation}}</h4>
+                    </div>
+                </ng-template>
+                <div class="col-2 col-md-2 text-end">
+                    <i class="fa fa-file-excel-o" (click)="Detailedexcel()"></i>
+                </div>
+                <div class="table-responsive col-12 col-md-12">
+                    <div class="fixed-header">
+                        <table class="table table-borderless det" id="info_detailed">
+                            <thead>
+                                <tr>
+                                    <th style="width: 10%;">Date</th>
+                                    <th style="width: 53%;">Particulars</th>
+                                    <th style="width: 15%;">Trans</th>
+                                    <th></th>
+                                    <th class="text-end" style="width: 10%;">Paid
+                                    </th>
+                                    <th class="text-end" style="width: 10%;">Purchased
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let getItem of DetailedData; let i = index" class="pointer"
+                                    [class.active]="getItem == HighlightRow2" (click)="highlgtdet(i)">
+                                    <ng-container *ngIf="getItem.Sales != null && getItem.Receipts != null">
+                                        <td>{{getItem.Dbtdate | date:'dd-MMM-yyyy'}}</td>
+                                        <td>{{getItem.Particulars}}</td>
+                                        <td>{{getItem.Trans}}</td>
+                                        <td *ngIf="option == 'creditor'" class="text-center"
+                                            (click)="ShowLedgerDetails(getItem)"><span class="material-icons mi">
+                                                skip_next
+                                            </span></td>
+
+
+                                        <td class="text-end" *ngIf="getItem.Receipts  != 0;else nextblock4">
+                                            {{getItem.Receipts.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}
+                                        </td>
+                                        <ng-template #nextblock4>
+                                            <td class="text-end"></td>
+                                        </ng-template>
+
+                                        <td class="text-end" *ngIf="getItem.Sales != 0;else nextblock5">
+                                            {{getItem.Sales.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}
+                                        </td>
+                                        <ng-template #nextblock5>
+                                            <td class="text-end"></td>
+                                        </ng-template>
+                                    </ng-container>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td *ngIf="option == 'creditor'">
+                                        <div *ngIf="OpenBalpayable">
+                                            <b>Opening Balance (Rs)</b>
+                                        </div>
+                                        <div *ngIf="OpenBalreceivable">
+                                            <b>Opening Balance (Rs)</b>
+                                        </div>
+                                        <div *ngIf="openingAmt === 0">
+                                            <b>Opening Balance (Rs)</b>
+                                        </div>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td *ngIf="OpenBalpayable" class="text-end">
+                                        <b>{{
+                                            OpenBalpayable.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}</b>
+                                    </td>
+                                    <td></td>
+                                    <td class="text-end">
+                                        <div *ngIf="OpenBalreceivable">
+                                            <b>{{
+                                                OpenBalreceivable.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}</b>
+                                        </div>
+                                        <div *ngIf="openingAmt === 0">
+                                            <b>{{openingAmt.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}</b>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td><b>Current Total (Rs)</b></td>
+                                    <td></td>
+                                    <td></td>
+
+                                    <td class="text-end">
+                                        <b>{{detreceipttot.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}</b>
+                                    </td>
+
+                                    <td class="text-end">
+                                        <b>{{detsalestot.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}</b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+
+                                    <td *ngIf="option=='creditor'">
+                                        <div *ngIf="InvDetailedpayable">
+                                            <b> Closing Balance (Rs)</b>
+                                        </div>
+                                        <div *ngIf="InvDetailedreceivable">
+                                            <b>Closing Balance (Rs)</b>
+                                        </div>
+                                        <div *ngIf="InvDetailedcloBal === 0">
+                                            <b> Closing Balance (Rs)</b>
+                                        </div>
+                                    </td>
+                                    <td></td>
+                                    <td *ngIf="option == 'creditor'"></td>
+                                    <td *ngIf="InvDetailedpayable" class="text-end">
+                                        <b>{{InvDetailedpayable.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}</b>
+                                    </td>
+                                    <td></td>
+                                    <td class="text-end">
+                                        <div *ngIf="InvDetailedreceivable">
+                                            <b>{{InvDetailedreceivable.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}</b>
+                                        </div>
+                                        <div *ngIf="InvDetailedcloBal === 0">
+                                            <b>{{InvDetailedcloBal.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}</b>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="loader" *ngIf="isloader">
+                            <mat-spinner diameter="30" color="primary">
+                            </mat-spinner>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div [style.display]="showModal ? 'block' : 'none'" class="modal backdrop" id="exampleModalCenter" tabindex="-1"
+        role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" *ngIf="option =='creditor'">
+        <div class="modal-dialog modalitem">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{DocType}}</h5><br>
+                    <button type="button" class="btn-close" (click)="hide()" data-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-sm-12 col-sm-12 col-md-12">
+                        <div class="row mb">
+                            <div class="col-12 col-md-4">
+                                <label for="from" class="label">Date : <span class="caption">{{Trndate}}</span></label>
+                            </div>
+                        </div>
+                        <div class="row mb">
+                            <div class="col-12 col-md-4">
+                                <label for="to" class="label"
+                                    *ngIf="TranType === 'Purchase' || TranType === 'DR_Note' || TranType == 'Rev_Purchase' || TranType === 'CR_Note'">Tran
+                                    No :
+                                    <span class="caption">{{Trnno}}</span>
+                                </label>
+                                <label for="to" class="label"
+                                    *ngIf="TranType === 'Adjustment' || TranType === 'Payment'">Voucher No :
+                                    <span class="caption">{{Trnno}}</span>
+                                </label>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <label for="to" class="label">Fb Id :
+                                    <span class="caption">{{fbid}}</span> </label>
+                            </div>
+                            <div class="col-12 col-md-4" *ngIf="TranType === 'Payment'">
+                                <label for="from" class="label">UTR No :
+                                    <span class="caption">{{utrno}}</span>
+                                </label>
+                            </div>
+                            <div class="col-12 col-md-4" *ngIf="TranType != 'Payment'">
+
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <label for="to" class="label">Supname :
+                                    <span class="caption">{{CreditorS_name}}</span>
+                                </label>
+                            </div>
+                            <div class="col-12 col-md-4" *ngIf="TranType === 'Purchase' || TranType == 'Rev_Purchase'">
+                                <label for="to" class="label">Invoice No :
+                                    <span class="caption">{{Invno}}</span>
+                                </label>
+                            </div>
+                            <div class="col-12 col-md-4" *ngIf="TranType === 'DR_Note' || TranType === 'CR_Note'">
+                                <label for="to" class="label">Ref Docno :
+                                    <span class="caption">{{Invno}}</span>
+                                </label>
+                            </div>
+                            <div class="col-12 col-md-4" *ngIf="TranType === 'Payment'">
+                                <label for="from" class="label">Pay Batch No :
+                                    <span class="caption">{{PBno}}</span>
+                                </label>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <label for="to" class="label">Total Amt :
+                                    <span
+                                        class="caption">{{totamt.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-sm-12 col-md-12">
+                        <div class="table-responsive">
+                            <div class="fixed-header1">
+                                <table class="table table-borderless detail">
+                                    <thead>
+                                        <tr
+                                            *ngIf="TranType === 'Purchase' || TranType === 'DR_Note' || TranType == 'Rev_Purchase'|| TranType == 'CR_Note'">
+                                            <th>Sno</th>
+                                            <th
+                                                *ngIf="DocType != 'Expense Invoice' && DocType != 'Supplier Account Based Dr. Note' && DocType != 'Supplier Account Based Cr. Note'&& DocType != 'Reversal Expense Invoice'">
+                                                Icode</th>
+                                            <th
+                                                *ngIf="DocType != 'Expense Invoice' && DocType != 'Supplier Account Based Dr. Note'&& DocType != 'Supplier Account Based Cr. Note' && DocType != 'Reversal Expense Invoice'">
+                                                Iname</th>
+                                            <th
+                                                *ngIf="DocType != 'Expense Invoice' && DocType != 'Supplier Account Based Dr. Note' && DocType != 'Supplier Account Based Cr. Note'&& DocType != 'Reversal Expense Invoice'">
+                                                InvQty</th>
+                                            <th
+                                                *ngIf="DocType != 'Expense Invoice' && DocType != 'Supplier Account Based Dr. Note'&& DocType != 'Supplier Account Based Cr. Note' && DocType != 'Reversal Expense Invoice'">
+                                                Uom</th>
+                                            <th class="text-end"
+                                                *ngIf="DocType != 'Expense Invoice' && DocType != 'Supplier Account Based Dr. Note'&& DocType != 'Supplier Account Based Cr. Note' && DocType != 'Reversal Expense Invoice'">
+                                                Rate</th>
+                                            <th
+                                                *ngIf="DocType === 'Expense Invoice' || DocType === 'Supplier Account Based Dr. Note' ||  DocType === 'Reversal Expense Invoice' || DocType === 'Supplier Account Based Cr. Note'">
+                                                Usage</th>
+                                            <th class="text-end">Amount </th>
+                                        </tr>
+                                        <tr *ngIf="TranType === 'Adjustment' || TranType === 'Payment'">
+                                            <th>Sno</th>
+                                            <th>Ref Document No</th>
+                                            <th *ngIf="TranType === 'Adjustment'">Status</th>
+                                            <th class="text-end">Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let getItem of LedgerDetailList; let i = index" class="pointer">
+                                            <td>{{i+1}}</td>
+                                            <ng-container
+                                                *ngIf="TranType === 'Purchase' || TranType === 'DR_Note' || TranType == 'Rev_Purchase' || TranType == 'CR_Note'">
+                                                <td
+                                                    *ngIf="DocType != 'Expense Invoice' && DocType != 'Supplier Account Based Dr. Note'&& DocType != 'Supplier Account Based Cr. Note'&& DocType != 'Reversal Expense Invoice'">
+                                                    {{getItem.Icode}}</td>
+                                                <td
+                                                    *ngIf="DocType != 'Expense Invoice' && DocType != 'Supplier Account Based Dr. Note'&& DocType != 'Supplier Account Based Cr. Note'&& DocType != 'Reversal Expense Invoice'">
+                                                    {{getItem.Iname}}</td>
+                                                <td
+                                                    *ngIf="DocType != 'Expense Invoice' && DocType != 'Supplier Account Based Dr. Note'&& DocType != 'Supplier Account Based Cr. Note'&& DocType != 'Reversal Expense Invoice' && (TranType === 'Purchase' || TranType == 'Rev_Purchase')">
+                                                    {{getItem.InvQty}}</td>
+                                                <td
+                                                    *ngIf="DocType != 'Expense Invoice' && DocType != 'Supplier Account Based Dr. Note'&& DocType != 'Supplier Account Based Cr. Note'&& DocType != 'Reversal Expense Invoice'&& TranType === 'DR_Note'">
+                                                    {{getItem.Qty}}</td>
+                                                <td
+                                                    *ngIf="DocType != 'Expense Invoice' && DocType != 'Supplier Account Based Dr. Note'&& DocType != 'Supplier Account Based Cr. Note'&& DocType != 'Reversal Expense Invoice'">
+                                                    {{getItem.Uom}}</td>
+                                                <td class="text-end"
+                                                    *ngIf="DocType != 'Expense Invoice' && DocType != 'Supplier Account Based Dr. Note'&& DocType != 'Supplier Account Based Cr. Note'&& DocType != 'Reversal Expense Invoice'">
+                                                    {{getItem.Rate}}</td>
+                                                <td
+                                                    *ngIf="DocType === 'Expense Invoice' || DocType === 'Supplier Account Based Dr. Note' ||  DocType === 'Reversal Expense Invoice' ||  DocType === 'Supplier Account Based Cr. Note'">
+                                                    {{getItem.Usage}}</td>
+                                                <td class="text-end">
+                                                    {{getItem.Amount.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}
+                                                </td>
+                                            </ng-container>
+                                            <ng-container *ngIf="TranType === 'Payment'">
+                                                <td>{{getItem.RefDocno}}</td>
+                                                <td class="text-end">
+                                                    {{getItem.DocAmt.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}
+                                                </td>
+                                            </ng-container>
+                                            <ng-container *ngIf="TranType === 'Adjustment'">
+                                                <td>{{getItem.RefDocNo}}</td>
+                                                <td>{{getItem.Stat}}</td>
+                                                <td class="text-end">
+                                                    {{getItem.RefDocAmt.toLocaleString('en-IN',{minimumFractionDigits:number,maximumFractionDigits:number})}}
+                                                </td>
+                                            </ng-container>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 
+    <div class="content" *ngIf="isSelect ==='LedgerDetails'">
+        <div class="Accounts4">
+            
+            <div class="row">
+                <div class="col-10 col-md-10">
+                    <h4 class="heading"> </h4>
+                </div> 
+            </div>
+            <div class="table-responsive">
+                <div class="fixed-header">
+                    <table class="table table-borderless det" id="info_detailed">
+                        <thead>
+                            <tr>
+                                <th style="width: 10%;">Icode</th>
+                                <th style="width: 53%;">Iname</th>
+                                <th style="width: 15%;">InvQty</th>
+                                <th style="width: 5%;">Uom</th>   
+                                <th class="text-end" style="width: 10%;">Rate</th>
+                                <th class="text-end" style="width: 10%;">Amount </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let getItem of LedgerDetailList; let i = index" class="pointer"
+                                [class.active]="getItem == HighlightRow2" (click)="highlgtdet(i)">
+                                <ng-container *ngIf="getItem.Sales != null && getItem.Receipts != null">
+                                    <td>{{getItem.Icode | date:'dd-MMM-yyyy'}}</td>
+                                    <td>{{getItem.Iname}}</td>                
+                                    <td>{{getItem.InvQty}}</td>
+                                    <td>{{getItem.Uom}}</td>
+                                    <td>{{getItem.Rate}}</td>                
+                                    <td>{{getItem.InvAmt}}</td>                
+                                </ng-container>
+                            </tr>
+                           
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div> -->
+</div>

@@ -1,0 +1,726 @@
+<div class=" d-flex align-items-center justify-content-center " *ngIf="viewMoreLoad" style="position: fixed; top:0; bottom: 0; left: 0; right: 0; z-index: 10001 !important; backdrop-filter: blur(2px);">
+    <mat-spinner></mat-spinner>
+</div>
+
+<div class="gWrapper">
+    <app-header Titleheader="{{Title}}"></app-header>
+    <div class="px-2">
+
+        <ng-template #createFinBook id="createFinBook" >
+            <div >
+            <div class="gDialogTitle">
+                <span></span>
+                <span class="" *ngIf="!this.editable">Create Finance Book</span>
+                <span class="" *ngIf="this.editable">Edit Finance Book</span>
+                <button type="button" id="close" class="gDialogCloseButton" (click)="dialog.closeAll()">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </div>
+            <div class=" gDialogContainer">
+                <form [formGroup]="CreateFBForm" class="row ">
+                    <mat-form-field class="col-12 col-xl-6 ">
+                        <mat-label>Company Name</mat-label>
+                        <input type="text" formControlName="campName" matInput [matAutocomplete]="autopoup" readonly>
+                        <mat-autocomplete autoActiveFirstOption #autopoup="matAutocomplete" (keydown)="keytab1($event,'fbCode')" class="gAutoCompleteContainer">
+                            <mat-option class="gSelectOption" *ngFor="let option of CampNameOptions | filter: CreateFBForm.get('campName').value" [value]="option.company" (onSelectionChange)="setCmpCode($event, option.CmpCode)">
+                                {{option.company}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                    <mat-form-field class=" col-12 col-xl-6 ">
+                        <mat-label>FB Code</mat-label>
+
+                        <input type="text" style="text-transform: uppercase;" formControlName="FbCode" id="fbCode" (keydown)="keytab1($event,'FbName')" matInput [matAutocomplete]="autopoup1">
+                        <mat-autocomplete  #autopoup1="matAutocomplete"  class="gAutoCompleteContainer">
+                            <ng-container disabled>
+                                <mat-option *ngIf="FBListArr.length > 0" disabled class="gSelectOption" style="opacity: 0.5">
+                                    Available FB Codes 
+                                  </mat-option>
+                                  <mat-option *ngIf="FBListArr.length === 0" disabled class="gSelectOption" style="opacity: 0.5;" >
+                                  No records found
+                                  </mat-option>
+                            <mat-option disabled class="gSelectOption" style="cursor: no-drop;" *ngFor="let option of FBListArr | filter: CreateFBForm.get('FbCode').value"  [value]="option.FbCode">
+                                {{option.FbCode}}
+                            </mat-option>
+                        </ng-container>
+                        </mat-autocomplete>
+                        <!-- <input type="text" class="" formControlName="FbCode" id="fbCode" (keydown)="keytab1($event,'FbName')" matInput autocomplete="off"> -->
+                    </mat-form-field>
+
+
+                    <mat-form-field class="col-12 col-xl-6 ">
+                        <mat-label>FB Name</mat-label>
+                        <input matInput style="text-transform: uppercase;" type="text" formControlName="FbName" id="FbName" (keydown)="keytab1($event,'FbDescrip')" [matAutocomplete]="autopoup2">
+                        <mat-autocomplete  autoActiveFirstOption #autopoup2="matAutocomplete"  class="gAutoCompleteContainer">
+                            <ng-container disabled>
+                                <mat-option *ngIf="FBListArr.length > 0" disabled class="gSelectOption" style="opacity: 0.5;" >
+                                    Available FB Names 
+                                  </mat-option>
+                                  <mat-option *ngIf="FBListArr.length === 0" disabled class="gSelectOption" style="opacity: 0.5;" >
+                                  No records found
+                                  </mat-option>
+                            <mat-option disabled class="gSelectOption"style="cursor: no-drop;"  *ngFor="let option of FBListArr | filter: CreateFBForm.get('FbName').value"  [value]="option.FbName">
+                                {{option.FbName}}
+                            </mat-option>
+                        </ng-container>
+                        </mat-autocomplete>
+                    </mat-form-field>
+
+                    <mat-form-field class="col-12 col-xl-6 ">
+                        <mat-label>FB Description </mat-label>
+                        <input matInput formControlName="FbDescrip" autocomplete="off" id="FbDescrip" (keydown)="keytab1($event,'data')">
+                    </mat-form-field>
+
+                    <mat-form-field class="col-12 col-xl-6 ">
+                        <mat-label>Effective Date </mat-label>
+
+                        <input matInput formControlName="EffectiveDate" id="data" [matDatepicker]="picker" autocomplete="off" (dateChange)="focusNext('submit')" (keydown)="keytab1($event,'submit')">
+                        <mat-datepicker-toggle matSuffix [for]="picker">
+                            <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                    <div class="col-12 d-flex text-end justify-content-end">
+
+                        <button type="button" id="submit" class="gSaveButton" (click)="submitDialog('save')" *ngIf="!editable">Save</button>
+                        <button type="button " id="submit" class="gSaveButton" (click)="submitDialog('update')" *ngIf="editable">Update</button>
+
+                    </div>
+
+                </form>
+            </div>
+        </div>
+        </ng-template>
+
+        <!-- ========================================Create Fin Book =================================================== -->
+        <section class=" sectionContainerFinbook" *ngIf="mainMenuSelected ==='createFinBook'">
+
+            <form class="form row mx-2 justify-content-center my-1">
+
+                <div class="col-12 d-flex col-xl-5 col-md-7 newClass">
+                    <label for="exampleInputEmail1 " class="gInputLable mx-md-3">Company Name</label>
+                    <div class="gOuterInput w-100" >
+                        <input class="gInnerInput" [formControl]="companyName" matInput [matAutocomplete]="autoManage">
+                        <mat-autocomplete autoActiveFirstOption #autoManage="matAutocomplete" class="gAutoCompleteContainer">
+                            <mat-option class="gSelectOption" *ngFor="let option of CampNameOptions | filter: companyName.value" [value]="option.company" (onSelectionChange)="ViewDate($event, option.CmpCode)">
+                                {{option.company}}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <button type="button" mat-button class="gInputButton" [disabled]="loading" matTooltip="Refresh" (click)="ViewDateButton()">
+                            <mat-icon>sync</mat-icon>
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+
+            <form [formGroup]="VOForm" autocomplete="off" class="example-containerFinbook  gTableSection">
+                <div class="searchContainer gTableActionheaders">
+                    <form role="search" class="search-form ">
+                        <input type="search" name="Search" #input [ngClass]="{'gSearchText': TableFilter === '', 'gSearchText1':TableFilter!=='' }" [(ngModel)]="TableFilter" autocomplete="off">
+
+                    </form>
+                    <img Cores px-0 class="png-icon gXlButton curser " src=".\assets\gImg\excel1.png" type="submit" matTooltip="Excel Export" (click)="XLExportMasterFinbook()">
+                    <button type="button" mat-button class="bulkbuttons gNormalButton" (click)="openDialog(createFinBook)" *ngIf="HaveAccess">Create</button>
+
+
+                </div>
+                <section formArrayName="VORows" #XLTABLE class="gInnerTable">
+
+                    <table class="gNormalTable-sm table " id="table" width="100%">
+                        <thead class="">
+                            <tr>
+                                <th style="width: 60px !important;">Sno</th>
+                                <th>FbCode</th>
+                                <th>FbName</th>
+                                <th>FbDescrip</th>
+                                <th>EffectiveDate</th>
+                                <th>Createdby</th>
+                                <th>Createdtime</th>
+                                <th *ngIf="HaveAccess" style="width: 60px !important;" class="text-end">Edit</th>
+                                <th *ngIf="HaveAccess" style="width: 60px !important;" class="text-end">Delete</th>
+
+                            </tr>
+                        </thead>
+                        <tbody class="">
+                            <tr class="" *ngFor="let data of transactions.data | filter:TableFilter ; let i = index">
+                                <td style="width: 60px !important;">{{i+1}}</td>
+
+                                <td scope="col">{{data.FbCode}}</td>
+                                <td scope="col">{{data.FbName}}</td>
+                                <td scope="col">{{data.FbDescrip}}</td>
+                                <td scope="col">{{data.EffectiveDate}}</td>
+                                <td scope="col">{{data.Createdby}}</td>
+                                <td scope="col">{{data.Createdtime}}</td>
+                                <td *ngIf="HaveAccess" class="text-end" style="width: 60px !important;">
+                                    <button mat-icon-button class="gEditIcon" (click)="editFinbook(data, createFinBook)" >
+                                        <mat-icon>edit</mat-icon>
+                                    </button>
+                                </td>
+                                <td *ngIf="HaveAccess" class="text-end" style="width: 60px !important;">
+                                    <button mat-icon-button class="gDeleteIcon"  (click)="deleteFinbook(data)">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </td>
+
+                            </tr>
+                            <tr *ngIf="transactions.data?.length > 0 && (transactions.data | filter : TableFilter)?.length === 0">
+                                <td [colSpan]="9" *ngIf="HaveAccess" class="text-center">No record found.</td>
+                                <td [colSpan]="7" *ngIf="!HaveAccess" class="text-center">No record found.</td>
+                            </tr>
+                            <tr *ngIf="transactions.data.length === 0 && !loading ">
+
+                                <td [colSpan]="9" *ngIf="HaveAccess" class="text-center">No record found.</td>
+                                <td [colSpan]="7" *ngIf="!HaveAccess" class="text-center">No record found.</td>
+
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                    <div class="SkeltonLoader text-center justify-content-center d-flex" *ngIf="loading">
+                        <mat-spinner></mat-spinner>
+                    </div>
+                </section>
+            </form>
+        </section>
+
+        <!-- ========================================Map Branch to Fin Book =================================================== -->
+
+
+        <section *ngIf="mainMenuSelected ==='mapBranchtoFinbook'" class=" sectionContainerFinbook">
+            <div class="sectionContainerFinbook">
+                <div class="justify-content-center gap-2 mx-2  mt-1 row align-items-baseline">
+
+                    <div class="col-12 col-sm-6 col-md-4 col-xl-4 mb-1">
+                        <div class="row m-0 form-group branchOutInput">
+                            <div class="col-12 col-xl-3 p-0">
+                                <label for="exampleInputEmail1 " class="gInputLable">Company Name</label>
+                            </div>
+                            <div class="col-12 col-xl-9 p-0">
+                                <input class="gInnerInput-border" (input)="filterCmp($event.target.value)" #autoCompleteInput [matAutocomplete]="autocmpsingle" [formControl]="companyName" matInput>
+                                <mat-autocomplete autoActiveFirstOption id="autocmpsingle" #autocmpsingle="matAutocomplete" class="gAutoCompleteContainer">
+                                    <mat-option class="gSelectOption" *ngFor="let option of CampNameOptionsList" [value]="option.company" (onSelectionChange)="brCmpSelected($event, option.CmpCode, 'inputs')">
+                                        {{option.company}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-4 col-xl-4 mb-1">
+
+                        <div class="row m-0 form-group branchOutInput">
+                            <div class="col-12  col-xl-3 p-0">
+                                <label for="exampleInputEmail1" class="gInputLable">Finbook Name</label>
+                            </div>
+                            <div class="col-12 p-0   col-xl-9">
+                                <div class="gOuterInput">
+                                    <input class="gInnerInput-border" [placeholder]="mapViewplaceholder" (input)="checkcmpselected($event.target.value)" id="brFB" [formControl]="finbookName" matInput [matAutocomplete]="fbook">
+                                    <mat-autocomplete autoActiveFirstOption #fbook="matAutocomplete" class="gAutoCompleteContainer">
+                                        <mat-option class="gSelectOption" *ngFor="let option of FinBookOptionsList " [value]="option.FbName" (onSelectionChange)="brFbSelected($event, option.FbCode, 'inputs')">
+                                            {{option.FbName}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                    <button type="button" mat-button class="gInputButton" [disabled]="Brloading" matTooltip="Refresh" (click)="viewMappedBranch('withoutdate')">
+                                        <mat-icon>sync</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <section class="gTableSection " tabindex="0">
+                    <div class="topHeaderTable">
+                        <div class="d-flex  text-end  gTableActionheaders">
+
+                            <form role="search" class="search-form ">
+
+                                <input type="search" name="Search" #input [ngClass]="{'gSearchText': searchTemp === '', 'gSearchText1':searchTemp!=='' }" [(ngModel)]="searchTemp" autocomplete="off">
+                            </form>
+
+
+                            <img Cores px-0 class="png-icon gXlButton curser " src=".\assets\gImg\excel1.png" type="submit" matTooltip="Excel Export" (click)="XLExportBranchMapTable()">
+
+                            <button type="button" class="gTableIconButton" (click)="openMapDialog(Viewdialog)" matTooltip="View">
+                                <mat-icon>remove_red_eye</mat-icon>
+                            </button>
+                            <button type="button" mat-button class="bulkbuttons gNormalButton" (click)="openMapOptionDialog(AccToFbMap)" *ngIf="HaveAccess">Create</button>
+
+                        </div>
+
+                    </div>
+                    <div class="gInnerTable">
+
+                        <table class="gNormalTable-sm table " id="table" width="100%">
+                            <thead class="">
+                                <tr>
+                                    <th style="width: 60px !important;">Sno</th>
+                                    <th>BrCode</th>
+                                    <th>BranchName</th>
+                                    <th *ngIf="HaveAccess" style="width: 60px !important;" class="text-end"> Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="">
+                                <tr class="" *ngFor="let data of datasource.data | filter:searchTemp ; let i = index">
+                                    <td style="width: 60px !important;">{{i+1}}</td>
+                                    <td scope="col">{{data.BrCode}}</td>
+                                    <td scope="col">{{data.BranchName}}</td>
+                                    <td *ngIf="HaveAccess" class="text-end" style="width: 60px !important;">
+                                        <button mat-icon-button class="gDeleteIcon"  (click)="RemoveBrMapFinbook(data.BrCode)">
+                                            <mat-icon>delete</mat-icon>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <tr *ngIf="datasource.data.length > 0 && (datasource.data | filter : searchTemp)?.length === 0">
+                                    <td [colSpan]="9" *ngIf="HaveAccess" class="text-center">No record found.</td>
+                                    <td [colSpan]="7" *ngIf="!HaveAccess" class="text-center">No record found.</td>
+                                </tr>
+                                <tr *ngIf="datasource.data.length === 0 && !Brloading && (datasource.data.length | filter : searchTemp)?.length !== 0 ">
+
+                                    <td [colSpan]="9" *ngIf="HaveAccess" class="text-center">No record found.</td>
+                                    <td [colSpan]="7" *ngIf="!HaveAccess" class="text-center">No record found.</td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="SkeltonLoader text-center justify-content-center d-flex" *ngIf="Brloading">
+                            <mat-spinner></mat-spinner>
+                        </div>
+
+                    </div>
+                </section>
+
+
+                <ng-template #Viewdialog>
+                    <div class="gDialogTitle">
+                        <span class=""> View Mapped List</span>
+                        <button type="button" id="submit" class="gDialogCloseButton" (click)="dialog.closeAll()">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </div>
+
+                    <div class="gDialogContainer">
+                        <form [formGroup]="viewMapForm " class="row ">
+                            <mat-form-field class="col-12 col-xl-6 ">
+                                <mat-label>Company Name</mat-label>
+
+                                <input matInput formControlName="viewcmpName" (input)="filterViewCmp($event.target.value) " [matAutocomplete]="viewCmpName">
+                                <mat-autocomplete autoActiveFirstOption #viewCmpName="matAutocomplete" class="gAutoCompleteContainer">
+                                    <mat-option class="gSelectOption" *ngFor="let option of viewCampNameOptionsList " [value]="option.company " (onSelectionChange)="brCmpSelected($event, option.CmpCode ,'view')">
+                                        {{option.company}}
+                                    </mat-option>
+                                </mat-autocomplete>
+
+                            </mat-form-field>
+
+                            <mat-form-field class="col-12 col-xl-6 ">
+                                <mat-label>Finbook Name</mat-label>
+                                <input matInput formControlName="viewfbName" id="viewBrFb" [matAutocomplete]="viewFbook" (input)="filterViewFb($event.target.value) ">
+                                <mat-autocomplete autoActiveFirstOption #viewFbook="matAutocomplete" class="gAutoCompleteContainer">
+                                    <mat-option class="gSelectOption" *ngFor="let option of viewFinbooklistOptions " [value]="option.FbName " (onSelectionChange)="brFbSelected($event, option.FbCode, 'view') ">
+                                        {{option.FbName}}
+                                    </mat-option>
+                                </mat-autocomplete>
+
+                            </mat-form-field>
+
+
+                            <mat-form-field class="col-6 col-xl-3 ">
+                                <mat-label>From Date</mat-label>
+                                <input matInput formControlName="viewstartDate" [matDatepicker]="startDate" autocomplete="off " (dateChange)="viewMappedBranch('withdate')">
+                                <mat-datepicker-toggle matSuffix [for]="startDate ">
+                                    <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #startDate></mat-datepicker>
+                            </mat-form-field>
+
+                            <mat-form-field class="col-6 col-xl-3 ">
+                                <mat-label>To Date</mat-label>
+                                <input matInput formControlName="viewendDate" [matDatepicker]="endDate" autocomplete="off " (dateChange)="viewMappedBranch('withdate')">
+                                <mat-datepicker-toggle matSuffix [for]="endDate ">
+                                    <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #endDate></mat-datepicker>
+                            </mat-form-field>
+                            <div class="col-12 col-xl-6  text-end justify-content-end d-flex">
+                                <button type="button" class="gSaveButton " (click)="viewMappedBranch('withdate')">View</button>
+
+                            </div>
+                        </form>
+                        <div class=" pt-1">
+                            <div class="popUp_container gTableSection ">
+                                <div class="gInnerTable">
+                                    <table mat-table #viewtable [dataSource]="BrMapFilterList" class="table gNormalTable-sm">
+                                        <ng-container [matColumnDef]="column " *ngFor="let column of BrMapFilterdisplayedColumns; ">
+                                            <th mat-header-cell *matHeaderCellDef> {{column }} </th>
+                                            <td mat-cell *matCellDef="let element ;let i=index ">
+
+
+                                                <span *ngIf="column ==='SNo'">{{i+1}}</span>
+                                                <span *ngIf="column !=='SNo' && column !=='Action'">{{element[column] ?
+                                                    element[column]:
+                                                    '' }}</span>
+                                                <span *ngIf="column ==='Action'" style="min-width: 80px;">
+                                                    <button mat-button class="gHandIcon"
+                                                        (click)="viewMoreBRMap(element)">
+                                                        <i class="fa fa-hand-o-right"></i>
+                                                    </button>
+                                                </span>
+                                            </td>
+                                        </ng-container>
+
+                                        <tr mat-header-row *matHeaderRowDef="BrMapFilterdisplayedColumns "></tr>
+                                        <tr mat-row *matRowDef="let row; columns: BrMapFilterdisplayedColumns; "></tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </div>
+        </section>
+
+        <!-- ========================================Map Account Code to Fin Book =================================================== -->
+
+        <section *ngIf="mainMenuSelected ==='mapAcctoFinbook'" class=" sectionContainerFinbook">
+            <div class="sectionContainerFinbook  mt-1">
+
+                <div class="justify-content-center mx-2  row align-items-baseline">
+
+                    <div class="col-12 col-sm-6 col-md-4 col-xl-4 mb-1">
+                        <div class="row m-0 form-group branchOutInput">
+                            <div class="col-12 col-xl-3 p-0">
+                                <label for="exampleInputEmail1 " class="gInputLable">Company Name</label>
+                            </div>
+                            <div class="col-12 col-xl-9 p-0">
+                                <input class="gInnerInput-border" (input)="filterCmp($event.target.value)" #autoCompleteInput [matAutocomplete]="autocmpsingle" [formControl]="companyName" matInput>
+                                <mat-autocomplete autoActiveFirstOption id="autocmpsingle" #autocmpsingle="matAutocomplete" class="gAutoCompleteContainer">
+                                    <mat-option class="gSelectOption" *ngFor="let option of CampNameOptionsList" [value]="option.company" (onSelectionChange)="brCmpSelected($event, option.CmpCode, 'inputs')">
+                                        {{option.company}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-4 col-xl-4 mb-1">
+
+
+                        <div class="row m-0 form-group branchOutInput">
+                            <div class="col-12  col-xl-3 p-0">
+                                <label for="exampleInputEmail1" class="gInputLable">Finbook Name</label>
+                            </div>
+                            <div class="col-12 p-0  col-xl-9">
+                                <div class="gOuterInput">
+                                    <input class="gInnerInput-border" [placeholder]="mapViewplaceholder" (input)="checkcmpselected($event.target.value)" id="brFB" [formControl]="finbookName" matInput [matAutocomplete]="fbook">
+                                    <mat-autocomplete autoActiveFirstOption #fbook="matAutocomplete" class="gAutoCompleteContainer">
+                                        <mat-option class="gSelectOption" *ngFor="let option of FinBookOptionsList " [value]="option.FbName" (onSelectionChange)="brFbSelected($event, option.FbCode, 'inputs')">
+                                            {{option.FbName}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                    <button type="button" mat-button class="gInputButton" matTooltip="Refresh" [disabled]="Brloading" (click)="initialAccCodeDataLoad(selectedCmpCode,selectedFbCode)">
+                                        <mat-icon>sync</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <section class="gTableSection " tabindex="0">
+                    <div class="topHeaderTable">
+                        <div class="d-flex  text-end  gTableActionheaders">
+                            <form role="search" class="search-form ">
+
+                                <input type="search" name="Search" #input [ngClass]="{'gSearchText': searchTemp === '', 'gSearchText1':searchTemp!=='' }" [(ngModel)]="searchTemp" autocomplete="off">
+                            </form>
+
+                            <img Cores px-0 class="png-icon gXlButton curser " src=".\assets\gImg\excel1.png" type="submit" matTooltip="Excel Export" (click)="XLExportBranchMapTable()">
+                            <button type="button" class="gTableIconButton " matTooltip="View" (click)="openMapDialog(Viewdialog)">
+                                <mat-icon>remove_red_eye</mat-icon>
+                            </button>
+                            <button type="button" mat-button class="bulkbuttons gNormalButton" (click)="openMapOptionDialog(AccToFbMap)" *ngIf="HaveAccess">Create</button>
+
+                        </div>
+                    </div>
+
+                    <div class="gInnerTable">
+
+                        <table class="gNormalTable-sm table " id="table" width="100%">
+                            <thead class="">
+                                <tr>
+                                    <th style="width: 60px !important;">S.No</th>
+                                    <th style="width: 100px !important;">AcCode</th>
+                                    <th>AcName</th>
+                                    <th *ngIf="HaveAccess" style="width: 60px !important;" class="text-end">Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody class="">
+                                <tr class="" *ngFor="let data of datasource.data | filter: searchTemp; let i = index">
+                                    <td style="width: 60px !important;">{{i+1}}</td>
+                                    <td style="width: 100px !important;" scope="col">{{data.AcCode}}</td>
+                                    <td scope="col">{{data.AcName}}</td>
+                                    <td *ngIf="HaveAccess" class="text-end" style="width: 60px !important;">
+                                        <button mat-icon-button class="gDeleteIcon" color="warn" (click)="RemoveBrMapFinbook(data.AcCode)">
+                                            <mat-icon>delete</mat-icon>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <tr *ngIf="datasource.data.length > 0 && (datasource.data | filter : searchTemp)?.length === 0">
+                                    <td [colSpan]="9" *ngIf="HaveAccess" class="text-center">No record found.</td>
+                                    <td [colSpan]="7" *ngIf="!HaveAccess" class="text-center">No record found.</td>
+                                </tr>
+                                <tr *ngIf="datasource.data.length === 0 && !Brloading && (datasource.data.length | filter : searchTemp)?.length !== 0 ">
+
+                                    <td [colSpan]="9" *ngIf="HaveAccess" class="text-center">No record found.</td>
+                                    <td [colSpan]="7" *ngIf="!HaveAccess" class="text-center">No record found.</td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="SkeltonLoader text-center justify-content-center d-flex" *ngIf="Brloading">
+                            <mat-spinner></mat-spinner>
+                        </div>
+                    </div>
+                </section>
+
+
+                <ng-template #Viewdialog>
+                    <div class="gDialogTitle">
+                        <span class=""> View Mapped List</span>
+                        <button type="button" id="submit" class="gDialogCloseButton" (click)="dialog.closeAll()">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </div>
+                    <div class="gDialogContainer">
+                        <form [formGroup]="viewMapForm " class="row gDialogContent ">
+
+                            <mat-form-field class="col-12 col-xl-6 ">
+                                <mat-label>Company Name</mat-label>
+                                <input matInput formControlName="viewcmpName" (input)="filterViewCmp($event.target.value) " [matAutocomplete]="viewCmpName">
+                                <mat-autocomplete autoActiveFirstOption #viewCmpName="matAutocomplete" class="gAutoCompleteContainer">
+                                    <mat-option class="gSelectOption" *ngFor="let option of viewCampNameOptionsList " [value]="option.company " (onSelectionChange)="brCmpSelected($event, option.CmpCode ,'view')">
+                                        {{option.company}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+
+                            <mat-form-field class="col-12 col-xl-6 ">
+                                <mat-label>Finbook Name</mat-label>
+                                <input matInput formControlName="viewfbName" id="viewBrFb" [matAutocomplete]="viewFbook" (input)="filterViewFb($event.target.value) ">
+                                <mat-autocomplete autoActiveFirstOption #viewFbook="matAutocomplete" class="gAutoCompleteContainer">
+                                    <mat-option class="gSelectOption" *ngFor="let option of viewFinbooklistOptions " [value]="option.FbName " (onSelectionChange)="brFbSelected($event, option.FbCode, 'view') ">
+                                        {{option.FbName}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+
+
+                            <mat-form-field class="col-6 col-xl-3 ">
+                                <mat-label>From Date</mat-label>
+                                <input matInput formControlName="viewstartDate" [matDatepicker]="startDate" autocomplete="off " (dateChange)="viewMappedBranch('withdate')">
+                                <mat-datepicker-toggle matSuffix [for]="startDate ">
+                                    <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #startDate></mat-datepicker>
+                            </mat-form-field>
+
+                            <mat-form-field class="col-6 col-xl-3 ">
+                                <mat-label>To Date</mat-label>
+                                <input matInput formControlName="viewendDate" [matDatepicker]="endDate" autocomplete="off " (dateChange)="viewMappedBranch('withdate')">
+                                <mat-datepicker-toggle matSuffix [for]="endDate ">
+                                    <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #endDate></mat-datepicker>
+                            </mat-form-field>
+                            <div class="col-12 col-xl-6  text-end justify-content-end d-flex ">
+                                <button type="button" class="gSaveButton " (click)="viewMappedBranch('withdate')">View</button>
+
+                            </div>
+
+                        </form>
+                        <div class=" pt-1">
+                            <div class="gTableSection">
+                                <div class="popUp_container gInnerTable">
+
+                                    <table mat-table #viewtable [dataSource]="BrMapFilterList" class="gNormalTable-sm  table gTableStriped">
+                                        <ng-container [matColumnDef]="column " *ngFor="let column of BrMapFilterdisplayedColumns; ">
+                                            <th mat-header-cell *matHeaderCellDef> {{column }} </th>
+                                            <td mat-cell *matCellDef="let element ;let i=index ">
+                                                <span *ngIf="column ==='SNo'">{{i+1}}</span>
+                                                <span *ngIf="column !=='SNo' && column !=='Action'">{{element[column] ?
+                                                    element[column]:
+                                                    '' }}</span>
+                                                <span *ngIf="column ==='Action'" style="min-width: 80px;">
+                                                    <button mat-icon-button class="gHandIcon"
+                                                        (click)="viewMoreBRMap(element)">
+                                                        <i class="fa fa-hand-o-right"></i>
+                                                    </button>
+                                                </span>
+                                            </td>
+                                        </ng-container>
+
+                                        <tr mat-header-row *matHeaderRowDef="BrMapFilterdisplayedColumns "></tr>
+                                        <tr mat-row *matRowDef="let row; columns: BrMapFilterdisplayedColumns; "></tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+
+
+            </div>
+        </section>
+    </div>
+
+
+    <ng-template #AccToFbMap>
+        <div class="gDialogTitle">
+            <span></span>
+            <span class="" *ngIf="mainMenuSelected === 'mapBranchtoFinbook'">Map Branch to Finbook</span>
+            <span class="" *ngIf="mainMenuSelected === 'mapAcctoFinbook'">Map Account code to Finbook</span>
+
+
+            <button type="button" id="submit" class="gDialogCloseButton" (click)="dialog.closeAll()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+
+        <div class=" gDialogContainer">
+            <mat-tab-group (selectedTabChange)="onTabChanged($event.index);">
+
+                <!--   ============================ tab1 ============================================== -->
+                <mat-tab label="Individual Map" class="row">
+                    <div class="col-12 mt-3">
+                        <mat-label class="gInputLable">Company Name</mat-label>
+                        <input class="gInnerInput-border " type="text" id="brCCenter" [value]="companyName.value" disabled>
+
+                    </div>
+
+                    <div class="col-12 mt-3">
+                        <mat-label class="gInputLable">Finbook Name</mat-label>
+                        <input class="gInnerInput-border " type="text" id="brCCenter" [value]="finbookName.value" disabled>
+
+                    </div>
+
+                    <div class="col-12 mt-3" *ngIf="mainMenuSelected === 'mapBranchtoFinbook'">
+                        <mat-label class="gInputLable">Cost Center / Branch</mat-label>
+
+                        <input class="gInnerInput-border " id="brCCenter" (input)="getBrcenterBook($event.target.value, 'Branch')" [formControl]="branchName" matInput [matAutocomplete]="ccBr">
+                        <mat-autocomplete autoActiveFirstOption #ccBr="matAutocomplete" class="gAutoCompleteContainer">
+                            <mat-option class="gSelectOption" *ngFor="let option of BranchOption | filter: branchName.value" [value]="option.brname" (onSelectionChange)="branchSelected($event, option.brcode)">
+                                {{option.brname}}
+                            </mat-option>
+                        </mat-autocomplete>
+
+
+                    </div>
+                    <div class="col-12 mt-3" *ngIf="mainMenuSelected === 'mapAcctoFinbook'">
+                        <mat-label class="gInputLable">Account Code</mat-label>
+                        <div class="gOuterInput">
+                            <input class="gInnerInput-border" id="brCCenter" (input)="getBrcenterBook($event.target.value, 'AccCode')"
+                             [formControl]="AccCode" matInput [matAutocomplete]="fbAcc"  >
+                            <mat-autocomplete autoActiveFirstOption #fbAcc="matAutocomplete" class="gAutoCompleteContainer" [displayWith]="displayFn">
+                                <mat-option class="gSelectOption" *ngFor="let option of BranchOption" [value]="option" 
+                                (onSelectionChange)="branchSelected($event, option.AcCode)">
+                                    {{option.AcName}} - {{option.AcCode}}
+                                </mat-option>
+                            </mat-autocomplete>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-12 mt-3 text-center">
+                        <button type="button" *ngIf="mainMenuSelected === 'mapBranchtoFinbook'" id="singleAdd" mat-button class="gSaveButton"(click)="UploadBranchmap('single')">
+                       Save
+                        </button>
+                        <button type="button" *ngIf="mainMenuSelected === 'mapAcctoFinbook'" id="singleAdd" mat-button class="gSaveButton"(click)="UploadAccCodehmap('single')">
+                            Save
+                             </button>
+
+                    </div>
+
+
+                </mat-tab>
+                <mat-tab label="Bulk Map">
+                    <div class="row">
+                        <div class="col-12 col-xl-6 mt-2">
+                            <mat-label class="gInputLable">Company Name</mat-label>
+                            <input class="gInnerInput-border " type="text" id="brCCenter" [value]="companyName.value" disabled>
+
+                        </div>
+
+                        <div class="col-12 col-xl-6 mt-2">
+                            <mat-label class="gInputLable">Finbook Name</mat-label>
+                            <input class="gInnerInput-border " type="text" id="brCCenter" [value]="finbookName.value" disabled>
+
+                        </div>
+                        <div class="col-12 my-3 ">
+                            <button type="button" mat-button class="gNormalButton  mx-1" (click)="browsebutton()">
+                            Browse XL
+                            &nbsp;<mat-icon>attachment</mat-icon> </button>
+                            <input type="file" [(ngModel)]="inputValue" hidden id="import" accept=".xlsx, .xls" (change)="onFileChange($event, invalidBrCode)">
+
+                            <button mat-button *ngIf="mainMenuSelected === 'mapBranchtoFinbook'" class="gNormalButton mx-1 my-0" (click)="previewclick('BRMap')">
+                            Template &nbsp;
+                            <mat-icon>save_alt</mat-icon>
+                        </button>
+                            <button mat-button *ngIf="mainMenuSelected === 'mapAcctoFinbook'" class="gNormalButton mx-1 my-0" (click)="previewclick('AccMap')">
+                            Template
+                            &nbsp;
+                            <mat-icon>save_alt</mat-icon>
+                        </button>
+                            <button type="button" *ngIf="mainMenuSelected === 'mapBranchtoFinbook'" mat-button class="gSaveButton  mx-1" [disabled]="Brloading || invalidbranchCodev.length > 0" (click)="UploadBranchmap('bulk')" >
+                          Save
+                        </button>
+                            <button type="button" *ngIf="mainMenuSelected === 'mapAcctoFinbook'" mat-button class="gSaveButton  mx-1" [disabled]="Brloading || invalidbranchCodev.length > 0" (click)="UploadAccCodehmap('bulk')" >
+                            Save
+                          </button>
+                        </div>
+                    </div>
+
+                    <div class="gDialogContainer ">
+                        <div class="gTableSection">
+                            <div class="gTableActionheaders justify-content-center" *ngIf="InvalidText !== ''">
+
+                                <span class="gInputLable">{{InvalidText}}</span>
+                            </div>
+                            <div class="gInnerTable" style="max-height: calc(100vh - 300px);">
+                                <table mat-table #table [dataSource]="BulkDataSource" class="table gNormalTable-sm">
+                                    <ng-container [matColumnDef]="column " *ngFor="let column of InvaliddisplayedColumns; ">
+                                        <th mat-header-cell *matHeaderCellDef class="">
+                                            <span *ngIf="invalidbranchCodev.length > 0">  {{column === 'SNo' ? 'Row.No' :column }}</span>
+                                            <span *ngIf="invalidbranchCodev.length === 0">  {{column === 'SNo' ? 'S.No' :column }}</span>
+
+                                        </th>
+                                        <td mat-cell *matCellDef="let element ;let i=index " class="">
+                                            <span *ngIf="column === 'SNo'">{{i+1}}</span>
+                                            <span *ngIf="column !== 'SNo'">{{element[column] ? element[column] : 'Null'}}</span>
+                                        </td>
+                                    </ng-container>
+
+                                    <tr mat-header-row *matHeaderRowDef="InvaliddisplayedColumns " class="">
+                                    </tr>
+                                    <tr mat-row *matRowDef="let row; columns: InvaliddisplayedColumns; " class=""></tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </mat-tab>
+
+            </mat-tab-group>
+        </div>
+
+    </ng-template>
+    <ng-template #invalidBrCode>
+
+    </ng-template>

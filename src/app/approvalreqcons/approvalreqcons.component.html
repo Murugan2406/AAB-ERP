@@ -1,0 +1,35 @@
+<div class="wrapper">
+
+<div layout="column" layout-fill>
+
+  <div class="header">
+      <mat-toolbar color ="warn">
+        <mat-toolbar-row>
+          <button mat-button routerLink="/dashboard"> BACK</button>
+          <span class="example-spacer"></span>
+          <button mat-button> {{menuCaption}} </button>
+            <span class="example-spacer"></span>
+            <button mat-button disabled>
+                <img class="png-icon" src=".\assets\gImg\a2b2.png" style="max-width: 56px; min-width: 56px;">
+            </button>
+        </mat-toolbar-row>
+      </mat-toolbar>
+  </div>
+
+ <table class="table table-sm table-hover" style="margin-top: 10px;">
+    <th>Branch Name</th>
+    <th>Customer Name</th>
+
+    <tr routerLink="/approvalreqdtls" (click)="OnSelectedval(recordg?.brcode,recordg?.trnno,recordg?.orderno)" *ngFor="let recordg of getApprovalData">
+      <td *ngIf="recordg.visible">{{ recordg?.brcode }}</td>
+        <td>{{recordg?.brname}}</td>
+        <td>{{recordg?.custname}}</td>
+        <td *ngIf="recordg.visible">{{ recordg?.trnno }}</td>
+        <td *ngIf="recordg.visible">{{ recordg?.orderno }}</td>
+    </tr>
+</table>
+
+
+</div>
+
+</div>

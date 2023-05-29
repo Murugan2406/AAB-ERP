@@ -1,0 +1,22 @@
+<div class="gWrapper">
+    <app-header Titleheader="Dynamic Forms"></app-header>
+   <div class=" container  ">
+        <div class="gcardContainer mx-2 p-4 mt-xl-5">
+        <div class="gTitle">Dynamic Forms</div>
+
+        <input type="text" class="gInnerInput-border">
+        <div class="row justify-content-center">
+            <app-dynamic-form-builder     (keydown)="keytab($event)" (gForm)="formEvent($event)"[fields]="getFields()"
+             (gFormSubmit)="formSubmit($event)" (gDropDownChanged)="gDropDownChange($event)" (gSelectionChanged)="selectionChange($event)" (autoCompleteTrigger)="autCompleteTrigger($event)"></app-dynamic-form-builder>
+       
+       <button class="gNormalButton mt-3" (click)="SubmitForm(this.fields)">Save</button>
+       
+            </div>
+        </div>
+      
+    </div>
+    <div class="row mx-5 mt-4 justify-content-center">
+
+        {{this.AutoForm.value | json}}
+                </div> 
+    </div>

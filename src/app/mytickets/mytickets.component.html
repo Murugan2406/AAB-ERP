@@ -1,0 +1,183 @@
+<div class="wrapper">
+
+  <div class="header">
+    <mat-toolbar color="warn">
+      <mat-toolbar-row>
+        <button mat-button (click)="backNavigation()"> BACK</button>
+        <span class="example-spacer"></span>
+        <span class="example-spacer"></span>
+        <button mat-button (click)="exportAsXLSX()" *ngIf="isTicketList===true">
+          <i class="fa fa-file-excel-o" style="font-size: 20px;" aria-hidden="true"></i>
+        </button>
+        <button mat-button disabled>
+          <img class="png-icon" src=".\assets\gImg\a2b2.png" style="max-width: 56px; min-width: 56px;">
+        </button>
+      </mat-toolbar-row>
+    </mat-toolbar>
+  </div>
+
+  <div class="content">
+    <div class="example-container">
+      <div *ngIf="isTicketList===true" style="margin-top: 1%;">
+        <div class="row">
+          <div class="col-xl-2 col-lg-2 col-md-4 col-6 form-group">
+            <label class="text-muted">Start Date </label>
+            <input type="date" (keydown)="keydownEvent($event)" [(ngModel)]="fromdate"
+              class="form-control form-control-sm form-select" id="startdate" name="startdate">
+          </div>
+          <div class="col-xl-2 col-lg-2 col-md-4 col-6 form-group">
+            <label class="text-muted">End Date </label>
+            <input type="date" (keydown)="keydownEvent($event)" [(ngModel)]="todate"
+              class="form-control form-control-sm form-select" id="enddate" name="enddate">
+          </div>
+          <div class="col-xl-2 col-lg-2 col-md-4 col-6 form-group"
+            *ngIf="(sideMenuSelected==='deptTicket'|| sideMenuSelected==='reports')&&isFilter">
+            <label class="text-muted">Status </label>
+            <select class="form-control form-control-sm form-select" name="status" [(ngModel)]="selectStatus" #User
+              id="sel3" (change)="onStatusChange($event.target)">
+              <option value="ALL" selected>ALL</option>
+              <option *ngFor='let user of status'>{{user}}</option>
+            </select>
+          </div>
+          <div class="col-xl-2 col-lg-2 col-md-4 col-6 form-group" *ngIf="sideMenuSelected==='deptTicket'&&isFilter ">
+            <label class="text-muted">DapartMent </label>
+            <select class="form-control form-control-sm form-select" #dept id="sel1" name="dept" [(ngModel)]="deptName"
+              (change)="onDeptChange($event.target)">
+              <!----  <option value="{{deptName}}" selected>{{deptName}}</option> -->
+              <option *ngFor="let dept of deptNames" selected="deptName===dept" [value]="dept">{{dept}}</option>
+            </select>
+          </div>
+          <div class="col-xl-2 col-lg-2 col-md-4 col-6 form-group"
+            *ngIf="sideMenuSelected==='deptTicket'&&isFilter">
+            <label class="text-muted">Subject </label>
+            <select class="form-control form-control-sm form-select" name="selsub" [(ngModel)]="subject" id="selsub"
+              (change)="onSubjChange($event.target)">
+              <option value="ALL">ALL</option>
+              <option *ngFor='let subj of subjects' [value]="subj.ListofJds">
+                {{subj.ListofJds}}</option>
+            </select>
+          </div>
+          <div class="col-xl-2 col-lg-2 col-md-4 col-6 form-group"
+            *ngIf="(sideMenuSelected==='deptTicket' || sideMenuSelected==='reports')&&isFilter">
+            <label class="text-muted">User </label>
+            <select class="form-control form-control-sm form-select" #names name="user" [(ngModel)]="selectUser"
+              id="sel3" (change)="onUserChange($event.target)">
+              <option value="ALL">ALL</option>
+              <option *ngFor='let names of UserNames' selected="selectUser===names" [value]="names">
+                {{names}}</option>
+            </select>
+          </div>
+          <div class="ms-auto col-xl-2 col-lg-2 col-md-4 col-6 form-group has-search " *ngIf="isSearch && isFilter"
+            style="margin-bottom: auto;margin-top: auto;">
+            <span class="fa fa-search form-control-feedback"></span>
+            <input size="100" type="text" [(ngModel)]="filter" name="search" id="search"
+              class="form-control form-control-sm form-select" placeholder="Search">
+          </div>
+        </div>
+
+        <div id="table-scroll" id="style-2" class="table-responsive" style="margin-bottom: 20PX;"
+          [ngClass]="{ 'table-scroll': listlen >=25 ,'tablehideScroll': 25 > listlen } ">
+          <table id="main-table"
+            class="main-table table table-hover table-responsive-sm table-responsive-md table-striped table-sm shadow-sm p-3 mb-5 bg-white rounded">
+            <thead>
+              <th>Sno</th>
+              <th class="pointer"><b>Subject</b>
+                <i style="padding-left: 5%" class="fa" (click)="sort('subjectJd')"
+                  [ngClass]="{'fa-sort': column != 'subjectJd', 'fa-sort-asc': (column == 'subjectJd' && isDesc), 'fa-sort-desc': (column == 'subjectJd' && !isDesc) }"
+                  aria-hidden="true"> </i>
+              </th>
+              <th class="pointer"><b>TicketId</b>
+                <i style="padding-left: 5%" class="fa" (click)="sort('ticketId')"
+                  [ngClass]="{'fa-sort': column != 'ticketId', 'fa-sort-asc': (column == 'ticketId' && isDesc), 'fa-sort-desc': (column == 'ticketId' && !isDesc) }"
+                  aria-hidden="true">
+                </i>
+              </th>
+              <th>Location</th>
+              <th class="pointer">Assigned</th>
+              <th class="pointer">Status</th>
+              <th class="pointer"><b>From</b>
+                <i style="padding-left: 5%" class="fa" (click)="sort('fromUsr')"
+                  [ngClass]="{'fa-sort': column != 'fromUsr', 'fa-sort-asc': (column == 'fromUsr' && isDesc), 'fa-sort-desc': (column == 'fromUsr' && !isDesc) }"
+                  aria-hidden="true"> </i>
+              </th>
+              <th><b>LastUpdate</b>
+                <i style="padding-left: 5%" (click)="searchView()" class="fa fa-search"></i>
+              </th>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let element of checklist |filter:filter  |orderby: {property: column, direction: direction};let i=index ">
+                <td>{{i+1}}</td>
+                <td style="font: bold">
+                  <a (click)="ticketDetails(element.ticketId)">{{element.subjectJd}}</a>
+                </td>
+                <td style="font: bold;">
+                  <a (click)="ticketDetails(element.ticketId)">{{element.ticketId}}</a>
+                </td>
+                <td style="font: bold;">
+                  <a (click)="ticketDetails(element.ticketId)"> {{element.brname}}</a>
+                </td>
+                <td>
+                  <div style="color: red" *ngIf="element.assignedTo==='Unassigned'">
+                    <a (click)="ticketDetails(element.ticketId)"> {{element.assignedTo}}</a>
+                  </div>
+                  <div style="color: #008000" *ngIf="element.assignedTo !='Unassigned'">
+                    <a (click)="ticketDetails(element.ticketId)">{{element.assignedTo}}</a>
+                  </div>
+                </td>
+                <td>
+                  <div style="color: red" *ngIf="element.statusCmp==='Unassigned'">
+                    <a (click)="ticketDetails(element.ticketId)"> {{element.statusCmp}}</a>
+                  </div>
+                  <div style="color: #4E342E" *ngIf="element.statusCmp==='Rejected'">
+                    <a (click)="ticketDetails(element.ticketId)"> {{element.statusCmp}}</a>
+                  </div>
+                  <div style="color: #17A2B8" *ngIf="element.statusCmp==='Approved'">
+                    <a (click)="ticketDetails(element.ticketId)"> {{element.statusCmp}}</a>
+                  </div>
+                  <div style="color: #f47100" *ngIf="element.statusCmp==='ApprovalPending'">
+                    <a (click)="ticketDetails(element.ticketId)"> {{element.statusCmp}}</a>
+                  </div>
+                  <div style="color: #960052" *ngIf="element.statusCmp==='In-progress'">
+                    <a (click)="ticketDetails(element.ticketId)"> {{element.statusCmp}}</a>
+                  </div>
+                  <div style="color: #9C27B0" *ngIf="element.statusCmp==='Open'">
+                    <a (click)="ticketDetails(element.ticketId)"> {{element.statusCmp}}</a>
+                  </div>
+                  <div style="color: rgb(0, 60, 255)" *ngIf="element.statusCmp==='Resolved'">
+                    <a (click)="ticketDetails(element.ticketId)"> {{element.statusCmp}}</a>
+                  </div>
+                  <div style="color: green" *ngIf="element.statusCmp==='Closed'">
+                    <a (click)="ticketDetails(element.ticketId)"> {{element.statusCmp}}</a>
+                  </div>
+                  <div style="color: #1DE9B6" *ngIf="element.statusCmp==='ReOpen'">
+                    <a (click)="ticketDetails(element.ticketId)"> {{element.statusCmp}}</a>
+                  </div>
+                  <div style="color: black" *ngIf="element.statusCmp==='Deleted'">
+                    <a (click)="ticketDetails(element.ticketId)"> {{element.statusCmp}}</a>
+                  </div>
+                </td>
+                <td style="color: #008000">
+                  <a (click)="ticketDetails(element.ticketId)"> {{element.fromUsr}}</a>
+                </td>
+                <td style="font: bold;">
+                  <a (click)="ticketDetails(element.ticketId)"> {{element.lastActivityTime}}</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+      <div *ngIf="isTicketDetails===true">
+        <app-ticket-details></app-ticket-details>
+      </div>
+    </div>
+  </div>
+  <!-- LOADING ICON -->
+  <div *ngIf="progressval == 'indeterminate'" class="loading">
+    <mat-progress-spinner [mode]="progressval">
+    </mat-progress-spinner>
+  </div>
+  <!-- LOADING ICON -->
+</div>

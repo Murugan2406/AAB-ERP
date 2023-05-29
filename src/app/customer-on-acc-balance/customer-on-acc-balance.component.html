@@ -1,0 +1,217 @@
+<div class="wrapper gWrapper wrapper1">
+    <app-header Titleheader="Customer On Account Balance"></app-header>
+
+
+    <section class="gSection  row justify-content-center">
+        <div class="col-xl-12 col-md-12 col-12">
+            <form class="form row align-items-center mx-2">
+
+                <div class="col-xl-4 col-sm-6 col-12 mb-2 col-md-4 formFieldsOuter">
+                    <div class="p-0">
+                        <label for="inputLabel" class="gInputLable">Location/ Branch</label>
+                    </div>
+
+                    <div class="gOuterInput">
+                        <input class="gInnerInput w-100" (input)="sortBranchName($event.target.value)" (keydown)="keytab($event)" [matAutocomplete]="autocmpsingle" [formControl]="BranchName" matInput />
+                        <mat-autocomplete id="autocmpsingle" #autocmpsingle="matAutocomplete" [displayWith]="displayBr" class="gAutoCompleteContainer">
+                            <mat-option *ngFor="let option of branchLists" class="gSelectOption" [value]="option" (onSelectionChange)="BrSelected($event)">
+                                {{ option.brname}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </div>
+                </div>
+
+                <div class="col-xl-4 col-sm-6 col-12 mb-2 col-md-4 formFieldsOuter">
+                    <div class="p-0">
+                        <label for="inputLabel" class="gInputLable">Customer Name</label>
+                    </div>
+                    <div class="gOuterInput">
+                        <input class="gInnerInput w-100" (input)="sortCustomerName($event.target.value)" id="customerName" (keydown)="keytab($event)" [matAutocomplete]="autoCustomer" [formControl]="CustomerName" matInput />
+                        <mat-autocomplete #autoCustomer="matAutocomplete" [displayWith]="displayCustomer" class="gAutoCompleteContainer">
+                            <mat-option *ngFor="let option of customerList" class="gSelectOption" [value]="option" (onSelectionChange)="CustomerSelected($event)">
+                                {{ option.name }}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <button type="button" id="goButton" mat-button class="gInputButton" [disabled]="loading" (click)="checkvalidation()">
+                            <mat-icon>sync</mat-icon>
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+        <div class="mx-2">
+            <section class="gTableSection mx-xl-2">
+
+                <div class="gTableActionheaders">
+
+                    <form role="search" class="search-form ml-3">
+
+                        <input type="search" name="Search" [(ngModel)]="CustomerSearch" [ngClass]="{'gSearchText': CustomerSearch === '', 'gSearchText1':CustomerSearch!=='' }" autocomplete="off">
+
+                    </form>
+                    <img Cores px-0 class="png-icon gXlButton curser " src=".\assets\gImg\excel1.png" type="submit" matTooltip="Excel Export" (click)="exportexcel()">
+
+
+
+                </div>
+
+                <div class="gInnerTable">
+                    <table class="gNormalTable-sm table " id='trRow'>
+                        <thead>
+                            <tr>
+                                <th style="width: 80px !important">S.No</th>
+                                <th style="width: 200px !important">Customer Code </th>
+                                <th class="">Customer Name</th>
+                                <th style="width: 80px !important">View</th>
+                                <th style="width: 80px !important" *ngIf="origin !== 'Client'">Edit</th>
+                                <th style="width: 100px !important; padding-right: 20px !important; " class="text-end">Adv Amount
+                                    <i class="fa" style="cursor:pointer" (click)="sort('AdvBal')" [ngClass]="{'fa-sort': column != 'AdvBal', 'fa-sort-asc': (column =='AdvBal' && isDesc),
+
+                                'fa-sort-desc': (column == 'AdvBal' && !isDesc) }" aria-hidden="true"></i>
+                                </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let user of datasource.data | filter : CustomerSearch; let i=index">
+                                <td style="width: 80px !important">{{i+1}}</td>
+                                <td style="width: 200px !important">{{user.Custcode}}</td>
+                                <td>{{user.Customer}}</td>
+                                <td style="width: 80px !important">
+                                    <button mat-icon-button class="gHandIcon" (click)="ViewMore(ViewMoreCustomerDetails, user)">
+                                        <i class="fa fa-hand-o-right "></i>
+                                    </button>
+
+                                </td>
+                                <td style="width: 80px !important" *ngIf="origin !== 'Client'">
+                                    <button mat-icon-button class="gEditIcon" (click)="EditPopUp(EditAccBalance, user)">
+                                        <mat-icon>edit</mat-icon>
+                                    </button>
+
+                                </td>
+                                <td style="width: 100px !important; padding-right: 20px !important;" class="text-end"> {{user.AdvBal|currency:"INR":"symbol"}} </td>
+
+                            </tr>
+                            <tr *ngIf="datasource.data.length > 0" class="toggleFooter">
+                                <td colspan="4" class="text-center " *ngIf="origin === 'Client'"> <b> Total Advance</b></td>
+                                <td colspan="5" class="text-center " *ngIf="origin !== 'Client'"> <b> Total Advance</b></td>
+                                <td colspan="1" class="text-end" style="width: 100px !important; padding-right: 20px !important;"> <b>{{ TotalAmt |currency:"INR":"symbol"}}</b> </td>
+                            </tr>
+                            <tr *ngIf="(datasource.data | filter : CustomerSearch)?.length === 0">
+
+                                <td colspan="6" class="text-center">No result found.</td>
+                            </tr>
+
+                            <tr *ngIf="datasource.data.length === 0 && !loading && (datasource.data | filter : CustomerSearch)?.length !== 0 ">
+
+                                <td colspan="6" class="text-center">No record found.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </section>
+        </div>
+        <ng-template #EditAccBalance>
+
+
+
+            <div class="gDialogTitle">
+
+                <span class="">Edit Customer On Account Balance</span>
+
+
+                <button type="button" id="submit" class="gDialogCloseButton" (click)="dialog.closeAll()">
+                        <mat-icon>close</mat-icon>
+    </button>
+            </div>
+
+
+            <div class="gDialogContainer">
+
+                <form [formGroup]="CreateAccBalance" class="row ">
+                    <mat-form-field class="col-12 forminput1">
+                        <mat-label>Customer Name</mat-label>
+                        <input type="text" formControlName="CustName" readonly matInput [matAutocomplete]="autopoup" (keydown)="keytab($event)" />
+                        <mat-autocomplete #autopoup="matAutocomplete" [displayWith]="displayFn">
+                            <mat-option *ngFor="let option of ViewCampNameOptionsListOne" [value]="option">
+                                {{ option.company }}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                    <mat-form-field class="col-12 forminput1">
+                        <mat-label>Current Amount</mat-label>
+                        <input type="text" class="" formControlName="CurrAmt" readonly matInput autocomplete="off" (keydown)="keytab($event)" />
+                    </mat-form-field>
+
+                    <mat-form-field class="col-12 forminput1">
+                        <mat-label>New Amount</mat-label>
+                        <input matInput type="number" formControlName="NewAmt" autocomplete="off" (keydown)="keytab($event)" />
+                    </mat-form-field>
+                    <mat-form-field class="col-12 forminput1">
+                        <mat-label>Different Adjust Amount</mat-label>
+                        <input matInput type="text" formControlName="diffAdjAmt" autocomplete="off" readonly (keydown)="keytab($event)" />
+                    </mat-form-field>
+
+                    <div class="col-12 d-flex text-center justify-content-center">
+                        <button type="button" id="submit" class="gSaveButton" (click)="popUpSubmit(CreateAccBalance.value)">
+                            Update
+                        </button>
+
+                    </div>
+                </form>
+            </div>
+        </ng-template>
+
+
+
+
+        <ng-template #ViewMoreCustomerDetails>
+            <div class="gDialogTitle">
+
+                <span class="">Edit Customer On Account Balance</span>
+
+
+                <button type="button" id="submit" class="gDialogCloseButton" (click)="dialog.closeAll()">
+                        <mat-icon>close</mat-icon>
+    </button>
+            </div>
+            <div class="gDialogContainer">
+
+                <form class="row mt-2 mx-2 form1 ">
+                    <section class="gTableSection  col-12">
+                        <div class="gInnerTable">
+                            <mat-table class="gNormalTable-sm table " mat-table [dataSource]="datasourceMore">
+                                <ng-container *ngFor="let col of displayedMoreColumns" [matColumnDef]="col">
+                                    <th mat-header-cell *matHeaderCellDef>
+                                        {{col}}
+                                    </th>
+                                    <td mat-cell *matCellDef="let row; let i = index">
+                                        {{row[col]}}
+                                    </td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedMoreColumns"></tr>
+
+                                <tr mat-row *matRowDef="let row; columns: displayedMoreColumns"></tr>
+
+                                <tr class="mat-row" *matNoDataRow>
+                                    <td class="mat-cell text-center" *ngIf="!loading" [attr.colspan]="displayedMoreColumns.length + 1">
+                                        No records found.
+                                    </td>
+                                </tr>
+                            </mat-table>
+                            <div class="item" *ngIf="loading">
+                                <ngx-skeleton-loader count="5"></ngx-skeleton-loader>
+                            </div>
+                        </div>
+                    </section>
+
+
+                </form>
+            </div>
+        </ng-template>
+
+    </section>
+</div>

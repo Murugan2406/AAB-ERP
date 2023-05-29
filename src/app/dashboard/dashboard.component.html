@@ -1,0 +1,459 @@
+
+
+<div class="loading" *ngIf="viewMoreLoad" style="position: fixed; top:0; bottom: 0; left: 0; right: 0; z-index: 10001 !important; backdrop-filter: blur(3px);">
+
+    <div class="pendulum-container">
+  
+      <div class="ball-first">
+        <div id="ball-1" class="first"></div>
+        <div id="shadow-1" class="first-shadow"></div>
+      </div>
+      <div id="ball-2"></div>
+      <!-- <div id="ball-3"></div>
+      <div id="ball-4"></div> -->
+      <div id="ball-5"></div>
+      <div id="ball-6"></div>
+      <div class="ball-first">
+        <div id="ball-7" class="last"></div>
+        <div id="shadow-2" class="last-shadow"></div>
+      </div>
+    </div>
+    <div class="loader">
+      <span class="gInputLable">Just Hold On 👋</span>
+
+    </div>
+  </div>
+
+
+<div class="gWrapper">
+  <app-header Titleheader="Web Buddy.IO"></app-header>
+
+
+<!-- <button id="but" autoplay (click)="openWebCam()">
+    Open WebCam
+</button>
+<video #videoPlayer></video> -->
+  <!-- <div  id="grid"  class="row mx-2 align-items-center"  style="width: 550px;margin-left: 30% !important;">
+    <div class="col-xl-3 text-center" >
+      <span class="gInputLable" *ngIf="this.player1">Player 1 Turn </span><br>
+      <i class="fa fa-heart-o fa-2x  mt-2 text-black" style="color: #000;" *ngIf="this.player1"></i>
+    </div>
+    <div class="col-4 mt-2 col-xl-6 gap-2">
+  <button *ngFor="let value of arr" value =''  [id]="value" mat-button class="gNormalButton m-2 tick " (click)="btnClick(value)"
+  style="height: 40px !important;"></button>
+</div>
+  <div class="col-xl-3 text-center" >
+    <span class="gInputLable" *ngIf="!this.player1">Player 2 Turn </span><br>
+    <i class="fa fa-heart-o fa-2x  mt-2" *ngIf="!this.player1" style="color: red;" ></i>
+  </div>
+</div>  -->
+
+
+
+
+
+  <!-- <button mat-button (click)="callFunction()" class="gSaveButton">Printer Check</button> -->
+
+  <div class="row mx-2 " style="float: left;">
+    <div class="col-12 text-center badge-danger mt-4" style="position: sticky;top: 30px;z-index: 300;">
+      
+  <!-- <button class="gSaveButton" (click)="reset()">ResetGame</button> -->
+      <input type="search" id="search" matInput class="gInnerInput-border" style="max-width: 400px;" placeholder="Search"
+        [(ngModel)]="searchInput" (keyup)="applyFilter($event, $event.target.value)" >
+        <!-- <input type="search" id="search" matInput class="gInnerInput-border" style="max-width: 400px;" placeholder="Search"
+        [formControl]="myControl" (input)="testing($event.target.value)">
+        <div class="mt-2" >
+          <button class="gSaveButton" (click)="setValue()">Set Value</button>
+        
+      </div> -->
+    </div>
+    <!-- <input type="file"   id="import" (change)="fileReader($event)">
+    <pdf-viewer src="../../assets/Test.pdf"></pdf-viewer> -->
+    <!-- <canvas #pdfViewer></canvas> -->
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-center mt-4 text-center " routerLinkActive="active">
+      <button mat-button class="router" routerLink="/Updatation">
+        <mat-icon>folder_open</mat-icon><br>
+        <span id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"
+          style="text-align: center;">Update Folder</span>
+      </button>
+    </div>
+
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-center mt-4" routerLinkActive="active">
+      <button mat-button class="router" routerLink="/ClientServerCommon/RequestTracker">
+        <i class="fa fa-cog fa-2x fa-beat"></i>
+
+        <h5 id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"
+          style="text-align: center;">REQUEST TRACKER</h5>
+      </button>
+    </div>
+
+
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-center mt-4" routerLinkActive="active">
+      <button mat-button class="router" (click)="Production('FinishedPrd')">
+        <i class="fa fa-heart fa-2x fa-beat"></i><br>
+        <h5 id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"
+          style="text-align: center;">Factory Production <br> (FinishedPrd)</h5>
+      </button>
+    </div>
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-center mt-4" routerLinkActive="active">
+      <button mat-button class="router" (click)="Production('IssueOnlyToproduct')">
+        <mat-icon class="rotate">accessibility</mat-icon><br>
+        <h5 id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"style="text-align: center;">Factory Production <br> (IssueOnlyToproduct)</h5>
+      </button>
+    </div>
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-center mt-4" routerLinkActive="active">
+      <button mat-button class="router" (click)="Production('Prdn_IssueBOTH')">
+        <i class="fa fa-heart fa-2x fa-beat"></i><br>
+        <h5 id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"
+          style="text-align: center;">Factory Production <br> (Prdn_IssueBOTH)</h5>
+      </button>
+    </div>
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-center mt-4" routerLinkActive="active">
+      <button mat-button class="router" routerLink="/Prod-Barcode">
+        <mat-icon class="rotate">accessibility</mat-icon><br>
+        <h5 id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"
+          style="text-align: center;">Prod-Barcode</h5>
+      </button>
+    </div>
+
+
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-center mt-4" routerLinkActive="active">
+      <button mat-button class="router" routerLink="/Intent-Item">
+        <mat-icon class="rotate">accessibility</mat-icon><br>
+        <h5 id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"
+          style="text-align: center;">Intent-Item</h5>
+      </button>
+    </div>
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-center mt-4" routerLinkActive="active">
+      <button mat-button class="router" routerLink="/Updatation/set-issue">
+        <i class="fa fa-cog fa-2x fa-beat"></i><br>
+        <h5 id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"
+          style="text-align: center;">Set-Issue</h5>
+      </button>
+    </div>
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-center mt-4" routerLinkActive="active">
+    <button mat-button class="router" routerLink="/Store-Issue">
+        <i class="fa fa-cog fa-2x fa-beat"></i><br>
+        <h5 id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"
+          style="text-align: center;">Store-Issue</h5>
+      </button>
+    </div>
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-center mt-4" routerLinkActive="active">
+      <button mat-button class="router" routerLink="/Tare-Weight">
+        <i class="fa fa-heart fa-2x fa-beat"></i><br>
+        <h5 id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"
+          style="text-align: center;">Tare-Weight</h5>
+      </button>
+    </div>
+
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-center mt-4" routerLinkActive="active">
+      <button mat-button class="router" routerLink="/Numberic-Type">
+        <mat-icon class="rotate">accessibility</mat-icon><br>
+        <h5 id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"
+          style="text-align: center;">Numberic Type</h5>
+      </button>
+    </div>
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-center mt-4" routerLinkActive="active">
+      <button mat-button class="router" (click)="OpeBalRoute('OpeningBal')">
+        <mat-icon class="rotate">accessibility</mat-icon><br>
+        <h5 id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"
+          style="text-align: center;">Opening Balance</h5>
+      </button>
+    </div>
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-center mt-4" routerLinkActive="active">
+      <button mat-button class="router" (click)="OpeBalRoute('OpeningBalApprove')">
+        <mat-icon class="rotate">accessibility</mat-icon><br>
+        <h5 id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"
+          style="text-align: center;">Opening Balance Approval</h5>
+      </button>
+    </div>
+
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-center mt-4" routerLinkActive="active">
+      <button mat-button class="router" (click)="AmcRouting('AMCMaster')">
+        <i class="fa fa-cog fa-2x fa-beat"></i>
+        <h5 id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"
+          style="text-align: center;">AMC-Master</h5>
+      </button>
+    </div>
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-center mt-4" routerLinkActive="active">
+      <button mat-button class="router" (click)="AmcRouting('AMCApprovel')">
+        <i class="fa fa-cog fa-2x fa-beat"></i>
+        <h5 id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"
+          style="text-align: center;">AMC-Approval</h5>
+      </button>
+    </div>
+
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-center mt-4" routerLinkActive="active">
+      <button mat-button class="router" (click)="DCNoteRouting('SupplierEntry')">
+        <i class="fa fa-heart fa-2x fa-beat"></i>
+        <h5 id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"
+          style="text-align: center;">Supplier DC Note</h5>
+      </button>
+    </div>
+
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-center mt-4" routerLinkActive="active">
+      <button mat-button class="router" (click)="DCNoteRouting('SupplierApproval')">
+        <i class="fa fa-cog fa-2x fa-beat"></i>
+        <h5 id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"
+          style="text-align: center;">Supplier DC Note Approval</h5>
+      </button>
+    </div>
+
+
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-center mt-4" routerLinkActive="active">
+      <button mat-button class="router" (click)="DCNoteRouting('customerEntry')">
+        <i class="fa fa-heart fa-2x fa-beat"></i>
+        <h5 id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"
+          style="text-align: center;">Customer DC Note</h5>
+      </button>
+    </div>
+
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-center mt-4" routerLinkActive="active">
+      <button mat-button class="router" (click)="DCNoteRouting('customerApproval')">
+        <mat-icon class="rotate">accessibility</mat-icon><br>
+        <h5 id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"
+          style="text-align: center;">Customer DC Note Approval</h5>
+      </button>
+    </div>
+
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-center mt-4" routerLinkActive="active">
+      <button mat-button class="router" routerLink="/master-Ledger">
+        <i class="fa fa-cog fa-2x fa-beat"></i>
+
+        <h5 id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"
+          style="text-align: center;">Master Ledger </h5>
+      </button>
+    </div>
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-center mt-4" routerLinkActive="active">
+      <button mat-button class="router" routerLink="/dynamic-forms">
+        <i class="fa fa-heart fa-2x fa-beat"></i>
+        <h5 id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"
+          style="text-align: center;">Dynamic Forms </h5>
+      </button>
+    </div>
+
+
+    <!-- <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-center mt-4" routerLinkActive="active">
+                <button mat-button class="router" class="FolderIcon" routerLink="/petty-cash">
+
+              <span class="material-icons">
+                send_time_extension         
+              </span>
+      <h5 id="text" tabindex ='1' class="text-xs font-weight-bold text-info text-uppercase mb-1" style="text-align: center;">
+       Update Component</h5>
+    </button>
+            </div> -->
+
+
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-center mt-4" routerLinkActive="active">
+      <button mat-button class="router" (click)="JVRouting('JVNormal')">
+        <i class="fa fa-heart fa-2x fa-beat"></i>
+        <h5 id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"
+          style="text-align: center;">Journal Voucher</h5>
+      </button>
+    </div>
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-center mt-4" routerLinkActive="active">
+      <button mat-button class="router" (click)="JVRouting('JVApprovel')">
+        <i class="fa fa-cog fa-2x fa-beat"></i>
+        <h5 id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"
+          style="text-align: center;">Journal Voucher Approval</h5>
+      </button>
+    </div>
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-center mt-4" routerLinkActive="active">
+      <button mat-button class="router" routerLink="/sundry-receipt">
+        <mat-icon class="rotate">accessibility</mat-icon><br>
+        <h5 id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"
+          style="text-align: center;">Sundrt receipt</h5>
+      </button>
+    </div>
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-center mt-4" routerLinkActive="active">
+      <button mat-button class="router" routerLink="/Item-Swap">
+        <i class="fa fa-cog fa-2x fa-beat"></i>
+        <h5 id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"
+          style="text-align: center;">Item Swap</h5>
+      </button>
+    </div>
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-center mt-4" routerLinkActive="active">
+      <button mat-button class="router" routerLink="/cheque-Payment">
+        <mat-icon class="rotate">accessibility</mat-icon><br>
+        <h5 id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"
+          style="text-align: center;">Cheque Payments</h5>
+      </button>
+    </div>
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-center mt-4" routerLinkActive="active">
+      <button mat-button class="router" routerLink="/table-test">
+        <i class="fa fa-heart fa-2x fa-beat"></i>
+        <h5 id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"
+          style="text-align: center;">Test Table</h5>
+      </button>
+    </div>
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-center mt-4" routerLinkActive="active">
+      <button mat-button class="router" routerLink="/SharedComponent">
+        <i class="fa fa-cog fa-2x fa-beat"></i>
+        <h5 id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"
+          style="text-align: center;">Shared Module</h5>
+      </button>
+    </div>
+
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-center mt-4" routerLinkActive="active">
+      <button mat-button class="router" routerLink="/customer-on-acc-balance">
+        <i class="fa fa-heart fa-2x fa-beat"></i>
+        <h5 id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"
+          style="text-align: center;">Customer OnAcc Balance</h5>
+      </button>
+    </div>
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-center mt-4" routerLinkActive="active">
+      <button mat-button class="router" routerLink="/terminal-to-user">
+        <i class="fa fa-heart fa-2x fa-beat"></i>
+        <h5 id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"
+          style="text-align: center;">Terminal to user</h5>
+      </button>
+    </div>
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-center mt-4" routerLinkActive="active">
+      <button mat-button class="router" (click)="gmainRouting('group', 'VendorGroup')">
+        <i class="fa fa-cog fa-2x fa-beat"></i>
+        <h5 id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"
+          style="text-align: center;">Vendor Group</h5>
+      </button>
+    </div>
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-center mt-4" routerLinkActive="active">
+      <button mat-button class="router" (click)="gmainRouting('group','ItemGroup')">
+        <i class="fa fa-cog fa-2x fa-beat"></i>
+        <h5 id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"
+          style="text-align: center;">Item Group</h5>
+      </button>
+    </div>
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-center mt-4" routerLinkActive="active">
+      <button mat-button class="router" (click)="gmainRouting('group','CustomerGroup')">
+        <i class="fa fa-heart fa-2x fa-beat"></i>
+        <h5 id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"
+          style="text-align: center;">Customer group</h5>
+      </button>
+    </div>
+
+
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-center mt-4" routerLinkActive="active">
+      <button mat-button class="router" (click)="gmainRouting('finbook','createFinBook')">
+        <i class="fa fa-cog fa-2x fa-beat"></i>
+        <h5 id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"
+          style="text-align: center;">Finance Book Master</h5>
+      </button>
+    </div>
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-center mt-4" routerLinkActive="active">
+      <button mat-button class="router" (click)="gmainRouting('finbook','mapBranchtoFinbook')">
+        <i class="fa fa-heart fa-2x fa-beat"></i>
+        <h5 id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"
+          style="text-align: center;">Map branches to FB</h5>
+      </button>
+    </div>
+
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-center mt-4" routerLinkActive="active">
+      <button mat-button class="router" (click)="gmainRouting('finbook','mapAcctoFinbook')">
+        <i class="fa fa-cog fa-2x fa-beat"></i>
+        <h5 id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"
+          style="text-align: center;">Map Acc Code to FB</h5>
+      </button>
+    </div>
+
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-center mt-4" routerLink="/EmployeeWelfare/Advance-Payment"
+      routerLinkActive="active">
+      <button mat-button class="router">
+        <i class="fa fa-heart fa-2x fa-beat"></i>
+        <h5 id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"
+          style="text-align: center;">Advance Payment</h5>
+      </button>
+    </div>
+
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-center mt-4" routerLink="/EmployeeWelfare/Form4EE"
+      routerLinkActive="active">
+      <button mat-button class="router">
+        <i class="fa fa-cog fa-2x fa-beat"></i>
+        <h5 id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"
+          style="text-align: center;">Form4-EE</h5>
+      </button>
+    </div>
+
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-center mt-4" routerLink="/EmployeeWelfare/PFExemption"
+      routerLinkActive="active">
+      <button mat-button class="router">
+        <i class="fa fa-heart fa-2x fa-beat"></i>
+        <h5 id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"
+          style="text-align: center;">PF Exemption</h5>
+      </button>
+    </div>
+
+
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-center mt-4" routerLink="/EmployeeWelfare/EsiForms"
+      routerLinkActive="active">
+      <button mat-button class="router">
+        <i class="fa fa-cog fa-2x fa-beat"></i>
+        <h5 id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"
+          style="text-align: center;">ESI Forms </h5>
+      </button>
+    </div>
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-center mt-4" routerLink="/EmployeeWelfare/ESI"
+      routerLinkActive="active">
+      <button mat-button class="router">
+        <i class="fa fa-heart fa-2x fa-beat"></i>
+        <h5 id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"
+          style="text-align: center;">ESI Report</h5>
+      </button>
+    </div>
+
+
+    <div class="col-sm-3  my-2" routerLink="/EmployeeWelfare/PF-Challan" routerLinkActive="active">
+      <button mat-button class="router">
+        <i class="fa fa-cog fa-2x fa-beat"></i>
+        <h5 id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"
+          style="text-align: center;">PF Challan
+        </h5>
+      </button>
+    </div>
+
+    <div class="col-sm-3  my-2" routerLink="/Accounts/Edit-Card-Settlement" routerLinkActive="active">
+      <button mat-button class="router">
+        <i class="fa fa-heart fa-2x fa-beat"></i>
+        <h5 id="text" tabindex='1' class="text-xs font-weight-bold text-info text-uppercase mb-1"
+          style="text-align: center;">Edit Card Settlement
+        </h5>
+      </button>
+    </div>
+
+  </div>
+
+</div>

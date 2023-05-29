@@ -1,0 +1,194 @@
+<div class="wrapper">
+    <div class="header">
+        <mat-toolbar color="warn">
+            <mat-toolbar-row class="header-nav">
+                <button mat-button (click)="backNavigation()" type="button" [hidden]="toggleContent"> BACK</button>
+                <button mat-button (click)="ontoggleContent()" type="button" [hidden]="!toggleContent"> BACK</button>
+                <span>
+                    <button mat-button (click)="homeNavigate()" type="button">
+                        <mat-icon style="color:#fff;">home</mat-icon>
+                </button>
+                <button mat-button disabled type="button">
+                        <img class="png-icon" src=".\assets\gImg\a2b2.png" style="max-width: 16px; min-width: 56px;">
+                    </button>
+                </span>
+            </mat-toolbar-row>
+        </mat-toolbar>
+    </div>
+
+    <section class="container" [hidden]="toggleContent">
+        <div class="row cardRow">
+
+            <mat-card>
+
+                <form class="form">
+                    <div class="sectionTitle text-center  mb-5">
+                        <label for="" class="formTitle">Advance Payment Details
+                        </label>
+                    </div>
+
+                    <div class="form-group row d-flex">
+                        <div class="col-12 col-md-5 col-xl-5 formlables">
+                            <label for="">  Report Type</label>
+                        </div>
+                        <div class=" branchOutInput col-12 col-md-7 col-xl-7">
+
+                            <input class="datepickerInput branchInInput" matInput [formControl]="advanceReportType" id="type" [matAutocomplete]="type">
+                            <mat-autocomplete autoActiveFirstOption #type="matAutocomplete">
+                                <mat-option *ngFor="let option of advanceReportTypeOptions | filter : advanceReportType.value" [value]="option?.Val" (onSelectionChange)="advanceReportSelected($event,option?.Val)">
+                                    {{option?.Val}}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
+                    </div>
+
+                    <div class="form-group row d-flex">
+                        <div class="col-12 col-md-5 col-xl-5 formlables">
+                            <label for="">Advance Type</label>
+                        </div>
+                        <div class=" branchOutInput col-12 col-md-7 col-xl-7">
+
+                            <input class="datepickerInput branchInInput" matInput [formControl]="advanceType" id="advance" [matAutocomplete]="advance">
+                            <mat-autocomplete autoActiveFirstOption #advance="matAutocomplete">
+                                <mat-option *ngFor="let option of advanceTypeOptions | filter : advanceType.value" [value]="option?.val" (onSelectionChange)="advanceTypeSelected($event, option.sno)">
+                                    {{option?.val}}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row  d-flex">
+                        <div class="col-12 col-md-5 col-xl-5 formlables">
+                            <label for=""> Region</label>
+                        </div>
+
+                        <div class=" branchOutInput col-12 col-md-7 col-xl-7">
+                            <input type="text" matInput class="datepickerInput branchInInput" id="Regions" [formControl]="Region" [matAutocomplete]="region">
+                            <mat-autocomplete autoActiveFirstOption #region="matAutocomplete">
+                                <mat-option *ngFor="let option of RegionOptions | filter : Region.value" [value]="option.pfregion " (onSelectionChange)="RegionSelected($event, option.pfregion)">
+                                    {{option.pfregion}}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
+                    </div>
+
+                    <div class="form-group row  d-flex">
+                        <div class="col-12 col-md-5 col-xl-5 formlables">
+                            <label for=""> Branch</label>
+                        </div>
+
+                        <div class=" branchOutInput col-12 col-md-7 col-xl-7">
+                            <input type="text" matInput class="datepickerInput branchInInput" id="branch" [formControl]="Branch" [matAutocomplete]="branch">
+                            <mat-autocomplete autoActiveFirstOption #branch="matAutocomplete">
+                                <mat-option *ngFor="let option of BranchOptions | filter : Branch.value" [value]="option.BranchName " (onSelectionChange)="branchSelected($event, option.Brcode, month);">
+                                    {{option.BranchName}}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
+                    </div>
+
+                    <div class="form-group row d-flex" *ngIf="advanceReportType.value !== 'Advance Balance'">
+                        <div class="col-12 col-md-5 col-xl-5 formlables">
+                            <label for="">Month</label>
+                        </div>
+
+                        <div class="datpicker col-12 col-md-3 col-xl-3">
+                            <input matInput class="datepickerInput" id="Month" [matDatepicker]="month" [formControl]="Month" style="border: none;">
+                            <mat-datepicker-toggle matSuffix [for]="month"></mat-datepicker-toggle>
+                            <mat-datepicker dateFormat="date" #month startView="multiyear" (monthSelected)="setToMonthAndYear($event, month)" panelClass="example-month-picker">
+                            </mat-datepicker>
+                        </div>
+                    </div>
+
+
+                </form>
+                <div class=" actionbuttons justify-content-center ">
+                    <button type="button " [disabled]="loading" mat-raised-button class="buttons " id="submit" (click)="Submit(dialog)">  <i class="fa fa-spinner fa-spin" *ngIf="loading " ></i>   View</button>
+                </div>
+
+            </mat-card>
+
+
+
+        </div>
+    </section>
+
+    <ng-template #dialog class="" tabindex="0">
+
+        <div *ngIf="!SuccessResponse">
+            <div *ngIf="ResponseStatus">
+                <div mat-dialog-content class="text-center mat-dialog-content">
+                    {{ResponseStatus}}
+                </div>
+            </div>
+            <div mat-dialog-actions class=" text-center mt-3 mb-0 pb-0 justify-content-center">
+                <button mat-button type="button" class="dialogButton text-center" (click)="onCloseDialog()">Close</button>
+            </div>
+        </div>
+
+    </ng-template>
+
+    <div [hidden]="!toggleContent" class="printPrivew ">
+        <div class="col-12 text-end">
+            <button type="button " mat-icon-button [elementToPrint]="printFile" ngPrint>
+                <i class="fa fa-print" style="font-size: 20px;color:#000000;" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div #printFile class="" style="margin-top: -30px;">
+            <div class="row ">
+                <span class="col-12 mb-3  text-center" style="font-size: 14px;">{{advanceReportType.value}} - {{finalmonth}}</span>
+            </div>
+            <div class="row mt-3 " style="margin-top: -20px;">
+
+                <table class="" mat-table [dataSource]="form4EEList">
+
+                    <ng-container *ngFor="let col of displayedColumns" [matColumnDef]="col">
+                        <th mat-header-cell *matHeaderCellDef style="color: #000 !important;font-size: 11px;"> {{ col }}</th>
+                        <td mat-cell *matCellDef="let row; let i = index" [ngStyle]="col === 'issuedate' ? {'min-width': '100px'} : {'min-width': 'none'}" [ngClass]="{'subtotal': row['subtotal'] === true}">
+                            <span style="font-size: 10px;" *ngIf="advanceReportType.value === 'Advance Payment'" [ngStyle]="col === 'issuedate' ? {'min-width': '100px'} : {'min-width': 'none'}" [ngClass]="{'subtotal': row['subtotal'] === true}">{{ col !== 'issuedate' ? row[col] :row[col]| date : 'dd-MMM-YYYY' }}</span>
+                            <span style="font-size: 10px;" *ngIf="advanceReportType.value === 'Advance Deduction'" [ngStyle]="col === 'deducteddate' ? {'min-width': '100px'} : {'min-width': 'none'}" [ngClass]="{'subtotal': row['subtotal'] === true}">{{ col !== 'deducteddate' ? row[col] :row[col]| date : 'dd-MMM-YYYY' }}</span>
+                            <span style="font-size: 10px;" *ngIf="advanceReportType.value === 'Advance Balance'" [ngClass]="{'subtotal': row['subtotal'] === true}">{{row[col]}}</span>
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef [ngClass]="{'subtotal': col === 'advanceamt'}">
+                            <span *ngIf="advanceReportType.value === 'Advance Payment'" [ngClass]="{'subtotal': col === 'advanceamt'}">
+                            {{ col === 'advanceamt' ? grandPFTotal: '' || col === 'empname' ? 'Grand Total': '' }}
+                        </span>
+                            <span *ngIf="advanceReportType.value === 'Advance Deduction'" [ngClass]="{'subtotal': col === 'advDeductionAmt'}">
+                            {{ col === 'advDeductionAmt' ? grandPFTotal: '' || col === 'empname' ? 'Grand Total': '' }}
+                        </span>
+                            <span *ngIf="advanceReportType.value === 'Advance Balance'" [ngClass]="{'subtotal': col === 'advDeductionAmt'}">
+                            {{ col === 'BalanceAmt' ? grandPFTotal: '' || col === 'empname' ? 'Grand Total': '' }}
+                        </span>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" style="color: #000 !important; font-weight: 800; border-bottom: 1px dotted rgb(114, 112, 112);"></tr>
+
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                    <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+
+                    <ng-container matColumnDef="groupHeader">
+                        <td colspan="7" mat-cell *matCellDef="let group" [ngClass]="{'typeheader': group.isType === true,'Regionheader': group.isType === false }">
+
+                            <div class="typeheaderGroup"><span><b style="color: #000;font-size: 10px;">{{group.groupName ? group.groupName : '' }} </b> </span>
+                                <span> <b style="color: #000;font-size: 10px;">{{group.subtotalTYPE ? group.subtotalTYPE : ''}}</b></span></div>
+
+
+
+                        </td>
+                    </ng-container><br>
+
+
+
+                    <tr mat-row class="clickable" *matRowDef="let row; columns:['groupHeader']; when: isGroup">
+                    </tr>
+
+
+                </table>
+
+
+            </div>
+        </div>
+    </div>

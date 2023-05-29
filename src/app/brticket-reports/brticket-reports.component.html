@@ -1,0 +1,184 @@
+<mat-sidenav-container>
+  <mat-sidenav-content>
+    <mat-toolbar color="warn" class="position-fixed">
+      <button mat-button (click)="backNavigation()"> BACK</button>
+      <span style="text-align: center;font-size: 16px;" class="mat-spacer"> REPORTS </span>
+      <img class="pull-right" src=".\assets\gImg\a2b2.png" style="max-width: 56px; min-width: 56px;">
+    </mat-toolbar>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+<br>
+<div class="content" *ngIf="isOption == 'Subject_Wise'">
+  <div class=" row">
+    <div class=" col-xl-3 col-lg-3 col-md-4 col-6 form-group">
+      <label for="pwd" class="text-muted">DepartMent</label><bR>
+      <select class="form-control form-control-sm custom-select custom-select-sm" name="selectDept" [(ngModel)]="dept"
+        id="pwd" (change)="onChangeDept($event.target)">
+        <option *ngFor="let dept of DepartMents" selected="dept===dept.deptname" [value]="dept.deptname">
+          {{dept.deptname}}</option>
+      </select>
+    </div>
+    <div class="  col-xl-2  col-lg-2 col-md-4 col-6 form-group">
+      <label class="text-muted" for="startDate">Start Date</label>
+      <input type=date class="form-control form-control-sm" name="startDate" [(ngModel)]="startDate" id="startDate">
+    </div>
+    <div class="   col-xl-2 col-lg-2  col-md-4 col-6 form-group">
+      <label class="text-muted" for="endDate">End Date</label>
+      <input type=date class="form-control form-control-sm" name="endDate" [(ngModel)]="endDate" id="endDate">
+    </div>
+    <div class=" col-xl-1 col-lg-1 col-md-2 col-3 form-group" style="margin-top: auto;margin-bottom: auto;">
+      <button type="submit" (click)="getFilter()" class="btn btn-primary btn-sm btn-filter">
+        View</button>
+    </div>
+    <div class=" col-xl-1 col-lg-1 col-md-1 col-3 form-group" style="margin-top: auto;margin-bottom: auto;">
+      <button type="submit" class="btn btn-success btn-sm " (click)="exportAsXLSX()">
+        <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+      </button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="table-responsive">
+      <table class="table table-bordered tableBodyScroll table-sm table-hover shadow-sm p-3 mb-5 bg-white rounded">
+        <thead>
+          <tr>
+            <th scope="col">Subject</th>
+            <th scope="col" class="text-center">Count
+              <i style="padding-left: 5%" class="fa" (click)="sortSub('Cnt')"
+                [ngClass]="{'fa-sort': subcolumn != 'Cnt', 'fa-sort-asc': (subcolumn == 'Cnt' && subDesc), 'fa-sort-desc': (subcolumn == 'Cnt' && !subDesc) }"
+                aria-hidden="true"> </i>
+            </th>
+            <th scope="col" class="text-center">
+              <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+            </th>
+          </tr>
+        </thead>
+        <tbody style="font-size: 12px">
+          <tr *ngFor="let list of ListJds|orderby: {property: subcolumn, direction: subdirection}">
+            <td>{{list.SubjectJd}}</td>
+            <td class="text-center">{{list.Cnt}}</td>
+            <td class="text-center">
+              <i (click)="getBrFilter(list.SubjectJd)" class="fa fa-hand-o-right" aria-hidden="true"></i>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="content" *ngIf="isOption == 'Branch_Wise'">
+  <div class="row">
+    <div class="col-11">
+      <div class="row filterText">
+        Departmet : {{dept}} / Subject: {{selSub}}
+      </div>
+      <div class="row filterText">
+        From: {{startDate |date:'dd-MMM-yyyy'}} / To: {{endDate |date:'dd-MMM-yyyy'}}
+      </div>
+    </div>
+    <div class="col-1">
+      <button type="submit" class="btn btn-success btn-sm " (click)="exportAsXLSXBr()">
+        <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="table-responsive">
+      <table class="table table-bordered tableBodyScroll table-sm table-hover shadow-sm p-3 mb-5 bg-white rounded">
+        <thead>
+          <tr>
+            <th scope="col">sno</th>
+            <th scope="col">Branch</th>
+            <th class="text-center" scope="col">Count
+              <i style="padding-left: 5%" class="fa" (click)="sort('Cnt')"
+                [ngClass]="{'fa-sort': column != 'Cnt', 'fa-sort-asc': (column == 'Cnt' && isDesc), 'fa-sort-desc': (column == 'Cnt' && !isDesc) }"
+                aria-hidden="true"> </i>
+            </th>
+            <th scope="col" class="text-center">
+              <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+            </th>
+          </tr>
+        </thead>
+        <tbody style="font-size: 12px">
+          <tr *ngFor="let brlist of BrList|orderby: {property: column, direction: direction};let i = index">
+            <td>{{i+1}}</td>
+            <td>{{brlist.RequestedBrname}}</td>
+            <td class="text-center">{{brlist.Cnt}}</td>
+            <td class="text-center">
+              <i (click)="getDetails(brlist)" class="fa fa-hand-o-right" aria-hidden="true"></i>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- LOADING ICON -->
+<div *ngIf="progressval == 'indeterminate'" class="loading">
+  <mat-progress-spinner [mode]="progressval">
+  </mat-progress-spinner>
+</div>
+<!-- LOADING ICON -->
+
+
+<div *ngIf="!hidden" [style.display]="!hidden ? 'block' : 'none'" class="modal" Id="exampleModal1" tabindex="-1">
+  <div class="modal-dialog modal-fullscreen">
+    <div class="modal-content gModalContent">
+      <div class="gDialogTitle">
+        <span></span> <!-- for center position -->
+        <span>Ticket Details</span>
+        <button type="button" id="submit" class="gDialogCloseButton" data-bs-dismiss="modal" (click)="hidden = true">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <div class="modal-body gDialogContainer">
+        <div class="row">
+          <div class="col-11 filterText">Branch: {{selBrname}}</div>
+        <div class="col-1">
+          <button type="submit" class="btn btn-success btn-sm " (click)="exportAsXLSXtickets()">
+            <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+          </button>
+        </div>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-bordered tableBodyScroll table-sm table-hover shadow-sm p-3 mb-5 bg-white rounded">
+            <thead>
+              <tr>
+                <th scope="col">sno</th>
+                <th scope="col">Ticket</th>
+                <th scope="col">Resolved Date/Time</th>
+                <th scope="col">Resolved Usr</th>
+                <th scope="col">View</th>
+
+              </tr>
+            </thead>
+            <tbody style="font-size: 12px">
+              <tr *ngFor="let ticket of detailList;let i = index">
+                <td>{{i+1}}</td>
+                <td>{{ticket.TicketId}}</td>
+                <td>{{ticket.Resolveddate}} {{ticket.ResolvedTime}}</td>
+                <td>{{ticket.ResolvedUser}}</td>
+                <td >
+                  <button mat-icon-button class="gHandIcon" (click)="ticketDetails(ticketDetailsTemp, ticket.TicketId)"> <i class="fa fa-hand-o-right "></i></button>
+                </td>
+
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #ticketDetailsTemp>
+  <div class="gDialogTitle">
+    <span></span>
+    <span class="">Ticket Details</span>
+    <button type="button" id="submit" class="gDialogCloseButton" (click)="dialog.closeAll()">&#x2715;</button>
+  </div>
+  <div class="gDialogContainer">
+  <app-ticket-details></app-ticket-details>
+  </div>
+</ng-template>

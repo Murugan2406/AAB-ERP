@@ -1,0 +1,1324 @@
+<div>
+    <div class="loader text-center" *ngIf="isload">
+        <img src="assets/gImg/salegif.gif" class="load">
+    </div>
+</div>
+<div class="wrapper">
+    <div class="fix">
+        <div class="header">
+            <mat-toolbar color="warn">
+                <mat-toolbar-row>
+                    <button mat-button (click)="backNavigation()"> BACK</button>
+                    <span class="example-spacer"></span>
+                    <button mat-button></button>
+                    <span class="example-spacer"></span>
+                    <button mat-button routerLink='/dashboard' class="btn btn-lg"> <i
+                            class="fa fa-home text-white btn btn-lg"></i></button>
+                    <button mat-button disabled>
+                        <img class="png-icon" src=".\assets\gImg\a2b2.png" style="max-width:56px;min-width:56px">
+                    </button>
+                </mat-toolbar-row>
+            </mat-toolbar>
+        </div>
+    </div>
+    <section *ngIf="SalesONE">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    <h3 class="mt-1 mb-0"><u>
+                            Sales Reports</u></h3>
+                </div>
+            </div>
+            <div class="row salesreport">
+                <div class="col-sm-12 border1 bradius px-0 py-2 my-2">
+                    <form [formGroup]="SalesReportform" id="submitForm" class="salesreportformclass">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <mat-form-field class="col-sm-6">
+                                    <mat-label>GST/VAT</mat-label>
+                                    <mat-select formControlName="mode" [(ngModel)]="patchmode">
+                                        <mat-option *ngFor="let item of GSTVAT" [value]="item.taxtype"
+                                            (click)="changesel()">
+                                            {{item.taxtype}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <mat-form-field class="col-sm-6">
+                                    <mat-label>Currency</mat-label>
+                                    <mat-select formControlName="currency" [(ngModel)]="patchrate">
+                                        <mat-option *ngFor="let item of rate" [value]="item.Currency">
+                                            {{item.Currency}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-2">
+                                <mat-form-field class="col-sm-12">
+                                    <mat-label>Sales type</mat-label>
+                                    <mat-select formControlName="stype" [(ngModel)] = "patchsalestype">
+                                        <mat-option *ngFor="let item of salestype" [value]="item.saletype"
+                                            (click)="styperchange()">
+                                            {{item.saletype}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-2">
+                                <mat-form-field class="col-sm-12">
+                                    <mat-label>Tax Format</mat-label>
+                                    <mat-select formControlName="tax" [(ngModel)]="patchtax">
+                                        <mat-option *ngFor="let item of taxdata" [value]="item.withwithout"
+                                            (click)="changetax()">
+                                            {{item.withwithout}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-2">
+                                <mat-form-field class="col-sm-12">
+                                    <mat-label>Date format</mat-label>
+                                    <mat-select formControlName="frmt" [(ngModel)]="patchformat">
+                                        <mat-option *ngFor="let item of format" [value]="item.Datesel"
+                                            (click)="changedatefrmt()">
+                                            {{item.Datesel}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-2">
+                                <mat-form-field class="col-sm-12">
+                                    <mat-label>Option</mat-label>
+                                    <mat-select formControlName="opt" [(ngModel)]="patchoption">
+                                        <mat-option *ngFor="let item of option" [value]="item.roption"
+                                            (click)="changeopt()">
+                                            {{item.roption}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-2">
+                                <mat-form-field class="col-sm-12">
+                                    <mat-label>Report Type</mat-label>
+                                    <mat-select formControlName="rtype" [(ngModel)]="patchrtype">
+                                        <mat-option *ngFor="let item of report" [value]="item.rpttype">
+                                            {{item.rpttype}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="row salesreport">
+                <div class="offset-sm-1 col-sm-10 offset-sm-1 border py-2 my-2">
+                    <form [formGroup]="SalesReportform" id="submitForm" class="salesreportformclass">
+                        <div class="row" *ngIf="patchoption == 'Category_Terminalwise Sales'">
+                            <div class="col-sm-6 px-4 py-3">
+                                <div class="row">
+                                    <div class="multiselectsales col-sm-12">
+                                        <label class="cat">Select Category</label>
+                                        <div class="overlaptext" *ngIf="showtrue"> ALL</div>
+                                        <ng-multiselect-dropdown #multi1 class="dropdown custom-font-size1"
+                                            [settings]="dropdownSettings" [data]="dropdownList" formControlName="cat"
+                                            [(ngModel)]="patchcat" (onSelect)="onItemSelect()"
+                                            (onSelectAll)="onSelectAll($event)" (onDeSelectAll)="onDeselectAll()"
+                                            (onDeSelect)="onItemDeSelect()">
+                                        </ng-multiselect-dropdown>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 px-4 py-3">
+                                <div class="row">
+                                    <div class="multiselectsales col-sm-12">
+                                        <label class="cat">Select Terminal</label>
+                                        <div class="overlaptext1" *ngIf="showtrue1"> ALL</div>
+                                        <ng-multiselect-dropdown #multi1 class="dropdown custom-font-size1"
+                                            [settings]="dropdownSettings1" [data]="dropdownList1"
+                                            formControlName="terminal" [(ngModel)]="patchterminal"
+                                            (onSelect)="onItemSelect1($event)" (onSelectAll)="onSelectAll1($event)"
+                                            (onDeSelectAll)="onDeselectAll1($event)"
+                                            (onDeSelect)="onItemDeSelect1($event)">
+                                        </ng-multiselect-dropdown>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" *ngIf="!GclientServer">
+                            <div class="col-sm-6">
+                                <mat-form-field class="col-sm-12">
+                                    <mat-label>Financial Year</mat-label>
+                                    <mat-select formControlName="fyear" [(ngModel)]="patchfyear">
+                                        <mat-option *ngFor="let item of Financial" [value]="item.fyear"  (click)="Fyearchange(item.fyear)">
+                                            {{item.fyear}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-6">
+                                <mat-form-field class="col-sm-12">
+                                    <mat-label>Company</mat-label>
+                                    <mat-select formControlName="company" [(ngModel)]="patchcompany">
+                                        <mat-option *ngFor="let item of company" (click)="companychange(item.Company)"
+                                            [value]="item.Company">
+                                            {{item.Company}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row" *ngIf="!GclientServer">
+                            <div class="col-sm-6">
+                                <mat-form-field class="col-sm-12">
+                                    <mat-label>State</mat-label>
+                                    <mat-select formControlName="state" [(ngModel)]="patchstate">
+                                        <mat-option *ngFor="let item of stateslist" (click)="statechange(item)"
+                                            [value]="item.State">
+                                            {{item.State}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-6">
+                                <mat-form-field class="col-sm-12">
+                                    <mat-label>Region</mat-label>
+                                    <mat-select formControlName="region" [(ngModel)]="patchregion">
+                                        <mat-option *ngFor="let item of regionList" (click)="Regionchange(item)"
+                                            [value]="item.Region">
+                                            {{item.Region}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6" *ngIf="!GclientServer">
+                                <mat-form-field class="col-sm-12">
+                                    <mat-label>Branch</mat-label>
+                                    <input type="text" [(ngModel)]="patchbranch" id="searchitemb" aria-label="Number"
+                                        matInput [formControl]="Branchloccntrl" [matAutocomplete]="auto"
+                                        placeholder="Select Location">
+                                    <mat-autocomplete #auto="matAutocomplete">
+                                        <mat-option *ngFor="let branchname of Branchlocation"
+                                            (onSelectionChange)="changeloc($event,branchname.brcode)"
+                                            [value]="branchname?.brname">{{ branchname?.brname }}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-6 text-center pt-3 px-0">
+                                <mat-checkbox class="example-margin col-sm-12 small p-0" formControlName="own"
+                                    [(ngModel)]="check" (change)="checkCheckBoxvalue($event)">Exclude
+                                    (Own Company Sales)</mat-checkbox>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <mat-form-field class="col-sm-12">
+                                    <mat-label>From Date</mat-label>
+                                    <input matInput [matDatepicker]="picker" formControlName="fromdate"
+                                        (dateInput)="inputEvent1($event)" [(ngModel)]="patchfromdate">
+                                    <mat-datepicker-toggle matSuffix [for]="picker">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #picker (opened)="onOpen()">
+                                    </mat-datepicker>
+                                </mat-form-field>
+                                <div style="display: none">
+                                    <div class="datepicker-footer" #datepickerFooter>
+                                        <button mat-raised-button color="primary" (click)="today()">
+                                            Today
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <mat-form-field class="col-sm-12">
+                                    <mat-label>To Date</mat-label>
+                                    <input matInput [matDatepicker]="picker1" formControlName="todate"
+                                        (dateInput)="inputEvent($event)" [(ngModel)]="patchtodate">
+                                    <mat-datepicker-toggle matSuffix [for]="picker1">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #picker1 (opened)="onOpen1()">
+                                    </mat-datepicker>
+                                </mat-form-field>
+                                <div style="display: none">
+                                    <div class="datepicker-footer1" #datepickerFooter1>
+                                        <button mat-raised-button color="primary" (click)="today1()">
+                                            Today
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 text-center">
+                                <button class="btn view rounded-0 px-3 py-1"
+                                    (click)="viewsales()"><span>View</span></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="modal fade" id="getdate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm offset-sm-1 col-sm-10 offset-sm-1">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12 text-center">
+                            <img src="assets/gImg/date.png" alt="" width="40%">
+                            <h6>From date is greater than To date!</h6>
+                            <button mat-raised-button color="accent" class="ok_btn" (click)="closedate()">OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="getsubcat" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-sm offset-sm-1 col-sm-10 offset-sm-1">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12 text-center">
+                            <img src="assets/gImg/food-icon-7.png" alt="" width="40%">
+                            <h6>Selected Subcategory limit exceeded!</h6>
+                            <button mat-raised-button color="accent" class="ok_btn" (click)="closesub()">OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="getcat" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm offset-sm-1 col-sm-10 offset-sm-1">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12 text-center">
+                            <img src="assets/gImg/food-icon-7.png" alt="" width="40%">
+                            <h6>Selected Category limit exceeded!</h6>
+                            <button mat-raised-button color="accent" class="ok_btn" (click)="closecat()">OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section *ngIf="SalesTWO" class="bg-white">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-7 col-9 text-end">
+                    <b class="text-uppercase">SALES REPORT </b>
+                </div>
+                <div class="col-sm-5 col-3 p-1 text-end">
+                    <i (click)="exportexcel()" class="fa fa-file-excel-o excel"></i>
+                    <button class="fa fa-file-pdf-o pdf ms-2" printSectionId="id" ngxPrint></button>
+                </div>
+            </div>
+            <div class="row" id="id">
+                <div class="row heading">
+                    <div class="col-sm-12 col-12 text-center">
+                        <span style="display:inline">
+                            <span><a>Fyear : </a></span>
+                            <span><b>{{patchfyear}} |</b></span>
+                            <span><a>Company : </a></span>
+                            <span><b>{{patchcompany}} |</b></span>
+                            <span><a>State : </a></span>
+                            <span><b>{{patchstate}} |</b></span>
+                            <span><a>Region : </a></span>
+                            <span><b>{{patchregion}} |</b></span>
+                            <span><a>Branch : </a></span>
+                            <span><b>{{patchbranch}} |</b></span>
+                            <span><a>From : </a></span>
+                            <span><b>{{patchfromdate|date:'dd-MMM-yyyy'}} |</b></span>
+                            <span><a>To : </a></span>
+                            <span><b>{{patchtodate|date:'dd-MMM-yyyy'}} |</b></span>
+                            <span><a>GST/VAT : </a></span>
+                            <span><b>{{patchmode}} |</b></span>
+                            <span><a>Currency : </a></span>
+                            <span><b>{{patchrate}} |</b></span>
+                            <span><a>Sale Type : </a></span>
+                            <span><b>{{patchsalestype}} </b></span>
+                            <span *ngIf="patchoption == 'Category_Terminalwise Sales'"><a>| Category : </a></span>
+                            <span
+                                *ngIf="patchoption == 'Category_Terminalwise Sales' && salesviewone.subcategorylist =='ALL'">
+                                <b>{{salesviewone.subcategorylist}} </b>
+                            </span>
+                            <span
+                                *ngIf="patchoption == 'Category_Terminalwise Sales' && salesviewone.subcategorylist !='ALL'">
+                                <b class="limittext">{{salesviewone.subcategorylist}} </b>
+                            </span>
+                            <span *ngIf="patchoption == 'Category_Terminalwise Sales'"><a>| Terminal : </a></span>
+                            <span
+                                *ngIf="patchoption == 'Category_Terminalwise Sales' && salesviewone.terminallist =='ALL'">
+                                <b>{{salesviewone.terminallist}} </b>
+                            </span>
+                            <span
+                                *ngIf="patchoption == 'Category_Terminalwise Sales' && salesviewone.terminallist !='ALL'">
+                                <b class="limittext">{{salesviewone.terminallist}} </b>
+                            </span>
+                            <span><a> | Tax Format: </a></span>
+                            <span><b>{{patchtax}}</b></span>
+                            <span><a> | Date Format: </a></span>
+                            <span><b>{{patchformat}}</b></span>
+                            <span><a> |Option: </a></span>
+                            <span><b>{{patchoption}}</b></span>
+                            <span><a> | Report type: </a></span>
+                            <span><b>{{patchrtype}}</b></span>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="toclistscroll mb-2">
+                        <table class="table table-bordered" cellspacing="0" id="tableexcelone" border="1"
+                            *ngIf="!showempty && patchoption ==='All Type Of Sales'">
+                            <thead>
+                                <tr >
+                                    <th class="text-start" *ngIf="patchbranch != 'ALL' && patchrtype == 'Detailed'">Date</th>
+                                    <ng-container *ngFor="let head of salesview">
+                                        <th *ngIf="head[0] == 'L'" class="text-start">{{head| slice:2}}</th>
+                                        <th *ngIf="head[0] == 'R'" class="text-end">{{head| slice:2}}</th>
+                                    </ng-container>
+                                </tr>
+                            </thead>
+                            <tbody class="table" *ngFor="let item of result">
+                                <tr *ngIf="patchbranch == 'ALL'">
+                                    <td class="fw-bold border-0 text-start text"
+                                        *ngIf="patchrtype == 'Detailed'"
+                                        style="color:#3f51b5;text-shadow:2px 1px #5f2c8242" colspan="2">{{item.date}}
+                                    </td>
+                                </tr>
+                                <ng-container *ngFor="let reg of item.Datewise">
+                                    <td class="fw-bold border-0 text-start"  *ngIf="patchbranch == 'ALL'"
+                                        style="color:#15752b;text-shadow:2px 2px #5f2c8242" colspan="2">{{reg.region}}
+                                    </td>
+                                    <tr *ngFor="let final of reg.regionwise" class="table table-hover">
+                                        <td class="text-start" *ngIf="patchbranch != 'ALL' && patchrtype == 'Detailed'">{{final.L_Trandate}}</td>
+                                        <ng-container *ngFor="let head of salesview">
+                                            <td *ngIf="head[0] == 'L'" class="text-start">{{final[head]}}</td>
+                                            <td *ngIf="head[0] == 'R'" class="text-end">{{final[head]}}
+                                            </td>
+
+                                        </ng-container>
+                                    </tr>
+                                    <tr class="tfoot" *ngIf="patchbranch =='ALL'">
+                                        <td></td>
+                                        <td>{{(reg.R_Total)}}</td>
+                                        <td>{{(reg.R_Sales)}}</td>
+                                        <td>{{(reg.R_Outdoor)}}</td>
+                                        <td>{{(reg.R_Hall)}}</td>
+                                        <td >{{(reg.R_Cst)}}</td>
+                                        <td>{{(reg.R_Lodge)}}</td>
+                                        <td>{{(reg.R_OtherSale)}}</td>
+                                    </tr>
+                                </ng-container>
+                                <tr class="tfoot1" *ngIf="patchbranch =='ALL'">
+                                    <td class="fw-bold" style="color:#710d2f;text-shadow:2px 2px #5f2c8242">
+                                        TOTAL</td>
+                                    <td> {{(item.RTotal)}}</td>
+                                    <td> {{(item.RSales)}}</td>
+                                    <td> {{(item.ROutdoor)}}</td>
+                                    <td> {{(item.RHall)}}</td>
+                                    <td> {{(item.RCst)}}</td>
+                                    <td> {{(item.RLodge)}}</td>
+                                    <td> {{(item.RScrap)}}</td>
+                                </tr>
+                            </tbody>
+                            <ng-container>
+                                <tr class="tfoot2">
+                                    <td class="fw-bold text-start"
+                                        style="color:#b53f7b;text-shadow:2px 2px #5f2c8242">GRAND
+                                        TOTAL</td>
+                                        <td *ngIf="patchbranch != 'ALL' && patchrtype == 'Detailed'"></td>
+                                    <td> {{(Total)}}</td>
+                                    <td> {{(Sales)}}</td>
+                                    <td> {{(Outdoor)}}</td>
+                                    <td> {{(Hall)}}</td>
+                                    <td> {{(Cst)}}</td>
+                                    <td> {{(Lodge)}}</td>
+                                    <td> {{(Scrap)}}</td>
+                                </tr>
+                            </ng-container>
+                        </table>
+                        <table class="table table-bordered" cellspacing="0" id="tableexcelone" border="1"
+                        *ngIf="!showempty && patchoption ==='Billwise Sales'">
+                        <thead>
+                            <tr>
+                                <th class="text-start" *ngIf="patchbranch != 'ALL' && patchrtype == 'Detailed'">Date</th>
+                                <ng-container *ngFor="let head of salesview">
+                                    <th *ngIf="head[0] == 'L'" class="text-start">{{head| slice:2}}</th>
+                                    <th *ngIf="head[0] == 'R'" class="text-end">{{head| slice:2}}</th>
+                                </ng-container>
+                            </tr>
+                        </thead>
+                        <tbody class="table" *ngFor="let item of result">
+                            <tr *ngIf="patchbranch == 'ALL' && patchrtype == 'Detailed'">
+                                <td class="fw-bold border-0 text-start text"
+                                    style="color:#3f51b5;text-shadow:2px 1px #5f2c8242" colspan="2">{{item.date}}
+                                </td>
+                            </tr>
+                            <ng-container *ngFor="let reg of item.Datewise">
+                                <td class="fw-bold border-0 text-start"
+                                    style="color:#15752b;text-shadow:2px 2px #5f2c8242" colspan="2">{{reg.region}}
+                                </td>
+                                <tr *ngFor="let final of reg.regionwise" class="table table-hover">
+                                    <td class="text-start" *ngIf="patchbranch != 'ALL' && patchrtype == 'Detailed'">{{final.L_Trandate}}</td>
+                                    <ng-container *ngFor="let head of salesview">
+                                        <td *ngIf="head[0] == 'L'" class="text-start">{{final[head]}}</td>
+                                        <td *ngIf="head[0] == 'R'" class="text-end">{{final[head]}}
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                    </table>
+                        <table class="table table-bordered" cellspacing="0" id="tableexcelone" border="1"
+                            *ngIf="!showempty && patchoption ==='Sales BillCount'">
+                            <thead>
+                                <tr>
+                                    <th class="text-start" *ngIf="patchbranch != 'ALL' && patchrtype == 'Detailed'">Date</th>
+                                    <ng-container *ngFor="let head of salesview">
+                                        <th *ngIf="head[0] == 'L'" class="text-start">{{head| slice:2}}</th>
+                                        <th *ngIf="head[0] == 'R'" class="text-end">{{head| slice:2}}</th>
+                                    </ng-container>
+                                </tr>
+                            </thead>
+                            <tbody class="table" *ngFor="let item of result">
+                                <tr *ngIf="patchbranch =='ALL'">
+                                    <td class="fw-bold border-0 text-start text"
+                                        *ngIf="patchrtype == 'Detailed'"
+                                        style="color:#3f51b5;text-shadow:2px 1px #5f2c8242" colspan="2">{{item.date}}
+                                    </td>
+                                </tr>
+                                <ng-container *ngFor="let reg of item.Datewise">
+                                    <td class="fw-bold border-0 text-start" *ngIf="patchbranch =='ALL'"
+                                        style="color:#15752b;text-shadow:2px 2px #5f2c8242" colspan="2">{{reg.region}}
+                                    </td>
+                                    <tr *ngFor="let final of reg.regionwise" class="table table-hover">
+                                        <td class="text-start" *ngIf="patchbranch != 'ALL' && patchrtype == 'Detailed'">{{final.L_Trandate}}</td>
+                                        <ng-container *ngFor="let head of salesview">
+                                            <td *ngIf="head[0] == 'L'" class="text-start">{{final[head]}}</td>
+                                            <td *ngIf="head[0] == 'R'" class="text-end">{{final[head]}}
+                                            </td>
+                                        </ng-container>
+                                    </tr>
+                                    <tr class="tfoot" *ngIf="patchbranch =='ALL'">
+                                        <td></td>
+                                        <td >{{(reg.R_Total)}}</td>
+                                        <td >{{(reg.R_Sales)}}</td>
+                                        <td >{{(reg.R_Outdoor)}}</td>
+                                        <td >{{(reg.R_Hall)}}</td>
+                                        <td >{{(reg.R_Cst)}}</td>
+                                        <td >{{(reg.R_Lodge)}}</td>
+                                        <td >{{(reg.R_OtherSale)}}</td>
+                                    </tr>
+                                </ng-container>
+                                <tr class="tfoot1" *ngIf="patchbranch =='ALL'">
+                                    <td class="fw-bold" style="color:#710d2f;text-shadow:2px 2px #5f2c8242">
+                                        TOTAL</td>
+                                    <td> {{(item.RTotal)}}</td>
+                                    <td> {{(item.RSales)}}</td>
+                                    <td> {{(item.ROutdoor)}}</td>
+                                    <td> {{(item.RHall)}}</td>
+                                    <td> {{(item.RCst)}}</td>
+                                    <td> {{(item.RLodge)}}</td>
+                                    <td> {{(item.RScrap)}}</td>
+                                </tr>
+                            </tbody>
+                            <ng-container>
+                                <tr class="tfoot2">
+                                    <td class="fw-bold text-start"
+                                        style="color:#b53f7b;text-shadow:2px 2px #5f2c8242">GRAND
+                                        TOTAL</td>
+                                        <td *ngIf="patchbranch != 'ALL' && patchrtype == 'Detailed'"></td>
+                                    <td> {{(Total)}}</td>
+                                    <td> {{(Sales)}}</td>
+                                    <td> {{(Outdoor)}}</td>
+                                    <td> {{(Hall)}}</td>
+                                    <td> {{(Cst)}}</td>
+                                    <td> {{(Lodge)}}</td>
+                                    <td> {{(Scrap)}}</td>
+                                </tr>
+                            </ng-container>
+                        </table>
+                        <table class="table table-bordered" cellspacing="0" id="tableexcelone" border="1"
+                            *ngIf="!showempty && patchoption ==='Category_Terminalwise Sales'">
+                            <thead>
+                                <tr>
+                                    <!-- <th class="text-start" *ngIf="patchbranch != 'ALL' && patchrtype == 'Detailed'">Date</th> -->
+                                    <ng-container *ngFor="let head of salesview">
+                                        <th *ngIf="head[0] == 'L'" class="text-start">{{head| slice:2}}</th>
+                                        <th *ngIf="head[0] == 'R'" class="text-end">{{head| slice:2}}</th>
+                                    </ng-container>
+                                </tr>
+                            </thead>
+                            <tbody class="table" *ngFor="let item of result">
+                                <tr >
+                                    <td class="fw-bold border-0 text-start text"
+                                        *ngIf="patchrtype == 'Detailed'"
+                                        style="color:#3f51b5;text-shadow:2px 1px #5f2c8242" colspan="2">{{item.date}}
+                                    </td>
+                                </tr>
+                                <ng-container *ngFor="let reg of item.Datewise">
+                                    <td class="fw-bold border-0 text-start"
+                                        style="color:#15752b;text-shadow:2px 2px #5f2c8242" colspan="2">{{reg.region}}
+                                    </td>
+                                    <tr *ngFor="let final of reg.regionwise" class="table table-hover">
+                                        <!-- <td class="text-start" *ngIf="patchbranch != 'ALL' && patchrtype == 'Detailed'">{{final.L_Trandate}}</td> -->
+                                        <ng-container *ngFor="let head of salesview">
+                                            <td *ngIf="head[0] == 'L'" class="text-start">{{final[head]}}</td>
+                                            <td *ngIf="head[0] == 'R'" class="text-end">{{final[head]}}
+                                            </td>
+                                        </ng-container>
+                                    </tr>
+                                    <tr class="tfoot" *ngIf="patchoption =='Category_Terminalwise Sales' && patchbranch=='ALL'">
+                                        <td></td>
+                                        <td></td>
+                                        <td>{{(reg.R_NetAmt)}}</td>
+                                        <td>{{(reg.R_SGST)}}</td>
+                                        <td>{{(reg.R_CGST)}}</td>
+                                        <td>{{(reg.R_IGST)}}</td>
+                                        <td>{{(reg.R_Cess)}}</td>
+                                        <td>{{(reg.R_GrossAmt )}}</td>
+                                    </tr>
+                                </ng-container>
+                                <tr class="tfoot1" *ngIf="patchoption =='Category_Terminalwise Sales' && patchbranch == 'ALL'">
+                                    <td class="fw-bold text-start" style="color:#710d2f;text-shadow:2px 2px #5f2c8242">
+                                        TOTAL</td>
+                                        <td></td>
+                                    <td> {{(item.RNetAmt)}}</td>
+                                    <td> {{(item.RSGST)}}</td>
+                                    <td> {{(item.RCGST)}}</td>
+                                    <td> {{(item.RIGST)}}</td>
+                                    <td> {{(item.RCess)}}</td>
+                                    <td> {{(item.RGrossAmt)}}</td>
+                                </tr>
+                            </tbody>
+                            <ng-container>
+                                <tr class="tfoot2">
+                                    <td class="fw-bold text-start"
+                                        style="color:#15752b;text-shadow:2px 2px #5f2c8242">GRAND
+                                        TOTAL</td>
+                                        <td></td>
+                                    <td> {{(NetAmt)}}</td>
+                                    <td> {{(SGST)}}</td>
+                                    <td> {{(CGST)}}</td>
+                                    <td> {{(IGST)}}</td>
+                                    <td> {{(Cess)}}</td>
+                                    <td> {{(GrossAmt)}}</td>
+                                </tr>
+                            </ng-container>
+                        </table>
+                        <table class="table table-bordered" cellspacing="0" id="tableexcelone" border="1"
+                            *ngIf="!showempty && patchoption ==='Tax Payable ( Sweet_Rest )'">
+                            <thead>
+                                <tr>
+                                    <th class="text-start" *ngIf="patchbranch != 'ALL' && patchrtype == 'Detailed'">Date</th>
+                                    <ng-container *ngFor="let head of salesview">
+                                        <th *ngIf="head[0] == 'L'" class="text-start">{{head| slice:2}}</th>
+                                        <th *ngIf="head[0] == 'R'" class="text-end">{{head| slice:2}}</th>
+                                    </ng-container>
+                                </tr>
+                            </thead>
+                            <tbody class="table" *ngFor="let item of result">
+                                <tr *ngIf="patchbranch =='ALL'">
+                                    <td class="fw-bold border-0 text-start text"
+                                        *ngIf="patchrtype == 'Detailed'"
+                                        style="color:#3f51b5;text-shadow:2px 1px #5f2c8242" colspan="2">{{item.date}}
+                                    </td>
+                                </tr>
+                                <ng-container *ngFor="let reg of item.Datewise">
+                                    <td class="fw-bold border-0 text-start" *ngIf="patchbranch =='ALL'"
+                                        style="color:#15752b;text-shadow:2px 2px #5f2c8242" colspan="2">{{reg.region}}
+                                    </td>
+                                    <tr *ngFor="let final of reg.regionwise" class="table table-hover">
+                                        <td class="text-start" *ngIf="patchbranch != 'ALL' && patchrtype == 'Detailed'">{{final.L_Trandate}}</td>
+                                        <ng-container *ngFor="let head of salesview">
+                                            <td *ngIf="head[0] == 'L'" class="text-start">{{final[head]}}</td>
+                                            <td *ngIf="head[0] == 'R'" class="text-end">{{final[head]}}
+                                            </td>
+                                        </ng-container>
+                                    </tr>
+                                    <tr class="tfoot" *ngIf="patchoption == 'Tax Payable ( Sweet_Rest )' && patchbranch == 'ALL'">
+                                        <td class="fw-bold"
+                                            style="color:#710d2f;text-shadow:2px 2px #5f2c8242"> </td>
+                                        <td>{{(reg.R_NetAmt)}}</td>
+
+                                        <td>{{(reg.R_SGST)}}</td>
+
+                                        <td>{{(reg.R_CGST)}}</td>
+
+                                        <td>{{(reg.R_IGST)}}</td>
+
+                                        <td>{{(reg.R_Cess)}}</td>
+
+                                        <td>{{(reg.R_GrossAmt )}}</td>
+                                    </tr>
+                                </ng-container>
+                                <tr class="tfoot1" *ngIf="patchoption == 'Tax Payable ( Sweet_Rest )' && patchbranch == 'ALL'">
+                                    <td class="fw-bold" style="color:#710d2f;text-shadow:2px 2px #5f2c8242">
+                                        Total</td>
+                                    <td> {{(item.RNetAmt)}}</td>
+                                    <td> {{(item.RSGST)}}</td>
+                                    <td> {{(item.RCGST)}}</td>
+                                    <td> {{(item.RIGST)}}</td>
+                                    <td> {{(item.RCess)}}</td>
+                                    <td> {{(item.RGrossAmt)}}</td>
+                                </tr>
+                                <ng-container>
+                                    <tr class="tfootcoinage">
+                                        <td></td>
+                                        <td *ngIf="patchbranch != 'ALL' && patchrtype == 'Detailed'"></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="small">Coinage</td>
+                                        <td class="small"> {{(item.RCoinage)| number}}</td>
+                                    </tr>
+                                    <tr class="tfoot2">
+                                        <td></td>
+                                        <td *ngIf="patchbranch != 'ALL' && patchrtype == 'Detailed'"></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="fw-bold text-end"
+                                            style="color:#15752b;text-shadow:2px 2px #5f2c8242">GRAND
+                                            TOTAL</td>
+                                        <td> {{((item.RGrossAmt)+(item.RCoinage))}}</td>
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                        </table>
+                        <table class="table table-bordered" cellspacing="0" id="tableexcelone" border="1"
+                            *ngIf="!showempty && patchoption ==='Tax Payable' ">
+                            <thead>
+                                <tr>
+                                    <th class="text-start">Date</th>
+                                    <ng-container *ngFor="let head of salesview">
+                                        <th *ngIf="head[0] == 'L'" class="text-start">{{head| slice:2}}</th>
+                                        <th *ngIf="head[0] == 'R' && head != 'R_Taxper'" class="text-end">{{head|
+                                            slice:2}} </th>
+                                        <th *ngIf="head[0] == 'R' && head == 'R_Taxper'" class="text-end">{{head|
+                                            slice:2}} (%) </th>
+                                    </ng-container>
+                                </tr>
+                            </thead>
+                            <tbody class="table" *ngFor="let item of result">
+                                <!-- <tr *ngIf="patchbranch == 'ALL'">
+                                    <td class="fw-bold border-0 text-start text"
+                                        style="color:#3f51b5;text-shadow:2px 1px #5f2c8242" colspan="2">{{item.date}}
+                                    </td>
+                                </tr> -->
+                                <tr *ngFor="let final of item.Datewise" class="table table-hover">
+                                    <td class="text-start">{{final.L_Trandate}}</td>
+                                    <ng-container *ngFor="let head of salesview">
+                                        <td *ngIf="head[0] == 'L'" class="text-start">{{final[head]}}</td>
+                                        <td *ngIf="head[0] == 'R'" class="text-end">{{final[head]}}
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                                <tr class="tfoot1" *ngIf="patchbranch =='ALL'">
+                                    <td class="fw-bold" style="color:#710d2f;text-shadow:2px 2px #5f2c8242">
+                                        TOTAL</td>
+                                        <td></td>
+                                    <td> {{(item.RNetAmt)}}</td>
+
+                                    <td> {{(item.RSGST)}}</td>
+
+                                    <td> {{(item.RCGST)}}</td>
+
+                                    <td> {{(item.RIGST)}}</td>
+
+                                    <td> {{(item.RCess)}}</td>
+
+                                    <td> {{(item.RGrossAmt)}}</td>
+
+
+                                </tr>
+                                <ng-container>
+                                    <tr class="tfootcoinage">
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="small">Coinage</td>
+                                        <td class="small"> {{(item.RCoinage)| number}}</td>
+                                    </tr>
+                                    <tr class="tfoot2">
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="fw-bold text-end"
+                                            style="color:#15752b;text-shadow:2px 2px #5f2c8242">GRAND
+                                            TOTAL</td>
+                                        <td> {{((item.RGrossAmt)+(item.RCoinage)|number)}}</td>
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                        </table>
+                        <table class="table table-bordered" cellspacing="0" id="tableexcelone" border="1"
+                            *ngIf="!showempty && patchoption === 'Tax Payable Branchwise'">
+                            <thead>
+                                <tr>
+                                    <th class="text-start" *ngIf="patchbranch != 'ALL' && patchrtype == 'Detailed'">Date</th>
+                                    <ng-container *ngFor="let head of salesview">
+                                        <th *ngIf="head[0] == 'L'" class="text-start">{{head| slice:2}}</th>
+                                        <th *ngIf="head[0] == 'R'" class="text-end">{{head| slice:2}} </th>
+                                    </ng-container>
+                                </tr>
+                            </thead>
+                            <tbody class="table" *ngFor="let item of result">
+                                <tr *ngIf="patchbranch == 'ALL'">
+                                    <td class="fw-bold border-0 text-start text"
+                                        style="color:#3f51b5;text-shadow:2px 1px #5f2c8242" colspan="2">{{item.date}}
+                                    </td>
+                                </tr>
+                                <tr *ngFor="let final of item.Datewise" class="table table-hover">
+                                    <td class="text-start" *ngIf="patchbranch != 'ALL' && patchrtype == 'Detailed'">{{final.L_Trandate}}</td>
+                                    <ng-container *ngFor="let head of salesview">
+                                        <td *ngIf="head[0] == 'L'" class="text-start">{{final[head]}}</td>
+                                        <td *ngIf="head[0] == 'R'" class="text-end">{{final[head]}}
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                                <tr class="tfoot1" *ngIf="patchbranch =='ALL'">
+                                    <td class="fw-bold" style="color:#710d2f;text-shadow:2px 2px #5f2c8242">
+                                        TOTAL</td>
+                                    <td> {{(item.RNetAmt)}}</td>
+                                    <td> {{(item.RSGST)}}</td>
+                                    <td> {{(item.RCGST)}}</td>
+                                    <td> {{(item.RIGST)}}</td>
+                                    <td> {{(item.RCess)}}</td>
+                                    <td> {{(item.RGrossAmt)}}</td>
+                                </tr>
+                                <ng-container *ngIf="patchbranch == 'ALL'">
+                                    <tr class="tfootcoinage" >
+                                        <td></td>
+                                        <td *ngIf="patchbranch != 'ALL' && patchrtype == 'Detailed'"></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="small">Coinage</td>
+                                        <td class="small"> {{(item.RCoinage)| number}}</td>
+                                    </tr>
+                                    <tr class="tfoot2">
+                                        <td></td>
+                                        <td *ngIf="patchbranch != 'ALL' && patchrtype == 'Detailed'"></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="fw-bold text-end"
+                                            style="color:#15752b;text-shadow:2px 2px #5f2c8242">GRAND
+                                            TOTAL</td>
+                                        <td> {{((item.RGrossAmt)+(item.RCoinage))}}</td>
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                        </table>
+                        <table class="table table-bordered" cellspacing="0" id="tableexcelone" border="1"
+                            *ngIf="!showempty && patchoption == 'Taxwise Sales'">
+                            <thead>
+                                <tr>
+                                    <th class="text-start" *ngIf="patchbranch != 'ALL' && patchrtype == 'Detailed'">Date</th>
+                                    <ng-container *ngFor="let head of salesview">
+                                        <th *ngIf="head[0] == 'L'" class="text-start">{{head| slice:2}}</th>
+                                        <th *ngIf="head[0] == 'R'" class="text-end">{{head| slice:2}} </th>
+                                    </ng-container>
+                                </tr>
+                            </thead>
+                            <tbody class="table" *ngFor="let item of result">
+                                <tr *ngIf="patchbranch =='ALL'">
+                                    <td class="fw-bold border-0 text-start text"
+                                        style="color:#3f51b5;text-shadow:2px 1px #5f2c8242" colspan="2">{{item.branch}}
+                                    </td>
+                                </tr>
+                                <ng-container *ngFor="let date of item.branchwise">
+                                    <tr *ngIf="patchbranch =='ALL'">
+                                        <td class="fw-bold border-0 text-start"
+                                            style="color:#a83fb5;text-shadow:2px 1px #5f2c8242" colspan="2">
+                                            {{date.date}}
+                                        </td>
+                                    </tr>
+                                    <ng-container *ngFor="let TAX of date.datewise">
+                                        <tr>
+                                            <td class="fw-bold border-0 text-start"
+                                                style="color:#b38d1a;text-shadow:2px 1px #5f2c8242" colspan="2"> GST
+                                                {{TAX.gst}} (%)
+                                            </td>
+                                        </tr>
+                                        <tr *ngFor="let final of TAX.gstwise" class="table table-hover">
+                                            <td class="text-start" *ngIf="patchbranch != 'ALL' && patchrtype == 'Detailed'">{{final.L_Trandate}}</td>
+                                            <ng-container *ngFor="let head of salesview">
+                                                <td *ngIf="head[0] == 'L'" class="text-start">{{final[head]}}</td>
+                                                <td *ngIf="head[0] == 'R'" class="text-end">{{final[head]}}
+                                                </td>
+                                            </ng-container>
+                                        </tr>
+                                    </ng-container>
+                                    <tr class="tfoot1" *ngIf="patchbranch =='ALL'">
+                                        <td class="fw-bold text-end small" *ngIf="patchrtype == 'Detailed'"
+                                            style="color:#b53f7b;text-shadow:2px 2px #5f2c8242">
+                                            TOTAL</td>
+                                        <td> {{(date.NetAmt)}}</td>
+                                        <td> {{(date.SGST)}}</td>
+                                        <td> {{(date.CGST)}}</td>
+                                        <td> {{(date.Cess)}}</td>
+                                        <td> {{(date.GrossAmt)}}</td>
+                                    </tr>
+                                </ng-container>
+                                <tr class="tfoot2">
+                                    <td class="fw-bold text-start small" *ngIf="patchrtype == 'Detailed'"
+                                        style="color:#15752b;text-shadow:2px 2px #5f2c8242">
+                                        GRAND TOTAL</td>
+                                        <td *ngIf="patchbranch != 'ALL'"></td>
+                                    <td> {{(item.RNetAmt)}}</td>
+                                    <td> {{(item.RSGST)}}</td>
+                                    <td> {{(item.RCGST)}}</td>
+                                    <td> {{(item.RCess)}}</td>
+                                    <td> {{(item.RGrossAmt)}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table class="table table-bordered" cellspacing="0" id="tableexcelone" border="1"
+                            *ngIf="!showempty && patchoption == 'Taxwise Sales (Sweet_Rest_Veg )'">
+                            <thead>
+                                <tr>
+                                    <th class="text-start" *ngIf="patchbranch != 'ALL' && patchrtype == 'Detailed'">Date</th>
+                                    <ng-container *ngFor="let head of salesview">
+                                        <th *ngIf="head[0] == 'L'" class="text-start">{{head| slice:2}}</th>
+                                        <th *ngIf="head[0] == 'R'" class="text-end">{{head| slice:2}} </th>
+                                    </ng-container>
+                                </tr>
+                            </thead>
+                            <tbody class="table" *ngFor="let item of result">
+                                <tr *ngIf="patchbranch =='ALL'">
+                                    <td class="fw-bold border-0 text-start text"
+                                        style="color:#a83fb5;text-shadow:2px 1px #5f2c8242" colspan="2">{{item.branch}}
+                                    </td>
+                                </tr>
+                                <ng-container *ngFor="let date of item.branchwise">
+                                    <tr *ngIf="patchbranch =='ALL'">
+                                        <td class="fw-bold border-0 text-start"
+                                            style="color:#17a2b8;text-shadow:2px 1px #5f2c8242" colspan="2">
+                                            {{date.date}}
+                                        </td>
+                                    </tr>
+                                    <ng-container *ngFor="let TAX of date.datewise">
+                                        <tr>
+                                            <td class="fw-bold border-0 text-start"
+                                                style="color:#b38d1a;text-shadow:2px 1px #5f2c8242" colspan="2"> GST
+                                                {{TAX.gst}} (%)
+                                            </td>
+                                        </tr>
+                                        <tr *ngFor="let final of TAX.gstwise" class="table table-hover">
+                                            <td class="text-start" *ngIf="patchbranch != 'ALL' && patchrtype == 'Detailed'">{{final.L_Trandate}}</td>
+                                            <ng-container *ngFor="let head of salesview">
+                                                <td *ngIf="head[0] == 'L'" class="text-start">{{final[head]}}</td>
+                                                <td *ngIf="head[0] == 'R'" class="text-end">{{final[head]}}
+                                                </td>
+                                            </ng-container>
+                                        </tr>
+                                        <tr class="tfoot1" *ngIf="patchbranch =='ALL'">
+                                            <td class="fw-bold text-end"
+                                                style="color:#8e133d;text-shadow:2px 2px #5f2c8242">
+                                            </td>
+                                            <td> {{(TAX.NetAmt)}}</td>
+                                            <td> {{(TAX.SGST)}}</td>
+                                            <td> {{(TAX.CGST)}}</td>
+                                            <td> {{(TAX.Cess)}}</td>
+                                            <td> {{(TAX.GrossAmt)}}</td>
+                                        </tr>
+                                    </ng-container>
+                                </ng-container>
+                                <tr class="tfoot2">
+                                    <td class="fw-bold text-start"
+                                        style="color:#15752b;text-shadow:2px 2px #5f2c8242">GRAND
+                                        TOTAL</td>
+                                        <td *ngIf="patchbranch != 'ALL' && patchrtype == 'Detailed'"></td>
+                                    <td> {{(item.RNetAmt)}}</td>
+                                    <td> {{(item.RSGST)}}</td>
+                                    <td> {{(item.RCGST)}}</td>
+                                    <td> {{(item.RCess)}}</td>
+                                    <td> {{(item.RGrossAmt)}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table class="table table-bordered" cellspacing="0" id="tableexcelone" border="1"
+                            *ngIf="!showempty && patchoption == 'Taxwise Sales (Sweet_Rest )'">
+                            <thead>
+                                <tr>
+                                    <th class="text-start" *ngIf="patchbranch != 'ALL' && patchrtype == 'Detailed'">Date</th>
+                                    <ng-container *ngFor="let head of salesview">
+                                        <th *ngIf="head[0] == 'L'" class="text-start">{{head| slice:2}}</th>
+                                        <th *ngIf="head[0] == 'R'" class="text-end">{{head| slice:2}} </th>
+                                    </ng-container>
+                                </tr>
+                            </thead>
+                            <tbody class="table" *ngFor="let item of result">
+                                <tr *ngIf="patchbranch =='ALL'">
+                                    <td class="fw-bold border-0 text-start text"
+                                        style="color:#3f51b5;text-shadow:2px 1px #5f2c8242">{{item.branch}}
+                                    </td>
+                                </tr>
+                                <ng-container *ngFor="let date of item.branchwise">
+                                    <tr *ngIf="patchbranch =='ALL'">
+                                        <td class="fw-bold border-0 text-start"
+                                            style="color:#a83fb5;text-shadow:2px 1px #5f2c8242">{{date.date}}
+                                        </td>
+                                    </tr>
+                                    <ng-container *ngFor="let cat of date.datewise">
+                                        <tr>
+                                            <td class="fw-bold border-0 text-start"
+                                                style="color:#17a2b8;text-shadow:2px 1px #5f2c8242">{{cat.cat}}
+                                            </td>
+                                        </tr>
+                                        <ng-container *ngFor="let TAX of cat.catwise">
+                                            <tr>
+                                                <td class="fw-bold border-0 text-start"
+                                                    style="color:#b38d1a;text-shadow:2px 1px #5f2c8242" colspan="2">GST
+                                                    {{TAX.gst}} (%)
+                                                </td>
+                                            </tr>
+                                            <tr *ngFor="let final of TAX.gstwise" class="table table-hover">
+                                                <td class="text-start" *ngIf="patchbranch != 'ALL' && patchrtype == 'Detailed'">{{final.L_Trandate}}</td>
+                                                <ng-container *ngFor="let head of salesview">
+                                                    <td *ngIf="head[0] == 'L'" class="text-start">{{final[head]}}</td>
+                                                    <td *ngIf="head[0] == 'R' " class="text-end">
+                                                        {{final[head]}}
+                                                    </td>
+                                                </ng-container>
+                                            </tr>
+                                        </ng-container>
+                                    </ng-container>
+                                    <tr class="tfoot1" *ngIf="date !=null && patchbranch == 'ALL'">
+                                        <td class="fw-bold text-end small" *ngIf="patchrtype == 'Detailed'"
+                                            style="color:#b53f7b;text-shadow:2px 2px #5f2c8242">
+                                            TOTAL</td>
+                                        <td> {{(date.NetAmt)}}</td>
+                                        <td> {{(date.SGST)}}</td>
+                                        <td> {{(date.CGST)}}</td>
+                                        <td> {{(date.Cess)}}</td>
+                                        <td> {{(date.GrossAmt)}}</td>
+                                    </tr>
+                                </ng-container>
+                                <tr class="tfoot2" >
+                                    <td class="fw-bold text-start small" *ngIf="patchrtype == 'Detailed'"
+                                        style="color:#15752b;text-shadow:2px 2px #5f2c8242">GRAND
+                                        TOTAL</td>
+                                        <td *ngIf="patchbranch != 'ALL' && patchrtype == 'Detailed'"></td>
+                                    <td> {{(item.RNetAmt)}}</td>
+                                    <td> {{(item.RSGST)}}</td>
+                                    <td> {{(item.RCGST)}}</td>
+                                    <td> {{(item.RCess)}}</td>
+                                    <td> {{(item.RGrossAmt)}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table class="table table-bordered" cellspacing="0" id="tableexcelone" border="1"
+                            *ngIf="!showempty && patchoption == 'Salemodewise Sales'">
+                            <thead>
+                                <tr>
+                                    <th class="text-start" *ngIf="patchbranch != 'ALL' && patchrtype == 'Detailed'">Date</th>
+                                    <ng-container *ngFor="let head of salesview">
+                                        <th *ngIf="head[0] == 'L'" class="text-start">{{head| slice:2}}</th>
+                                        <th *ngIf="head[0] == 'R'" class="text-end">{{head| slice:2}}</th>
+                                    </ng-container>
+                                </tr>
+                            </thead>
+                            <tbody class="table" *ngFor="let item of resultARR">
+                                <tr *ngIf="patchrtype == 'Detailed' && patchbranch == 'ALL'">
+                                    <td class="fw-bold border-0 text-start text"
+                                        style="color:#3f51b5;text-shadow:2px 1px #5f2c8242" colspan="2">{{item.date}}
+                                    </td>
+                                </tr>
+                                <ng-container *ngFor="let reg of item.Datewise">
+                                    <td class="fw-bold border-0 text-start" *ngIf="patchbranch =='ALL'"
+                                        style="color:#15752b;text-shadow:2px 2px #5f2c8242" colspan="2">{{reg.region}}
+                                    </td>
+                                    <tr *ngFor="let final of reg.regionwise" class="table table-hover">
+                                        <td class="text-start" *ngIf="patchbranch != 'ALL' && patchrtype == 'Detailed'">{{final.L_Trandate}}</td>
+                                        <ng-container *ngFor="let head of salesview">
+                                            <td *ngIf="head[0] == 'L'" class="text-start">{{final[head]}}</td>
+                                            <td *ngIf="head[0] == 'R'" class="text-end">{{final[head]}}
+                                            </td>
+                                        </ng-container>
+                                    </tr>
+                                    <tr class="tfoot" *ngIf="patchbranch =='ALL'">
+                                        <td *ngIf="patchrtype == 'Detailed'"></td>
+                                        <td>{{(reg.RS_Total)}}</td>
+                                        <td>{{(reg.RS_Cash)}}</td>
+                                        <td>{{(reg.RS_Card)}}</td>
+                                        <td>{{(reg.RS_Credit)}}</td>
+                                        <td>{{(reg.RS_Token)}}</td>
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                            <ng-container>
+                                <tr class="tfoot2">
+                                    <td class="fw-bold text-start" *ngIf="patchrtype == 'Detailed'"
+                                        style="color:green;text-shadow:2px 2px #5f2c8242">GRAND
+                                        TOTAL</td>
+                                        <td *ngIf="patchbranch != 'ALL' && patchrtype == 'Detailed'"></td>
+                                    <td> {{(total)}}</td>
+                                    <td> {{(Cash)}}</td>
+                                    <td> {{(Card)}}</td>
+                                    <td> {{(Credit)}}</td>
+                                    <td> {{(Token)}}</td>
+                                </tr>
+                            </ng-container>
+                        </table>
+                        <table class="table table-bordered" cellspacing="0" id="tableexcelone" border="1"
+                            *ngIf="!showempty && patchoption == 'Branchwise Sales'">
+                            <thead>
+                                <tr>
+                                    <th class="text-start" *ngIf="patchbranch != 'ALL' && patchrtype == 'Detailed'">Date</th>
+                                    <ng-container *ngFor="let head of salesview">
+                                        <th *ngIf="head[0] == 'L'" class="text-start">{{head| slice:2}}</th>
+                                        <th *ngIf="head[0] == 'R'" class="text-end">{{head| slice:2}}</th>
+                                    </ng-container>
+                                </tr>
+                            </thead>
+                            <tbody class="table" *ngFor="let item of resultARR">
+                                <tr *ngIf="patchrtype == 'Detailed' && patchbranch == 'ALL'">
+                                    <td class="fw-bold border-0 text-start text"
+                                        style="color:#3f51b5;text-shadow:2px 1px #5f2c8242" colspan="2">{{item.date}}
+                                    </td>
+                                </tr>
+                                <ng-container *ngFor="let reg of item.Datewise">
+                                    <td class="fw-bold border-0 text-start" *ngIf="patchbranch =='ALL'"
+                                        style="color:#15752b;text-shadow:2px 2px #5f2c8242" colspan="2">{{reg.region}}
+                                    </td>
+                                    <tr *ngFor="let final of reg.regionwise" class="table table-hover">
+                                        <td class="text-start" *ngIf="patchbranch != 'ALL' && patchrtype == 'Detailed'">{{final.L_Trandate}}</td>
+                                        <ng-container *ngFor="let head of salesview">
+                                            <td *ngIf="head[0] == 'L'" class="text-start">{{final[head]}}</td>
+                                            <td *ngIf="head[0] == 'R'" class="text-end">{{final[head]}}
+                                            </td>
+                                        </ng-container>
+                                    </tr>
+                                    <tr class="tfoot" *ngIf="patchbranch =='ALL'">
+                                        <td></td>
+                                        <td >{{(reg.R_GrossAmt)}}</td>
+
+                                        <td>{{(reg.R_Vat)}}</td>
+
+                                        <td >{{(reg.R_Sertax)}}</td>
+
+                                        <td >{{(reg.R_NetAmt)}}</td>
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                            <ng-container>
+                                <tr class="tfoot2">
+                                    <td class="fw-bold text-start"
+                                        style="color:green;text-shadow:2px 2px #5f2c8242">GRAND
+                                        TOTAL</td>
+                                        <td *ngIf="patchbranch != 'ALL' && patchrtype == 'Detailed'"></td>
+                                    <td> {{(GrossAmt)}}</td>
+                                    <td> {{(Vat)}}</td>
+                                    <td> {{(Sertax)}}</td>
+                                    <td> {{(NetAmt)}}</td>
+                                </tr>
+                            </ng-container>
+                        </table>
+                        <table class="table table-bordered" cellspacing="0" id="tableexcelone" border="1"
+                            *ngIf="!showempty && patchoption == 'Sales With BillNo'">
+                            <thead>
+                                <tr>
+                                    <th class="text-start" *ngIf="patchbranch != 'ALL' && patchrtype == 'Detailed'">Date</th>
+                                    <ng-container *ngFor="let head of salesview">
+                                        <th *ngIf="head[0] == 'L'" class="text-start">{{head| slice:2}}</th>
+                                        <th *ngIf="head[0] == 'R'" class="text-end">{{head| slice:2}}</th>
+                                    </ng-container>
+                                </tr>
+                            </thead>
+                            <tbody class="table" *ngFor="let item of resultARR">
+                                <tr *ngIf="patchrtype == 'Detailed' && patchbranch == 'ALL'">
+                                    <td class="fw-bold border-0 text-start text"
+                                        style="color:#3f51b5;text-shadow:2px 1px #5f2c8242" colspan="2">{{item.date}}
+                                    </td>
+                                </tr>
+                                <ng-container *ngFor="let reg of item.Datewise">
+                                    <td class="fw-bold border-0 text-start" *ngIf="patchbranch =='ALL'"
+                                        style="color:#15752b;text-shadow:2px 2px #5f2c8242" colspan="2">{{reg.region}}
+                                    </td>
+                                    <tr *ngFor="let final of reg.regionwise" class="table table-hover">
+                                        <td class="text-start" *ngIf="patchbranch != 'ALL' && patchrtype == 'Detailed'">{{final.L_Trandate}}</td>
+                                        <ng-container *ngFor="let head of salesview">
+                                            <td *ngIf="head[0] == 'L'" class="text-start">{{final[head]}}</td>
+                                            <td *ngIf="head[0] == 'R'" class="text-end">{{final[head]}}
+                                            </td>
+                                        </ng-container>
+                                    </tr>
+                                    <tr class="tfoot" *ngIf="patchbranch =='ALL'">
+                                        <td *ngIf="patchrtype == 'Detailed'"></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td >{{(reg.RS_Total)}}</td>
+
+                                        <td >{{(reg.RS_Cash)}}</td>
+
+                                        <td >{{(reg.RS_Card)}}</td>
+
+                                        <td >{{(reg.RS_Credit)}}</td>
+
+                                        <td >{{(reg.RS_Token)}}</td>
+
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                            <ng-container>
+                                <tr class="tfoot2">
+                                    <td class="fw-bold text-start"
+                                        style="color:green;text-shadow:2px 2px #5f2c8242">GRAND
+                                        TOTAL</td>
+                                        <td *ngIf="patchbranch != 'ALL'"></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td> {{(total)}}</td>
+                                    <td> {{(Cash)}}</td>
+                                    <td> {{(Card)}}</td>
+                                    <td> {{(Credit)}}</td>
+                                    <td> {{(Token)}}</td>
+                                </tr>
+                            </ng-container>
+                        </table>
+                        <table class="table table-bordered" cellspacing="0" id="tableexcelone" border="1"
+                            *ngIf="!showempty && patchoption == 'Coinage'">
+                            <thead>
+                                <tr>
+                                    <ng-container *ngFor="let head of salesview">
+                                        <th *ngIf="head[0] == 'L'" class="text-start">{{head| slice:2}}</th>
+                                        <th *ngIf="head[0] == 'R'" class="text-end">{{head| slice:2}}</th>
+                                    </ng-container>
+                                </tr>
+                            </thead>
+                            <tbody class="table" *ngFor="let item of resultARR">
+                                <tr *ngIf="patchbranch === 'ALL'">
+                                    <td class="fw-bold border-0 text-start text"
+                                        style="color:#3f51b5;text-shadow:2px 1px #5f2c8242" colspan="2">{{item.date}}
+                                    </td>
+                                </tr>
+                                <ng-container *ngFor="let reg of item.Datewise">
+                                    <td class="fw-bold border-0 text-start" *ngIf="patchrtype == 'Detailed' && patchbranch === 'ALL'"
+                                        style="color:#15752b;text-shadow:2px 2px #5f2c8242" colspan="2">{{reg.region}}
+                                    </td>
+                                    <tr *ngFor="let final of reg.regionwise" class="table table-hover">
+                                        <ng-container *ngFor="let head of salesview">
+                                            <td *ngIf="head[0] == 'L'" class="text-start w-25">{{final[head]}}</td>
+                                            <td *ngIf="head[0] == 'R'" class="text-end w-25">
+                                                {{final[head]}}
+                                            </td>
+                                        </ng-container>
+                                    </tr>
+                                    <tr class="tfoot" *ngIf="patchrtype == 'Detailed' && patchbranch === 'ALL'">
+                                        <td></td>
+                                        <td>{{reg.R_Coinage}}</td>
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                            <ng-container>
+                                <tr class="tfoot2">
+                                    <td class="fw-bold text-start"
+                                        style="color:green;text-shadow:2px 2px #5f2c8242">GRAND
+                                        TOTAL</td>
+                                    <td> {{(coinage)}}</td>
+                                </tr>
+                            </ng-container>
+                        </table>
+                        <table class="table table-bordered" cellspacing="0" id="tableexcelone" border="1"
+                            *ngIf="!showempty && patchoption == 'Catwise Sales [SW/SA/RS/BK/IC]'">
+                            <thead>
+                                <tr>
+                                    <th class="text-start" *ngIf="patchbranch != 'ALL' && patchrtype == 'Detailed'">Date</th>
+                                    <ng-container *ngFor="let head of salesview">
+                                        <th *ngIf="head[0] == 'L'" class="text-start">{{head| slice:2}}</th>
+                                        <th *ngIf="head[0] == 'R'" class="text-end">{{head| slice:2}}</th>
+                                    </ng-container>
+                                </tr>
+                            </thead>
+                            <tbody class="table" *ngFor="let item of consolidatedData">
+                                <tr *ngIf="patchrtype == 'Detailed' && patchbranch == 'ALL'">
+                                    <td class="fw-bold border-0 text-start text"
+                                        style="color:#3f51b5;text-shadow:2px 1px #5f2c8242" colspan="2">{{item.date}}
+                                    </td>
+                                </tr>
+                                <tr *ngFor="let final of item.values" class="table table-hover">
+                                    <td class="text-start" *ngIf="patchbranch != 'ALL' && patchrtype == 'Detailed'">{{final.L_Trandate}}</td>
+                                    <ng-container *ngFor="let head of salesview">
+                                        <td *ngIf="head[0] == 'L'" class="text-start">{{final[head]}}</td>
+                                        <td *ngIf="head[0] == 'R'" class="text-end">{{final[head]}}
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                                <tr class="tfoot text-end" *ngIf="patchbranch == 'ALL'">
+                                    <td></td>
+                                    <td>{{(item.TOTAL)}}</td>
+                                    <td>{{(item.SWEETS)}}</td>
+                                    <td>{{(item.SAVOURIES)}}</td>
+                                    <td>{{(item.RESTAURANT)}}</td>
+                                    <td>{{(item.BAKERY)}}</td>
+                                    <td>{{(item.ICE_CREAMS)}}</td>
+                                    <td>{{(item.A2B_GREENS)}}</td>
+
+                                </tr>
+                            </tbody>
+                            <ng-container>
+                                <tr class="tfoot2">
+                                    <td class="fw-bold text-start"
+                                        style="color:green;text-shadow:2px 2px #5f2c8242">GRAND
+                                        TOTAL</td>
+                                        <td *ngIf="patchbranch != 'ALL' && patchrtype == 'Detailed'"></td>
+                                    <td>{{(TOTAL)}}</td>
+                                    <td>{{(SWEETS)}}</td>
+                                    <td>{{(SAVOURIES)}}</td>
+                                    <td>{{(RESTAURANT)}}</td>
+                                    <td>{{(BAKERY)}}</td>
+                                    <td>{{(ICE_CREAMS)}}</td>
+                                    <td>{{(A2B_GREENS)}}</td>
+                                </tr>
+                            </ng-container>
+                        </table>
+                        <table class="table table-bordered" cellspacing="0" id="tableexcelone" border="1"
+                            *ngIf="!showempty && patchoption == 'Bill Receipts'">
+                            <thead>
+                                <tr>
+                                    <th class="text-start" *ngIf="patchbranch != 'ALL' && patchrtype == 'Detailed'">Date</th>
+                                    <th colspan="6">Bill Details</th>
+                                    <th colspan="6">Payment Details</th>
+                                </tr>
+                                <tr>
+                                    <ng-container *ngFor="let head of salesview">
+                                        <th *ngIf="head[0] == 'L'" class="text-start">{{head| slice:2}}</th>
+                                        <th *ngIf="head[0] == 'R'" class="text-end">{{head| slice:2}}</th>
+                                    </ng-container>
+                                </tr>
+                            </thead>
+                            <tbody class="table" *ngFor="let item of consolidatedData">
+                                <tr *ngIf="patchbranch =='ALL'">
+                                    <td class="fw-bold border-0 text-start text"
+                                        style="color:#3f51b5;text-shadow:2px 1px #5f2c8242" colspan="2">{{item.date}}
+                                    </td>
+                                </tr>
+                                <tr *ngFor="let final of item.values" class="table table-hover">
+                                    <td class="text-start" *ngIf="patchbranch != 'ALL' && patchrtype == 'Detailed'">{{final.L_Trandate}}</td>
+                                    <ng-container *ngFor="let head of salesview">
+                                        <td *ngIf="head[0] == 'L'" class="text-start">{{final[head]}}</td>
+                                        <td *ngIf="head[0] == 'R'" class="text-end">
+                                            {{final[head]}}
+
+                                    </ng-container>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="col-sm-12 text-center" *ngIf="showempty">
+                            <img src="assets/gImg/no-data-found.png" alt="" width="50%">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

@@ -1,0 +1,10 @@
+<div [formGroup]="form">
+    <div class="gOuterInput">
+        <input class="gInnerInput" matInput [id]="field.name" [formControlName]="field.name" [matDatepicker]="picker" />
+        <mat-datepicker-toggle type="button" matSuffix [for]="picker " class="gInputButton">
+            <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+        </mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+    </div>
+
+</div>

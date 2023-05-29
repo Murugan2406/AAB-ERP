@@ -1,0 +1,120 @@
+<form [formGroup]="AccountInformationForm">
+    <div class="row">
+
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="row form-group">
+                <label class="gInputLable col-sm-12 col-md-4 col-lg-3">Fin Book <strong  class="text-danger ng-star-inserted">*</strong>  </label>
+                <div class="col-sm-12 col-md-8 col-lg-9">
+                    <input type="text" class="gInnerInput" name="finBookName1" [id]="unique+'finBookName1'" formControlName="FinBookName" autocomplete="off" (input)="FilterFinbook($event.target.value)" (keydown)="keytab($event, unique+'AccCostCenter')" [matAutocomplete]="fbName"
+                    />
+                    <mat-autocomplete #fbName="matAutocomplete" class="gAutoCompleteContainer" [displayWith]="displayFb">
+                        <mat-option class="gSelectOption" *ngFor="let fb of FbOneArr" [value]="fb" (onSelectionChange)="Fbchoosed($event, 'debit', unique+'AccCostCenter')">
+                            {{ fb.FbName }}
+                        </mat-option>
+                    </mat-autocomplete>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="row form-group">
+                <label class="gInputLable col-sm-12 col-md-4 col-lg-4">CostCenter <strong  class="text-danger ng-star-inserted">*</strong> </label>
+                <div class="col-sm-12 col-md-8 col-lg-8">
+                    <input type="text" class="gInnerInput" name="costCenter" [id]="unique+'AccCostCenter'" formControlName="costCenter" (input)="getBranchName($event.target.value)" autocomplete="off" [matAutocomplete]="autoBranchName" (keydown)="keytab($event, unique+'accountType')"
+                    />
+                    <mat-autocomplete #autoBranchName="matAutocomplete" class="gAutoCompleteContainer" [displayWith]="displayBr">
+                        <mat-option class="gSelectOption" *ngFor="let branchName of debitBranch" [value]="branchName" (onSelectionChange)="FocusNext1($event,unique+'accountType' )">{{ branchName.brname }}</mat-option>
+                    </mat-autocomplete>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="row form-group">
+                <label class="gInputLable col-sm-12 col-md-4 col-lg-4">Account Type <strong  class="text-danger ng-star-inserted">*</strong> </label>
+                <div class="col-sm-12 col-md-8 col-lg-8">
+                    <mat-select class="gInnerInput" [id]="unique+'accountType'" formControlName="accountType" >
+                        <mat-option class="gSelectOption" *ngFor="let accountType of accountTypes" (onSelectionChange)="FocusNext($event, unique+'accname')" [value]="accountType.Acctype">
+                            {{ accountType.Acctype }}
+                        </mat-option>
+                    </mat-select>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="row form-group">
+                <mat-label class="gInputLable col-sm-12 col-md-4 col-lg-3" *ngIf="AccountInformationForm.get('accountType').value !== 'Ussage Ids'">Acc. Name <strong  class="text-danger ng-star-inserted">*</strong> 
+                </mat-label>
+                <mat-label class="gInputLable col-sm-12 col-md-4 col-lg-3" *ngIf="AccountInformationForm.get('accountType').value === 'Ussage Ids'">Usg. Name <strong  class="text-danger ng-star-inserted">*</strong> 
+                </mat-label>
+
+
+                <div class="col-sm-12 col-md-8 col-lg-9" *ngIf="AccountInformationForm.get('accountType').value !== 'Ussage Ids' ">
+                    <input type="text" class="gInnerInput" name="name" [id]="unique+'accname'" (keydown)="keytab($event, unique+'Amount')" formControlName="AccName_UssageName" autocomplete="off" [matAutocomplete]="autoNames" (input)="getAccountName($event.target.value)"
+                    />
+
+                    <mat-autocomplete #autoNames="matAutocomplete" [displayWith]="displayAccName" class="gAutoCompleteContainer">
+                        <mat-option class="gSelectOption-11" *ngFor="let accName of debitaccountNames" [value]="accName" (onSelectionChange)="AccountNameSelected($event)">
+                            {{ accName.AcCodeName }}
+                        </mat-option>
+                    </mat-autocomplete>
+                </div>
+                <div class="col-sm-12 col-md-8 col-lg-9" *ngIf="AccountInformationForm.get('accountType').value === 'Ussage Ids' ">
+                    <input type="text" class="gInnerInput" name="name" [id]="unique+'accname'" formControlName="AccName_UssageName" (keydown)="keytab($event, unique+'Amount')" [matAutocomplete]="autoNames" (input)="getUssageName($event.target.value)" />
+                    <mat-autocomplete #autoNames="matAutocomplete" [displayWith]="displayUssageName" class="gAutoCompleteContainer">
+                        <mat-option class="gSelectOption-11" *ngFor="let usgName of debitUsageList" [value]="usgName" (onSelectionChange)="AccountNameSelected($event)">
+                            {{ usgName.UsageCodeName }}
+                        </mat-option>
+                    </mat-autocomplete>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="row form-group">
+                <label class="gInputLable col-sm-12 col-md-4 col-lg-4">Amount <strong  class="text-danger ng-star-inserted">*</strong> </label>
+                <div class="col-sm-12 col-md-4 col-lg-4">
+                    <input type="text" class="gInnerInput" name="Amount" [id]="unique+'Amount'" formControlName="Amount" autocomplete="off" (keypress)="Decimal($event)" (keydown)="keytab($event,unique+'remarks')" />
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- <div class="col-12 col-md-6 col-xl-4">
+            <div class="row form-group">
+                <label class="gInputLable col-sm-12 col-md-4 col-lg-4">Attachments <strong  class="text-danger ng-star-inserted">*</strong> </label>
+                <div class="col-sm-12 col-md-4 col-lg-4">
+                    <input type="text" class="gInnerInput" name="Amount" [id]="unique+'Amount'" formControlName="Amount" autocomplete="off" (keypress)="Decimal($event)" (keydown)="keytab($event,unique+'remarks')" />
+
+                </div>
+
+            </div>
+
+        </div> -->
+
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="row form-group">
+                <label class="gInputLable col-sm-12 col-md-4 col-lg-4">Remarks <strong  class="text-danger ng-star-inserted">*</strong> </label>
+                <div class="col-sm-12 col-md-8 col-lg-8 ">
+                    <div class="gOuterInput">
+                        <input type="text" class="gInnerInput" name="remarks" [id]="unique+'remarks'" formControlName="remarks" autocomplete="off" (keydown)="keytab($event, unique+'add_button')" />
+                        <button type="button" [id]="unique+'add_button'" mat-button class="gInputButton" [disabled]="editable" (click)="SubmitDebitForm()">
+                                <mat-icon style="font-size: 20px !important">add</mat-icon>
+                            
+                            </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+    </div>
+</form>

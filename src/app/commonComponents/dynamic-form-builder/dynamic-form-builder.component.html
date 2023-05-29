@@ -1,0 +1,23 @@
+<form (ngSubmit)="onSubmit.emit(this.form.value)" [formGroup]="form" class="form-horizontal row">
+    <div *ngFor="let field of fields" [class]="field.style">
+        <label class="gInputLable" [attr.for]="field.label">
+            {{field.label}}
+            <strong class="text-danger">*</strong>
+          </label>
+        <div class="" [ngSwitch]="field.type">
+            <app-text-box *ngSwitchCase="'text'" [field]="field" [form]="form"></app-text-box>
+            <app-text-box *ngSwitchCase="'number'" [field]="field" [form]="form"></app-text-box>
+            <app-checkbox *ngSwitchCase="'checkbox'" [field]="field" [form]="form"></app-checkbox>
+            <app-radio *ngSwitchCase="'radio'" [field]="field" [form]="form"></app-radio>
+            <app-file *ngSwitchCase="'file'" [field]="field" [form]="form"></app-file>
+            <app-date *ngSwitchCase="'date'" [field]="field" [form]="form"></app-date>
+            <app-file *ngSwitchCase="'attchment'" [field]="field" [form]="form"></app-file>
+            <app-droupdown *ngSwitchCase="'dropdown'" [field]="field" [form]="form" (dropDownChanged)="dropDownChange($event)"></app-droupdown>
+            <app-auto-complete *ngSwitchCase="'autoComplete'" [field]="field" [form]="form"  (selectioChanged)="selectionChange($event)" (autoTrigger)="autCompleteTrigger($event)"></app-auto-complete>
+    
+        </div>
+    </div>
+    <!-- (selectioChanged)="selectionChange($event)" (autoTrigger)="autCompleteTrigger($event)" -->
+
+</form>
+

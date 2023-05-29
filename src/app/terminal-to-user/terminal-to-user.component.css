@@ -1,0 +1,48 @@
+.example-spacer {
+    flex: 1 1 auto;
+}
+
+.gDeleteIcon .mat-icon {
+    font-size: 17px;
+    line-height: 22px !important;
+}
+
+.section1 {
+    padding: 5px;
+    border-radius: 8px;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.gInnerInput-border {
+    min-width: 300px !important;
+    width: auto !important;
+}
+
+.topSection {
+    margin: 0;
+}
+
+.gInnerTable {
+    max-height: calc(100% - 225px);
+}
+
+.gInputLable {
+    font-weight: 500;
+}
+
+@media only screen and (max-width: 560px) {
+    .topSection {
+        margin: 5px;
+        padding: 0;
+    }
+    .gInnerInput-border {
+        min-width: 0 !important
+    }
+}
+
+@media only screen and (max-width: 1000px) {
+    .gInnerInput-border {
+        min-width: 0 !important
+    }
+}

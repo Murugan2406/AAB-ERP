@@ -1,0 +1,10 @@
+<div class="gOuterInput" [formGroup]="form">
+    <input class="gInnerInput" [id]="field.name" [formControlName]="field.name" matInput [matAutocomplete]="auto" (input)="autCompleteTrigger($event, field, $event.target.value)">
+    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" class="gAutoCompleteContainer" [displayWith]="displayFn">
+        <mat-option class="gSelectOption" *ngFor="let option of OptionView " [value]="option" (onSelectionChange)="OptionSecleted($event, field)">
+            {{option[option.key3]}}
+        </mat-option>
+
+    </mat-autocomplete>
+
+</div>

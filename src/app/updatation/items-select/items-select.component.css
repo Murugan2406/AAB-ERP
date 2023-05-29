@@ -1,0 +1,97 @@
+.form-group {
+    font-size: 12px;
+}
+
+.example-full-width {
+    width: 100%;
+}
+
+.optionlbl {
+    font-size: 12px;
+    font: bold;
+    color: #1C5A85;
+    font-weight: bold;
+}
+
+
+/* Absolute Center Spinner */
+
+.loading {
+    position: fixed;
+    z-index: 999;
+    height: 100px;
+    width: 100px;
+    overflow: show;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+
+/* Transparent Overlay */
+
+.loading:before {
+    content: '';
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+
+/* Buttons */
+
+@media only screen and (min-width:769px) {
+    .serchBox {
+        margin-left: 33%;
+    }
+}
+
+.option-card {
+    border: 0px solid rgb(19 151 132 / 88%);
+    /* rgb(19 151 132 / 88%)rgb(19 151 132 / 88%) */
+}
+
+.card-body {
+    padding: 0rem !important
+}
+
+.p-2 {
+    padding: .2rem!important;
+}
+
+.form-group {
+    margin-bottom: 0rem;
+}
+
+.gcardContainer {
+    box-shadow: 0 8px 32px 0 rgb(31 38 135 / 43%);
+    padding: 10px 20px;
+    min-width: 60%;
+    border: 0.5px solid rgb(31 38 135 / 23%);
+}
+
+
+/* ::ng-deep.gInputButton {
+      .mat-icon-button {
+          width: 30px !important;
+          height: 18px !important;
+          line-height: 20px !important;
+      }
+  } */
+
+.container {
+    max-width: 650px;
+    margin-bottom: 50px;
+}
+
+input:disabled,
+input[type=text]:read-only {
+    color: rgba(0, 0, 0, 0.685) !important;
+    background-color: rgba(0, 0, 0, 0.192) !important;
+}

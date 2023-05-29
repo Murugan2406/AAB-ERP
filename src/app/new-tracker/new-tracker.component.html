@@ -1,0 +1,270 @@
+<section class="gWrapper">
+
+<body>
+    <nav class="navbar1">
+        <a class="navbar-brand" href="#">
+            <div >
+                <!-- <img class="icon hexagon" /> -->
+                <img [src]="this.globals.gCmplogo" alt="" class="icon-container">
+            </div>
+            <span class="name">A2B's Request Tracker</span>
+        </a>
+        <ul class="navbar-nav ">
+            <li>
+                <a class="active"><img class="icon home" /><span>Home</span></a>
+            </li>
+            <li>
+                <a class=""><img class="icon statistics" /><span>Create Ticket</span></a>
+            </li>
+            <li>
+                <a><img class="icon mail " /><span>Inbox</span></a>
+            </li>
+            <li>
+                <a><img class="icon statistics" /><span>Complaints</span></a>
+            </li>
+            <li>
+                <a><img class="icon user" /><span> My NewTickets</span></a>
+            </li>
+            <li>
+                <a><img class="icon file" /><span>New Requests</span></a>
+            </li>
+            <li>
+                <a><img class="icon statistics" /><span>Department Tickets</span></a>
+            </li>
+            <li>
+                <a><img class="icon file" /><span>Trash</span></a>
+            </li>
+            <li>
+                <a><img class="icon file" /><span>Reports</span></a>
+            </li>
+        </ul>
+  
+    </nav>
+    <main>
+        <header>
+            <section role="search">
+                <form action="#" method="get">
+                    <div class="form-inline">
+                        <img class="icon search" />
+                        <input type="search" placeholder="Search" />
+                    </div>
+                </form>
+            </section>
+
+            <section role="application">
+                <button class="change-view">
+                    <img class="icon layout" />Create
+                </button>
+                <button class="change-view">
+                    <img class="icon layout" />Complaints
+                </button>
+                <button class="change-view">
+                    <img class="icon layout" />Trash
+                </button>
+                <button class="notification">
+                    <img class="icon notification" />
+                </button>
+                <button class="menu">
+                    <!-- <img class="icon menu" /> -->
+                    <!-- <img src="https://murugan2406.github.io/AdminPanel/assets/profile-pic-01.jpg" alt="" class="cardporfile"> -->
+                    <img src="../../assets/gImg/murugan.png" alt="" class="cardporfile">
+
+                </button>
+            </section>
+        </header>
+      <ul class="navbar-nav">
+        <li>
+            <a class=""><span>Welcome back <b>{{userNameShort[0]}}</b> ,</span></a>
+        </li> 
+      </ul>
+        <div class="charts-wrapper row mx-1">
+            <div class="col-3 mt-3">
+                <section role="credit-card" >
+                    <div class="top">
+                        
+                        <img src="https://ozcanzaferayan.github.io/financial-crm/img/mastercard.svg" />
+                        <img src=".\assets\gImg\a2b2.png" class="apple_pay" />
+                    </div>
+                    <div class="ccNumber">
+                        <span>˙˙˙˙ ˙˙˙˙ ˙˙˙˙ </span>
+                    </div>
+                    <div class="ccBottom">
+                        <div class="ccValidThru">
+                            <label>My NewTickets</label>
+                            <span  class="cardCount">{{requestDetails.Mytickets}}</span>
+                        </div>
+                        <div class="ccCardHolder">
+                            <label>My Complaints</label>
+                            <span  class="cardCount">{{requestDetails.Inbox}}</span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="col-3 mt-3">
+                <section role="credit-card" >
+                    <div class="top">
+                        <img src="https://ozcanzaferayan.github.io/financial-crm/img/mastercard.svg" />
+                        <img src=".\assets\gImg\a2b2.png" class="apple_pay" />
+                    </div>
+                    <div class="ccNumber">
+                        <span>˙˙˙˙ ˙˙˙˙ ˙˙˙˙ </span>
+                    </div>
+                    <div class="ccBottom">
+                        <div class="ccValidThru">
+                            <label>New Requests</label>
+                            <span  class="cardCount">{{requestDetails.Unassigned}}</span>
+                        </div>
+                        <div class="ccCardHolder">
+                            <label>Department Open</label>
+                            <span  class="cardCount">{{requestDetails.myTicketsDept}}</span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="col-3 mt-3">
+                <section role="credit-card" >
+                    <div class="top">
+                        <img src="https://ozcanzaferayan.github.io/financial-crm/img/mastercard.svg" />
+                        <img src=".\assets\gImg\a2b2.png" class="apple_pay" />
+                    </div>
+                    <div class="ccNumber">
+                        <span>˙˙˙˙ ˙˙˙˙ ˙˙˙˙ </span>
+                    </div>
+                    <div class="ccBottom">
+                        <div class="ccValidThru">
+                            <label>Dept Resolved</label>
+                            <span  class="cardCount">{{requestDetails.resolvedDept}}</span>
+                        </div>
+                        <div class="ccCardHolder">
+                            <label>Resolved Me</label>
+                            <span  class="cardCount">{{requestDetails.resolvedMe}}</span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="col-3 mt-3">
+                <section role="credit-card" >
+                    <div class="top">
+                        <img src="https://ozcanzaferayan.github.io/financial-crm/img/mastercard.svg" />
+                        <img src=".\assets\gImg\a2b2.png" class="apple_pay" />
+                    </div>
+                    <div class="ccNumber">
+                        <span>˙˙˙˙ ˙˙˙˙ ˙˙˙˙ </span>
+                    </div>
+                    <div class="ccBottom">
+                        <div class="ccValidThru">
+                            <label>Approval Pending</label>
+                            <span  class="cardCount">{{requestDetails.apprPendingDept}}</span>
+                        </div>
+                        <div class="ccCardHolder">
+                            <label>In Progress</label>
+                            <span class="cardCount">{{requestDetails.InprogressDept}}</span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="col-12 mt-4">
+            <section role="chart" class="exchange-rates ">
+            
+                
+                <div id="report" class="collapse show">
+                    <div class="card-body p-0">
+                      <div class="row  align-items-center">
+                        <h3 class="title m-0 col-xl-4 col-lg-3 col-md-6 col-12 form-group">Reports</h3>
+                        <div class="col-xl-3 col-lg-3 col-md-6 col-12 form-group">
+                          <label class="gInputLable">Department</label>
+                          <mat-select  class="gNewInput" style="padding: 4px 15px !important;" [(ngModel)]="chartDept"
+                            (change)="onChangeDepartment()" #names name="user">
+                            <mat-option *ngFor="let dept of DepartMents" selected="chartDept===dept" [value]="dept"
+                            class="gSelectOption">{{dept}}
+                            </mat-option>
+                          </mat-select>
+                        </div>
+                        <div class="col-xl-2 col-lg-3 col-md-4 col-5 form-group">
+                          <label class="gInputLable" for="sel1">Start Date</label>
+                          <!-- <input type=date class="form-control form-control-sm" [(ngModel)]="startDate" id="startDate"
+                            name="startDate"> -->
+                            <div class="gOuterInput  gNewOuterInput">
+                                <input matInput class="gNewInput gNewInput1" id="startDate" [matDatepicker]="picker"
+                                [(ngModel)]="startDate"autocomplete="off">
+                            <mat-datepicker-toggle matSuffix [for]="picker" class="gInputButton gNewButton">
+                                <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                            </div>
+                        </div>
+                        <div class="col-xl-2 col-lg-3 col-md-4 col-5 form-group">
+                          <label class="gInputLable" for="sel1">End Date</label>
+                          <div class="gOuterInput  gNewOuterInput">
+                            <input matInput class="gNewInput gNewInput1" id="endDate" [matDatepicker]="picker1"
+                            [(ngModel)]="endDate"autocomplete="off">
+                        <mat-datepicker-toggle matSuffix [for]="picker1" class="gInputButton gNewButton">
+                            <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                        </div>
+                          <!-- <input type=date class="form-control form-control-sm" name="endDate" [(ngModel)]="endDate"
+                            id="endDate"> -->
+                        </div>
+                        <div class="col-xl-1 col-lg-1 col-md-2 col-2 d-flex align-items-end flex-column">
+                          <label class="gInputLable" for="sel1"> </label><br>
+                          <button  (click)="onChangeDepartment()"
+                            class="gSaveButton gNewSaveButton">submit</button>
+                        </div>
+                      </div>
+                      <div class="row mt-5">
+                        <canvas baseChart height="35" width="100px" [datasets]="lineChartData" [labels]="lineChartLabels"
+                          [options]="lineChartOptions" [colors]="lineChartColors" [legend]="lineChartLegend"
+                          [chartType]="lineChartType">
+                          <!--[plugins]="lineChartPlugins"-->
+                        </canvas>
+                      </div>
+                    </div>
+                  </div>
+            </section>
+            </div>
+            <div class="col-12 mt-3">
+            <section role="chart" class="last-costs gNewHeader">
+                <h3 class="title m-0">Statistics</h3>
+                <div id="statistics" class="collapse show">
+                    <div class="card-body">
+                        <div class="">
+                      <div class="gInnerTable" >
+                        <table class="gNormalTable-md table">
+                          <thead>
+                            <tr>
+                              <th scope="col" class="firstRow">Department</th>
+                              <th scope="col">Created</th>
+                              <th scope="col">Unassigned</th>
+                              <th scope="col">Open</th>
+                              <th scope="col">In Progress</th>
+                              <th scope="col">Aproval Pending</th>
+                              <th scope="col">Resolved</th>
+                              <th scope="col"  class="lastRow">Closed</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let boardTable of dashbordTable" (click)="gotoFilter(boardTable.Department)">
+                              <td>{{boardTable.Department}}</td>
+                              <td>{{boardTable.CreatedT}}</td>
+                              <td>{{boardTable.Unassigned}}</td>
+                              <td>{{boardTable.OpenTicket}}</td>
+                              <td>{{boardTable.Inprogress}}</td>
+                              <td>{{boardTable.ApprovalPending}}</td>
+                              <td>{{boardTable.ResolvedT}}</td>
+                              <td>{{boardTable.ClosedT}}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+            </section>
+            </div>
+     
+    </div>
+    </main>
+</body>
+</section>

@@ -1,0 +1,126 @@
+
+.router {
+    cursor: pointer;
+    /* margin-left:10%; */
+    width: 220px;
+    /* background-color: var(--table-actionHeader-bg) !important; */
+    background: linear-gradient(to right bottom, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.1));
+    padding: 10px;
+    border-radius: 15px !important;
+    /* box-shadow: 0 0px 9px 0 var(--button-save-color); */
+    box-shadow: 0 8px 32px 0 rgb(31 38 135 / 43%);
+
+    border: 0.5px solid rgb(31 38 135 / 23%) !important;
+  height: 100px;
+}
+.circle{
+  
+  width: 500px;
+  height: 400px;
+  padding: 10px;
+  margin-bottom: 50px;
+  border-radius: 48% 52% 60% 40% / 54% 23% 77% 46%;
+  /* // border-radius: 48% 52% 22% 78% / 70% 23% 77% 30% ; */
+  background-color: aquamarine;
+  background: rgba( 255, 255, 255, 0.45 );
+  box-shadow: 0px, 35px rgba(61, 78, 137, 0.21);
+  backdrop-filter: blur( 14px );
+  -webkit-backdrop-filter: blur( 14px );
+  /* border-radius: 10px; */
+  position: absolute;
+  border: 1px solid rgba( 255, 255, 255, 0.18 );
+  top: 10%;
+  right: 30%;
+  animation: fa-beat infinite 3s linear;
+  
+}
+.circle1,
+.circle2 {
+  width: 12rem;
+  height: 12rem;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+  background: linear-gradient(
+    to right bottom,
+    rgba(255, 255, 255, 0.9),
+    rgba(255, 255, 255, 0.1)
+  );
+  position: absolute;
+
+}
+.circle1 {
+  top: 7%;
+  animation: rotation infinite 2s linear;
+  background: #B2FEFA;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #0ED2F7, #B2FEFA);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #0ED2F7, #B2FEFA); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+  right: 7%;
+  border-radius: 48% 52% 22% 78% / 70% 23% 77% 30% ;
+}
+.circle2 {
+  bottom: 7%;
+  left: 15%;
+  background: #EDE574;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #E1F5C4, #EDE574);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #E1F5C4, #EDE574); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+  /* animation: rotation infinite 2s linear; */
+  border-radius: 48% 52% 22% 78% / 70% 23% 77% 30% ;
+
+  animation: rev infinite 2s linear;
+}
+@keyframes rev{
+  from{
+    transform:rotate(360deg);
+  }
+  
+  to{
+    transform:rotate(0deg);
+
+  }
+}
+@keyframes rotation{
+  from{
+    transform:rotate(0deg);
+  }
+  
+  to{
+    transform:rotate(360deg);
+  }
+}
+@keyframes fa-beat {
+  0% {
+    transform:scale(1),;
+    
+  }
+  5% {
+    transform:scale(1.25);
+  }
+  20% {
+    transform:scale(1);
+    border-radius: 48% 52% 22% 78% / 70% 23% 77% 30% ; 
+  }
+  30% {
+    transform:scale(1);
+  }
+  35% {
+    transform:scale(1.25);
+  }
+  50% {
+    transform:scale(1);
+  }
+  55% {
+    transform:scale(1.25);
+    border-radius: 48% 52% 22% 78% / 70% 23% 77% 30% ; 
+  }
+  70% {
+    transform:scale(1);
+  }
+  100% {
+      transform:scale(0.5);
+    }
+}

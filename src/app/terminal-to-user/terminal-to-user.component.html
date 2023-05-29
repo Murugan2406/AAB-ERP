@@ -1,0 +1,125 @@
+<div class="gWrapper">
+    <app-header Titleheader="Terminal to User"></app-header>
+
+    <div class="row text-center mt-1 pb-2 justify-content-center topSection section1 ">
+        <div class="col-12">
+            <span class="gTitle m-0"></span>
+        </div>
+        <div class="col-12 col-xl-4 d-flex mt-1">
+
+
+
+            <label class="caption mx-2 gInputLable">Terminal</label>
+            <div class="gOuterInput  w-100 text-end">
+
+                <input class="gInnerInput w-100" [matAutocomplete]="auto2" (input)="TerminalChange($event.target.value)" [formControl]="terminalName" />
+                <mat-autocomplete id="autoCustomer" #auto2="matAutocomplete" [displayWith]="displayFn" class="gAutoCompleteContainer">
+                    <mat-option class="gSelectOption" *ngFor="let name of LoadTerminal" [value]="name" (onSelectionChange)="autoUser($event,name.TerCode)">
+                        {{name.TerName}}
+                    </mat-option>
+                </mat-autocomplete>
+                <button class="gInputButton" (click)="reload()" mat-button>
+
+                    <mat-icon>refresh</mat-icon>
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <section class="sectionContainerFinbook1 mx-xl-1  row banner ng-star-inserted">
+
+
+
+
+        <div class="form col-12 col-md-6 col-xl-6  mb-3 ">
+
+            <div class="gTableSection">
+                <div class="gTableActionheaders">
+
+                    <div class=" col-12 text-end d-flex justify-content-start">
+                        <label class=" gInputLable mx-2">User Name</label>
+                        <input class="gInnerInput-border" [formControl]="userControl" [matAutocomplete]="auto" />
+                        <mat-autocomplete id="autoCustomer" #auto="matAutocomplete" class="gAutoCompleteContainer" [displayWith]="displayuserName">
+                            <mat-option class="gSelectOption" *ngFor="let name of User" [value]="name">
+                                {{name.username}}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <button type="button" mat-button class="gIconButton" (click)="adduser()">
+                            <i class="fa fa-plus " id="focusid"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class=" gInnerTable">
+                    <table class=" gNormalTable-sm table gTableStriped">
+                        <thead>
+                            <tr>
+                                <th class="">S.No</th>
+                                <th>Username</th>
+                                <th class="">Action</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let user of TertoUser; let i=index">
+                                <td>{{i+1}}</td>
+                                <td>{{user.username}}</td>
+                                <td>
+                                    <button mat-icon-button (click)="deleteuser(user.username)" class="gDeleteIcon">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="form col-12 col-md-6 col-xl-6 mb-3 ">
+            <div class="gTableSection">
+                <div class="gTableActionheaders">
+
+                    <div class="d-flex col-12 text-end justify-content-start">
+                        <label class="gInputLable mx-2">System Ip</label>
+                        <input class="gInnerInput-border" [formControl]="ipControl" [matAutocomplete]="auto1" matInput />
+                        <mat-autocomplete id="autoCustomer" #auto1="matAutocomplete" class="gAutoCompleteContainer" [displayWith]="displayStystemIP">
+                            <mat-option class="gSelectOption" *ngFor="let name of LoadIp" [value]="name">
+                                {{name.code}}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <button type="button" mat-button class="gIconButton" (click)="addip()">
+                            <i class="fa fa-plus " id="focusid"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class=" gInnerTable">
+                    <table class="gNormalTable-sm table gTableStriped">
+                        <tr>
+                            <th class="thFirst">S.No</th>
+                            <th>System Ip</th>
+                            <th class="thLast">Action</th>
+                        </tr>
+                        <tbody>
+                            <tr *ngFor="let value of IpforTer; let i=index">
+                                <td>{{i+1}}</td>
+                                <td>{{value.IPter}}</td>
+                                <td>
+                                    <button mat-icon-button (click)="deleteip(value.IPter)" class="gDeleteIcon">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>

@@ -1,0 +1,84 @@
+/* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fc;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    transition-duration: 0.5ms
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Alkalami&family=Fira+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Nunito:wght@400;500;700&family=Open+Sans:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap');
+
+/* @import "~@angular/material/prebuilt-themes/indigo-pink.css"; */
+
+
+/* @import '~@circlon/angular-tree-component/css/angular-tree-component.css'; */
+
+
+/* @import './../node_modules/@circlon/angular-tree-component/css/angular-tree-component.css'; */
+
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 6px 14px -6px #000000;
+}
+
+.header-nav {
+    display: flex;
+    justify-content: space-between;
+}
+
+.mat-toolbar.mat-warn {
+    /* background: #0763AC; */
+    color: #fff;
+    background-color: #0073bb;
+    background: linear-gradient(to bottom, #0073bb 0%, #193482 100%);
+    background: -webkit-gradient(linear, top top, bottom top, from(#0073bb), to(#193482));
+}
+
+.mat-dialog-container {
+    /* margin: 0px; */
+    /* padding-bottom: 5px!important; */
+    overflow: hidden;
+}
+
+.mat-dialog-actions {
+    min-height: 30px!important;
+}
+
+.mat-button-ripple.mat-ripple,
+.mat-button-focus-overlay {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position: absolute;
+    pointer-events: none;
+    border-radius: inherit;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background-color: #f8f9fc;
+    overflow-y: auto;
+    height: 100%;
+}
+
+
+.mat-select-panel {
+    margin-top: 25px !important;
+    border-radius: 10px !important;
+    padding: 5px !important;
+}

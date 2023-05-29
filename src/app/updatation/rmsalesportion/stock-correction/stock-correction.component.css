@@ -1,0 +1,244 @@
+  .wrapper{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+    background: rgb(255, 255, 255);
+  }
+
+  .header{
+    flex: 0 0 auto;
+    background: #aaa;
+  }
+
+  .content{
+    overflow:hidden;
+    flex: 1 1 auto;
+    /* overflow-y: auto; */
+    margin-left: 5px;
+    margin-right: 5px;
+    /* padding-left: 5px;
+    padding-right: 5px; */
+    margin-top: 25px;
+    margin-bottom: 25px;
+  }
+
+  .footer{
+    flex: 0 0 auto;
+    background:#FF5733;
+    height: 40px;
+  }
+
+  .example-spacer{
+    flex:1 1 auto;
+  }
+
+  .example-container {
+    width: 100%;
+    height: 100%;
+  }
+
+  .loading {
+    position: fixed;
+    z-index: 999;
+    height: 100px;
+    width: 100px;
+    overflow: show;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
+
+  .loading:before {
+    content: '';
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.3);
+  }
+
+  .mat-column-select {
+    overflow: initial;
+  }
+
+  .tableWrap {
+    height: 550px;
+    overflow: auto;
+    font-family: Tahoma;
+    color: #e4e6e7;
+  }
+
+  thead tr th {
+    position: sticky;
+    top: 0;
+    background-color: #d0e2e7;
+    color: rgb(22, 22, 78);
+    border-bottom: 2px solid #e8e8e8;
+    border-right: 1px solid #f0f0f0;
+  }
+
+  tbody tr:nth-child(even) {
+    background-color: rgb(231, 248, 248);
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    font-family: Tahoma;
+    color: #072e49;
+  }
+
+  table td {
+    font-size: 10px; white-space: nowrap;
+    padding: 4px;
+    border-right: 1px solid #f0f0f0;
+  }
+
+  tbody tr {
+    border-bottom: 2px solid #e8e8e8;
+  }
+
+  thead {
+    font-size: 12px; white-space: nowrap;
+    text-indent: 1%;
+    font-weight: bold;
+    color: #1C5A85;
+    border-bottom: 2px solid #e8e8e8;
+    color: #1C5A85;
+  }
+
+  .table-barderless tbody tr:nth-child(even) {
+    background-color:  #b0c4de;
+  }
+
+  .table-barderless  table {
+    border: white;
+    border: 0;
+  }
+  .table-barderless tbody tr {
+    border: white;
+    border: 0;
+    color: #191970;
+  }
+
+  .table-barderless tbody td {
+    font-size: 12px !important; white-space: nowrap ;
+    border: white;
+    border: 0;
+  }
+
+  tr.noBorder td {
+    border: 0;
+  }
+
+  @media screen and (min-width: 769px) {
+    .test {
+      margin-left: 30px;
+    }
+  }
+
+  .ContentWithBorder{
+    margin-top: 15px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 15px;
+    padding-bottom: 10px;
+    border: 1px solid rgb(219, 216, 216) !important;
+  }
+
+  .DetailContent{
+    margin-top: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 5px;
+    padding-bottom: 10px;
+    /* border: 1px solid rgb(219, 216, 216) !important; */
+  }
+
+  .Viewcontent{
+    overflow:hidden;
+    flex: 1 1 auto;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+
+  .Phy_Lbl{
+    color:#0e8496;
+  }
+
+  .phytable{
+    padding-left:0px;
+    padding-right: 0px;
+    padding-top:0px;
+    padding-bottom: 0px;
+    border-style: hidden;
+    background-color: white;
+  }
+
+
+  .lcAlignRow {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+
+  .selected {
+    background-color: red;
+  }
+
+  .mat-row.highlighted {
+    background: lightblue;
+  }
+
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .HeaderDet{
+    background-color:#95baac;
+    color: white;
+    padding: 14px 20px;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+  }
+
+  .RWCntrl{
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+  }
+
+  .btn-group-sm>.btn, .btn-sm {
+    margin: auto;
+    padding: .20rem .3rem;
+    font-size: .875rem;
+    line-height: 1.5;
+    border-radius: .2rem;
+  }
+
+  :host ::ng-deep .mat-option{
+    line-height: 27px;
+    height: 27px;
+  }
+
+  .form-group{
+    margin-bottom: 0.5rem;
+  }

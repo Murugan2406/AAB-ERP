@@ -1,0 +1,606 @@
+<div class="loading" *ngIf="isLoading">
+    <mat-progress-spinner class=" spinner" diameter="50" mode="indeterminate"></mat-progress-spinner>
+</div>
+
+<div class="wrapper">
+    <div class="header">
+        <mat-toolbar color="warn">
+            <mat-toolbar-row>
+                <button mat-button (click)="backNavigation()"> BACK</button>
+                <span class="example-spacer"></span>
+                <button mat-button></button>
+                <span class="example-spacer"></span>
+                <button mat-button (click)="homeNavigate()">
+                    <span class="material-icons">home</span>
+                </button>
+                <button mat-button>
+                    <img class="png-icon" src=".\assets\gImg\a2b2.png" style="max-width: 56px; min-width: 56px;">
+                </button>
+            </mat-toolbar-row>
+        </mat-toolbar>
+    </div>
+
+    <div class="content">
+        <div class="container-fluid">
+            <div *ngIf="gMenu=='EmployeeWeekoffalter'" class="row">
+                <div class="col-md-3"></div>
+                <div id="loginbox" style="margin-top:20px;"
+                    class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <div class="panel-title text-center">Employee Weekoff Alter</div>
+                        </div>
+                        <div class="panel-body">
+                            <div style="display:none" id="login-alert" class="alert alert-danger col-sm-12"></div>
+                            <div class="row">
+                                <div class="form-group col-md-5">
+                                    <label>Month</label>
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                    <input type="date" class="form-control" [(ngModel)]="month" name="month" id="month"
+                                        disabled>
+                                </div>
+                                <div class="form-group col-md-7"> </div>
+                                <div *ngIf="globals.gclientServer =='Server'" class="form-group col-md-12">
+                                    <label>Branch</label>
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                    <input type="text" [(ngModel)]="branchalt" id="branchalt" name="branchalt"
+                                        [matAutocomplete]="brauto" class="form-control sizech"
+                                        (ngModelChange)="brchange($event)" (keydown)="keytab($event,'Empcodealt')">
+                                    <mat-autocomplete #brauto="matAutocomplete">
+                                        <mat-option *ngFor="let opear of getbrname" class="sizech"
+                                            (onSelectionChange)="brchangeloc($event,opear)" [value]="opear?.brname">
+                                            {{opear?.brname}}</mat-option>
+                                    </mat-autocomplete>
+                                </div>
+                                <div *ngIf="globals.gclientServer =='Client'" class="form-group col-md-12">
+                                    <label>Branch</label>
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                    <input type="text" [(ngModel)]="branchalt" id="branchalt" name="branchalt"
+                                        [matAutocomplete]="brauto" class="form-control sizech" disabled
+                                        (ngModelChange)="brchange($event)" (keydown)="keytab($event,'Empcodealt')">
+                                    <mat-autocomplete #brauto="matAutocomplete">
+                                        <mat-option *ngFor="let opear of getbrname" class="sizech"
+                                            (onSelectionChange)="brchangeloc($event,opear)" [value]="opear?.brname">
+                                            {{opear?.brname}}</mat-option>
+                                    </mat-autocomplete>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Empcode</label>
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                    <input type="text" class="form-control" [(ngModel)]="Empcodealt" name="Empcodealt"
+                                        id="Empcodealt" (keydown)="keyemp1($event)" autocomplete="off">
+                                </div>
+                                <div class="form-group col-md-8">
+                                    <label>Empname</label>
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                    <input type="text" [(ngModel)]="Empnamealt" id="Empnamealt" name="Empnamealt"
+                                        [matAutocomplete]="auto1" class="form-control sizech"
+                                        (ngModelChange)="change1($event)" (keydown)="keytab($event,'weekoffdate')">
+                                    <mat-autocomplete #auto1="matAutocomplete">
+                                        <mat-option *ngFor="let opear of getempnamealter" class="sizech"
+                                            (onSelectionChange)="changeloc1($event,opear)" [value]="opear?.empname">
+                                            {{opear?.empname}}</mat-option>
+                                    </mat-autocomplete>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label>WeekoffDate</label>
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                    <select class="form-select" [(ngModel)]="weekoffdate" name="weekoffdate"
+                                        id="weekoffdate" (keydown)="keytab($event,'chgdate')">
+                                        <option *ngFor="let val of getempcodealtdata;" [value]="val.WeekOffAlterDay">
+                                            {{val.WeekOffAlterDay}}
+                                        </option>
+
+                                    </select>
+                                    <!-- <input type="text" class="form-control" [(ngModel)]="weekoffdate" name="weekoffdate"
+                                        id="weekoffdate" > -->
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Changedate</label>
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                    <input type="date" class="form-control" [(ngModel)]="chgdate" name="chgdate"
+                                        id="chgdate" (keydown)="keytab($event,'Reason')">
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label>Reason</label>
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                    <input type="text" class="form-control" [(ngModel)]="Reason" name="Reason"
+                                        id="Reason" (keydown)="keytab($event,'savebutton')" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="col-md-12 mt-1">
+                                <button mat-raised-button class=" changeaddnew" id="savebutton" type="button"
+                                    (click)="savealt()">Save
+                                </button>
+                                <button mat-raised-button class=" changeadd2 ms-2" id="clbutton" type="button"
+                                    (click)="clearalt()">Reset
+                                </button>
+                                <button mat-raised-button class="float-end  changeadd1" id="viewbutton" type="button"
+                                    (click)="viewsecalt()">View </button>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="table-responsive mx-2" id="managerTable2">
+                    <table class="table table1 mb-0 mt-2" id="table1" width="100%">
+                        <thead id="managerTable2">
+                            <tr>
+                                <!-- <th *ngIf="textnot">Sno</th> -->
+                                <th *ngFor="let header of getempcodealt">
+                                    <div>{{header}}</div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of getempcodealtdata; let i=index;">
+                                <!-- <div
+                                    *ngIf="getempcodealtdata.length === 0 || (getempcodealtdata.length === 1 && (getempcodealtdata[0].StatusRes =='No Record Found')); else hrvw">
+                                </div>
+                                <ng-template #hrvw> -->
+                                <!-- <td >{{i+1}}</td> -->
+                                <td *ngFor="let key of getempcodealt">
+                                    <div
+                                        [ngStyle]="{'color':(item[key] === 'PENDING') ? 'blue' 
+                                        : (item[key] === 'APPROVED') ? 'green':  (item[key] === 'REJECTED') ? 'Red':''}">
+                                        {{item[key]}}</div>
+                                </td>
+                                <!-- </ng-template> -->
+                            </tr>
+                        </tbody>
+
+                    </table>
+                    <!-- <div class="cludnorec mt-5 fw-bold"
+                        *ngIf="getempcodealtdata.length === 0  || (getempcodealtdata.length === 1 && (getempcodealtdata[0].StatusRes === 'No Record Found'))">
+                        Record Not Found</div> -->
+                </div>
+            </div>
+
+            <div *ngIf="gMenu =='EmployeeWeekoffentry'" class="row">
+                <div class="col-md-3"></div>
+                <div id="loginbox" style="margin-top:20px;"
+                    class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <div class="panel-title text-center">Employee Weekoff Entry</div>
+                        </div>
+                        <div class="panel-body">
+                            <div style="display:none" id="login-alert" class="alert alert-danger col-sm-12"></div>
+                            <div class="row">
+                                <div *ngIf="globals.gclientServer =='Server'" class="form-group col-md-8">
+                                    <label>Branch</label>
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                    <input type="text" [(ngModel)]="branch" id="branch" name="branch"
+                                        [matAutocomplete]="brauto" class="form-control sizech"
+                                        (ngModelChange)="brchange($event)" (keydown)="keytab($event,'Empcode')">
+                                    <mat-autocomplete #brauto="matAutocomplete">
+                                        <mat-option *ngFor="let opear of getbrname" class="sizech"
+                                            (onSelectionChange)="brchangeloc($event,opear)" [value]="opear?.brname">
+                                            {{opear?.brname}}</mat-option>
+                                    </mat-autocomplete>
+                                </div>
+                                <div *ngIf="globals.gclientServer =='Client'" class="form-group col-md-8">
+                                    <label>Branch</label>
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                    <input type="text" [(ngModel)]="branch" id="branch" name="branch"
+                                        [matAutocomplete]="brauto" class="form-control sizech" disabled
+                                        (ngModelChange)="brchange($event)" (keydown)="keytab($event,'Empcode')">
+                                    <mat-autocomplete #brauto="matAutocomplete">
+                                        <mat-option *ngFor="let opear of getbrname" class="sizech"
+                                            (onSelectionChange)="brchangeloc($event,opear)" [value]="opear?.brname">
+                                            {{opear?.brname}}</mat-option>
+                                    </mat-autocomplete>
+                                </div>
+                                <div class="form-group col-md-5">
+                                    <label>Empcode</label>
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                    <input type="text" class="form-control" [(ngModel)]="Empcode" name="Empcode"
+                                        id="Empcode" (keydown)="keyemp($event)" autocomplete="off">
+                                </div>
+                                <div class="form-group col-md-7">
+                                    <label>Empname</label>
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                    <input type="text" [(ngModel)]="Empname" id="Empname" name="Empname"
+                                        [matAutocomplete]="auto" class="form-control sizech"
+                                        (ngModelChange)="change($event)" (keydown)="keytab($event,'day')">
+                                    <mat-autocomplete #auto="matAutocomplete">
+                                        <mat-option *ngFor="let opear of getempname" class="sizech"
+                                            (onSelectionChange)="changeloc($event,opear)" [value]="opear?.empname">
+                                            {{opear?.empname}}</mat-option>
+                                    </mat-autocomplete>
+                                </div>
+
+                                <div class="form-group col-md-3">
+                                    <label>DOJ</label>
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                    <input type="text" class="form-control" [(ngModel)]="doj" name="doj" id="doj"
+                                        disabled>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Day</label>
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                    <select class="form-select" [(ngModel)]="day" name="day" id="day"
+                                        (keydown)="keytab($event,'savebutton')">
+                                        <option *ngFor="let val of getempday;" [value]="val.TrnValue">{{val.TrnValue}}
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6 mt-3">
+                                    <button mat-raised-button class=" changeaddnew" id="savebutton" type="button"
+                                        (click)="save()">Save
+                                    </button>
+                                    <button mat-raised-button class=" changeadd2 ms-2" id="clbutton" type="button"
+                                        (click)="clear()">Reset
+                                    </button>
+                                    <button mat-raised-button class=" changeadd2 ms-2" id="clbutton" type="button"
+                                        (click)="getallview()">ViewAll
+                                    </button>
+                                    <button mat-raised-button class="changeadd1 ms-2" id="viewbutton"
+                                        type="button" (click)="viewsec()">View </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive mx-2" id="managerTable2">
+                    <table class="table table1 mb-0 mt-2" id="table1" width="100%">
+                        <thead id="managerTable2">
+                            <tr>
+                                <th *ngFor="let header of getempcodes">
+                                    <div>{{header}}</div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of getempcodedata; let i=index;">
+                                <td *ngFor="let key of getempcodes">
+                                    <div> {{item[key]}}</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div *ngIf="gMenu =='Entryviewweekoff'">
+                <h5 class="fw-bold text-info text-center text-capitalize mt-2"><u class="under">Employee Weekoff entry
+                        Status</u></h5>
+                <div class="col-md-12 ">
+                    <div class="card1 mx-2">
+                        <div class="row ">
+                            <div class="form-group col-md-4">
+                                <label>Branch</label>
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                <input type="text" [(ngModel)]="branch" id="branch" name="branch"
+                                    [matAutocomplete]="brauto" class="form-control sizech" [disabled]="auth"
+                                    (ngModelChange)="brchange($event)" (keydown)="keytab($event,'frmety')">
+                                <mat-autocomplete #brauto="matAutocomplete">
+                                    <mat-option *ngFor="let opear of getbrname" class="sizech"
+                                        (onSelectionChange)="brchangeloc($event,opear)" [value]="opear?.brname">
+                                        {{opear?.brname}}</mat-option>
+                                </mat-autocomplete>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label color="primary">From</label>
+                                <input class="form-control" type="date" [(ngModel)]="frmety" id="frmety"
+                                    (keydown)="keytab($event,'toety')">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label color="primary">To</label>
+                                <input class="form-control" type="date" [(ngModel)]="toety" id="toety"
+                                    (keydown)="keytab($event,'button')">
+                            </div>
+
+
+                            <div class="col-md-3 mt-2">
+                                <button mat-raised-button class="changeadd1 mt-2" type="button" id="button"
+                                    (click)="viewdata()">View</button>
+
+                                <!-- <img Cores px-0 class="png-icon addview submit curser float-end"
+                                src=".\assets\gImg\excel1.png" type="submit" (click)="exportexcel()"
+                                title="exportexcel"> -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive mx-2" id="managerTable2">
+                        <table class="table table1 mb-0 mt-2" id="table1" width="100%">
+                            <thead id="managerTable2">
+                                <tr>
+                                    <th>S.no</th>
+                                    <th>Empcode</th>
+                                    <th>Empname</th>
+                                    <th>Brname</th>
+                                    <th>WeekDay</th>
+                                    <th>Changed WeekDay</th>
+                                    <th>Flag</th>
+                                    <th>Trndate</th>
+                                    <th>Entry Usr</th>
+                                    <th>Entry On</th>
+                                    <!-- <th>Approved Usr</th>
+                                    <th>Approved On</th> -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let ash of getempviewdata; let i=index;">
+                                    <div
+                                        *ngIf="getempviewdata.length === 0 || (getempviewdata.length === 1 && (getempviewdata[0].StatusRes =='No Record Found')); else hrview">
+                                    </div>
+                                    <ng-template #hrview>
+                                        <td>{{i+1 }}</td>
+                                        <td>{{ash.Empcode}}</td>
+                                        <td>{{ash.Empname}}</td>
+                                        <td>{{ash.Branch}}</td>
+                                        <td>{{ash.CurWeekDay}}</td>
+                                        <td>{{ash.ChangedWeekDay}}</td>
+                                        <td>{{ash.Flag}}</td>
+                                        <td>{{ash.Trndate}}</td>
+                                        <td>{{ash.EntryUser}}</td>
+                                        <td>{{ash.EntryTime}}</td>
+                                        <!-- <td>{{ash.ApprovedUser}}</td>
+                                        <td>{{ash.Approvedtime}}</td> -->
+                                    </ng-template>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="cludnorec mt-5 fw-bold"
+                            *ngIf="getempviewdata.length === 0  || (getempviewdata.length === 1 && (getempviewdata[0].StatusRes === 'No Record Found'))">
+                            Record Not Found</div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="gMenu =='Entryviewweekoffalter'">
+                <h5 class="fw-bold text-info text-center text-capitalize mt-2"><u class="under">Employee Weekoff alter
+                        Status</u></h5>
+                <div class="col-md-12 ">
+                    <div class="card1 mx-2">
+                        <div class="row ">
+                            <div class="form-group col-md-2">
+                                <label color="primary">Status</label>
+                                <select class="form-select" [(ngModel)]="altstatus" name="altstatus" id="altstatus"
+                                    (keydown)="keytab($event,'branchalt')" (change)="changests()">
+                                    <option value="ALL">ALL</option>
+                                    <option value="PENDING">Pending</option>
+                                    <option value="APPROVED">Approved</option>
+                                    <option value="REJECTED">Rejected</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Branch</label>
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                <input type="text" [(ngModel)]="branchalt" id="branchalt" name="branchalt"
+                                    [matAutocomplete]="brauto" class="form-control sizech" [disabled]="auth"
+                                    (ngModelChange)="brchange($event)" (keydown)="keytab($event,'frmalt')">
+                                <mat-autocomplete #brauto="matAutocomplete">
+                                    <mat-option *ngFor="let opear of getbrname" class="sizech"
+                                        (onSelectionChange)="brchangeloc($event,opear)" [value]="opear?.brname">
+                                        {{opear?.brname}}</mat-option>
+                                </mat-autocomplete>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label color="primary">From</label>
+                                <input class="form-control" type="date" [(ngModel)]="frmalt" id="frmalt"
+                                    (keydown)="keytab($event,'toalt')">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label color="primary">To</label>
+                                <input class="form-control" type="date" [(ngModel)]="toalt" id="toalt"
+                                    (keydown)="keytab($event,'altbutton')">
+                            </div>
+
+
+                            <div class="col-md-2 mt-2">
+                                <button mat-raised-button class="changeadd1 mt-2" type="button" id="altbutton"
+                                    (click)="viewdataalt()">View</button>
+
+                                <!-- <img Cores px-0 class="png-icon addview submit curser float-end"
+                                src=".\assets\gImg\excel1.png" type="submit" (click)="exportexcel()"
+                                title="exportexcel"> -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive mx-2" id="managerTable2">
+                        <table class="table table1 mb-0 mt-2" id="table1" width="100%">
+                            <thead id="managerTable2">
+                                <tr>
+                                    <th *ngFor="let header of getempview">
+                                        <div>{{header}}</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of getempviewaltdata; let i=index;">
+                                    <div
+                                        *ngIf="getempviewaltdata.length === 0 || (getempviewaltdata.length === 1 && (getempviewaltdata[0].StatusRes =='No Record Found')); else hrview">
+                                    </div>
+                                    <ng-template #hrview>
+                                        <td *ngFor="let key of getempview">
+                                            <div
+                                                [ngStyle]="{'color':(item[key] === 'PENDING') ? 'blue' 
+                                            : (item[key] === 'APPROVED') ? 'green':  (item[key] === 'REJECTED') ? 'Red':''}">
+                                                {{item[key]}}</div>
+                                        </td>
+                                    </ng-template>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                        <div class="cludnorec mt-5 fw-bold"
+                            *ngIf="getempviewaltdata.length === 0  || (getempviewaltdata.length === 1 && (getempviewaltdata[0].StatusRes === 'No Record Found'))">
+                            Record Not Found</div>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="gMenu =='EmployeeWeekoffapproval'">
+                <h5 class="fw-bold text-info text-center text-capitalize mt-2"><u class="under">Employee Weekoff
+                        Approval</u></h5>
+                <div class="col-md-12 ">
+                    <div class="card1 mx-2">
+                        <div class="row ">
+                            <div class="form-group col-md-2">
+                                <label color="primary">Status</label>
+                                <select class="form-select" [(ngModel)]="altstatus" name="altstatus" id="altstatus"
+                                    (keydown)="keytab($event,'Region')" (change)="changesnew()">
+                                    <option value="ALL">ALL</option>
+                                    <option value="PENDING">Pending</option>
+                                    <option value="APPROVED">Approved</option>
+                                    <option value="REJECTED">Rejected</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label color="primary">Region</label>
+                                <select class="form-select" [(ngModel)]="Region" name="Region" id="Region"
+                                    (keydown)="keytab($event,'aaprbranch')" (change)="appname1()">
+                                    <option *ngFor="let val of getloadapprdata;" [value]="val.TrnValue">{{val.TrnValue}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label color="primary">Branch</label>
+                                <input type="text" [(ngModel)]="aaprbranch" id="aaprbranch" name="aaprbranch"
+                                    [matAutocomplete]="auto2" class="form-control sizech"
+                                    (ngModelChange)="appchange($event)" (keydown)="keytab($event,'aaprdesign')">
+                                <mat-autocomplete #auto2="matAutocomplete">
+                                    <mat-option *ngFor="let opear of getapprbranch" class="sizech"
+                                        (onSelectionChange)="appchangeloc($event,opear)" [value]="opear?.CNAME">
+                                        {{opear?.CNAME}}</mat-option>
+                                </mat-autocomplete>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label color="primary">Department</label>
+                                <input type="text" [(ngModel)]="aaprdesign" id="aaprdesign" name="aaprdesign"
+                                    [matAutocomplete]="auto3" class="form-control sizech"
+                                    (ngModelChange)="appchange1($event)" (keydown)="keytab($event,'apprbutton')">
+                                <mat-autocomplete #auto3="matAutocomplete">
+                                    <mat-option *ngFor="let opear of getapprdesign" class="sizech"
+                                        (onSelectionChange)="appchangeloc1($event,opear)" [value]="opear?.CNAME">
+                                        {{opear?.CNAME}}</mat-option>
+                                </mat-autocomplete>
+                            </div>
+
+                            <div class="col-md-2 mt-2">
+                                <button mat-raised-button class="changeadd1 mt-2" type="button" id="apprbutton"
+                                    (click)="viewapprove()">View</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="altstatus === 'PENDING'" class="col-md-2 ms-2">
+                        <button mat-raised-button class="changeadd1 mt-2" type="button" id="apprrejectbutton"
+                            (click)="Apprreject()">Approve or Reject</button>
+                    </div>
+                    <div class="table-responsive mx-2" id="managerTable2">
+                        <table class="table table1 mb-0 mt-2" id="table1" width="100%">
+                            <thead id="managerTable2">
+                                <tr>
+                                    <th *ngFor="let header of getempviewappr">
+                                        <div *ngIf="header =='Icon' && altstatus === 'PENDING'"><input type="checkbox"
+                                                [(ngModel)]="isMasterSel" name="list_name" value="h1"
+                                                (change)="checkUncheckAll()" /></div>
+                                        <div *ngIf="header !='Icon' && header !='TrnNo'">{{header}}</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of getempviewapprdata;let i = index;">
+                                    <td *ngFor="let key of getempviewappr">
+                                        <div *ngIf="key =='Icon' && altstatus === 'PENDING'"> <input class="edt"
+                                                #checkboxes type="checkbox" [(ngModel)]="item.selected"
+                                                (change)="chkchange($event,item)"></div>
+                                        <div [ngStyle]="{'color':(item[key] === 'PENDING') ? 'blue' 
+                                            : (item[key] === 'APPROVED') ? 'green':  (item[key] === 'REJECTED') ? 'Red':''}"
+                                            *ngIf="key !='Icon' && key !='TrnNo'">{{item[key]}}</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="cludnorec mt-4 fw-bold" *ngIf="getempviewapprdata.length === 0">
+                            Record Not Found</div>
+                    </div>
+                </div>
+            </div>
+            <div [style.display]="empltable ? 'block' : 'none'" class="modal" id="imagemodal" tabindex="-1"
+                role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="width:100%;">
+                <div class="modal-dialog2">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h6 class="fw-bold text-info1 text-center my-1">Employee Weekoff ViewAll - {{branch |
+                                titlecase}}</h6><button type="button" class="btn-close float-end" aria-label="Close"
+                                (click)="Cleartab()"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="table-responsive mx-2" id="managerTable2">
+                                <table class="table table1 mb-0 mt-2" id="table1" width="100%">
+                                    <thead id="managerTable2">
+                                        <tr>
+                                            <th *ngFor="let header of getallemp">
+                                                <div>{{header}}</div>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of getallempday; let i=index;">
+                                            <div
+                                                *ngIf="getallempday.length === 0 || (getallempday.length === 1 && (getallempday[0].StatusRes =='No Record Found')); else hrview">
+                                            </div>
+                                            <ng-template #hrview>
+                                                <td *ngFor="let key of getallemp">
+                                                    <div
+                                                        [ngStyle]="{'color':(item[key] === 'PENDING') ? 'blue' 
+                                                : (item[key] === 'APPROVED') ? 'green':  (item[key] === 'REJECTED') ? 'Red':''}">
+                                                        {{item[key]}}</div>
+                                                </td>
+                                            </ng-template>
+                                        </tr>
+                                    </tbody>
+
+                                </table>
+                                <div class="cludnorec mt-5 fw-bold"
+                                    *ngIf="getallempday.length === 0  || (getallempday.length === 1 && (getallempday[0].StatusRes === 'No Record Found'))">
+                                    Record Not Found</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div [style.display]="emplappr ? 'block' : 'none'" class="modal" id="imagemodal" tabindex="-1" role="dialog"
+                aria-labelledby="myModalLabel" aria-hidden="true" style="width:100%;">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header"></div>
+                        <div class="modal-body">
+                            <h5 class="text-center text-info fw-bold ms-5 text-capitalize">Weekoff ?..</h5>
+                            <form #appreject="ngForm">
+                                <div class="form-group row ">
+                                    <label for="inputEmail3" class="col-sm-3 col-form-label label-head">Enter Reason
+                                    </label>
+                                    <div class="col-sm-7 ">
+                                        <input type="text" class="form-control" name="areason" [(ngModel)]="areason"
+                                            #name="ngModel" autocomplete="off"
+                                            [ngClass]="{ 'is-invalid': appreject.submitted && name.invalid }" required>
+                                        <div class="text-danger invalid-feedback"
+                                            *ngIf="appreject.submitted && name.invalid">
+                                            <p *ngIf="name.errors?.['required']">Reject Reason is required.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-center">
+                                    <button mat-raised-button type="submit" class="btn btn-primary" id="branch1"
+                                        (click)="changeapprej(appreject,'APPROVED')">Approve</button>
+                                    <button mat-raised-button type="submit" class="btn btn-primary" id="branch2"
+                                        (click)="changeapprej(appreject,'REJECTED')">Reject</button>
+                                    <button mat-raised-button type="reset" class="btn btn-primary" id="sbutton"
+                                        (click)="cancel(appreject)">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

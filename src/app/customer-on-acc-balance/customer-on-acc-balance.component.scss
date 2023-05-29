@@ -1,0 +1,149 @@
+.input:read-only,
+input:disabled,
+.mat-button-disabled {
+    border: 1px dotted #2b6a3d;
+    cursor: no-drop !important;
+}
+
+.gWrapper {
+    padding-top: 0 !important;
+}
+
+th.mat-header-cell,
+td.mat-cell {
+    width: 120px;
+}
+
+.gDialogTitle {
+    font-size: 18px !important;
+}
+
+.gDialogClosebutton {
+    line-height: 30px !important;
+}
+
+mat-cell:first-child,
+mat-footer-cell:first-child,
+mat-header-cell:first-child {
+    max-width: 40px !important;
+}
+
+.gInputLable {
+    line-height: 20px !important;
+    font-weight: 500 !important;
+}
+
+.gInnerTable {
+    max-height: calc(100vh - 140px);
+}
+
+.gNormalTable-sm td {
+    font-size: 11px !important;
+}
+
+.gNormalTable-sm thead {
+    .fa {
+        font-size: 16px;
+        color: #99b1a0;
+    }
+    z-index: 1;
+}
+
+.fa {
+    font-size: 16px;
+}
+
+.toggleFooter {
+    position: sticky;
+    bottom: 0;
+    z-index: 1;
+}
+
+.toggleFooter {
+    background-color: #e3f0ef;
+    td {
+        background-color: #e3f0ef;
+        font-weight: 600;
+        border-bottom: none !important;
+        white-space: nowrap;
+        line-height: 22px;
+        height: 22px;
+        text-transform: capitalize;
+        font-family: system-ui;
+        font-size: 12px;
+        padding: 1px 10px !important;
+        color: #04003a !important;
+        font-weight: 700 !important;
+        border-bottom: none !important;
+        z-index: 3;
+    }
+}
+
+::ng-deep.mat-dialog-container {
+    padding: 5px !important;
+    border-radius: 15px !important;
+    box-sizing: border-box;
+    overflow: auto;
+    outline: 0;
+    background-color: #ffffff !important;
+    .gDialogContainer {
+        box-shadow: none !important;
+        position: relative;
+        border-radius: 0 0 15px;
+        background-color: var(--table-actionHeader-bg) !important;
+        box-shadow: 0 8px 32px 0 rgb(31 38 135 / 23%);
+        padding: 10px;
+        backdrop-filter: blur(10px);
+    }
+    .gDialogTitle {
+        background-color: var(--dialog-title-bg);
+        padding: 10px 5px;
+        font-size: 18px !important;
+        margin-bottom: 0 !important;
+        font-weight: 500 !important;
+        font-family: system-ui !important;
+        text-align: center;
+        color: #000;
+        text-transform: capitalize;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 15px 15px 0 0;
+    }
+    .gDialogCloseButton {
+        color: #000;
+        padding: 0;
+        font-weight: 900;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        min-width: 30px;
+        background-color: var(--button-dialog-close-bg-color);
+        line-height: 29px;
+        border: 1px solid transparent;
+        .mat-icon {
+            font-size: 22px;
+            line-height: 29px !important;
+        }
+        .fa {
+            font-size: 22px;
+            line-height: 29px !important;
+        }
+    }
+    .gDialogCloseButton:hover {
+        background-color: var(--button-dialog-close-hover-bg-color);
+        color: #fff;
+    }
+}
+
+@media only screen and (max-width: 560px) {
+     ::ng-deep.mat-dialog-container {
+        margin: 10px !important;
+    }
+    .gInnerTable {
+        max-height: calc(100vh - 150px);
+    }
+    .gWrapper {
+        padding: 10 !important;
+    }
+}

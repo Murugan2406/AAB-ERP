@@ -1,0 +1,253 @@
+<div class="gWrapper">
+  <div>
+    <app-header [Titleheader]="SRTitleHeader" back="true" (BackClick)="backClicked()"></app-header>
+  </div>
+  <div class="row justify-content-center mx-3">
+    <div class="gcardContainer col-lg-9 mt-1">
+      <div class="gTableSection">
+      <form [formGroup]="accountPostingForm">
+        <div class="row body">
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="d-flex flex-column gap-0">
+              <div class="row form-group">
+                <mat-label class="gInputLable col-12 col-sm-12 col-md-12 col-lg-5">Voucher Type</mat-label>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-7">
+                  <span class="gInputLable">{{voucherType}}</span>
+                  <!-- <input type="text" class="" name="voucherType" id="voucherType"
+                    formControlName="voucherType" readonly autocomplete="off" /> -->
+                </div>
+              </div>
+              <div class="row form-group">
+                <label class="gInputLable col-12 col-sm-12 col-md-12 col-lg-5">Accounting Date</label>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-7">
+                  <span class="gInputLable">{{accDate}}</span>
+                  <!-- <input type="date" class="gInnerInput-12" name="accDate" id="accDate" formControlName="accDate"
+                    readonly /> -->
+                </div>
+              </div>
+              <div class="row form-group">
+                <mat-label class="gInputLable col-12 col-sm-12 col-md-12 col-lg-5">Trans Id</mat-label>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-7">
+                  <span class="gInputLable">{{transId}}</span>
+                  <!-- <input type="text" class="gInnerInput-12" name="transId" id="transId" formControlName="transId"
+                    autocomplete="off" readonly /> -->
+                </div>
+              </div>
+              <div class="row form-group">
+                <mat-label class="gInputLable col-12 col-sm-12 col-md-12 col-lg-5">Voucher No</mat-label>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-7">
+                  <span class="gInputLable">{{voucherNo}}</span>
+                  <!-- <input type="text" class="gInnerInput-12" name="voucherNo" id="voucherNo" autocomplete="off"
+                    formControlName="voucherNo" readonly /> -->
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="d-flex flex-column gap-0">
+              <div class="row form-group">
+                <mat-label class="gInputLable col-12 col-sm-12 col-md-12 col-lg-5">Division</mat-label>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-7">
+                  <span class="gInputLable">{{division}}</span>
+                  <!-- <input type="text" class="gInnerInput-12" name="division" id="division" autocomplete="off"
+                    formControlName="division" readonly /> -->
+                </div>
+              </div>
+              <div class="row form-group">
+                <mat-label class="gInputLable col-12 col-sm-12 col-md-12 col-lg-5">Sub Division</mat-label>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-7">
+                  <span class="gInputLable">{{subDiv}}</span>
+                  <!-- <input type="text" class="gInnerInput-12" name="subDivision" id="subDivision" autocomplete="off"
+                    formControlName="subDivision" readonly /> -->
+                </div>
+              </div>
+              <div class="row form-group" *ngIf="hideSCCode">
+                <mat-label class="gInputLable col-12 col-sm-12 col-md-12 col-lg-5">S/C Code</mat-label>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-7">
+                  <span class="gInputLable">{{supCode}}</span>
+                  <!-- <input type="text" class="gInnerInput-12" name="supCode" id="supCode" formControlName="supCode"
+                    autocomplete="off" readonly /> -->
+                </div>
+              </div>
+              <div class="row form-group" *ngIf="hideSCCode">
+                <mat-label class="gInputLable col-12 col-sm-12 col-md-12 col-lg-5">S/C Name</mat-label>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-7">
+                  <span class="gInputLable">{{supName}}</span>
+                  <!-- <input type="text" class="gInnerInput-12" name="supName" id="supName" formControlName="supName"
+                    autocomplete="off" readonly /> -->
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="d-flex flex-column gap-0">
+              <div class="row form-group">
+                <mat-label class="gInputLable col-12 col-sm-12 col-md-12 col-lg-5">Created By</mat-label>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-7">
+                  <span class="gInputLable">{{createdBy}}</span>
+                  <!-- <input type="text" class="gInnerInput-12" name="createdBy" id="createdBy" formControlName="createdBy"
+                    autocomplete="off" readonly /> -->
+                </div>
+              </div>
+              <div class="row form-group">
+                <mat-label class="gInputLable col-12 col-sm-12 col-md-12 col-lg-5">Created On</mat-label>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-7">
+                  <span class="gInputLable">{{createdOn}}</span>
+                  <!-- <input type="text" class="gInnerInput-12" name="createdOn" id="createdOn" formControlName="createdOn"
+                    autocomplete="off" readonly /> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    </div>
+    <div *ngIf="template1">
+      <div class="row">
+        <div class="col-12">
+          <h3 class="gDialogTitle1">Dr</h3>
+        </div>
+      </div>
+      <div class="row m-1">
+        <section class="gTableSection">
+          <div class="gInnerTable" style="max-height: calc(50vh - 165px)">
+            <table class="gNormalTable-md table" id="table" width="100%">
+              <thead>
+                <tr>
+                  <th scope="col">S.NO</th>
+                  <th scope="col">Entry Type</th>
+                  <th scope="col">Acc Code</th>
+                  <th scope="col">Acc Name</th>
+                  <th scope="col">Amount</th>
+                  <th scope="col">FinBook Code</th>
+                  <th scope="col">FinBook Name</th>
+                  <th scope="col">CostCenter Code</th>
+                  <th scope="col">CostCenter Name</th>
+                  <th scope="col">Company Code</th>
+                  <th scope="col">Company Name</th>
+                  <th scope="col">Analysis Code</th>
+                  <th scope="col">Sub Analysis Code</th>
+                </tr>
+              </thead>
+              <tbody *ngFor="let data of accpostingL1table  | filter:searchText; let i= index">
+                <tr>
+                  <td>{{ i + 1}}</td>
+                  <td>{{ data.Remarks }}</td>
+                  <td style="min-width: 85px">{{data.AcCode}}</td>
+                  <td>{{ data.AcName }}</td>
+                  <td>{{ data.TrnAmt }}</td>
+                  <td>{{ data.FbCode }}</td>
+                  <td>{{ data.FbName }}</td>
+                  <td>{{ data.BrCode }}</td>
+                  <td>{{ data.BrName }}</td>
+                  <td>{{ data.CmpCode }}</td>
+                  <td>{{ data.CmpName }}</td>
+                  <td>{{ data.AnalysisCode }}</td>
+                  <td>{{ data.SubAnalysisCode }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+      <div class="row form-group mt-1">
+        <div class="col-4 col-sm-6 col-md-7 col-lg-9 col-xl-9"></div>
+        <div class="col-12 col-sm-6 col-md-5 col-lg-3 col-xl-3" style="text-align: right;">
+          <mat-label class="gInputLable">Debit Total </mat-label>
+          <input type="text" style="text-align: right; width: 140px!important;" class="gInnerInput" name="DrTotal"
+            id="DrTotal" value="{{ getDrTotal() }}" readonly />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <h3 class="gDialogTitle1">Cr
+          </h3>
+        </div>
+      </div>
+      <div class="row m-1">
+        <section class="gTableSection">
+          <div class="gInnerTable" style="max-height: calc(50vh - 165px)">
+            <table class="gNormalTable-md table" id="table" width="100%">
+              <thead>
+                <tr>
+                  <th scope="col">S.NO</th>
+                  <th scope="col">Entry Type</th>
+                  <th scope="col">Acc Code</th>
+                  <th scope="col">Acc Name</th>
+                  <th scope="col">Amount</th>
+                  <th scope="col">FinBook Code</th>
+                  <th scope="col">FinBook Name</th>
+                  <th scope="col">CostCenter Code</th>
+                  <th scope="col">CostCenter Name</th>
+                  <th scope="col">Company Code</th>
+                  <th scope="col">Company Name</th>
+                  <th scope="col">Analysis Code</th>
+                  <th scope="col">Sub Analysis Code</th>
+                </tr>
+              </thead>
+              <tbody *ngFor="let data of accpostingL2table  | filter:searchText; let i= index">
+                <tr>
+                  <td>{{ i + 1}}</td>
+                  <td>{{ data.Remarks }}</td>
+                  <td style="min-width: 85px">{{data.AcCode}}</td>
+                  <td>{{ data.AcName }}</td>
+                  <td>{{ data.TrnAmt }}</td>
+                  <td>{{ data.FbCode }}</td>
+                  <td>{{ data.FbName }}</td>
+                  <td>{{ data.BrCode }}</td>
+                  <td>{{ data.BrName }}</td>
+                  <td>{{ data.CmpCode }}</td>
+                  <td>{{ data.CmpName }}</td>
+                  <td>{{ data.AnalysisCode }}</td>
+                  <td>{{ data.SubAnalysisCode }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+      <div class="row form-group mt-1">
+        <div class="col-4 col-sm-6 col-md-7 col-lg-9 col-xl-9"></div>
+        <div class="col-12 col-sm-6 col-md-5 col-lg-3 col-xl-3" style="text-align: right;">
+          <mat-label class="gInputLable">Credit Total </mat-label>
+          <input type="text" style="text-align: right; width: 140px!important;" class="gInnerInput" name="CrTotal"
+            id="CrTotal" value="{{ getCrTotal() }}" readonly />
+        </div>
+      </div>
+    </div>
+    <div class="mx-1" *ngIf="template2">
+      <div class="row m-1">
+        <section class="gTableSection">
+          <div class="gInnerTable" style="max-height: calc(82vh - 70px)">
+            <table class="gNormalTable-sm table" id="table" width="100%">
+              <thead>
+                <tr>
+                  <th scope="col" style="width: 40px;">S.No</th>
+                  <th scope="col">DrCr</th>
+                  <th scope="col">Acc Name</th>
+                  <th style="text-align: right;" scope="col">Debit</th>
+                  <th style="text-align: right;" scope="col">Credit</th>
+                </tr>
+              </thead>
+              <tbody >
+                <tr *ngFor="let data of templateArr1 | filter:searchText; let i= index">
+                <ng-container *ngIf="data.AcName === ''">
+                  <td [colSpan]="5"><strong>{{ data.TrnAmt }}</strong></td>
+                </ng-container>
+                <ng-container  *ngIf="data.AcName !== ''" >
+                  <td [ngClass]="data.DrCr =='Cr'?'cdt':''" style="width: 40px;">{{ data.SNo }}</td>
+                  <td [ngClass]="data.DrCr =='Cr'?'cdt':''">{{ data.DrCr }}</td>
+                  <td [ngClass]="data.AcName =='Grand Total'?'subtotal':'' || data.DrCr =='Cr'?'cdt':''">{{ data.AcName }}</td>
+                  <td [ngClass]="data.AcName =='Grand Total'?'subtotal':'' || data.DrCr =='Cr'?'cdt':''" style="text-align: right;">{{ data.DrAmt > 0 ? (data.DrAmt | gCurrencyPipe) : ''}}</td>
+                  <td [ngClass]="data.AcName =='Grand Total'?'subtotal':'' || data.DrCr =='Cr'?'cdt':''" style="text-align: right;">{{ data.CrAmt > 0 ? (data.CrAmt | gCurrencyPipe) : ''}}</td>
+                </ng-container>
+                </tr>
+              </tbody>
+              </table>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>

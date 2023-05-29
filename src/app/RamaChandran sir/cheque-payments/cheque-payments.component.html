@@ -1,0 +1,99 @@
+
+<div class="gWrapper">
+    <app-header [Titleheader]="'Cheque Payments'">
+    </app-header>
+    <form class="form  mx-2  row align-items-center" [formGroup]="CheckEntryForm">
+        <div class="col-xl-3 col-sm-6 col-12 mb-2 col-md-4 ">
+            <div class="p-0">
+                <label for="inputLabel" class="gInputLable">Region Name</label>
+            </div>
+
+            <div class="gOuterInput">
+                <input class="gInnerInput w-100" [matAutocomplete]="autocmpsingle" formControlName="RegionName" matInput (input)="SortCompanyName($event.target.value)" />
+                <mat-autocomplete id="autocmpsingle" autoActiveFirstOption #autocmpsingle="matAutocomplete" class="gAutoCompleteContainer" [displayWith]="displayRegion">
+                    <mat-option *ngFor="let option of RegionList" class="gSelectOption" [value]="option" (onSelectionChange)="focusNext($event,'branchName' )">
+                        {{ option.Trnvalue}}
+                    </mat-option>
+                </mat-autocomplete>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-sm-6 col-12 mb-2 col-md-4 ">
+            <div class="p-0">
+                <label for="inputLabel" class="gInputLable">Branch Name</label>
+            </div>
+            <div class="gOuterInput">
+                <input class="gInnerInput w-100" id="branchName" (input)="getBranchName($event.target.value)" [matAutocomplete]="autoCustomer" formControlName="BranchName" matInput />
+                <mat-autocomplete #autoCustomer="matAutocomplete" autoActiveFirstOption [displayWith]="displayBr" class="gAutoCompleteContainer">
+                    <mat-option *ngFor="let option of branchLists" class="gSelectOption" [value]="option" (onSelectionChange)="focusNext($event, 'fromDate')">
+                        {{ option.name }}
+                    </mat-option>
+                </mat-autocomplete>
+                <button type="button" id="goButton" mat-button class=" gInputButton  " (click)="reloadTable()" [disabled]="loading">
+                    <mat-icon>sync</mat-icon>
+                </button>
+                <!--  -->
+            </div>
+        </div>
+
+
+        <div class="col-xl-2 col-sm-6 col-12 mb-2 col-md-4 ">
+            <div class="p-0">
+                <label for="inputLabel" class="gInputLable">From Date</label>
+            </div>
+            <div class="gOuterInput">
+                <input class="gInnerInput w-100" id="fromDate" (dateChange)="dateChanged()" (keydown)="focusNextbyEnter($event, 'toDate')" matInput [matDatepicker]="FromDate" formControlName="FromDate" autocomplete="off" placeholder="DD - MMM - YYYY" />
+                <mat-datepicker-toggle matSuffix [for]="FromDate" class="gInputButton">
+                    <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                </mat-datepicker-toggle>
+                <mat-datepicker #FromDate></mat-datepicker>
+            </div>
+        </div>
+
+        <div class="col-xl-2 col-sm-6 col-12 mb-2 col-md-4 ">
+            <div class="p-0">
+                <label for="inputLabel" class="gInputLable">To Date</label>
+            </div>
+            <div class="gOuterInput">
+                <input class="gInnerInput w-100" id="toDate" matInput (dateChange)="dateChanged()" (keydown)="focusNextbyEnter($event, 'goButton')" [matDatepicker]="picker" formControlName="ToDate" autocomplete="off" placeholder="DD - MMM - YYYY" />
+                <mat-datepicker-toggle matSuffix [for]="picker" class="gInputButton">
+                    <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                </mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </div>
+        </div>
+
+        <!-- <div class="col-xl-1 col-sm-6 col-12 mb-2 col-md-4 ">
+            <div class="p-0">
+                <label for="inputLabel" class="gInputLable"></label>
+            </div>
+
+            <button type="button" id="goButton" mat-button class="gIconButton mt-2" (click)="reloadTable()" [disabled]="loading">
+                    <mat-icon>sync</mat-icon>
+                </button>
+
+
+        </div> -->
+
+    </form>
+    <section class="gTableSection ">
+        <div class="gTableActionheaders">
+            <form role="search" class="search-form ml-3">
+                <input type="search" name="Search" [ngClass]="{'gSearchText': searchTemp === '', 'gSearchText1':searchTemp!=='' }" #input autocomplete="off" (ngModelChange)="applyFilter($event)" [(ngModel)]="searchTemp">
+            </form>
+            <img Cores px-0 class="png-icon gXlButton curser " src=".\assets\gImg\excel1.png" type="submit" matTooltip="Excel Export" (click)="downloadXl()">
+        </div>
+
+        <app-table-list [maxHeight]="150" [TableName]="'gNormalTable-sm'" [Footer]="Footer" [displayedColumns]="displayedColumns" [columnHeaders]="columnHeaders" [loading]="loading" [gDataSource]="datasource">
+        </app-table-list>
+
+    </section>
+
+
+    <ng-template #newComponent>
+        Edit Clicked
+        <button mat-icon-button class="gDeleteIcon" (click)="dialog.closeAll()">
+            <mat-icon>cancel</mat-icon>
+        </button>
+    </ng-template>
+</div>

@@ -1,0 +1,210 @@
+<div class="gWrapper">
+    <app-header></app-header>
+    <div class=" container  ">
+        <div class="gcardContainer mx-2 p-4 my-2">
+        <div class="gTitle">Dynamic Form Generator</div>
+    <!-- <form [formGroup]="myForm" id="masterForm" class="masterForm">
+
+        <div class="row mx-1">
+            <div class=" col-12 col-sm-6 mt-2">
+                <mat-label class="gInputLable">Input Type  <strong class="text-danger">*</strong></mat-label>
+                <input class="gInnerInput-border" (keydown)="keytab($event)" id="ledgerType" 
+                    formControlName="type" matInput [matAutocomplete]="type">
+                <mat-autocomplete autoActiveFirstOption #type="matAutocomplete"
+                    class="gAutoCompleteContainer">
+                    <mat-option *ngFor="let option of ledgerType " [value]="option" class="gSelectOption"
+                        (onSelectionChange)="optionSelected($event, option,'name')">
+                        {{option}}
+                    </mat-option>
+                </mat-autocomplete>
+
+            </div>
+
+            <div class=" col-12 col-sm-6 mt-2">
+                <mat-label class="gInputLable">formControl Name  <strong class="text-danger">*</strong> (Without Space)</mat-label>
+                <input class="gInnerInput-border" (keydown)="keytab($event)" id="name" formControlName="name"
+                    matInput>
+               
+            </div>
+
+
+            <div class=" col-12 col-sm-6  mt-2">
+                <label for="exampleInputEmail1 " class="gInputLable">Lable Name  <strong class="text-danger">*</strong></label>
+                <input class="gInnerInput-border" (keydown)="keytab($event)" id="label" formControlName="label"
+                matInput>
+            </div>
+            
+            <div class=" col-12 col-sm-6  mt-2">
+                <label for="exampleInputEmail1 " class="gInputLable">Default Style  <strong class="text-danger">*</strong></label>
+                <input class="gInnerInput-border" (keydown)="keytab($event)" id="style" formControlName="style"
+                matInput>
+            </div>
+
+            <div class=" col-12 col-sm-6  mt-2" *ngIf="showvalue">
+                <label for="exampleInputEmail1 " class="gInputLable">Default Value</label>
+                <input class="gInnerInput-border" (keydown)="keytab($event)" id="value" formControlName="value"
+                matInput>
+            </div>
+            <div class=" col-12 col-sm-6  mt-2 " *ngIf="showdefaultFilter">
+                <label for="exampleInputEmail1 " class="gInputLable">Filter Type</label>
+             <br>
+                <mat-radio-group formControlName="defaultFilter" id="defaultFilter" class="d-flex gap-3">
+                    <mat-radio-button required value="default" class="example-radio-button" >
+                        <span class="gInputLable">Auto Filter</span>
+                    </mat-radio-button>
+                    <mat-radio-button required value="API" class="example-radio-button" >
+                        <span class="gInputLable">Filter By Api</span>
+                    </mat-radio-button>
+                </mat-radio-group>
+            </div>
+
+
+            <div class=" col-12 col-sm-6 mt-1 text-center">
+                <button mat-button class="gSaveButton  mt-4" id="sumbit" type="button"
+                matTooltip="Use Alt + S to Submit"
+                    (click)="FormSubmit()">Add <mat-icon class="btn-ring"
+                        *ngIf="loading">autorenew</mat-icon> </button>
+            </div>
+
+        </div>
+    </form> -->
+
+    
+</div>
+
+
+
+</div>
+<!-- <section class="gTableSection mx-2">
+    <div class="gTableActionheaders">
+        <form role="search" class="search-form ml-3">
+            <input type="search" name="Search" class="gSearchText" #input autocomplete="off"
+                [(ngModel)]="viewSearch" />
+        </form>
+        <form role="search" class="search-form ml-3">
+            <button mat-button class="gSaveButton">get Value</button>
+        </form>
+        <form role="search" class="search-form ml-3">
+            <button mat-button class="gNormalButton" (click)="clearValue()">Clear</button>
+        </form>
+    </div>
+    <div class="gInnerTable" style="max-height: calc(100vh - 160px);">
+        <table class="gNormalTable-sm table" id="viewTable" width="100%">
+            <thead>
+                <tr>
+                    <th scope="col">S.NO</th>
+                    <th scope="col">Input Type</th>
+                    <th scope="col" >FormControl Name</th>
+                    <th scope="col">Lable Name</th>
+                    <th scope="col"> Style</th>
+                    <th scope="col">Default Value</th>
+                    <th scope="col">defaultFilter</th>
+                    <th scope="col">Options</th>
+                    <th scope="col">Edit</th>
+                    <th scope="col">Delete</th>
+
+    
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngIf="fields.length === 0">
+                    <td colspan="12" class="text-center">No record found.</td>
+                </tr>
+                <tr *ngFor="let data of fields | filter: viewSearch; let i = index " tabindex="0">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ data.type }}</td>
+                    <td>{{ data.name }}</td>
+                    <td>{{ data.label }}</td>
+                    <td>{{ data.value }}</td>
+                    <td>{{ data.style }}</td>
+                    <td>{{ data.defaultFilter }}</td>
+                    <td>{{ data.options }}</td>
+                    <td><button mat-button class="gEditIcon" (click)="editRow(data, i)"><mat-icon>edit</mat-icon></button></td>
+                    <td><button mat-button class="gDeleteIcon" (click)="RemoveRow(data, i)">	<mat-icon>delete</mat-icon></button></td>
+
+                   
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section> -->
+
+
+
+<form [formGroup]="VOForm" autocomplete="off" class="gTableSection  mx-2">
+  <div class="gTableActionheaders">
+    <button class="gSaveButton" (click)="addRow()">add row</button>
+  </div>
+  <ng-container formArrayName="VORows" class="gInnerTable">
+      <table #table class="gNormalTable-md table gTableStriped" mat-table [dataSource]="dataSource">
+
+          <ng-container matColumnDef="SNo">
+              <th mat-header-cell *matHeaderCellDef> SNo </th>
+              <td mat-cell *matCellDef="let fields; let i = index" [formGroup]="fields">
+                  <span class="runningFromToText">
+                  {{i+1}}
+              </span>
+              </td>
+          </ng-container>
+
+          <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef> name </th>
+              <td mat-cell *matCellDef="let fields;let i = index" [formGroup]="fields"> 
+                <input matInput class="gInnerInput" formControlName="name" [readonly]="VOForm.get('VORows').value[i].isEditable"> </td>
+          </ng-container>
+          <ng-container matColumnDef="label">
+              <th mat-header-cell *matHeaderCellDef> label </th>
+              <td mat-cell *matCellDef="let fields;let i = index" [formGroup]="fields"> 
+                <input matInput class="gInnerInput" formControlName="label" [readonly]="VOForm.get('VORows').value[i].isEditable"> </td>
+          </ng-container>
+ 
+          <ng-container matColumnDef="value">
+              <th mat-header-cell *matHeaderCellDef> value </th>
+              <td mat-cell *matCellDef="let fields;let i = index" [formGroup]="fields"> 
+                <input matInput class="gInnerInput" formControlName="value" [readonly]="VOForm.get('VORows').value[i].isEditable"> </td>
+          </ng-container>
+          <ng-container matColumnDef="style">
+              <th mat-header-cell *matHeaderCellDef> style </th>
+              <td mat-cell *matCellDef="let fields; let i = index" [formGroup]="fields">
+                <input matInput class="gInnerInput" formControlName="style" [readonly]="VOForm.get('VORows').value[i].isEditable">
+              </td>
+          </ng-container>
+          <ng-container matColumnDef="defaultFilter">
+            <th mat-header-cell *matHeaderCellDef> defaultFilter </th>
+            <td mat-cell *matCellDef="let fields; let i = index" [formGroup]="fields">
+              <input matInput class="gInnerInput" formControlName="defaultFilter" [readonly]="VOForm.get('VORows').value[i].isEditable">
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="options">
+          <th mat-header-cell *matHeaderCellDef> options </th>
+          <td mat-cell *matCellDef="let fields; let i = index" [formGroup]="fields">
+            <input matInput class="gInnerInput" formControlName="options" [readonly]="VOForm.get('VORows').value[i].isEditable">
+          </td>
+      </ng-container>
+          <ng-container matColumnDef="Action">
+              <th mat-header-cell *matHeaderCellDef> Action </th>
+              <td mat-cell *matCellDef="let fields;let i = index" [formGroup]="fields">
+                  <button mat-icon-button class="gEditIcon" *ngIf="VOForm.get('VORows').value[i].isEditable" (click)="EditAmount(VOForm,i)">
+                  <mat-icon>edit</mat-icon>
+              </button>
+                  <button mat-icon-button class="gSaveIcon" (click)="SaveAmount(VOForm,i)" *ngIf="!VOForm.get('VORows').value[i].isEditable">
+                  <mat-icon>check_circle</mat-icon>
+              </button>
+                  <button mat-icon-button class="gDeleteIcon" (click)="CancelEdit(VOForm,i)" *ngIf="!VOForm.get('VORows').value[i].isEditable">
+                  <mat-icon>cancel</mat-icon>
+              </button>
+              </td>
+
+          </ng-container>
+  
+          <tr mat-header-row *matHeaderRowDef="displayedColumns ;sticky: true" class="table-row"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      </table>
+  </ng-container>
+  <div class="item" *ngIf="loading">
+      <ngx-skeleton-loader count="15"></ngx-skeleton-loader>
+  </div>
+</form>
+</div>

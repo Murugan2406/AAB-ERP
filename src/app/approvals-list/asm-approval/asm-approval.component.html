@@ -1,0 +1,785 @@
+<div class="loading" *ngIf="isLoading">
+    <mat-progress-spinner class=" spinner" diameter="50" mode="indeterminate"></mat-progress-spinner>
+</div>
+<!-- <div class="isloader" *ngIf="isload">
+    <img src="assets/gImg/load1.gif" alt="" class="textload">
+</div> -->
+<div class="wrapper">
+    <div class="header">
+        <mat-toolbar color="warn">
+            <mat-toolbar-row>
+                <button mat-button (click)="backNavigation()"> BACK</button>
+                <span class="example-spacer"></span>
+                <button mat-button></button>
+                <span class="example-spacer"></span>
+
+
+                <button mat-button (click)="homeNavigate()">
+                    <span class="material-icons">home</span>
+                </button>
+                <button mat-button disabled>
+                    <img class="png-icon" src=".\assets\gImg\a2b2.png" style="max-width: 56px; min-width: 56px;">
+                </button>
+            </mat-toolbar-row>
+        </mat-toolbar>
+    </div>
+
+
+
+
+    <div class="content" *ngIf="select =='userconfig'">
+        <div class="row" style="padding-right: 5px; text-align: center;
+        padding-left: 5px; margin-top: 5px;">
+            <div class="col-md-12 col-sm-12 col-xl-12" style="height: 2.2rem !important;">
+
+                <form [formGroup]="eventEditForm" class="forms" novalidate>
+                    <div class="form-group ">
+                        <mat-radio-group style="text-align:center; color: #0c0c0c" [(ngModel)]="selectedStatus"
+                            formControlName="completed" aria-label="Select an option" >
+                            <mat-radio-button [value]="1" id="Employee"
+                                style="font-size:13px;margin-left: 10px; font-family:  sans-serif !important;"
+                                name="Selection" (click)="onSecondTab()" class="label-name3">Approval
+                                Pending </mat-radio-button>
+                            <mat-radio-button [value]="2" id="Branch" name="Selection" (click)="onFirstTab()"
+                                style="margin-left: 10px;  font-size:13px; font-family:  sans-serif !important;" class="label-name3 ">Ordered Status</mat-radio-button>
+                            <mat-radio-button [value]="3" id="apporved" (click)="onThirdTab()" name="Selection"
+                                style="margin-left: 10px; font-size:13px; font-family:  sans-serif !important;" class="label-name3 mt-sm-0 mt-2">Delivery
+                                Status</mat-radio-button>
+                            <mat-radio-button [value]="4" id="log" (click)="onFourthTab()" name="Selection"
+                                style="margin-left: 10px; font-size:13px; font-family:  sans-serif !important;" class="label-name3 mt-sm-0 mt-2">Order Edited</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+        <hr />
+
+        <!-- <mat-tab-group *ngIf="approval1 ">
+        <mat-tab label="Approval Pending" style="font-family: 'Oswald', sans-serif !important;"> -->
+        <div *ngIf="subselect=='firstTab'">
+            <div class="content" >
+                <!-- <div class="col-md-12 col-sm-12 col-xl-12"> -->
+                <div class="table-responsive" id="managerTable1" style="padding-right: 10px;
+                        padding-left: 10px; ">
+
+                    <table class="table table-bordered " id="table">
+                        <thead id="managerTable1" *ngIf="showhide">
+                            <tr class="nth-child(1)">
+                                <th style="text-align:left;">S.No.</th>
+                                <th style="text-align:left;">Branch Name</th>
+                                <th style="text-align:left;" *ngIf="appr === 'YES'"></th>
+                                <th>SS Name</th>
+                                <th>Order No</th>
+                                <th>Order Placed On</th>
+                                <th>Status</th>
+                                <th style="text-align: right;">Order Value</th>
+                                <th>Advance</th>
+
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="(Pendingorders[0]?.StatusRes !='No Records Found')">
+                            <tr *ngFor="let pending of Pendingorders; let i = index;">
+
+                                <!-- <ng-template #pendingview> -->
+                                    <td>{{i+1}}</td>
+                                    <td>{{pending.Branch}}</td>
+                                    <!-- -->
+                                    <td *ngIf="pending.ApprEnable === 'YES'" class="curser" (click)="approval(pending,'viewItems')">
+                                        <span class="material-icons md">
+                                            thumb_up_off_alt
+                                        </span>
+                                    </td>
+                                    <td>{{pending.Customer}}</td>
+                                    <td>{{pending.OrderNo}}</td>
+                                    <td>{{pending.RequestTime}}</td>
+                                    <td>{{pending.Status}}</td>
+                                    <td style="text-align: right;">{{pending.Ordervalue.toFixed(2)}}</td>
+                                    <td>{{pending.Advance}}</td>
+                                <!-- </ng-template> -->
+
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- <div
+                    *ngIf="Pendingorders.length === 1 && (Pendingorders[0].StatusRes =='No Records Found') ; else pendingview">
+                </div> -->
+                    <div *ngIf="Pendingorders.length === 1 && (Pendingorders[0].StatusRes =='No Records Found')"
+                        style="text-align:center; white-space: nowrap;  color: #007bff; font-family: 'Oswald', sans-serif ;">
+                        <div class="d-flex align-items-center justify-content-center mb-2">
+                          <div class="emklogo"></div>
+                        </div>
+                        No Orders Found
+                    </div>
+                </div>
+                <!-- </div> -->
+                <!-- </div> -->
+
+            </div>
+            <!-- </mat-tab> -->
+
+        </div>
+        <div *ngIf="subselect=='secondTab'">
+            <!-- <mat-tab label="View Approved Status"> -->
+            <div class="content" style="box-shadow:4px 2px 25px #fdfdfd; ">
+                <!-- <div class="row" style="margin-top:4px;"> -->
+                <div class="col-md-12 col-sm-12 col-xl-12" style="margin-top:4px; ">
+                    <!-- (ngSubmit)="submitFilter()" -->
+                    <form [formGroup]="SearchForm1" class="row">
+                        <mat-form-field class="col-12 col-md-2 form-group">
+                            <mat-label style=" color: #0157b4; font-family: 'Oswald', sans-serif ;" color="primary">
+                                Status
+                            </mat-label>
+
+                            <mat-select formControlName="Flag" [(ngModel)]="Flag1">
+                                <mat-option *ngFor="let selection of ViewSelection;" [value]="selection.Flag">
+
+                                    {{selection.Flag}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field class="col-12 col-md-3 form-group">
+                            <mat-label style=" color: #0157b4; font-family: 'Oswald', sans-serif;">Location
+                            </mat-label>
+                            <input type="text" [(ngModel)]="brname" id="searchitemb" aria-label="Number" matInput
+                                [formControl]="Branchloccntrl1" [matAutocomplete]="auto" name="brname" [value]="brname"
+                                required>
+                            <mat-autocomplete #auto="matAutocomplete">
+                                <mat-option *ngFor="let detail of BranchDetail"
+                                    (onSelectionChange)="changeloc($event,detail.brcode)" [value]="detail?.brname">
+                                    {{
+                                    detail?.brname}}
+                                </mat-option>
+                            </mat-autocomplete>
+
+                        </mat-form-field>
+                        <mat-form-field class="col-6 col-md-2 col-lg-2 mr-sm-2 form-group">
+                            <mat-label style=" color: #0157b4; font-family: 'Oswald', sans-serif ;" color="primary">
+                                From </mat-label>
+                            <input matInput formControlName="var2" [matDatepicker]="var2" name="var2" id="var2">
+                            <mat-datepicker-toggle matSuffix [for]="var2"></mat-datepicker-toggle>
+                            <mat-datepicker #var2></mat-datepicker>
+                        </mat-form-field>
+                        <div class="col-5 col-sm-6 col-md-2 col-lg-2 mr-sm-2 d-flex gap-2">
+                          <mat-form-field class="form-group" style="width: 90%;">
+                              <mat-label style=" color: #0157b4; font-family: 'Oswald', sans-serif ;" color="primary">
+                                  To </mat-label>
+                              <input matInput formControlName="var3" [matDatepicker]="var3" name="var3" id="var3">
+                              <mat-datepicker-toggle matSuffix [for]="var3"></mat-datepicker-toggle>
+                              <mat-datepicker #var3></mat-datepicker>
+                          </mat-form-field>
+                          <span>
+                            <button mat-raised-button class="search-button" color="primary" type="submit" (click)="submitFilter()"
+                                style="min-width: 30px; padding: 0; line-height: 2.5;"><i style="cursor: pointer; font-size:larger; color:white;" class="fa fa-angle-double-right"></i></button>
+                          </span>
+                        </div>
+                        <mat-form-field  class="col-12 offset-md-1 col-lg-2 col-md-2 form-group">
+                          <mat-label style=" color: #0157b4; font-family: 'Oswald', sans-serif ;" color="primary">
+                             Search </mat-label>
+                          <input matInput formControlName="search" placeholder="search here" autocomplete="off">
+
+                      </mat-form-field>
+                    </form>
+                </div>
+                <!-- </div>
+                <div class="row" style="padding-right: 5px;
+                padding-left: 5px; "> -->
+
+                <div class="table-responsive" id="managerTable" style="padding-right: 10px;
+                        padding-left: 10px; ">
+
+                    <table class="table table-bordered " id="table">
+                        <thead id="managerTable" *ngIf="showhide">
+                            <tr class="nth-child(1)">
+                                <th style="text-align:left;">S.No.</th>
+                                <th style="text-align:left;">Branch Name</th>
+                                <th></th>
+                                <th>SS Name</th>
+                                <th>Order No</th>
+                                <th>Order Placed On</th>
+                                <th>Status</th>
+                                <th>Approved By</th>
+                                <th>Approved On</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="ViewOrders[0]?.StatusRes !='No Records Found'">
+                            <tr *ngFor="let view of ViewOrders | filter:SearchForm1.get('search').value; let i = index; ">
+                                <!-- <div
+                                    *ngIf="ViewOrders.length === 1 && (ViewOrders[0].StatusRes =='No Records Found') ; else view1">
+                                </div> -->
+                                <!-- <ng-template #view1> -->
+                                    <td>{{i+1}}</td>
+                                    <td>{{view.Branch}}</td>
+                                    <td class="curser" (click)="approvalview(view)"><span class="material-icons md">
+                                            thumb_up_off_alt
+                                        </span></td>
+                                    <td>{{view.Customer}}</td>
+                                    <td>{{view.OrderNo}}</td>
+                                    <td>{{view.RequestTime}}</td>
+                                    <td>{{view.Status}}</td>
+                                    <td>{{view.ApprovedUser}}</td>
+                                    <td>{{view.ApprovedTime}}</td>
+                                <!-- </ng-template> -->
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div *ngIf="ViewOrders.length === 1 && (ViewOrders[0].StatusRes =='No Records Found')"
+                        style="text-align:center; white-space: nowrap;  color: #007bff; font-family: 'Oswald', sans-serif ;">
+                        <div class="d-flex align-items-center justify-content-center mb-2">
+                          <div class="emklogo2"></div>
+                        </div>
+                        No Orders Found
+                    </div>
+                </div>
+                <!-- </div> -->
+                <!-- </div> -->
+
+            </div>
+        </div>
+        <!-- </mat-tab> -->
+        <!-- <mat-tab label="Delivery Status"> -->
+        <div *ngIf="subselect=='thirdTab'">
+            <div class="content" >
+                <!-- <div class="row" style=" margin-top:4px;"> -->
+                <div class="col-md-12" style=" margin-top:4px;">
+
+                    <form [formGroup]="SearchForm2" (ngSubmit)="submitFilter2()" class="row">
+
+                        <mat-form-field class="col-12 col-md-3 form-group">
+                            <mat-label style=" color: #0157b4; font-family: 'Oswald', sans-serif;">Location
+                            </mat-label>
+                            <input type="text" [(ngModel)]="brname1" id="searchitemb" aria-label="Number" matInput
+                                [formControl]="Branchloccntrl2" [matAutocomplete]="auto1" name="brname"
+                                [value]="brname1" required>
+                            <mat-autocomplete #auto1="matAutocomplete">
+                                <mat-option *ngFor="let detail1 of BranchDetail1"
+                                    (onSelectionChange)="changeloc1($event,detail1.brcode)" [value]="detail1?.brname">{{
+                                    detail1?.brname}}
+                                </mat-option>
+                            </mat-autocomplete>
+
+                        </mat-form-field>
+                        <mat-form-field class="col-6 col-md-2 col-lg-2 form-group">
+                            <mat-label style=" color: #0157b4; font-family: 'Oswald', sans-serif ;" color="primary">
+                                From </mat-label>
+                            <input matInput formControlName="var2" [matDatepicker]="var2" name="var2" id="var2">
+                            <mat-datepicker-toggle matSuffix [for]="var2"></mat-datepicker-toggle>
+                            <mat-datepicker #var2></mat-datepicker>
+                        </mat-form-field>
+                        <div  class="col-5 col-sm-6 col-md-2 col-lg-2 d-flex gap-2">
+                          <mat-form-field class="form-group" style="width: 90%;">
+                              <mat-label style=" color: #0157b4; font-family: 'Oswald', sans-serif ;" color="primary">
+                                  To </mat-label>
+                              <input matInput formControlName="var3" [matDatepicker]="var3" name="var3" id="var3">
+                              <mat-datepicker-toggle matSuffix [for]="var3"></mat-datepicker-toggle>
+                              <mat-datepicker #var3></mat-datepicker>
+                          </mat-form-field>
+                          <span>
+                            <button mat-raised-button class="search-button " type="submit" color="primary"
+                            style="min-width: 30px; padding: 0; line-height: 2.5;"><i style="cursor: pointer; font-size:larger; color:white;" class="fa fa-angle-double-right"></i></button>
+                          </span>
+                        </div>
+                        <mat-form-field class="col-12 offset-md-3 col-lg-2 col-md-2 form-group">
+                          <mat-label style=" color: #0157b4; font-family: 'Oswald', sans-serif ;" color="primary">
+                             Search </mat-label>
+                          <input matInput formControlName="search" placeholder="search here" autocomplete="off">
+
+                      </mat-form-field>
+
+                    </form>
+                </div>
+                <!-- </div>
+                <div class="row" style="padding-right: 5px;
+                padding-left: 5px;"> -->
+
+                <!-- <div class="col-md-12 col-sm-12 col-xl-12"> -->
+                <div class="table-responsive" id="managerTable" style="padding-right: 10px;
+                        padding-left: 10px; ">
+
+                    <table class="table table-bordered  " id="table">
+                        <thead id="managerTable" *ngIf="showhide">
+                            <tr class="nth-child(1)">
+                                <th style="text-align:left;">S.No.</th>
+                                <th style="text-align:left;">Branch Name</th>
+                                <th></th>
+
+                                <th>SS Name</th>
+                                <th>Order No</th>
+                                <th>Order Placed On</th>
+                                <!-- <th>Order Time</th> -->
+
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="OrderStatus[0]?.StatusRes != 'No Records Found'">
+                            <tr *ngFor="let view of OrderStatus | filter:SearchForm2.get('search').value; let i = index;">
+
+                                    <td>{{i+1}}</td>
+                                    <td>{{view.Branch}}</td>
+                                    <td class="curser" (click)="deliveryview(view)"><span class="material-icons md">
+                                            thumb_up_off_alt
+                                        </span></td>
+                                    <td>{{view.Customer}}</td>
+                                    <td>{{view.OrderNo}}</td>
+                                    <td>{{view.RequestTime }}</td>
+
+
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div *ngIf="OrderStatus.length === 1 && (OrderStatus[0].StatusRes =='No Records Found')"
+                        style="text-align:center; white-space: nowrap;  color: #007bff; font-family: 'Oswald', sans-serif ;">
+                        <div class="d-flex align-items-center justify-content-center mb-2">
+                          <div class="emklogo2"></div>
+                        </div>
+                        No Orders Found
+                    </div>
+                </div>
+                <!-- </div> -->
+                <!-- </div> -->
+            </div>
+        </div>
+        <!-- </mat-tab>
+    </mat-tab-group> -->
+        <div *ngIf="subselect=='fourthTab'">
+            <div class="content" >
+                <!-- <div class="row" style=" margin-top:4px;"> -->
+                <div class="col-md-12" style=" margin-top:4px;">
+
+                    <form [formGroup]="editForm" class="row">
+                        <mat-form-field class="col-6 col-md-2 col-lg-2 form-group">
+                            <mat-label style=" color: #0157b4; font-family: 'Oswald', sans-serif ;" color="primary">
+                                From </mat-label>
+                            <input matInput formControlName="editfrom" [matDatepicker]="var2" name="var2" id="var2">
+                            <mat-datepicker-toggle matSuffix [for]="var2"></mat-datepicker-toggle>
+                            <mat-datepicker #var2></mat-datepicker>
+                        </mat-form-field>
+                        <div class="col-5 col-sm-6 col-lg-2 col-md-2 d-flex gap-2">
+
+                          <mat-form-field class="form-group" style="width: 90%;">
+                              <mat-label style=" color: #0157b4; font-family: 'Oswald', sans-serif ;" color="primary">
+                                  To </mat-label>
+                              <input matInput formControlName="editto" [matDatepicker]="var3" name="var3" id="var3">
+                              <mat-datepicker-toggle matSuffix [for]="var3"></mat-datepicker-toggle>
+                              <mat-datepicker #var3></mat-datepicker>
+                          </mat-form-field>
+                          <span>
+                            <button mat-raised-button class="search-button " type="submit" color="primary" (click)="editlog()"
+                            style="min-width: 30px; padding: 0; line-height: 2.5;"><i style="cursor: pointer; font-size:larger; color:white;" class="fa fa-angle-double-right"></i></button>
+                          </span>
+                        </div>
+                        <mat-form-field  class="col-12 offset-md-6 col-lg-2 col-md-2 form-group">
+                          <mat-label style=" color: #0157b4; font-family: 'Oswald', sans-serif ;" color="primary">
+                             Search </mat-label>
+                          <input matInput formControlName="search" placeholder="search here" autocomplete="off">
+                      </mat-form-field>
+
+                    </form>
+                </div>
+                <!-- </div>
+            <div class="row" style="padding-right: 5px;
+            padding-left: 5px;"> -->
+
+                <!-- <div class="col-md-12 col-sm-12 col-xl-12"> -->
+                <div class="table-responsive" id="managerTable" style="padding-right: 10px;
+                    padding-left: 10px; ">
+
+                    <table class="table table-bordered  " id="table" *ngIf="Ordereditlogdata[0]?.StatusRes !='No Records Found'">
+                        <thead id="managerTable">
+                            <tr class="nth-child(1)">
+                                <th style="text-align:left;">S.No.</th>
+                                <th style="text-align:left;">Branch Name</th>
+                                <th></th>
+
+                                <th>SS Name</th>
+                                <th>Order No</th>
+                                <th>Order Placed On</th>
+                                <th>Last Edited time</th>
+                                <!-- <th>Order Time</th> -->
+
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="Ordereditlogdata[0]?.StatusRes !='No Records Found'">
+                            <tr *ngFor="let view of Ordereditlogdata | filter: editForm.get('search').value; let i = index;">
+                                    <td>{{i+1}}</td>
+                                    <td>{{view.Branch}}</td>
+                                    <td class="curser" (click)="editviewshow(view)"><span class="material-icons md">
+                                            thumb_up_off_alt
+                                        </span></td>
+                                    <td>{{view.Customer}}</td>
+                                    <td>{{view.OrderNo}}</td>
+                                    <td>{{view.RequestTime }}</td>
+                                    <td>{{view.LastEditedTime }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div *ngIf="Ordereditlogdata.length === 1 && (Ordereditlogdata[0].StatusRes =='No Records Found')"
+                        style="text-align:center; white-space: nowrap;  color: #007bff; font-family: 'Oswald', sans-serif ;">
+                         <div class="d-flex align-items-center justify-content-center mb-2">
+                          <div class="emklogo2"></div>
+                        </div>
+                        No Orders Found
+                    </div>
+                </div>
+                <!-- </div> -->
+                <!-- </div> -->
+            </div>
+        </div>
+    </div>
+    <div class="content" *ngIf="select=='editlogshowdata'" >
+
+        <div class="col-md-12 col-sm-12 col-xl-12" style="padding-right: 10px;
+        padding-left: 10px; margin-top:5px;">
+            <h6 class="text-left" style="font-size: 12px; padding-top: 3px; font-weight: 600;color: darkslateblue; text-align: center;">SS Name : {{Customer}} / code: {{Custcode}}
+                / Order No :
+                {{Orderno}} / Branch : {{Branch}}</h6>
+        </div>
+        <div class="table-responsive" id="managerTable2" style="padding-right: 10px;
+            padding-left: 10px; ">
+
+            <table class="table table-bordered " id="table">
+                <thead id="managerTable2">
+                    <tr class="nth-child(1)">
+                        <th style="text-align:left;">S.No.</th>
+                        <th style="text-align:left;">Item Code</th>
+
+                        <th style="text-align:left;">Item Name</th>
+                        <th>Status</th>
+                        <th class="text-end">SSOrdQty</th>
+                        <th class="text-end">AsmEdtQty</th>
+                        <th>Uom</th>
+                        <th class="text-end">Rate</th>
+                        <th class="text-end">Value</th>
+                        <th class="text-end">OrderValue</th>
+                        <th>Edited by & Time </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let order of Ordereditlogview;let i = index;">
+                        <div *ngIf="Ordereditlogview.length === 0  ; else detia3">
+                        </div>
+                        <ng-template #detia3>
+                            <td>{{i+1}}</td>
+                            <td>{{order.Code}}</td>
+                            <td>{{order.ItemName}}</td>
+                            <td>{{order.Status}}</td>
+                            <td class="text-end">{{order.Qty}}</td>
+                            <td class="text-end">{{order.NewQty}}</td>
+                            <td>{{order.Uom}}</td>
+                            <td class="text-end">{{order.NewRate}}</td>
+                            <td class="text-end">{{(order.NewQty * order.NewRate).toFixed(2)}}</td>
+                            <td class="text-end">{{order.NewOrdervalue}}</td>
+                            <td>{{order.EditedUser}} {{order.EditedTime}}</td>
+                        </ng-template>
+                    </tr>
+
+
+                </tbody>
+            </table>
+            <div *ngIf="Ordereditlogview.length === 0"
+                style="text-align:center; white-space: nowrap;  color: #007bff; font-family: 'Oswald', sans-serif ;">
+                <div class="d-flex align-items-center justify-content-center mb-2">
+                  <div class="emklogo2"></div>
+                </div>
+                No Records Found
+            </div>
+        </div>
+        <!-- </div> -->
+
+    </div>
+
+    <div [style.display]="showModal ? 'block' : 'none'" class="modal backdrop" role="dialog"
+        aria-labelledby="myModalLabel" aria-hidden="true" style="padding:20px;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header"></div>
+
+                <div class="modal-body" style=" overflow-y: auto; padding:10px">
+                    <form [formGroup]="uploadForm">
+                        <div class="col-md-12" style=" padding-bottom:10px">
+                            <h6 class="heading" id="myModalLabel"
+                                style="font-family: 'Oswald', sans-serif ; font-size: 15px; text-align: center;"> Are
+                                you reject
+                            </h6>
+                            <mat-form-field class="col-md-12 form-group">
+                                <textarea matInput class="form-control" formControlName="rejectname" name="rejectname"
+                                    [(ngModel)]="rejectname" class="not-allowed" style="border-radius: 1px;"></textarea>
+                                <mat-error *ngIf="uploadForm.controls['rejectname'].hasError('required')">
+                                    Enter the Reject Reason</mat-error>
+                            </mat-form-field>
+                            <button type="submit" class="float-left" style="background-color: #007bff;color: white; "
+                                (click)="EsiUpdate()" mat-raised-button>Confirm</button>
+                            <button type="button" mat-raised-button class="float-right" data-dismiss="modal"
+                                (click)="cancelEsi()"
+                                style="float: right; background-color: black; color:white;">Cancel</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="select=='approval2'">
+      <div class="text-center" >
+          <h6 class="text-center" style="font-size: 12px;  font-weight: 600;color: darkslateblue;">SS Name : {{ssname}} / Order No :
+              {{Orderno}} / Order Date : {{OrderDate | date :'dd-MM-YYYY'}} / Order Value : {{ordervalue}} </h6>
+      </div>
+        <div class="d-flex align-items-center justify-content-between" style="margin: -10px 10px 5px;">
+            <div class="" *ngIf="this.gmainFlag == 'RtlOrderStatusHo'">
+                <button (click)="ApprovalConfirm()" mat-raised-button
+                    style="background-color: #007bff;  color: white ; " type="checkbox">Approve </button>
+            </div>
+            <div class="" *ngIf="this.gmainFlag == 'RtlOrderStatusHo'">
+                <button (click)="addneworder('Add')" mat-raised-button data-bs-toggle="modal"
+                    data-bs-target="#holdexampleModal" style="background-color: #007bff;  color: white ; "
+                    type="checkbox">Add New </button>
+            </div>
+        </div>
+
+        <div class="table-responsive mx-2" id="managerTable1">
+
+            <table class="table table-bordered " id="table">
+                <thead id="managerTable1">
+                    <tr class="nth-child(1)">
+                        <th style="text-align:left;">S.No.</th>
+                        <th *ngIf="this.gmainFlag == 'RtlOrderStatusHo'">
+                          <!-- [(ngModel)]="myModel"  -->
+                            <input type="checkbox"
+                            [(ngModel)]="masterSelected" name="list_name" value="m1"
+                              (change)="checkUncheckAll()"
+                              />
+                              <!-- (click)="selectAll()"  -->
+                        </th>
+                        <th *ngIf="this.gmainFlag == 'RtlOrderStatusHo'">Status</th>
+
+                        <th style="text-align:left;">Item Code</th>
+                        <th style="text-align:left;">Item Name</th>
+                        <th *ngIf="this.gmainFlag == 'RtlOrderStatusHo'"></th>
+                        <th>Qty</th>
+                        <th>Uom</th>
+                        <th>Rate</th>
+                        <th style="text-align: right;">Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let order of OrderDetail;let i = index;">
+                        <div
+                            *ngIf="OrderDetail.length === 1 && (OrderDetail[0].StatusRes =='No Records Found') ; else orders">
+                        </div>
+                        <ng-template #orders>
+                            <td>{{i+1}}</td>
+                            <td *ngIf="this.gmainFlag == 'RtlOrderStatusHo'">
+                              <!-- [checked]="order.myModel" (click)="ModelAll(i);"   -->
+                              <input type="checkbox"
+                              [checked]="order.myModel" [(ngModel)]="order.myModel" name="list_name" value="{{i+1}}"
+                              (change)="isAllSelected($event)"/></td>
+                            <td *ngIf="this.gmainFlag == 'RtlOrderStatusHo'">{{order.status}}</td>
+
+                            <td>{{order.Code}}</td>
+                            <td>{{order.ItemName}}</td>
+                            <td *ngIf="this.gmainFlag == 'RtlOrderStatusHo'" class=" text-center" ><i class="fa fa-edit curser" *ngIf="order.status =='Approve'" (click)="deliveryedit(order,'Edit',i)" data-bs-toggle="modal"
+                              data-bs-target="#holdexampleModal"> </i></td>
+                            <td>{{order.Qty}}</td>
+                            <td>{{order.Uom}}</td>
+                            <td>{{order.Rate.toFixed(2)}}</td>
+                            <td style="text-align: right;">{{(order.Qty * order.Rate).toFixed(2)}}</td>
+                        </ng-template>
+                    </tr>
+
+
+                </tbody>
+            </table>
+            <div *ngIf="OrderDetail.length === 1 && (OrderDetail[0].StatusRes =='No Records Found')"
+                style="text-align:center; white-space: nowrap;  color: #007bff; font-family: 'Oswald', sans-serif ;">
+                No Records Found
+            </div>
+        </div>
+        <!-- </div> -->
+
+    </div>
+
+
+    <div class="content" *ngIf="select=='approval4'" >
+
+        <div class="col-md-12 col-sm-12 col-xl-12" style="padding-right: 10px;
+        padding-left: 10px; margin-top:5px;">
+            <h6 class="text-left" style="font-size: 12px; padding-top: 3px;  font-weight: 600;color: darkslateblue; text-align: center;">SS Name : {{ssname}} / Order No :
+                {{Orderno}} / Order Date : {{OrderDate | date :'dd-MM-YYYY'}} / Order Value : {{ordervalue1}}</h6>
+        </div>
+        <div class="table-responsive" id="managerTable2" style="padding-right: 10px;
+            padding-left: 10px; ">
+
+            <table class="table table-bordered" id="table">
+                <thead id="managerTable2">
+                    <tr class="nth-child(1)">
+                        <th style="text-align:left;">S.No.</th>
+
+                        <!-- <th>Status</th> -->
+                        <th style="text-align:left;">Item Code</th>
+
+                        <th style="text-align:left;">Item Name</th>
+                        <th>Qty</th>
+                        <th>Uom</th>
+                        <th>Rate</th>
+                        <th style="text-align: right;">Value</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="OrderDetail1[0]?.StatusRes !='No Records Found'">
+                    <tr *ngFor="let order of OrderDetail1;let i = index;">
+
+
+                            <td>{{i+1}}</td>
+                            <!-- <td>{{order.status}}</td> -->
+
+                            <td>{{order.Code}}</td>
+                            <td>{{order.ItemName}}</td>
+                            <td>{{order.Qty}}</td>
+                            <td>{{order.Uom}}</td>
+                            <td>{{order.Rate }}</td>
+                            <td style="text-align: right;">{{(order.Qty * order.Rate).toFixed(2)}}</td>
+                            <td>{{order.Status}}</td>
+                    </tr>
+
+
+                </tbody>
+            </table>
+            <div *ngIf="OrderDetail1.length === 1 && (OrderDetail1[0].StatusRes =='No Records Found')"
+                style="text-align:center; white-space: nowrap;  color: #007bff; font-family: 'Oswald', sans-serif ;">
+                <div class="d-flex align-items-center justify-content-center mb-2">
+                  <div class="emklogo2"></div>
+                </div>
+                No Records Found
+            </div>
+        </div>
+        <!-- </div> -->
+
+    </div>
+    <div class="content" *ngIf="select=='approval5'" >
+
+        <div class="col-md-12 col-sm-12 col-xl-12" style="padding-right: 10px;
+        padding-left: 10px; margin-top:5px;">
+            <h6 class="text-left" style="font-size: 12px; padding-top: 3px;  font-weight: 600;color: darkslateblue; text-align: center;">SS Name : {{Customer}} / Order No :
+                {{Orderno}}</h6>
+        </div>
+        <div class="table-responsive" id="managerTable2" style="padding-right: 10px;
+            padding-left: 10px; ">
+
+            <table class="table table-bordered " id="table">
+                <thead id="managerTable2">
+                    <tr class="nth-child(1)">
+                        <th style="text-align:left;">S.No.</th>
+                        <th style="text-align:left;">Item Code</th>
+
+                        <th style="text-align:left;">Item Name</th>
+                        <th>Ordered Qty</th>
+                        <th>Uom</th>
+                        <th>Prepared Qty</th>
+                        <th>Delivered Qty</th>
+                        <th>Pending Qty</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let order of BillDetail;let i = index;">
+                        <div *ngIf="BillDetail.length === 0  ; else detial23">
+                        </div>
+                        <ng-template #detial23>
+                            <td>{{i+1}}</td>
+                            <td>{{order.Icode}}</td>
+
+                            <td>{{order.Iname}}</td>
+                            <td>{{order.OrderedQty}}</td>
+                            <td>{{order.Uom}}</td>
+                            <td>{{order.PreparedQty}}</td>
+                            <td>{{order.DeliveredQty}}</td>
+                            <td>{{order.PendingQty}}</td>
+                        </ng-template>
+                    </tr>
+
+
+                </tbody>
+            </table>
+            <div *ngIf="BillDetail.length === 0"
+                style="text-align:center; white-space: nowrap;  color: #007bff; font-family: 'Oswald', sans-serif ;">
+                <div class="d-flex align-items-center justify-content-center mb-2">
+                  <div class="emklogo2"></div>
+                </div>
+                No Records Found
+            </div>
+        </div>
+        <!-- </div> -->
+
+    </div>
+    <div class="modal fade" id="holdexampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+        data-bs-backdrop='static' aria-hidden="true">
+        <div class="modal-dialog dialog1">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Customer Order Details
+                    </h5>
+                    <button type="button" class="btn-close" hidden #closeAddExpenseModal data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h4 class="text-center mt-3 text-info  font-weight: 600;color: darkslateblue;">SS Name : {{edCustomer}} / Order No :
+                        {{edOrderNo}} / Order Date : {{edOrderDate | date :'dd-MM-YYYY'}} </h4>
+                        <!-- / Order Value :
+                        {{edOrdervalue}} -->
+                    <div class="row m-1">
+
+                        <div class="form-group col-md-4">
+                            <label class="label-head label-head1 fw-bold">Icode</label>
+                            <input class="form-control" type="text" name="edCode" [(ngModel)]="edCode" id="edCode"
+                                autocomplete="off" [disabled]='auth' (keypress)="keyPressNum($event)" (keydown)="keycode($event)" >
+                        </div>
+                        <div class="form-group col-md-8">
+                            <label class="label-head label-head1 fw-bold">Iname</label>
+                            <input class="form-control" type="text" name="edname" [(ngModel)]="edname" id="edname"
+                                autocomplete="off"   [matAutocomplete]="itemName"
+                                (ngModelChange)="changeload($event)"
+                                [disabled]='auth'>
+                                <mat-autocomplete  #itemName="matAutocomplete">
+                                  <mat-option *ngFor="let item of itemNameData" [value]="item.iname" (onSelectionChange)="getItemDetails($event,e)">
+                                  {{item.iname}}
+                                  </mat-option>
+                              </mat-autocomplete>
+                              <!-- [formControl]="itemNameCtrl" -->
+                        </div>
+                        <div *ngIf="editval =='Edit'" class="form-group col-sm-3">
+                            <label class="label-head label-head1 fw-bold">OldQty</label>
+                            <input class="form-control" type="number" name="edQty" [(ngModel)]="edQty" id="edQty"
+                                autocomplete="off" disabled>
+                        </div>
+                        <div class="form-group col-sm-3">
+                            <label class="label-head label-head1 fw-bold">NewQty</label>
+                            <input class="form-control" type="number" name="nqty" [(ngModel)]="nqty" id="nqty"
+                                autocomplete="off" (keyup)="changesave($event)" (keydown)="keytab($event,'branch1')">
+                        </div>
+                        <div class="form-group col-sm-3">
+                            <label class="label-head label-head1 fw-bold">Rate</label>
+                            <input class="form-control" type="number" name="edRate" [(ngModel)]="edRate" id="edRate"
+                                autocomplete="off" disabled>
+                        </div>
+                        <div class="form-group col-sm-3">
+                            <label class="label-head label-head1 fw-bold">Value</label>
+                            <input class="form-control" type="number" name="edvalue" [(ngModel)]="edvalue" id="edvalue"
+                                autocomplete="off" disabled>
+                        </div>
+
+                    </div>
+                      <div *ngIf="itemImg !=''" class="d-flex align-items-center justify-content-center">
+                          <img src={{itemImg}} alt="" style="width: 100px;">
+                      </div>
+                    <div class="text-center my-3">
+                        <button *ngIf="editval =='Edit'" mat-raised-button type="submit" class="btn btn-primary"
+                            id="branch1" (click)="dddata()">Update</button>
+                        <button *ngIf="editval =='Add'" mat-raised-button type="submit" class="btn btn-primary"
+                            id="branch1" (click)="dddata()">Add</button>
+                        <button mat-raised-button type="reset" class="btn btn-primary ms-2" id="sbutton"
+                            (click)="hrclear()">Cancel</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

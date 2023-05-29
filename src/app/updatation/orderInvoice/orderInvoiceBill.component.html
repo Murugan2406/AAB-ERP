@@ -1,0 +1,601 @@
+<div style="position: fixed; inset:0; backdrop-filter: blur(1.1px); z-index: 100000 !important;"
+  class="d-flex align-items-center justify-content-center" *ngIf="isload">
+  <img src="assets/gImg/output.gif" style="width:100px; margin: auto;">
+
+</div>
+<div class="watermark" *ngIf="additionalText !== ''">
+  <div class="gInputLable-18">Item rate check mode is enabled. For billing, use billing mode. To change billing mode, press  <b style="    border: 0.5px solid black;
+    padding: 0 10px;">F2</b> key.</div>
+  <!-- <img src="../../assets/gImg/AUTHORITY.png" > -->
+  <img alt="itemRateCheckMode" src='data:image/png;base64,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'/>
+</div>
+<div class="gWrapper">
+  <app-header [Titleheader]="tblSelected + additionalText" back="true" (BackClick)="goBack()"></app-header>
+  <button style="    position: absolute;
+  top: -7px;
+  right: 105px;
+  color: white;
+  height: 35px;" class="gHeaderBgColor" mat-icon-button [matMenuTriggerFor]="menu">
+    <mat-icon> more_vert </mat-icon>
+  </button>
+  <mat-menu #menu="matMenu" style="min-height: auto;">
+    <button type="button" mat-menu-item (click)="clearcart()"> Clear Cart </button>
+    <button type="button" mat-menu-item (click)="favItem()"> Favourite Items </button>
+    <button type="button" mat-menu-item (click)="getWMdata()" *ngIf="this.tblSelected === 'COUNTER BILLING'"> WeighingScale Data </button>
+    <button type="button" mat-menu-item (click)="itemRateCheck()"       *ngIf="itemGetFor !== 'ItemRateCheck'"> Items Rate Check </button>
+    <button type="button" mat-menu-item (click)="closeItemRateCheck()"  *ngIf="itemGetFor === 'ItemRateCheck'"> Items Rate Check Close </button>
+    <button type="button" mat-menu-item (click)="viewShortcut = true"  >Keyboard Shortcuts </button>
+  </mat-menu>
+
+  <div *ngIf="dragToggle" style="position: fixed; inset: 0; backdrop-filter: blur(1px); z-index: 99;"> </div>
+  <div *ngIf="dragToggle">
+    <div class="shadow-sm col-12 col-sm-11 col-md-8 col-lg-6 col-xl-5"
+      style="height: 100vh;position: fixed;right: 0;background: transparent;z-index: 100;backdrop-filter: blur(10px); overflow: auto;">
+      <div class="p-0 gModalContent "
+        style="padding: 0 !important; border-radius: 0 !important; position: sticky; top: 0; z-index: 100;">
+        <div class="gDialogTitle rounded-0">
+          <span></span> <!-- for center position -->
+          <div class="d-flex align-items-center gap-2">
+            <div>Favourite Items</div>
+            <div><mat-icon (click)="addItemdgle = !addItemdgle " style="cursor: pointer;">edit</mat-icon></div>
+          </div>
+          <button type="button" id="submit" class="gDialogCloseButton" data-bs-dismiss="modal"
+            (click)="favModelClose()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+      <div *ngIf="!addItemdgle">
+
+        <mat-accordion>
+          <mat-expansion-panel hideToggle *ngFor="let group of favItemsList; index as i" [expanded]="step === i"
+            (opened)="setStep(i)" class="gTableHeaderColor" style="background: transparent; margin: 0 3px !important;">
+            <mat-expansion-panel-header (click)="favItemId.deselectAll()">
+              <mat-panel-title>
+                <div class="gInputLable">{{group.groupName}}</div>
+              </mat-panel-title>
+
+            </mat-expansion-panel-header>
+            <mat-selection-list #favItemId style="max-height: calc(100vh - 250px);overflow: auto;" [multiple]="true"
+              (selectionChange)="selcChange($event)">
+              <div class="d-flex align-items-center gap-1" *ngFor="let item of group.data; index as j">
+                <mat-list-option style="font-size: 14px;font-family:  system-ui;height:34px;font-weight: 600;"
+                  (onSelectionChange)="selectedList($event,item,j)" [value]="item">
+                  <div class="row  p-0 m-0">
+                    <div class="col-10" style="font-size: 14px;font-family: system-ui;font-weight: 600;">
+                      {{item.Icode +" - "+ item.Iname}}
+                    </div>
+
+                    <div class="col-2 d-flex align-items-center gap-2">
+                      <div style="font-size: 14px;font-family: system-ui;font-weight: 600;">{{item.rate | currency :
+                        'INR':'symbol'}}</div>
+                    </div>
+                  </div>
+                </mat-list-option>
+                <div *ngIf="item.selected" class="d-flex align-items-center" style="text-align-last: end;">
+                  <div class="quantity" style="width: 88px">
+                    <button *ngIf="item.Qty <= 1 " class="plus-btn" type="button" name="button2">
+                    </button>
+                    <button *ngIf="item.Qty >= 1.000001 " class="plus-btn" type="button" name="button2"
+                      (click)="favQtyIncDnc((item.Qty-0) - (1-0),item)">
+                      <i class="fa fa-minus" aria-hidden="true"></i>
+                    </button>
+                    <input min="0.00" (keypress)="restrictNumericwithdot($event,item.uom)" (keydown)="keyEnter($event)"
+                      (focusout)="FavqtyWhenZeroFocus(item,item.Qty)" autocomplete="off"
+                      style="width: 40px; padding: 0 4px;" [id]="'favQtyField_'+i" [(ngModel)]="item.Qty"
+                      (ngModelChange)="favQtyIncDnc(item.Qty,item) ">
+                    <button class="plus-btn" type="button" name="button"
+                      (click)="favQtyIncDnc(((item.Qty - 0 ) + (1-0)),item) ">
+                      <i class="fa fa-plus" aria-hidden="true"></i>
+                    </button>
+                  </div>
+                  <div class="d-flex align-items-center gap-1">
+
+                    <div style="min-width: 10px; font-size: 15px;" class="gInputLable">P</div>
+                    <input style="width: 16px;height: 16px;border: 2px solid;border-radius: 2px;" type="checkbox"
+                      [(ngModel)]="item.checked" name="list_name" value="m1" (change)="changeParcel($event,item)"
+                      [disabled]="tblSelected === 'PARCEL BILLING'" />
+                  </div>
+                </div>
+              </div>
+
+            </mat-selection-list>
+            <div class="col-12 mt-2 m-0 p-0 mb-2">
+              <button class="gNormalButton " type="button" *ngIf="favItemsList.length > 0 && selectedFavItem.length > 0"
+                style="width: 100% !important;" (click)="addFavItemToOrderList(selectedFavItem,'Icode')">{{selectedFavItem.length == 1 ? '➕ Add item' : '➕ Add ' + selectedFavItem.length +' items'}}</button>
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+      <ng-container *ngIf="addItemdgle">
+        <form [formGroup]="favItemSelection" style="position: relative;">
+          <div id="CodeMain" class="row p-0 m-0  mx-2 bg-transparent shadow mt-2" style="padding-bottom: 8px !important;border-radius: 15px; overflow: hidden;" >
+            <div class="gModalContent "
+              style="padding: 0  !important; border-radius: 0 !important; background-color: transparent !important;">
+              <div class="gDialogTitle rounded-0"
+                style="padding:4px 5px !important; border-radius: 15px 15px 0 0 !important; background-color: transparent !important;">
+                <span></span> <!-- for center position -->
+                <span>Add Fav Item</span>
+                <button type="button" class="gDialogCloseButton" data-bs-dismiss="modal" (click)="addItemdgle = false">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+            </div>
+            <div class="col-9 px-1">
+              <label for="itemNameSel" class="gInputLable">Group Name</label>
+
+              <input type="text" class="gInnerInput" formControlName="grpName" id="itemNameSel"
+                [matAutocomplete]="auto155">
+              <mat-autocomplete #auto155="matAutocomplete" class='gAutoCompleteContainer'
+                (optionSelected)='viewFavGroupItems()'>
+                <mat-option *ngFor="let group of viewFavGroupName " class="option gSelectOption"
+                  [value]="group.GrpName">{{group.GrpName}}</mat-option>
+              </mat-autocomplete>
+
+            </div>
+            <div class="col-3 px-1">
+              <label for="icodeSel" class="gInputLable">Item Code</label>
+              <div class="gOuterInput" style="background-color:transparent !important; gap:4px">
+                <input type="text" maxlength="6" inputmode="numeric" class="gInnerInput" formControlName="icodeSel"
+                  id="icodeSel" #icodeSel (keypress)="restrictNumeric($event)" autocomplete="off" (keydown)="onFavIcodeKeydown($event)">
+
+                <button class="gInputButton" mat-button value=">>" id="itemNameget" type="button"
+                  (click)="favItemCodeDetails()" style="line-height: 15px !important;">
+                  <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+            <div class="col-9 px-1">
+              <label for="itemNameSel" class="gInputLable">Item Name</label>
+              <input type="text" class="gInnerInput" formControlName="itemNameSel" id="itemNameSel"
+                [matAutocomplete]="auto1125">
+              <mat-autocomplete #auto1125="matAutocomplete" class='gAutoCompleteContainer'
+                (optionSelected)='getSelectFavItemcode($event.option.viewValue)'>
+                <mat-option *ngFor="let item of searchItmresult" class="option gSelectOption"
+                  [value]="item?.iname">{{item?.iname + ':' + item?.icode
+                  }}
+                </mat-option>
+              </mat-autocomplete>
+
+            </div>
+            <div class="col-3 px-1" style="max-width: 150px;">
+              <label for="rateSel" class="gInputLable">Rate</label>
+              <div class="gOuterInput">
+                <div class="d-flex align-items-center justify-content-center m-0 p-0 gap-1">
+                  <input type="text" class="gInnerInput" formControlName="rateSel" id="rateSel">
+                </div>
+                <button class="gInputButton" mat-button value=">>" id="itemNameget"
+                  style="line-height: 15px !important;" type="button" id="addFavItemId"
+                  (click)="addFavGroupItems(favItemSelection.get('icodeSel').value)">
+                  <i class="fa fa-save" aria-hidden="true"></i>
+                </button>
+
+              </div>
+            </div>
+
+          </div>
+        </form>
+        <div class="gInnerTable mx-2 mt-1 " style="border-radius: 15px; max-height: calc(100vh - 220px);"
+          *ngIf="viewFavGroupData.length > 0">
+          <table class="gNormalTable-sm">
+            <thead>
+              <tr>
+                <th>Icode</th>
+                <th>Iname</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of viewFavGroupData">
+                <td>{{item.Icode}}</td>
+                <td>{{item.Iname}}</td>
+                <td> <mat-icon class="closeBtnEmk cursor-pointer" style="font-size: 22px; width: 10px;"
+                    (click)="removeFavItem(item)">close</mat-icon>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <div class="modal  mt-5" id="itemNamelist" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content gModalContent">
+        <div class="gDialogTitle">
+          <span></span> <!-- for center position -->
+          <span>Item Search</span>
+          <button type="button" id="submit" class="gDialogCloseButton" data-bs-dismiss="modal">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+        <div class="modal-body gDialogContainer p-3">
+          <div class="row m-0 p-0">
+            <div class="col-sm-12 m-0 p-0">
+              <div class="row m-0 p-0">
+                <div class="col-sm-12 m-0 p-0">
+                  <input autocomplete="off" matInput [formControl]="searchItemFc" [matAutocomplete]="auto15"
+                    class=" m-0 gInnerInput-border" id="searchItemFc1">
+                  <mat-autocomplete #auto15="matAutocomplete" class='gAutoCompleteContainer'
+                    (optionSelected)='getSelectedItemcode($event.option.viewValue)'>
+                    <mat-option *ngFor="let item of searchItmresult" class="option gSelectOption"
+                      [value]="item?.iname">{{item?.iname + ':' + item?.icode
+                      }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<div  *ngIf="viewShortcut" [style.display]="viewShortcut ? 'block' : 'none'" class="modal" Id="exampleModal1" tabindex="-1" style="backdrop-filter: blur(0.5px) brightness(0.5)">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content gModalContent">
+    <div class="gDialogTitle">
+        <span></span> <!-- for center position -->
+        <span>Keyboard Shortcuts</span>
+        <button type="button" class="gDialogCloseButton"  (click)="viewShortcut = false">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <div class="modal-body gDialogContainer ">
+        <div class="gTableSection">
+          <div class="gInnerTable">
+            <table class="gNormalTable-md">
+              <thead>
+                <tr class="profit_table">
+                  <th style="text-align-last: start;width: 15px;">S.No</th>
+                  <th>Key combination</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let shortcut of shortcutData; let i = index">
+                  <td>{{i+1}}</td>
+                  <td>{{shortcut.keys}}</td>
+                  <td>{{shortcut.description}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  <div class="mt-1">
+    <form [formGroup]="tblItemSelection" style="position: relative;">
+      <div id="CodeMain" class="row p-0 m-0 gcardContainer mx-2 bg-transparent">
+        <div class="col-12 col-sm-4 col-md-3 col-lg-2 px-1">
+          <label for="icodeSel" class="gInputLable">Item Code</label>
+          <div class="gOuterInput" style="background-color:transparent !important; gap:4px">
+            <input type="text" maxlength="18"  placeholder=" Alt + I "
+              class="gInnerInput" formControlName="icodeSel" id="icodeSel" autocomplete="off"  #icodeSel (focus)="onFocus('focused')"
+              (blur)="onFocus('')"  (keydown)="onIcodeKeydown($event)">
+              <!-- (keypress)="restrictNumeric($event)"  inputmode="numeric" pattern="[0-9]" -->
+            <button class="gInputButton" mat-button value=">>" id="itemNameget" type="button"
+              (click)="selectItemFirst('Icode')" style="line-height: 15px !important;">
+              <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+        <div class="col-12 col-sm-8 col-md-9 col-lg-4 px-1">
+          <label for="itemNameSel" class="gInputLable">Item Name</label>
+          <div class="gOuterInput" style="background-color:transparent !important; gap:4px">
+            <input type="text" placeholder=" Alt + V " class="gInnerInput" formControlName="itemNameSel"
+              id="itemNameSel">
+            <button class="gInputButton" style="line-height: 15px !important;" type="button" mat-button value=">>"
+              (click)="itmSearchClick()">
+              <i class="fa fa-search" style="font-size: 15px !important;" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 col-lg-1 px-1" style="max-width: 150px;">
+          <label for="rateSel" class="gInputLable">Rate</label>
+          <div class="d-flex align-items-center justify-content-center m-0 p-0 gap-1">
+            <input type="text" class="gInnerInput" formControlName="rateSel" id="rateSel">
+            <label for="itemNameSel" class="gInputLable">{{tblItemSelection.get('uomSel').value}}</label>
+          </div>
+        </div>
+        <div class="col-6 col-sm-4 col-md-4 col-lg-2 col-xl-1 px-1">
+          <label for="qtySel" class="gInputLable">Qty</label>
+          <div class="d-flex align-items-center justify-content-center m-0 p-0 gap-1">
+            <input  maxlength="5" inputmode="numeric" pattern="[0-9]" class="gInnerInput"
+              formControlName="qtySel" id="qtySel" #qtySel  (dragleave)="onDragStart($event)"
+              (keypress)="restrictNumericwithdot($event,tblItemSelection.get('uomSel').value)"
+              (keydown)="onQtyKeydown($event)">
+            <button type="button" class="gInputButton" mat-button
+              style="white-space: nowrap;line-height: 15px !important;" value="Add Item" id="btnNext"
+              (click)="selectedArgsFirst()">
+
+              <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+        <div class="col-12  col-sm-4 col-md-5 col-lg-2 px-1 align-self-end"
+        [ngClass]="{'col-6': tblSelected == 'COUNTER BILLING','col-12': tblSelected !== 'COUNTER BILLING'}"
+        style="margin-top: -4px;max-width: 80px;">
+          <mat-checkbox class="my-0 gInnerInput-border border-0" formControlName="parcelSel" id="parcelSel"
+            (change)="selectItem('Icode')" style="max-width: 80px; background-color: transparent !important;">
+            Parcel
+          </mat-checkbox>
+        </div>
+
+        <div class="col-12  col-sm-4 col-md-5 col-lg-2 px-1 align-self-end" *ngIf="tblSelected !== 'COUNTER BILLING'"
+          style="margin-top: -4px;     max-width: 180px;">
+          <label for="itemDesc" class="gInputLable "
+            [ngStyle]="{'margin-bottom': tblItemSelection.get('descSel').value ? '0' : '3px'}">
+            <mat-checkbox class="gInnerInput-border border-0" formControlName="descSel"
+              style="max-width: 80px;     background-color: transparent !important;"> Description </mat-checkbox>
+          </label>
+          <select class="gInnerInput" *ngIf="tblItemSelection.get('descSel').value" formControlName="itemDesc"
+            id="itemDesc">
+            <option *ngFor="let itm of myItemDescs" [value]="itm?.SplDesc"> {{itm?.SplDesc}} </option>
+          </select>
+        </div>
+
+
+        <div class="col-12 col-sm-3 col-md-4 col-lg-1 px-1 align-self-end" [ngClass]="{'col-lg-2 col-6 col-md-4 col-sm-3': tblSelected == 'COUNTER BILLING','col-lg-1 col-12 col-md-1 col-sm-1': tblSelected !== 'COUNTER BILLING'}" style="margin-bottom: 3px;">
+          <div class="d-flex justify-content-end align-items-center">
+            <button type="button" class="gInputButton border-0" style="min-width: 65px !important;white-space: nowrap;
+                padding: 5px 4px !important;" (click)="favItem()"> <i class="fa fa-heart" aria-hidden="true"></i>
+              Fav
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex align-items-center justify-content-start gap-1 m-0 p-0 position-absolute"
+        style="top: 0; right: 15px;" *ngIf="tblSelected == 'COUNTER BILLING'">
+        <div class="weignScalInd" [ngStyle]="{'background-color':invPreReqData[0]?.WMLockedYesNo == 'No' ? 'red' : 'green'}"></div>
+        <div class="gInputLable" style="font-size: 12px !important;">WeighingScale</div>
+      </div>
+    </form>
+  </div>
+
+  <div class="gTableSection mx-2 mt-1">
+    <div class="gInnerTable" [style]="'max-height: calc(100vh - '+ tableHeight +'px);'">
+      <table class="gNormalTable-md">
+        <thead>
+          <tr class="profit_table">
+            <th style="text-align-last: start;width: 15px;">S.No</th>
+            <th style="text-align-last: start;width: 15px;">Code</th>
+            <th style="text-align-last: start;">Item</th>
+            <th style="text-align-last: center;width: 15px;">Qty</th>
+            <th style="text-align-last: start;width: 15px;"></th>
+            <th style="text-align-last: start;width: 15px;"></th>
+            <th style="text-align-last: end; width: 15px;">Rate</th>
+            <th style="text-align-last: end; width: 15px;">Uom</th>
+            <th style="text-align-last: end; width: 140px;">Value</th>
+            <ng-container *ngIf="expand">
+              <th style="text-align-last: end; width: 15px;">Disc %</th>
+              <th style="text-align-last: end; width: 15px;">Disc Amt </th>
+              <th style="text-align-last: end; width: 15px;">Taxable Amt</th>
+              <th style="text-align-last: end; width: 15px;">Gst %</th>
+              <th style="text-align-last: end; width: 15px;">SGST Amt</th>
+              <th style="text-align-last: end; width: 15px;">CGST Amt</th>
+              <th style="text-align-last: end; width: 15px;">Gst Amt</th>
+              <th style="text-align-last: end; width: 15px;">Gross Amt</th>
+            </ng-container>
+            <th style="text-align-last: end; width: 15px;">
+              <span matTooltip="{{!expand ? 'Maximize Tax Details' : 'Minimize Tax Details'}}"
+                (click)="expand = !expand"
+                style="cursor: pointer;border: 1px solid;padding: 1px 10px; position: relative; margin: 0 0 0 6px;">
+                <mat-icon style="font-size: 23; rotate: 90deg;position: absolute;top: -2px;left: -2px;"> {{!expand ?
+                  'unfold_more' : 'unfold_less' }}</mat-icon>
+              </span>
+            </th>
+          </tr>
+        </thead>
+
+
+        <tbody>
+          <tr *ngFor="let item of items; let i = index">
+            <td>{{i+1}}</td>
+            <td>{{item.itemCode}}</td>
+            <td>
+              {{(item?.itemPNP == "NP") ? item?.itemName : item?.itemName + '- Parcel'}}
+            </td>
+            <td style="text-align-last: end;">
+              <div class="quantity" *ngIf="item.itmEditAlw ==='Allow'; else notEditable">
+                <button *ngIf="item.argQty <= 1 " class="plus-btn" type="button" name="button2"
+                  (click)="removeItemFromTable(i)">
+                  <i class="fa fa-trash" aria-hidden="true"></i>
+                </button>
+                <button *ngIf="item.argQty >= 1.000001 " class="plus-btn" type="button" name="button2"
+                  (click)="qtyIncDnc((item.argQty-0) - (1-0),item.itemRate,i)">
+                  <i class="fa fa-minus" aria-hidden="true"></i>
+                </button>
+                <input min="0.00" maxlength="5" (keypress)="restrictNumericwithdot($event,item.uom)"
+                  (keydown)="keyEnter($event)" (focusout)="qtyWhenZeroFocus(i,item.argQty)" autocomplete="off"
+                  style="width: 60px; padding: 0 8px;" [id]="'qtyField_'+i" [(ngModel)]="item.argQty"
+                  (ngModelChange)="qtyIncDnc(item.argQty,item.itemRate,i) ">
+                <button class="plus-btn" type="button" name="button"
+                  (click)="qtyIncDnc(((item.argQty - 0 ) + (1-0)),item.itemRate,i) ">
+                  <i class="fa fa-plus" aria-hidden="true"></i>
+                </button>
+
+              </div>
+              <ng-template #notEditable>
+                <div class="quantity" style="font-size: 14px;padding-right: 30px; color:#000 !important">{{item.argQty}}</div>
+              </ng-template>
+            </td>
+            <td> <b> {{(item?.itemPNP == "NP") ?'':'P'}} </b></td>
+            <td style="text-align-last: end;">
+              <div class="delImageCls">
+                <i class="fa fa-trash" style="cursor: pointer;" aria-hidden="true"
+                  (click)="item.itemGetFrom==='WMGet'? removeWMItemFromArray([item],i): removeItemFromTable(i)"></i>
+              </div>
+            </td>
+            <td style="text-align: right;">{{item.itemRate.toFixed(2) }} </td>
+            <td> {{item.uom}}</td>
+            <td style="text-align: right;">
+              <div class="total-price" style="font-weight: 650;">
+                {{item.itemTotal .toFixed(2) }}
+              </div>
+            </td>
+            <ng-container *ngIf="expand">
+              <td style="text-align: right;"> {{item.itemDisc }} %</td>
+              <td style="text-align: right;"> {{item.itemDiscAmt .toFixed(2)}}</td>
+              <td style="text-align: right;"> {{item.itemTaxableAmt .toFixed(2)}}</td>
+              <td style="text-align: right;"> {{item.itemGst}} %</td>
+              <td style="text-align: right;"> {{item.itemSgstIgstAmt .toFixed(2)}}</td>
+              <td style="text-align: right;"> {{item.itemCgstAmt .toFixed(2)}}</td>
+              <td style="text-align: right;"> {{item.itemGstAmt .toFixed(2) }}</td>
+              <td style="text-align: right;"> {{item.itemGrossAmt .toFixed(2) }}</td>
+            </ng-container>
+
+            <td style="text-align: center;"></td>
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+  <div>
+    <div class="clAccRejA" *ngIf="varRejectOpt">
+      <button type="button" class="checkoutA" (click)="rejectRequest()">Reject Order</button>
+    </div>
+    <button type="button" hidden id="modalView" data-bs-toggle="modal" data-bs-target="#updateModal"></button>
+  </div>
+  <div class=" " style="position: fixed; bottom:0; left:0; right:0;">
+    <div class="gcardContainer mx-2">
+      <form [formGroup]="customerSelection">
+      <div class="row p-0 m-0">
+        <div  class="col-6 col-sm-2 col-md-2 col-lg-2 col-xl-1" [hidden]="tblSelected !== 'COUNTER BILLING'">
+          <label for="itemNameSel" class="gInputLable">Sales Man</label>
+          <input (keypress)="restrictNumericwithdot($event,'UOM')" [maxLength]="4"
+          (keyup)="keyFocus($event)"
+          formControlName="salesMan" (ngModelChange)="salesManSelect($event)"  type="text"
+            id="salesManId" class="gInnerInput">
+        </div>
+
+
+        <div class="col-4 col-sm-3 col-lg-2 align-self-end" style="min-width: 130px;
+        max-width: 130px;">
+          <mat-slide-toggle (change)="onChangeslide($event)" [checked]="custdivsel">
+            <div class="gInputLable">Customer</div>
+          </mat-slide-toggle>
+        </div>
+        <div class="col-8 col-sm-3 col-md-2 col-lg-2 col-xl-1" *ngIf="!custdivsel">
+          <label for="itemNameSel" class="gInputLable">Discount(%)</label>
+          <input (keyup)="keyFocus($event)" (keypress)="restrictNumericwithdot($event,'KGS')" maxlength="5" formControlName="discPernt"
+            (ngModelChange)="discountChange($event)" id="discountId" placeholder="Alt + Z" type="text"
+            class="gInnerInput">
+        </div>
+          <div class="col-8 col-lg-3" id="ItmSearch" *ngIf="custdivsel">
+          <label class="gInputLable" for="searchItemFc">Search Customer</label>
+          <input type="text" class="gInnerInput-border" id="searchItemFc" aria-label="Number" matInput
+          formControlName="searchCustomerFc" [matAutocomplete]="auto">
+          <!-- (optionSelected)='getSelectedCustcode($event.option.viewValue)' -->
+          <mat-autocomplete #auto="matAutocomplete" >
+            <mat-option *ngFor="let item of searchItmresult" [value]="item?.custname" (onSelectionChange)="getSelectedCustcode($event, item)">
+              {{ item?.custname + ':' + item?.custcode }}
+            </mat-option>
+          </mat-autocomplete>
+        </div>
+        <div class="col-4  col-md-2 col-lg-2 col-xl-1" *ngIf="custdivsel == true">
+        <label class="gInputLable" for="discPernt">Disc Appr %</label>
+            <div class="gOuterInput" style="background-color: transparent !important;
+            gap: 3px;">
+            <input type="text" class="gInnerInput-border"style="margin: 0px 0 !important;" id="discPernt"
+            formControlName="discPernt" (keyup)="keyFocus($event)"  (keypress)="restrictNumericwithdot($event,'KGS')" maxlength="5" (ngModelChange)="discountChange($event)"
+              #discPernt>
+              <button type="button" class="gInputButton border-0" value="Check Discount" (click)="checkDisc()"><i class="fa fa-refresh"></i></button>
+        </div>
+        </div>
+      </div>
+    </form>
+      <div class="gTableSection">
+        <div class="gInnerTable">
+          <table class="gNormalTable-md   border-0" style="text-align:right !important">
+            <thead>
+              <tr>
+                <th>Total</th>
+                <th>Discount</th>
+                <th>Taxable</th>
+                <ng-container *ngIf="expand">
+                  <th>SGST</th>
+                  <th>CGST</th>
+                  <th>Cess</th>
+                  <th>TCS</th>
+                  <th>Coinage</th>
+                </ng-container>
+                <th>Total Tax</th>
+                <th>Payable Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{total }}</td>
+                <td>{{totdis.toFixed(2)}}</td>
+                <td>{{totalTaxable.toFixed(2) }}</td>
+                <ng-container *ngIf="expand">
+                  <td>{{(totalSgstamt)?.toFixed(2) }}</td>
+                  <td>{{totalCgstamt?.toFixed(2) }}</td>
+                  <td>{{toalCessamt?.toFixed(2) }}</td>
+                  <td>0</td>
+                  <td>{{totalCoinage }}</td>
+                </ng-container>
+                <td>{{gstTotal }}</td>
+                <td>{{toPay.toFixed(2)}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="toPay > 0" class="gHeader d-block" style=" height: auto !important;">
+      <mat-grid-list cols="2" rowHeight="40px">
+        <mat-grid-tile [colspan]="1" [rowspan]="1"> {{totQtyCntDisply}} Items {{toPay | currency:'INR':'symbol' }}
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="1" [rowspan]="1" #confirmSub (click)="kotFormSubit()" style="cursor: pointer;">
+          Confirm </mat-grid-tile>
+      </mat-grid-list>
+    </div>
+  </div>
+  <div  *ngIf="wmDataShow" [style.display]="wmDataShow ? 'block' : 'none'" class="modal" Id="exampleModal1" tabindex="-1">
+    <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content gModalContent">
+            <div class="gDialogTitle">
+                <span></span>  <!-- for center position -->
+                <span>WeighingScale Machine Data</span>
+                <button type="button" id="submit" class="gDialogCloseButton" data-bs-dismiss="modal" (click)="wmDataShow = false">
+                    <mat-icon >close</mat-icon>
+                </button>
+            </div>
+            <div class="modal-body gDialogContainer">
+              <mat-card class="rounded-3" style="padding: 6px; box-shadow:none;">
+                <div class="gTableSelection">
+                    <div class="gTableActionheaders">
+                      <button type="button" class="gNormalButton" (click)="removeWMData()">Remove All WM Datas</button>
+                    </div>
+                    <div class="gInnerTable">
+                      <table class="gNormalTable-md">
+                        <thead>
+                          <tr>
+                            <th *ngFor="let header of wmDataHeader">{{header}}</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let data of weighingMechineData">
+                              <td *ngFor="let header of wmDataHeader">{{data[header]}}</td>
+                            </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                </div>
+              </mat-card>
+              </div>
+        </div>
+    </div>
+  </div>
+
+
+
+</div>

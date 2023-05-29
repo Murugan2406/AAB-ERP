@@ -1,0 +1,499 @@
+
+
+<div class="loading"  *ngIf="progressval == 'indeterminate' || progressval1 == 'indeterminate1'"
+    style="position: fixed; top:0; bottom: 0; left: 0; right: 0; z-index: 10001 !important; backdrop-filter: blur(3px);">
+
+    <div class="pendulum-container">
+
+        <div class="ball-first">
+            <div id="ball-1" class="first"></div>
+            <div id="shadow-1" class="first-shadow"></div>
+        </div>
+        <div id="ball-2"></div>
+
+        <div id="ball-5"></div>
+        <div id="ball-6"></div>
+        <div class="ball-first">
+            <div id="ball-7" class="last"></div>
+            <div id="shadow-2" class="last-shadow"></div>
+        </div>
+    </div>
+
+</div>
+
+<div class="gWrapper gNewWrapper1">
+    <!-- <div class="reqhead "
+    *ngIf="globals.gmainMenuSelected=='FinishedPrd' && _defaultData.PrdnBatchSelMnlMech=='Barcode'">
+    Production Barcode - [Mech]
+</div>
+<div class="reqhead "
+    *ngIf="globals.gmainMenuSelected=='FinishedPrd' && _defaultData.PrdnBatchSelMnlMech !== 'Barcode'">
+    Production Barcode - [Manual]
+</div>
+<div class="reqhead " *ngIf="globals.gmainMenuSelected=='IssueOnlyToproduct'">
+    Individual Issues Only - [Not A Production Entry]
+</div>
+<div class="reqhead " *ngIf="globals.gmainMenuSelected=='Prdn_IssueBOTH'">
+    Production With Issue - [Both Entry]
+</div> -->
+    <app-header Titleheader="Production Barcode - [Mech]" back="true" (BackClick)="backNavigation()"
+    *ngIf="globals.gmainMenuSelected=='FinishedPrd' && _defaultData.PrdnBatchSelMnlMech=='Barcode'"></app-header>
+
+    <app-header Titleheader="Production Barcode - [Manual]" back="true" (BackClick)="backNavigation()"
+    *ngIf="globals.gmainMenuSelected=='FinishedPrd' && _defaultData.PrdnBatchSelMnlMech !== 'Barcode'"></app-header>
+    
+    <app-header Titleheader="Individual Issues Only - [Not A Production Entry]" back="true" (BackClick)="backNavigation()"
+    *ngIf="globals.gmainMenuSelected=='IssueOnlyToproduct'"></app-header>
+
+    <app-header Titleheader="Production With Issue - [Both Entry]" back="true" (BackClick)="backNavigation()"
+    *ngIf="globals.gmainMenuSelected=='Prdn_IssueBOTH'"></app-header>
+
+
+
+    <div class="content mt-1">
+        <div class="example-container" *ngIf="isOption == 'ViewAll'">
+            <app-production-view></app-production-view>
+        </div>
+        <div class="example-container" *ngIf="isOption == 'TrackItem'">
+            <app-track-item></app-track-item>
+        </div>
+
+        <div class="example-container" *ngIf="isOption == 'DcRaise'">
+            <app-dcraise></app-dcraise>
+        </div>
+        <div class="example-container" *ngIf="isOption == 'Save'">
+            <div class="d-flex row mx-1" style="margin-top:1%;">
+                <div class="col-12 col-md-12 col-lg-7 col-xl-7">
+                    <div class="newCard mt-2">
+
+       
+                        <!-- <div class="reqhead "
+                            *ngIf="globals.gmainMenuSelected=='FinishedPrd' && _defaultData.PrdnBatchSelMnlMech=='Barcode'">
+                            Production Barcode - [Mech]
+                        </div>
+                        <div class="reqhead "
+                            *ngIf="globals.gmainMenuSelected=='FinishedPrd' && _defaultData.PrdnBatchSelMnlMech !== 'Barcode'">
+                            Production Barcode - [Manual]
+                        </div>
+                        <div class="reqhead " *ngIf="globals.gmainMenuSelected=='IssueOnlyToproduct'">
+                            Individual Issues Only - [Not A Production Entry]
+                        </div>
+                        <div class="reqhead " *ngIf="globals.gmainMenuSelected=='Prdn_IssueBOTH'">
+                            Production With Issue - [Both Entry]
+                        </div> -->
+                        <div>
+                        <div class="row mx-1" style="padding-bottom: 10px;"
+                            *ngIf="globals.gmainMenuSelected !=='IssueOnlyToproduct'">
+                            <div class="col-12">
+                                <label class="gInputLable">Production Batch No </label>
+                            </div>
+                            <div class="col-10 col-md-6">
+                                <input type="text" [matAutocomplete]="auto1" [formControl]="batchnumControl" class="gNewInput"
+                                    [ngClass]="{'disable-input':_defaultData.PrdnBatchSelMnlMech=='Barcode'|| _defaultData.PrdnBatchSelMnlMech=='Scan'}"
+                                    id="batchno" name="batchno" [readOnly]="_defaultData.PrdnBatchSelMnlMech=='Barcode'|| _defaultData.PrdnBatchSelMnlMech=='Scan'">
+                                <mat-autocomplete class="gAutoCompleteContainer" #auto1="matAutocomplete"
+                                    (optionSelected)='getSelectedBatch($event.option.viewValue)'>
+                                    <mat-option *ngFor="let item of batch_list" [value]="item?.BatchName" class="gSelectOption">
+                                        {{item?.BatchName}}</mat-option>
+                                </mat-autocomplete>
+                            </div>
+                            <div class="col-2 " *ngIf="_defaultData.PrdnBatchSelMnlMech!=='Manual'">
+                                <button type="button" id="scanBtn" class="InfoButton"
+                                    (click)="open_BatchSelecPopup()">
+                                    <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                            <div class="col-12 col-md-3" *ngIf="globals.gmainMenuSelected=='FinishedPrd'">
+                                <mat-checkbox (change)="locationChange()" [(ngModel)]="addDespatch"
+                                    class="example-margin gInputLable">Add To
+                                    Despatch Location</mat-checkbox>
+                            </div>
+                        </div>
+
+                        <div class="row mx-1" style="padding-bottom: 10px;"
+                            *ngIf="globals.gmainMenuSelected !== 'FinishedPrd'">
+                            <div class="col-12 col-xl-6 ">
+                                <label class="gInputLable">Production Issue To Batch</label>
+                      
+                                <input type="text" [matAutocomplete]="auto6" [formControl]="issuebatchnumControl"
+                                    id="issue_batch" name="issue_batch" class="gNewInput">
+                                <mat-autocomplete class="gAutoCompleteContainer"  #auto6="matAutocomplete"
+                                    (optionSelected)='getSelectIssueBatch($event.option.viewValue)'>
+                                    <mat-option *ngFor="let item of issue_batch_list" [value]="item?.BatchName"  class="gSelectOption">
+                                        {{item?.BatchName}}</mat-option>
+                                </mat-autocomplete>
+                            </div>
+                            <div class="col-12 col-xl-6 ">
+                                <label class="gInputLable">Production Issue To Item</label>
+                                <input type="text" [matAutocomplete]="auto7" [formControl]="issueItemControl"
+                                    id="issue_item" name="issue_item" class="gNewInput">
+                                <mat-autocomplete class="gAutoCompleteContainer"  #auto7="matAutocomplete"
+                                    (optionSelected)='getSelectedissueItem($event.option.viewValue)'>
+                                    <mat-option *ngFor="let item of issue_itemList" [value]="item?.iname"  class="gSelectOption">
+                                        {{item?.iname}}</mat-option>
+                                </mat-autocomplete>
+                            </div>
+                        </div>
+
+                        <div class="row mx-1" style="padding-bottom: 10px;"
+                            *ngIf="globals.gmainMenuSelected == 'FinishedPrd' && addDespatch">
+                            <div class="col-12">
+                                <label class="gInputLable">Despatch To</label>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <input type="text" [matAutocomplete]="auto2" [formControl]="branchControl" id="branch"
+                                    name="branch" class="gNewInput">
+                                <mat-autocomplete class="gAutoCompleteContainer"  #auto2="matAutocomplete"
+                                    (optionSelected)='getSelectedLocation($event.option.viewValue)'>
+                                    <mat-option *ngFor="let item of brname_list" [value]="item?.brname" class="gSelectOption">
+                                        {{item?.brname}}</mat-option>
+                                </mat-autocomplete>
+                            </div>
+                            <div class="col-3">
+                                <button class="linkButtons m-0" mat-button (click)="chooseDc_raise('DcRaise')">
+                                    <i class="fa fa-hand-o-right firstIcon" aria-hidden="true"></i>
+                                    <span class="gInputLable">DCRaise</span>
+                                    <i class="fa fa-caret-right" aria-hidden="true"></i>
+                                 </button>
+                            </div>
+                        </div>
+
+                        <div class="row mx-1" style="padding-bottom: 10px;">
+                            <div class="col-6 col-md-4">
+                                <label class="gInputLable">Item Code</label>
+                                <input type="text" [(ngModel)]="icode" id="icode" name="icode" autocomplete="off"
+                                    [ngClass]="{'disable-input':globals.gmainMenuSelected == 'FinishedPrd' && _defaultData.PrdnBatchSelMnlMech!=='Manual'}"
+                                    (keypress)="icode_keyPress($event)" (keydown)="enterKeyEvent($event, 'icode')"
+                                    class="gNewInput" [readonly]="globals.gmainMenuSelected == 'FinishedPrd' && _defaultData.PrdnBatchSelMnlMech!=='Manual'">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="gInputLable">Item Name</label>
+                                <input type="text" [matAutocomplete]="auto3" [formControl]="itemControl" id="item"
+                                    [ngClass]="{'disable-input':globals.gmainMenuSelected == 'FinishedPrd' && _defaultData.PrdnBatchSelMnlMech!=='Manual'}"
+                                    name="item" class="gNewInput"  [readonly]="globals.gmainMenuSelected == 'FinishedPrd' && _defaultData.PrdnBatchSelMnlMech!=='Manual'">
+                                <mat-autocomplete class="gAutoCompleteContainer"  #auto3="matAutocomplete"
+                                    (optionSelected)='getItemToIcode($event.option.viewValue)'>
+                                    <mat-option *ngFor="let item of itemList" [value]="item?.iname"  class="gSelectOption">
+                                        {{item?.iname}}</mat-option>
+                                </mat-autocomplete>
+                            </div>
+                            <div class="col-6 col-md-4">
+                                <label class="gInputLable">Label Size</label>
+                                <mat-select [(ngModel)]="label_size" id="label" name="label" class="gNewInput">
+                                    <mat-option *ngFor="let sizes of lebel_list" [value]="sizes.id" class="gSelectOption">{{sizes.Size}}
+                                    </mat-option>
+                                </mat-select>
+                            </div>
+                            <div class="col-6 col-md-4 mt-4" >
+                                <mat-checkbox [(ngModel)]="isClear" class="example-margin gInputLable">Clear & Batch
+                                </mat-checkbox>
+                            </div>
+                        </div>
+
+        
+
+                        <div class="row mx-1" style="padding-bottom: 10px;">
+                            <div   class="col-6 col-md-3">
+                                <label class="gInputLable">Gross Weight <span *ngIf="icode"> ( {{uom}} )</span>
+                                </label>
+                                <input type="text" [(ngModel)]="cross_weight" id="Cross" name="Cross" autocomplete="off"
+                                    (keyup)="netValueCalculate(['gross'])" (keydown)="enterKeyEvent($event, 'cross_weight')"
+                                    (keypress)="OnlyNumericDecimal($event, 'Cross_weight', $event.target.value)" class="gNewInput"
+                                    [ngClass]="{'disable-input':ManualorMachine!=='MANUAL'}" [readonly]="ManualorMachine!=='MANUAL'">
+                            </div>
+                            <div  *ngIf="ManualorMachine!=='MANUAL' && icode" class="col-6  col-md-2 mt-4">
+                                <!-- <button type="button" id="weightBtn" class="btn btn-sm btn-success"
+                                    (click)="getWeight()">
+                                    <i class="fa fa-refresh" aria-hidden="true"></i>
+                                </button> --><label class="gInputLable">&nbsp;&nbsp;</label>
+                                <button type="button" id="weightBtn" class="InfoButton "
+                                (click)="getWeight()">
+                                <i class="fa fa-refresh" aria-hidden="true" style="line-height: 18px;"></i>
+                            </button>
+                            </div>
+                            <div class="col-6  col-md-3 col-6" > 
+                                <label class="gInputLable">Tare Weight <span *ngIf="icode"> ( {{uom}}
+                                        )</span></label>
+                                <input type="text" [(ngModel)]="tare_weight" id="Tare" name="Tare" autocomplete="off"
+                                    (keyup)="netValueCalculate('Tare')" (keypress)="OnlyNumericDecimal($event, 'tare_weight',$event.target.value)"
+                                    class="gNewInput" (keydown)="enterKeyEvent($event, 'tare_weight')" 
+                                    [ngClass]="{'disable-input':_defaultData.PrdnTareMnl_Barc == 'Auto'}" [readOnly]="_defaultData.PrdnTareMnl_Barc == 'Auto'">
+                            </div>
+
+                            <div class="col-6  col-md-3 col-6"  >
+                                <label class="gInputLable">Net Weight <span *ngIf="icode"> ( {{uom}}
+                                        )</span></label>
+                                <input type="text" [(ngModel)]="net_weight" id="net" name="net"
+                                    class="gNewInput disable-input" readonly> 
+                            </div>
+                        </div>
+                        <div class="row mt-4" >
+                        <div class="d-flex justify-content-center gap-3">
+                            <button type="button" mat-button id="saveBtn" (click)="saveCheck()"
+                                class="gSaveButton gNewSaveButton"> Save</button>
+                                <button type="button" mat-button id="saveBtn" (click)="clearDetails()"
+                                class="gSaveButton gNewDeleteButton"> Clear</button>
+                     
+                        </div>
+                     </div>
+
+<mat-menu #menu1="matMenu" [hasBackdrop]="false">
+    <div (mouseenter)="mouseEnter(menuTrigger)" (mouseleave)="mouseLeave(menuTrigger)">
+        <button mat-menu-item class="gMenuLable1">
+            <span class="gMenuLable ">Back&nbsp;: &nbsp;&nbsp; Alt + X </span>
+        </button>
+        <button mat-menu-item class="gMenuLable1">
+            <span class="gMenuLable"> Save&nbsp;:&nbsp;&nbsp; Alt + S </span>
+        </button>
+        <button mat-menu-item class="gMenuLable1">
+            <span class="gMenuLable"> Clear&nbsp;:&nbsp;&nbsp; Alt + C</span>
+        </button>
+  
+        <button mat-menu-item class="gMenuLable1">
+            <span class="gMenuLable"> View&nbsp;: &nbsp;&nbsp; Alt + V</span>
+        </button>
+        <button mat-menu-item class="gMenuLable1">
+            <span class="gMenuLable"> Delete Item&nbsp;: &nbsp;&nbsp; Alt + D</span>
+        </button>
+        <button mat-menu-item class="gMenuLable1">
+            <span class="gMenuLable"> Track Item&nbsp;: &nbsp;&nbsp; Alt + T</span>
+        </button>
+        <button mat-menu-item class="gMenuLable1">
+            <span class="gMenuLable"> Help&nbsp;: &nbsp;&nbsp; Alt + H</span>
+        </button>
+    </div>
+</mat-menu>
+</div>        
+                            <div class="row links">
+<div class="col-6 col-md-3">
+                                <button type="button" mat-button class="linkButtons " [matMenuTriggerFor]="menu1"
+                                #menuTrigger="matMenuTrigger" (mouseenter)="mouseEnter(menuTrigger)" 
+                                (mouseleave)="mouseLeave(menuTrigger)">
+                                <i class="fa fa-lightbulb-o firstIcon" aria-hidden="true"></i>
+                                <span class="gInputLable">Page tips</span>
+                                <i class="fa fa-caret-right" aria-hidden="true"></i></button>
+                       </div>
+                       <div class="col-6 col-md-3">
+                                <button mat-button (click)="viewAll()" type="button" class="linkButtons ">
+                                    <!-- <i class="fa fa-hand-o-right firstIcon" aria-hidden="true"></i> -->
+                                    <mat-icon class="firstIcon" style="font-size: 16px;">visibility</mat-icon>
+                                    <span class="gInputLable">View</span>
+                                    <i class="fa fa-caret-right" aria-hidden="true"></i>
+                                </button>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                <button mat-button (click)="openDeleteModal()" type="button" class="linkButtons linkDelete ">
+                                    <i class="fa fa-close firstIcon"style="font-size: 16px;"></i>
+                                    <span class="gInputLable">  Delete Items</span>
+                                    <i class="fa fa-caret-right" aria-hidden="true"></i>
+                             
+                                </button>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <button mat-button type="button" (click)="changeOption('TrackItem')" class="linkButtons ">
+                                    <!-- <i class="fa fa-hand-o-right firstIcon" aria-hidden="true"></i> -->
+                                    <mat-icon class="firstIcon" style="font-size: 16px;">track_changes</mat-icon>
+                                    <span class="gInputLable"> Track Item</span>
+                                    <i class="fa fa-caret-right" aria-hidden="true"></i>
+                              
+                                </button>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <button mat-button (click)="changeOption('ProductionBarcode')" type="button" class="linkButtons ">
+                                    <i class="fa fa-hand-o-right firstIcon" aria-hidden="true"></i>
+                                    <span class="gInputLable"> Test Page</span>
+                                    <i class="fa fa-caret-right" aria-hidden="true"></i>
+                              
+                                  
+                                </button>
+                 </div>
+                 <div class="col-6 col-md-3">
+                                <button mat-button type="button" class="linkButtons " (click)="changeOption('Help')">
+                                    <i class="fa fa-lightbulb-o firstIcon" aria-hidden="true"></i>
+                                    <span class="gInputLable">Help</span>
+                                    <i class="fa fa-caret-right" aria-hidden="true"></i>
+                              
+                                </button>
+                            </div>
+                            </div>
+                       
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-12 col-lg-5 col-xl-5">
+        
+                    <div class="gTableSection mt-2">
+                        <div class="gInputLable"*ngIf="addDespatch && branchControl.value" style="color: #3c6aff  !important;">
+                            Despatch To : {{branchControl.value}}
+                        </div>
+                        <div class="gInputLable" *ngIf="!addDespatch" style="color:#3c6aff !important">
+                            Recent Production Entries
+                        </div>
+                        <div class="rounded-3 gInnerTable mt-1 ">
+                            <table style="width: 100%;" class="gNormalTable-sm table ">
+                                <thead>
+                                    <th style="width: 5%;">Sno</th>
+                                    <th>Barcode</th>
+                                    <th>ICode</th>
+                                    <th>Product</th>
+                                    <th>Weight</th>
+                                    <th>Tare</th>
+                                    <th>Uom</th>
+                                </thead>
+                                <tbody *ngIf="addDespatch">
+                                    <tr *ngFor="let li of viewList;let i=index">
+                                        <td style="width: 5%;">{{i+1}}</td>
+                                        <td>{{li.Barcode}}</td>
+                                        <td>{{li.icode}}</td>
+                                        <td>{{li.iname}}</td>
+                                        <td>{{li.qty}}</td>
+                                        <td>{{li.tare}}</td>
+                                        <td>{{li.uom}}</td>
+                                    </tr>
+                                </tbody>
+                                <tbody *ngIf="!addDespatch">
+                                    <tr *ngFor="let li of viewList;let i=index">
+                                        <td style="width: 5%;">{{i+1}}</td>
+                                        <td>{{li.sno}}</td>
+                                        <td>{{li.icode}}</td>
+                                        <td>{{li.iname}}</td>
+                                        <td>{{li.qty}}</td>
+                                        <td>{{li.tareweight}}</td>
+                                        <td>{{li.typ}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+   
+    </div>
+
+    <div class="modal fade bd-example-modal-sm" data-bs-backdrop="static" id="scanModal" tabindex="-1" role="dialog"
+        aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered gNewModel">
+            <div class="modal-content card">
+                <div class="modal-header">
+                    <span></span>
+                    <span class="gInputLable" style="font-size: 16px;">
+                        Scan Set Issues Qrcode / Barcode
+                    </span>
+                    <!-- <h6 class="modal-title" id="exampleModalLabel">Select</h6> -->
+                    <button type="button" class="close InfoButton" data-bs-dismiss="modal" aria-label="Close" style="opacity: 1;font-size: 16px;">
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                        <!-- <span aria-hidden="true">&times;</span> -->
+                    </button>
+                </div>
+                <div class="modal-body ">
+           <div class="row align-items-center">
+                        
+            
+
+                    <div class="col-6 d-flex justify-content-center">
+                        <img src="../../../assets/gImg/scanner1.avif" class="modelImg">
+                    </div>
+                    <div class="col-6 ">
+                        <label class="gInputLable">Barcode / QRcode </label>
+                        <input type="text" [(ngModel)]="_paneldata.barcode" id="scanBarcode" name="scanBarcode" style="font-size: 22px;
+                        padding: 10px;"
+                            (keydown)="enterKeyEvent($event, 'scanBarcode')" class="gNewInput text-center"
+                            autocomplete="off">
+                            <button mat-button (click)="this.getBarcodeDetails()" type="button" class="linkButtons mt-3 ">
+                     
+                                <mat-icon class="firstIcon" style="font-size: 16px;">save</mat-icon>
+                                <span class="gInputLable">Validate</span>
+                                <i class="fa fa-caret-right" aria-hidden="true"></i>
+                            </button>
+                    </div>
+                    
+                </div>
+                    <!-- <div class="d-flex justify-content-center">
+                        <label class="gInputLable">(OR)</label>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-4 form-group">
+                            <label class="gInputLable">Item code</label>
+                        </div>
+                        <div class="col-8 form-group">
+                            <input type="text" [(ngModel)]="_paneldata.icode"
+                                (keydown)="enterKeyEvent($event, 'scanicode')" id="scanicode" name="scanicode"
+                                class="gNewInput" autocomplete="off">
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade bd-example-modal-sm " data-bs-backdrop="static" id="DeleteModal" tabindex="-1" role="dialog"
+        aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered gNewModel">
+            <div class="modal-content card">
+                <div class="modal-header">
+                    <span></span>
+                    <span class="gInputLable" style="font-size: 16px;">
+                     Delete Items
+                    </span>
+                    <!-- <h6 class="modal-title" id="exampleModalLabel">Select</h6> -->
+                    <button type="button" class="close InfoButton" data-bs-dismiss="modal" aria-label="Close" style="opacity: 1;font-size: 16px;">
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                        <!-- <span aria-hidden="true">&times;</span> -->
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mt-3" >
+                        <div class="col-4 form-group">
+                            <label class="gInputLable">Trn Date</label>
+                        </div>
+                        <div class="col-8 form-group">
+                            <!-- <input type="date" [(ngModel)]="trnDate" id="delDate" name="delDate" class="gNewInput"> -->
+                            <div class="gOuterInput  gNewOuterInput">
+                                <input matInput class="gNewInput" id="TrnDate" [matDatepicker]="picker2"
+                                [(ngModel)]="trnDate" (keydown)="focusNext($event,'trnno')" autocomplete="off">
+                            <mat-datepicker-toggle matSuffix [for]="picker2" class="gInputButton gNewButton">
+                                <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #picker2></mat-datepicker>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-4 form-group">
+                            <label class="gInputLable">Trn No</label>
+                        </div>
+                        <div class="col-8 form-group">
+                            <input type="text" [(ngModel)]="trn_no" id="trnno"  (keydown)="focusNext($event,'deletebtn')"  name="trnno" class="gNewInput"
+                                autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="row mt-4 ">
+
+                        <div class="col-12 text-center d-flex gap-3 justify-content-center">
+                            <button mat-button id="deletebtn" (click)="deleteApiReq()" type="button" class="linkButtons linkDelete">
+                                <!-- <i class="fa fa-hand-o-right firstIcon" aria-hidden="true"></i> -->
+                                <mat-icon class="firstIcon ">delete</mat-icon>
+                                <span class="gInputLable lable1">Delete</span>
+                                <i class="fa fa-caret-right" aria-hidden="true"></i>
+                            </button>
+                                <!-- <button type="button"  mat-button class="gSaveButton  gNewSaveButton" (click)="deleteApiReq()">
+                                    <i class="fa  fa-arrow-right" aria-hidden="true"></i> Delete
+                                </button> -->
+                                <!-- <button type="button" mat-button id="modalClosedbtn" class="linkButtons" data-bs-dismiss="modal" aria-label="Close">
+                                    <i class="fa fa-close firstIcon" aria-hidden="true"></i>
+                                    <span class="gInputLable">Cancel</span>
+                                    <i class="fa fa-caret-right" aria-hidden="true"></i>
+                          
+                                    
+                                </button> -->
+                
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

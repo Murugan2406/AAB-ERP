@@ -1,0 +1,313 @@
+<div class="loading" *ngIf="isLoading">
+    <mat-progress-spinner class=" spinner" diameter="50" mode="indeterminate"></mat-progress-spinner>
+</div>
+
+<div class="wrapper">
+    <div class="header">
+        <mat-toolbar color="warn">
+            <mat-toolbar-row>
+                <button mat-button (click)="backNavigation()"> BACK</button>
+                <span class="example-spacer"></span>
+                <button mat-button></button>
+                <span class="example-spacer"></span>
+                <button mat-button (click)="homeNavigate()">
+                    <span class="material-icons">home</span>
+                </button>
+                <button mat-button disabled>
+                    <img class="png-icon" src=".\assets\gImg\a2b2.png" style="max-width: 56px; min-width: 56px;">
+                </button>
+            </mat-toolbar-row>
+        </mat-toolbar>
+    </div>
+
+    <div class="content">
+        <div class="container-fluid">
+            <section *ngIf="select =='ipconfighome'">
+                <!-- manual bill View form Start -->
+                <div class="row">
+                    <div class="col-lg-3">
+                    </div>
+                    <div class="col-lg-6 mt-2">
+
+                        <!-- <div class="card-header border-bottom"> -->
+                        <h6 class="m-0 text-xs fw-bold text-info text-capitalize">Ip Configuration</h6>
+                        <!-- <img class="png-icon"
+                                        src=".\assets\gImg\ipconfig.png" style="max-width: 32px; min-width: 32px;"> -->
+
+                        <!-- </div> -->
+                        <!-- <div class="reportformclass card-small mb-2">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item p-3"> -->
+                        <div class="row ">
+
+                            <div class="row ms-2 me-2">
+                                <div class="form-group col-md-9">
+                                    <label class="label-head fw-bold">Branch Name</label>
+                                    <input class="form-control not-allowed" type="text" [(ngModel)]="Branch" id="Brname"
+                                        name="Branch" [matAutocomplete]="auto" (ngModelChange)="change($event)"
+                                        (keydown)="keytab($event,'manulbtnn')">
+                                    <mat-autocomplete #auto="matAutocomplete">
+                                        <mat-option *ngFor="let opear of getbranchloaddata" class="sizech"
+                                            (onSelectionChange)="changeloc($event,opear)" [value]="opear?.brname">
+                                            {{opear?.brname}}</mat-option>
+                                    </mat-autocomplete>
+                                </div>
+
+                                <div class="form-group col-md-3">
+                                    <button id="manulbtnn" class="manulbtnn" (click)="keytab1()">
+                                        <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                                    </button>
+                                    <button id="manulbtnn" class="manulbtnn ms-2" (click)="viewdattab()">
+                                        <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                                        Edit Log</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- </li>
+                            </ul>
+                        </div>-->
+                    </div>
+                    <div class="col-lg-3"></div>
+                </div>
+                <!-- manual bill View form End -->
+
+                <!-- manual bill on load Table View start -->
+                <div class="col-sm-12 mt-2 border-0" style="background-color: transparent">
+                    <!-- <h5 class='fw-bold text-info text-capitalize m-0'>history</h5> -->
+                    <div class="listscroll">
+                        <div class="table-responsive" id="managerTable1">
+                            <table class="table table-bordered dtable1 mb-0">
+                                <thead id="managerTable1">
+                                    <tr>
+                                        <th>Sno</th>
+                                        <th>Brcode</th>
+                                        <th>Branch</th>
+                                        <th class="text-center"><i class="fa fa-edit"></i></th>
+                                        <th>DbIp</th>
+                                        <th>DbName</th>
+                                        <th>Ip</th>
+                                        <th>DrIp</th>
+                                        <th>AppServerOs</th>
+                                        <th>AppServerIp</th>
+                                        <th>AppServerApiPort</th>
+                                        <th>SecondaryDbIp</th>
+                                        <th>SecondaryDbName</th>
+                                        <th>SqlWebPort</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let ask of getstatdata; let i=index">
+                                        <td>{{i+1}}</td>
+                                        <td>{{ask.Brcode}}</td>
+                                        <td>{{ask.Branch}}</td>
+                                        <td class="text-center curser" (click)="edit(ask)"><i class="fa fa-edit"></i>
+                                        </td>
+                                        <td>{{ask.DbIp}}</td>
+                                        <td>{{ask.DbName}}</td>
+                                        <td>{{ask.Ip}}</td>
+                                        <td>{{ask.DrIp}}</td>
+                                        <td>{{ask.AppServerOS}}</td>
+                                        <td>{{ask.AppServerIp}}</td>
+                                        <td>{{ask.AppServerApiPort}}</td>
+                                        <td>{{ask.SecondaryDbIp}}</td>
+                                        <td>{{ask.SecondaryDbName}}</td>
+                                        <td>{{ask.SqlWebPort}}</td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="addvalue" *ngIf="getstatdata.length === 0"> No Records Found</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- manual bill on load Table View End -->
+                <div [style.display]="Reasonvalue ? 'block' : 'none'" class="modal" id="imagemodal" tabindex="-1"
+                    role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="width:100%;">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header1">
+                                <h5 class="fw-bold text-info1 text-capitalize my-1">Edit Ip Configuration ..
+                                </h5>
+                            </div>
+                            <div class="modal-body">
+                                <form #Editipconfig='ngForm'>
+                                    <div class="row m-2">
+                                        <div class="form-group col-md-4">
+                                            <label class="label-head">DbName</label>
+                                            <input class="form-control" type="text" [(ngModel)]="DbName" id="DbName"
+                                                name="DbName" autocomplete="off">
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label class="label-head">DbIp</label>
+                                            <input class="form-control" type="text" [(ngModel)]="DbIp" id="DbIp"
+                                                #Icname=ngModel name="Icname" (keypress)="IPAddressKeyOnly($event)"
+                                                
+                                                [ngClass]="{ 'is-invalid': !Icname || Icname.invalid}" required>
+                                            <div class="text-danger" *ngIf="Icname.errors?.['required']">
+                                                <p>DbIp is required.</p>
+                                            </div>
+                                            <div class="text-danger"
+                                                *ngIf="!Icname.errors?.['required'] && Icname.invalid">
+                                                <p> Invalid DbIp.</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group col-md-4">
+                                            <label class="label-head">Ip</label>
+                                            <input class="form-control" type="text" [(ngModel)]="Ip" id="Ip"
+                                                name="Ipname" #Ipname=ngModel (keypress)="IPAddressKeyOnly($event)"
+                                                
+                                                [ngClass]="{ 'is-invalid': !Ipname || Ipname.invalid}" required>
+                                            <div class="text-danger" *ngIf="Ipname.errors?.['required']">
+                                                <p>Ip is required.</p>
+                                            </div>
+                                            <div class="text-danger"
+                                                *ngIf="!Ipname.errors?.['required'] && Ipname.invalid">
+                                                <p> Invalid Ip.</p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label class="label-head">DrIp</label>
+                                            <input class="form-control" type="text" [(ngModel)]="DrIp" id="DrIp"
+                                                name="DrrIp" #DrrIp=ngModel (keypress)="IPAddressKeyOnly($event)"
+                                                
+                                                [ngClass]="{ 'is-invalid': !DrrIp || DrrIp.invalid}" required>
+                                            <div class="text-danger" *ngIf="DrrIp.errors?.['required']">
+                                                <p>DrIp is required.</p>
+                                            </div>
+                                            <div class="text-danger"
+                                                *ngIf="!DrrIp.errors?.['required'] && DrrIp.invalid">
+                                                <p> Invalid DrIp.</p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label class="label-head">AppServerIp</label>
+                                            <input class="form-control" type="text" [(ngModel)]="AppServerIp"
+                                                id="AppServerIp" name="AppSerIp" #AppSerIp=ngModel
+                                                (keypress)="IPAddressKeyOnly($event)"
+                                                
+                                                [ngClass]="{ 'is-invalid': !AppSerIp || AppSerIp.invalid}" required>
+                                            <div class="text-danger" *ngIf="AppSerIp.errors?.['required']">
+                                                <p>AppServerIp is required.</p>
+                                            </div>
+                                            <div class="text-danger"
+                                                *ngIf="!AppSerIp.errors?.['required'] && AppSerIp.invalid">
+                                                <p> Invalid AppServerIp.</p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label class="label-head">AppServerApiPort</label>
+                                            <input class="form-control" type="number" [(ngModel)]="AppServerApiPort"
+                                                id="AppServerApiPort" name="AppServerApiPort">
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label class="label-head">SecondaryDbIp</label>
+                                            <input class="form-control" type="text" [(ngModel)]="SecondaryDbIp"
+                                                id="SecondaryDbIp" name="SecondIp" #SecondIp=ngModel
+                                                (keypress)="IPAddressKeyOnly($event)"
+                                                
+                                                [ngClass]="{ 'is-invalid': !SecondIp || SecondIp.invalid}" required>
+                                            <div class="text-danger" *ngIf="SecondIp.errors?.['required']">
+                                                <p>SecondaryDbIp is required.</p>
+                                            </div>
+                                            <div class="text-danger"
+                                                *ngIf="!SecondIp.errors?.['required'] && SecondIp.invalid">
+                                                <p> Invalid SecondaryDbIp.</p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label class="label-head">SecondaryDbName</label>
+                                            <input class="form-control" type="text" [(ngModel)]="SecondaryDbName"
+                                                id="SecondaryDbName" name="SecondaryDbName" autocomplete="off">
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label class="label-head">SqlWebPort</label>
+                                            <input class="form-control" type="number" [(ngModel)]="SqlWebPort"
+                                                id="SqlWebPort" name="SqlWebPort">
+                                        </div>
+                                        <div class="col-12 col-md-4 mt-1">
+                                            <label class="label-head">AppServerOs</label>
+                                            <mat-select class="form-control" [(ngModel)]="AppSerOS" name='SerOS'>
+                                                <mat-option *ngFor="let serOs of appSerOSList"
+                                                    [value]="serOs">{{serOs}}</mat-option>
+                                            </mat-select>
+                                        </div>
+                                        <div
+                                            class="col-md-6 mt-1 align-self-end d-sm-block d-flex justify-content-center align-items-center">
+                                            <button mat-raised-button type="button" class="btn btn-primary" id="branch"
+                                                (click)="getdasta()">Save</button>
+                                            <button mat-raised-button type="reset" class="btn btn-primary" id="ssbutton"
+                                                (click)="cancelapp()">Cancel</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section *ngIf="select =='ipconfigview'">
+                <div class="card1 mt-2">
+                    <div class="row mt-2">
+
+                        <div class="form-group col-md-4">
+                            <label class="label-head fw-bold">Branch Name</label>
+                            <input class="form-control not-allowed" type="text" [(ngModel)]="Branch" id="Brname"
+                                name="Branch" [matAutocomplete]="auto" (ngModelChange)="change($event)"
+                                (keydown)="keytab($event,'manulbtnn')">
+                            <mat-autocomplete #auto="matAutocomplete">
+                                <mat-option *ngFor="let opear of getbranchloaddata" class="sizech"
+                                    (onSelectionChange)="changeloc($event,opear)" [value]="opear?.brname">
+                                    {{opear?.brname}}</mat-option>
+                            </mat-autocomplete>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label class="label-head fw-bold">From</label>
+                            <input class="form-control" type="date" [(ngModel)]="From" id="From" name="From">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label class="label-head fw-bold">To</label>
+                            <input class="form-control" type="date" [(ngModel)]="To" id="To" name="To">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <button id="manulbtnn" class="manulbtnn ms-2" (click)="viewalldata()">
+                                <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                                View</button>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <img Cores px-0 class="png-icon addview submit curser float-end"
+                                src=".\assets\gImg\excel1.png" type="submit" (click)="exportexcel()"
+                                title="exportexcel">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 mt-2 border-0" style="background-color: transparent">
+                    <!-- <h5 class='fw-bold text-info text-capitalize m-0'>history</h5> -->
+                    <div class="listscroll">
+                        <div class="table-responsive" id="managerTable">
+                            <table class="table table-bordered dtable1  mb-0">
+                                <thead id="managerTable">
+                                    <tr>
+                                        <th *ngFor="let header of Fullviewhead">
+                                            {{header}}
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of fullviewdata;let i = index;">
+                                        <td *ngFor="let key of Fullviewhead">
+                                            {{item[key]}}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+</div>

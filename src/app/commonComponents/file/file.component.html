@@ -1,0 +1,13 @@
+<div [formGroup]="form">
+    <div class="gOuterInput">
+        <input type="file" class="gInnerInput " [id]="field.name" accept=".png, .jpg, .jpeg, .pdf"  (change)="selectFile($event)"   />
+        <div class="gInputButton">
+            <input type="text" style="display: none"
+               [formControlName]="field.name"  />
+            <span mat-icon-button (click)="docClick()"
+                class="col-sm-12 col-md-2 col-lg-2">
+                <mat-icon>attach_file</mat-icon>
+            </span>
+        </div>
+    </div>
+</div>

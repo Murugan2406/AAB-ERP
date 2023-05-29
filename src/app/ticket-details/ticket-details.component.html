@@ -1,0 +1,915 @@
+<div class="content">
+    <!---------------------REPLY CARD----------------------------------------->
+    <div id="T1" class="card shadow-sm p-3 mb-5 bg-white rounded">
+        <div class="card-body">
+
+            <div *ngIf="menuOption ==='outbox' || menuOption ==='reports'">
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" id="nav-profile-tab" data-bs-toggle="tab" href="#nav-profile"
+                        role="tab" aria-controls="nav-profile" aria-selected="false">Details</a>
+                    <a class="nav-item nav-link " id="nav-home-tab" (click)="optionDetails()" data-bs-toggle="tab"
+                        href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Update</a>
+                    <a class="nav-item ms-auto">
+                        <div *ngIf="viewOption " class="col-lg-4 col-md-12  col-sm-12">
+
+                            <div *ngIf="ticketDetail.statusCmp=== 'Unassigned' && menuOption !='reports' ">
+                                <button style="margin-left: 1%;color:#007BFF" mat-button (click)="removeTicket()">
+                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                    Delete</button>
+                            </div>
+
+
+                            <button style="color:#007BFF" mat-button [matMenuTriggerFor]="status"
+                                *ngIf="menuOption !=='outbox'">
+                                <i class="fa fa-chevron-down" aria-hidden="true"></i>Change Status
+                            </button>
+                            <mat-menu #status="matMenu">
+                                <div
+                                    *ngIf="multiRights !== 'Y' && (ticketDetail.statusCmp==='Unassigned' || ticketDetail.statusCmp==='Approved') ">
+                                    <button data-bs-toggle="modal" data-bs-target="#assignModal" title="Forward"
+                                        mat-menu-item>Assign</button>
+                                </div>
+                                <div *ngIf="multiRights == 'Y' && (ticketDetail.statusCmp==='Unassigned' || ticketDetail.statusCmp==='Approved' ||
+                ticketDetail.statusCmp==='Open' || ticketDetail.statusCmp==='In-progress') ">
+                                    <button data-bs-toggle="modal" data-bs-target="#assignModal" title="Forward"
+                                        mat-menu-item>Assign</button>
+                                </div>
+                                <div *ngIf="ticketDetail.statusCmp==='Resolved'">
+                                    <button mat-menu-item (click)="statusChange('Closed')">Close</button>
+                                </div>
+
+                                <div *ngIf="ticketDetail.statusCmp==='In-progress'">
+                                    <button mat-menu-item (click)="statusChange('Resolved')">Resolved</button>
+                                    <div *ngIf="fromUser === toUsr">
+                                        <button mat-menu-item (click)="statusChange('Closed')">Close</button>
+                                    </div>
+                                </div>
+
+                                <div *ngIf="ticketDetail.statusCmp==='Approved'">
+                                    <button mat-menu-item (click)="statusChange('In-progress')">In Progress</button>
+                                    <button mat-menu-item (click)="statusChange('Resolved')"> Resolved</button>
+                                    <div *ngIf="fromUser === toUsr">
+                                        <button mat-menu-item (click)="statusChange('Closed')">Close</button>
+                                    </div>
+                                </div>
+
+                                <div *ngIf="ticketDetail.statusCmp==='Open'">
+                                    <button mat-menu-item (click)="statusChange('In-progress')">In Progress</button>
+                                    <button mat-menu-item (click)="statusChange('Resolved')">Resolved</button>
+                                    <div *ngIf="fromUser === toUsr">
+                                        <button mat-menu-item (click)="statusChange('Closed')">Close</button>
+                                    </div>
+                                </div>
+                            </mat-menu>
+
+
+
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-------- TRASH and Dept Tickets TABS----------->
+            <nav *ngIf="menuOption ==='trash'">
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" id="nav-profile-tab" data-bs-toggle="tab" href="#nav-profile"
+                        role="tab" aria-controls="nav-profile" aria-selected="false">Details</a>
+                    <a class="nav-item ms-auto">
+                        <div class="col-lg-4 col-md-12  col-sm-12">
+                            <div class="btn-group " role="group">
+                                <div class="btn-group " role="group">
+                                    <!--  <button (click)="statusChange('Unassigned')" style= "color:#007BFF" mat-button>
+                  <i class="fa fa-folder-open-o" aria-hidden="true"></i>
+                    ReOpen</button> -->
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </nav>
+
+            <!--------  DEPARTMENT Tickets TABS----------->
+            <div *ngIf="menuOption ==='deptTicket'">
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" id="nav-profile-tab" (click)="optionDetails()"
+                        data-bs-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile"
+                        aria-selected="false">Details</a>
+                    <a *ngIf=" ticketDetail.statusCmp!='Closed'" class="nav-item nav-link " id="nav-home-tab"
+                        (click)="optionReply()" data-bs-toggle="tab" href="#nav-home" role="tab"
+                        aria-controls="nav-home" aria-selected="true">Update</a>
+                    <a class="nav-item ms-auto">
+
+
+                        <!-- <div *ngIf=""> -->
+                        <button style="color:#007BFF" mat-button [matMenuTriggerFor]="rejectoptions"
+                            *ngIf="multiRights == 'Y'">
+                            <i class="fa fa-chevron-down" aria-hidden="true"></i>Options
+                        </button>
+
+                        <!-- <div *ngIf="ticketDetail.statusCmp==='Unassigned' || ticketDetail.assignedTo=== fromUser">
+              <button style="color:#007BFF" mat-button [matMenuTriggerFor]="rejectoptions">
+                <i class="fa fa-chevron-down" aria-hidden="true"></i>Options
+              </button></div> -->
+
+                        <button style="color:#007BFF" mat-button [matMenuTriggerFor]="status"
+                            *ngIf="multiRights == 'N' && ticketDetail.assignedTo === fromUser"> Change Status </button>
+
+                        <mat-menu #rejectoptions="matMenu">
+
+                            <div *ngIf="multiRights === 'Y'&& (ticketDetail.statusCmp==='Unassigned' || ticketDetail.statusCmp==='Approved'
+                || ticketDetail.statusCmp==='Open' || ticketDetail.statusCmp==='In-progress') ">
+                                <button data-bs-toggle="modal" data-bs-target="#assignModal" title="Forward"
+                                    mat-menu-item>Assign</button>
+                            </div>
+
+
+                            <div *ngIf="ticketDetail.statusCmp==='Unassigned'">
+                                <button mat-menu-item data-bs-toggle="modal" (click)="getApprovalAuthorites()"
+                                    data-bs-target="#apprRequestSend" title="Forward">
+                                    Send To Approval
+                                </button>
+                            </div>
+
+                            <div *ngIf="ticketDetail.statusCmp!=='Unassigned' && ticketDetail.assignedTo === fromUser">
+                                <button mat-menu-item [matMenuTriggerFor]="status"> Change Status </button>
+                            </div>
+
+                        </mat-menu>
+
+                        <mat-menu #status="matMenu">
+
+                            <div *ngIf="ticketDetail.statusCmp==='Resolved' && fromUser === toUsr">
+                                <button mat-menu-item (click)="statusChange('Closed')">Close</button>
+                            </div>
+
+                            <div *ngIf="ticketDetail.statusCmp==='In-progress'">
+                                <button mat-menu-item (click)="statusChange('Resolved')">Resolved</button>
+                                <div *ngIf="fromUser === toUsr">
+                                    <button mat-menu-item (click)="statusChange('Closed')">Close</button>
+                                </div>
+                            </div>
+
+                            <div *ngIf="ticketDetail.statusCmp==='Approved'">
+                                <button mat-menu-item (click)="statusChange('In-progress')">In Progress</button>
+                                <button mat-menu-item (click)="statusChange('Resolved')"> Resolved</button>
+                                <div *ngIf="fromUser === toUsr">
+                                    <button mat-menu-item (click)="statusChange('Closed')">Close</button>
+                                </div>
+                            </div>
+
+                            <div *ngIf="ticketDetail.statusCmp==='Open'">
+                                <button mat-menu-item (click)="statusChange('In-progress')">In Progress</button>
+                                <button mat-menu-item (click)="statusChange('Resolved')">Resolved</button>
+                                <div *ngIf="fromUser === toUsr">
+                                    <button mat-menu-item (click)="statusChange('Closed')">Close</button>
+                                </div>
+                            </div>
+                        </mat-menu>
+
+                        <!-- </div> -->
+                    </a>
+                </div>
+            </div>
+
+            <!-------- APPROVAL PENDINGS TABS----------->
+            <nav *ngIf="menuOption ==='apprpendings'">
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" id="nav-profile-tab" data-bs-toggle="tab" href="#nav-profile"
+                        role="tab" aria-controls="nav-profile" aria-selected="false">Details</a>
+                    <a class="nav-item ms-auto">
+                        <div class="col-lg-4 col-md-12  col-sm-12">
+                            <div class="btn-group " role="group">
+                                <button style="color:#007BFF" mat-button data-bs-toggle="modal"
+                                    data-bs-target="#approvalModal" title="Forward">
+                                    <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+                                    Approve</button>
+                                <button style="margin-left: 1%;color:#007BFF;" mat-button data-bs-toggle="modal"
+                                    data-bs-target="#rejectModal" title="Forward">
+                                    <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
+                                    Reject</button>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </nav>
+
+            <!-------- INBOX, PENDINGS, UNASSIGNED TABS----------->
+            <nav *ngIf="menuOption ==='inbox'|| menuOption ==='pendings' || menuOption === 'unassigned'">
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" id="nav-profile-tab" (click)="optionDetails()"
+                        data-bs-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile"
+                        aria-selected="false">Details</a>
+                    <a *ngIf=" ticketDetail.statusCmp!='ApprovalPending'" class="nav-item nav-link " id="nav-home-tab"
+                        (click)="optionReply()" data-bs-toggle="tab" href="#nav-home" role="tab"
+                        aria-controls="nav-home" aria-selected="true">Update</a>
+                    <a class="nav-item ms-auto">
+                        <div *ngIf="viewOption && ticketDetail.statusCmp === 'Rejected'">
+                            <button style="color:#007BFF" mat-button [matMenuTriggerFor]="rejectoptions">
+                                <i class="fa fa-chevron-down" aria-hidden="true"></i>Options
+                            </button>
+                            <mat-menu #rejectoptions="matMenu">
+                                <button mat-menu-item data-bs-toggle="modal" (click)="getApprovalAuthorites()"
+                                    data-bs-target="#apprRequestSend" title="Forward">
+                                    Send To Approval </button>
+                            </mat-menu>
+                        </div>
+                        <div
+                            *ngIf="viewOption && ticketDetail.statusCmp!='ApprovalPending' && ticketDetail.statusCmp !='Rejected'  ">
+                            <button style="color:#007BFF" mat-button [matMenuTriggerFor]="options">
+                                <i class="fa fa-chevron-down" aria-hidden="true"></i>Options
+                            </button>
+                            <mat-menu #options="matMenu">
+                                <div *ngIf="multiRights === 'Y' && (ticketDetail.statusCmp ==='Unassigned' || ticketDetail.statusCmp==='Approved'
+                 || ticketDetail.statusCmp==='Open' || ticketDetail.statusCmp==='In-progress')">
+                                    <button data-bs-toggle="modal" data-bs-target="#assignModal" title="Forward"
+                                        mat-menu-item>Assign</button>
+                                </div>
+                                <div *ngIf="ticketDetail.statusCmp!=='Unassigned'">
+                                    <button mat-menu-item [matMenuTriggerFor]="status">
+                                        Change Status</button>
+                                </div>
+                                <button *ngIf="multiRights === 'Y'" mat-menu-item data-bs-toggle="modal"
+                                    (click)="getApprovalAuthorites()" data-bs-target="#apprRequestSend" title="Forward">
+                                    Send To Approval</button>
+                                <!-- <div *ngIf="(ticketDetail.statusCmp!='Approved' || ticketDetail.statusCmp==='Rejected') && ticketDetail.statusCmp!='Closed' ">
+            </div> -->
+                            </mat-menu>
+
+                            <mat-menu #status="matMenu">
+
+                                <div *ngIf="ticketDetail.statusCmp==='Resolved' && fromUser === toUsr">
+                                    <button mat-menu-item (click)="statusChange('Closed')"> Close</button>
+                                </div>
+
+                                <div *ngIf="ticketDetail.statusCmp==='In-progress'">
+                                    <button mat-menu-item (click)="statusChange('Resolved')">Resolved</button>
+                                    <div *ngIf="fromUser === toUsr">
+                                        <button mat-menu-item (click)="statusChange('Closed')">Close</button>
+                                    </div>
+                                </div>
+
+                                <div *ngIf="ticketDetail.statusCmp==='Approved'">
+                                    <button mat-menu-item (click)="statusChange('In-progress')">In Progress</button>
+                                    <button mat-menu-item (click)="statusChange('Resolved')">Resolved</button>
+                                    <div *ngIf="fromUser === toUsr">
+                                        <button mat-menu-item (click)="statusChange('Closed')">Close</button>
+                                    </div>
+                                </div>
+
+                                <div *ngIf="ticketDetail.statusCmp==='Open'">
+                                    <button mat-menu-item (click)="statusChange('In-progress')">In Progress</button>
+                                    <button mat-menu-item (click)="statusChange('Resolved')"> Resolved</button>
+                                    <div *ngIf="fromUser === toUsr">
+                                        <button mat-menu-item (click)="statusChange('Closed')">Close</button>
+                                    </div>
+                                </div>
+
+                                <div *ngIf="ticketDetail.statusCmp==='Closed'">
+                                    <button mat-menu-item (click)="statusChange('Open')">Open</button>
+                                </div>
+
+                            </mat-menu>
+                        </div>
+
+                        <div *ngIf=" ticketDetail.statusCmp ==='ApprovalPending'" class="col-lg-4 col-md-12  col-sm-12">
+                        </div>
+
+                    </a>
+                </div>
+            </nav><br>
+
+            <!------------- Reply Tab --------------------->
+            <div class="tab-content" id="nav-tabContent" style="margin-left: 2%">
+                <div class="tab-pane fade " id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+
+                    <form [formGroup]="replyForm">
+
+                        <div class="row">
+                            <div class="col-2">
+                                <label class="form-control text-muted form-select">To :</label>
+                            </div>
+                            <div class="col-lg-6 form-group">
+                                <input type=text id="toUser" name="toUser" class="form-control form-select"
+                                    formControlName="toUser" readonly [(ngModel)]="toUsr" required><br>
+                            </div>
+                            <div class="col-lg-3  form-group">
+                                <label class="text-muted">Attachment :</label>
+                                <input style="display:none;" type='file' data-bs-max-size="10240" id="input-file-image"
+                                    accept="*" (change)="handleFileInput($event)" multiple>
+                                <div class="form-control" class="btn-group">
+                                    <mat-icon class="attachFile"
+                                        onclick="document.getElementById('input-file-image').click()">attach_file
+                                    </mat-icon>
+                                    <!-- <mat-icon class="attachCamera" data-bs-toggle="modal" data-bs-target="#cameraModal">camera_alt</mat-icon> -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 form-group">
+                                <a style="color: #9C27B0" (click)="changeToolOption()"><i class="fa fa-pencil-square-o"
+                                        aria-hidden="true"></i> Toolbar</a>
+
+                                <div *ngIf="isToolbar!=true" class="form-control" formControlName="replyHtml"
+                                    [ngxSummernote]="config" required> </div>
+                                <div *ngIf="isToolbar" class="form-control" formControlName="replyHtml"
+                                    [ngxSummernote]="toolbar" required> </div>
+                            </div>
+                        </div><br>
+
+                        <div hidden class="row">
+                            <div class="col-lg-6 col-md-12 col-sm-12">
+                                <input style="display:none;" type='file' id="input-file-image" accept="*"
+                                    (change)="handleFileInput($event)" multiple>
+                                <button matTooltip="Maximum size 10mp" mat-raised-button type="button" color="accent"
+                                    onclick="document.getElementById('input-file-image').click()">
+                                    <mat-icon>attachment</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class=" col-lg-12 form-group">
+                                <div *ngFor="let capture of captureImage">
+                                    <div class="column">
+                                        <div class="img-wraps">
+                                            <span (click)="removeCaptureImage(capture)" class="closes"
+                                                title="Delete">&times;</span>
+                                            <img [src]="capture" width="100" height="100" alt="Preview">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" *ngIf="isAttachFiles && groupList?.length > 0 ">
+                            <div class=" col-lg-12 form-group">
+                                <div *ngFor="let file of groupList">
+                                    <div class="column"
+                                        *ngIf="file.fileType ==='jpeg' || file.fileType ==='jpg' ||file.fileType ==='png' ">
+                                        <div class="img-wraps">
+                                            <span (click)="removeFile(file.fileNames, file.fileData)" class="closes"
+                                                title="Delete">&times;</span>
+                                            <img [src]=" file.fileData" width="100" height="100" alt="Preview">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-6 col-md-12 col-sm-12 form-group">
+                                <div *ngIf="isAttachFiles && groupList?.length > 0 ">
+                                    <table class="tables table-sm table-hover">
+                                        <thead style="background-color:#3C8DBC;color:white">
+                                            <tr>
+                                                <th scope="col">File</th>
+                                                <th scope="col">Option</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let file of groupList">
+                                                <td>{{file.fileNames}}</td>
+                                                <td>
+                                                    <i style="color: red"
+                                                        (click)="removeFile(file.fileNames, file.fileData)"
+                                                        class="fa fa-trash" aria-hidden="true"></i>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div><br>
+
+                        <button mat-raised-button style="background-color:#009ABA;color:white" type="button"
+                            (click)="sendReply(replyForm.controls['replyHtml'].value)" class="btn btn-secondary"><i
+                                class="fa fa-reply" aria-hidden="true"></i>
+                            Send</button>
+                    </form>
+
+                </div>
+
+                <!-------------------- Details Tab --------------------->
+                <div style="font-size: 12px" class="tab-pane fade show active" id="nav-profile" role="tabpanel"
+                    aria-labelledby="nav-profile-tab">
+                    <div class="row">
+                        <div class="col-lg-4 col-md-12 col-sm-12">
+                            <table class="table table-sm table-borderless">
+                                <tbody>
+                                    <tr>
+                                        <th class="text-muted" scope="col">Subject</th>
+                                        <td style="color: #3C8DBC;font: bold">{{ticketDetail.subjectJd}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-muted" scope="col">Department</th>
+                                        <td style="color: #3C8DBC;font: bold">{{ticketDetail.departMent}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-lg-4 col-md-12 col-sm-12">
+                            <table class="table table-sm table-borderless">
+                                <tbody>
+                                    <tr>
+                                        <th class="text-muted" scope="col">TicketId</th>
+                                        <td style="color: #3C8DBC;font: bold">{{ticketDetail.ticketId}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-muted" scope="col">Status</th>
+                                        <td style="color: white">
+                                            <div *ngIf="ticketDetail.statusCmp==='Unassigned'">
+                                                <span class="badge bg-danger">
+                                                    {{ticketDetail.statusCmp}}
+                                                </span>
+                                            </div>
+                                            <div *ngIf="ticketDetail.statusCmp==='Resolved'">
+                                                <span class="badge bg-primary">{{ticketDetail.statusCmp}}</span>
+                                            </div>
+                                            <div *ngIf="ticketDetail.statusCmp==='ApprovalPending'">
+                                                <span style="background-color:#f47100" class="badge bg-warning"
+                                                    style="color: black">{{ticketDetail.statusCmp}}</span>
+                                            </div>
+                                            <div *ngIf="ticketDetail.statusCmp==='Approved'">
+                                                <span class="badge bg-info">{{ticketDetail.statusCmp}}</span>
+                                            </div>
+                                            <div *ngIf="ticketDetail.statusCmp==='Rejected'">
+                                                <span style="background-color:#4E342E"
+                                                    class="badge bg-secondary">{{ticketDetail.statusCmp}}</span>
+                                            </div>
+                                            <div *ngIf="ticketDetail.statusCmp==='Closed'">
+                                                <span class="badge bg-success">{{ticketDetail.statusCmp}}
+                                                </span>
+                                            </div>
+                                            <div *ngIf="ticketDetail.statusCmp==='Open'">
+                                                <span style="background-color:#9C27B0;color:white"
+                                                    class="badge bg-warning">
+                                                    {{ticketDetail.statusCmp}}
+                                                </span>
+                                            </div>
+                                            <div *ngIf="ticketDetail.statusCmp==='In-progress'">
+                                                <span style="background-color:#960052;color:white"
+                                                    class="badge bg-warning">
+                                                    {{ticketDetail.statusCmp}}
+                                                </span>
+                                            </div>
+                                            <div *ngIf="ticketDetail.statusCmp==='ReOpen'">
+                                                <span style="background-color:#1DE9B6" class="badge bg-success">
+                                                    {{ticketDetail.statusCmp}}
+                                                </span>
+                                            </div>
+                                            <div *ngIf="ticketDetail.statusCmp==='Deleted'">
+                                                <span style="color: black">
+                                                    {{ticketDetail.statusCmp}}
+                                                </span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-lg-4 col-md-12 col-sm-12">
+                            <table class="table table-sm table-borderless">
+                                <tbody>
+                                    <tr>
+                                        <th class="text-muted" scope="col">Priority</th>
+                                        <td style="color: #3C8DBC;font: bold">{{ticketDetail.prioritys}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-muted" scope="col">created Date</th>
+                                        <td style="color: #3C8DBC;font: bold">
+                                            {{ticketDetail.createdTime}}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+                    <div style="margin-top: 1%" class="row">
+                        <div class="col-lg-12">
+                            <div *ngIf="ticketDetail.subjectJd==='CARD TO CASH' ||
+            ticketDetail.subjectJd==='CASH TO CARD' || ticketDetail.subjectJd==='BILL CANCEL'">
+                                <table class="table table-responsive-sm table-sm table-hover">
+                                    <thead style="background-color:#3C8DBC ">
+                                        <tr style="color: white">
+                                            <th scope="col">Type</th>
+                                            <th scope="col">Date</th>
+                                            <th scope="col">BillNo</th>
+                                            <th scope="col" class="text-end">Amount</th>
+                                            <th scope="col">Reason</th>
+                                            <th scope="col">Approved</th>
+                                            <th scope="col" *ngIf="ticketDetail.subjectJd==='CASH TO CARD'">CardType
+                                            </th>
+                                            <th scope="col" *ngIf="ticketDetail.subjectJd==='CASH TO CARD'">Card.No</th>
+                                            <th scope="col" *ngIf="ticketDetail.subjectJd==='CASH TO CARD'">Trn.No</th>
+                                            <th scope="col" *ngIf="ticketDetail.subjectJd==='CASH TO CARD'">Trn Date
+                                            </th>
+                                            <th class="text-end" scope="col"
+                                                *ngIf="ticketDetail.subjectJd==='CASH TO CARD'">Trn Amt</th>
+                                            <th scope="col" *ngIf="ticketDetail.subjectJd==='BILL CANCEL'">Altr Billno
+                                            </th>
+                                            <th scope="col" *ngIf="ticketDetail.subjectJd==='BILL CANCEL'">Altr Billdate
+                                            </th>
+                                            <th class="text-end" scope="col"
+                                                *ngIf="ticketDetail.subjectJd==='BILL CANCEL'">Altr BillAmt
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let bill of additionalInfo">
+                                            <td>{{bill.TrnType}}</td>
+                                            <td>{{bill.TrnDate}}</td>
+                                            <td>{{bill.TrnNo}}</td>
+                                            <td class="text-end">{{bill.TrnAmt | currency:'INR'}}</td>
+                                            <td>{{bill.Reason}}</td>
+                                            <td>{{bill.TrnAprUsr}}</td>
+                                            <td *ngIf="ticketDetail.subjectJd==='CASH TO CARD'">{{bill.cardtype}}</td>
+                                            <td *ngIf="ticketDetail.subjectJd==='CASH TO CARD'">{{bill.cardno}}</td>
+                                            <td *ngIf="ticketDetail.subjectJd==='CASH TO CARD'">{{bill.cardtrnno}}</td>
+                                            <td *ngIf="ticketDetail.subjectJd==='CASH TO CARD'">{{bill.cardtrndate
+                                                |date:'dd-MMM-yyyy'}}</td>
+                                            <td class="text-end" *ngIf="ticketDetail.subjectJd==='CASH TO CARD'">
+                                                {{bill.cardamount | currency:'INR'}}
+                                            </td>
+                                            <td *ngIf="ticketDetail.subjectJd==='BILL CANCEL'">{{bill.altBillno}}</td>
+                                            <td *ngIf="ticketDetail.subjectJd==='BILL CANCEL'">{{bill.altbilldate
+                                                |date:'dd-MMM-yyyy'}}</td>
+                                            <td class="text-end" *ngIf="ticketDetail.subjectJd==='BILL CANCEL'">
+                                                {{bill.altbillamount | currency:'INR'}}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!------------------Reply  Details Card ---------------------------------------->
+    <!-----------APPROVAL PENDING And SEND ITEMS Ticket Details---------------->
+    <div
+        *ngIf=" menuOption ==='apprpendings' || menuOption ==='outbox' || menuOption==='reports'  || menuOption ==='approval' || menuOption ==='rejected' || menuOption==='deptTicket'">
+        <div class="timeline">
+            <div class="line text-muted"></div>
+
+            <div class="card shadow-sm p-3 mb-5 bg-white rounded" *ngFor="let ticket of ticketDetailsList ">
+                <div class="card-header">
+                    <img src=".\assets\gImg\person.jpg" class="avatar ">
+                    <h5 style="color: #3C8DBC;font: bold" class="card-title mb-0">{{ticket.fromUsr}} - {{ticket.brname}}
+                        <small style="margin-left: 30%" *ngIf="ticket.ifAttFoundYN==='Y'">
+                            <i class="material-icons" (click)="viewReplyFiles(ticket.subId,ticket.ticketId)"
+                                aria-hidden="true">attachment</i>
+                        </small>
+                        <small class="pull-right">
+                            <i class="fa fa-clock-o" aria-hidden="true"></i>
+                            {{ticket.timenow}}
+                        </small>
+                    </h5>
+                </div>
+
+                <div class="card-body">
+                    <div class="row">
+                        <div [ngxSummernoteView]="ticket.problemDesc"></div>
+                    </div>
+                    <div class="row" style="margin-right:10px">
+                        <div class="col-lg-9">
+                            <div
+                                *ngIf="ticket.ifAttFoundYN==='Y' && replyFiles?.length > 0 && ticket.subId ===viewsubIdFile && isAttachFiles">
+                                <div class="column" *ngFor="let file of replyFiles">
+                                    <div *ngIf="file.fileType === 'JPG' || file.fileType === 'png' || file.fileType === 'jpeg'"
+                                        class="img-wraps">
+                                        <img [src]="file.fileData" width="200" height="200" alt="Preview">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div
+                                *ngIf="ticket.ifAttFoundYN==='Y' && replyFiles?.length > 0 && ticket.subId ===viewsubIdFile && isAttachFiles">
+                                <table style="margin-top: 3%" class="table table-sm table-hover">
+                                    <thead style="background-color:#3C8DBC;color:white">
+                                        <tr>
+                                            <th scope="col">File</th>
+                                            <th scope="col">Option</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let file of replyFiles">
+                                            <td>{{file.fileNames}}</td>
+                                            <td>
+                                                <i style="color: green"
+                                                    (click)="downloadFile(file.fileNames, file.fileData)"
+                                                    class="fa fa-download" aria-hidden="true"></i>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!---------------- INBOX , PENDINGS, UnAssigned ---------------------->
+    <div *ngIf="menuOption ==='inbox' || menuOption ==='pendings' ||menuOption === 'unassigned'">
+        <div class="timeline">
+            <div class="line text-muted"></div>
+            <div class="card shadow-sm p-3 mb-5 bg-white rounded" *ngFor="let ticket of ticketDetailsList ">
+                <div class="card-header ">
+                    <img src=".\assets\gImg\person.jpg" class="avatar ">
+                    <h5 style="color: #3C8DBC;font: bold" class="card-title mb-0">
+                        {{ticket.fromUsr}} - {{ticket.brname}}
+                        <small style="margin-left: 30%" *ngIf="ticket.ifAttFoundYN==='Y'">
+                            <i class="material-icons" (click)="viewReplyFiles(ticket.subId,ticket.ticketId)"
+                                aria-hidden="true">attachment</i>
+                        </small>
+                        <small class="pull-right">
+                            <i class="fa fa-clock-o" aria-hidden="true"></i>
+                            {{ticket.timenow}}
+                        </small>
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div [ngxSummernoteView]="ticket.problemDesc"></div>
+                    </div>
+                    <div class="row" style="margin-right: 10px;">
+                        <div class="col-lg-9">
+                            <div
+                                *ngIf="ticket.ifAttFoundYN==='Y' && replyFiles?.length > 0 && ticket.subId ===viewsubIdFile && isAttachFiles">
+                                <div class="column" *ngFor="let file of replyFiles">
+                                    <div *ngIf="file.fileType === 'JPG' ||file.fileType === 'png' || file.filefileType === 'jpeg'"
+                                        class="img-wraps">
+                                        <img [src]="file.fileData" width="200" height="200" alt="Preview">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div
+                                *ngIf="ticket.ifAttFoundYN==='Y' && replyFiles?.length > 0 && ticket.subId ===viewsubIdFile && isAttachFiles">
+                                <table style="margin-top: 3%" class="table table-sm table-hover">
+                                    <thead style="background-color:#3C8DBC;color:white">
+                                        <tr>
+                                            <th scope="col">File</th>
+                                            <th scope="col">Option</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let file of replyFiles">
+                                            <td>{{file.fileNames}}</td>
+                                            <td>
+                                                <i style="color: green"
+                                                    (click)="downloadFile(file.fileNames, file.fileData)"
+                                                    class="fa fa-download" aria-hidden="true"></i>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--------------TRASH Ticket Details-------------->
+    <div *ngIf="menuOption ==='trash'">
+
+        <div class="timeline">
+            <div class="line text-muted"></div>
+            <div class="card shadow-sm p-3 mb-5 bg-white rounded">
+                <div class="card-header ">
+                    <img src=".\assets\gImg\person.jpg" class="avatar ">
+                    <h5 style="color: #3C8DBC;font: bold" class="card-title mb-0">
+                        {{ticketDetail.fromUsr}} - {{ticketDetail.brname}}
+                        <small style="margin-left: 30%" *ngIf="ticketDetail.ifAttFoundYN==='Y'">
+                            <i class="material-icons" (click)="viewReplyFiles(ticketDetail.subId,ticketDetail.ticketId)"
+                                aria-hidden="true">attachment</i>
+                        </small>
+                        <small class="pull-right">
+                            <i class="fa fa-clock-o" aria-hidden="true"></i>
+                            {{ticketDetail.timenow}}
+                        </small>
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div [ngxSummernoteView]="ticketDetail.problemDesc"></div>
+                    </div>
+                    <div class="row" style="margin-right: 10px;">
+                        <div class="col-lg-9">
+                            <div
+                                *ngIf="ticketDetail.ifAttFoundYN==='Y' && replyFiles?.length > 0 && ticketDetail.subId ===viewsubIdFile && isAttachFiles">
+                                <div class="column" *ngFor="let file of replyFiles">
+                                    <div *ngIf="file.fileType === 'JPG' ||file.fileType === 'png' || file.filefileType === 'jpeg'"
+                                        class="img-wraps">
+                                        <img [src]="file.fileData" width="100" height="100" alt="Preview">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div
+                                *ngIf="ticketDetail.ifAttFoundYN==='Y' && replyFiles?.length > 0 && ticketDetail.subId ===viewsubIdFile && isAttachFiles">
+                                <table style="margin-top: 3%" class="table table-sm table-hover">
+                                    <thead style="background-color:#3C8DBC;color:white">
+                                        <tr>
+                                            <th scope="col">File</th>
+                                            <th scope="col">Option</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let file of replyFiles">
+                                            <td>{{file.fileNames}}</td>
+                                            <td>
+                                                <i style="color: green"
+                                                    (click)="downloadFile(file.fileNames, file.fileData)"
+                                                    class="fa fa-download" aria-hidden="true"></i>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!--------------------- Assign MODAL---------------------->
+<div class="modal fade" id="assignModal" tabindex="-1" role="dialog" aria-labelledby="exampleMod alCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 style="color: #3C8DBC;font: bold" class="modal-title" id="exampleModalLongTitle">Assign To Ticket
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group text-muted"
+                    (change)="changeAssignType($event)">
+                    <mat-radio-button color="accent" style="margin-left: 3% " class="example-radio-button"
+                        *ngFor="let season of assignButton" [value]="season.value">
+                        {{season.type}}
+                    </mat-radio-button>
+                </mat-radio-group><br>
+                <div *ngIf="assignChoice!==undefined">
+                    <label class="text-muted">Assign To: </label><br>
+                    <select *ngIf="assignChoice==='user'" class="form-control form-select" id="sel1" #dept
+                        (change)="onChange($event.target)">
+                        <option selected value="select">Select</option>
+                        <option *ngFor='let dept of Names'>{{dept.username}}</option>
+                    </select>
+                    <select *ngIf="assignChoice !=='user'" class="form-control form-select" id="sel1" #dept
+                        (change)="onChange($event.target)">
+                        <option selected value="select">Select</option>
+                        <option *ngFor='let dept of Names'>{{dept.DeptName}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button mat-raised-button style="background-color: #F06292" class="btn btn-secondary"
+                    data-bs-dismiss="modal">Cancel</button>
+                <button mat-raised-button style="background-color: #9C27B0" class="btn btn-primary" (click)="assign()"
+                    data-bs-dismiss="modal">Assign</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--------------------- Send Approval Request MODAL---------------------->
+<div class="modal fade" id="apprRequestSend" tabindex="-1" role="dialog" aria-labelledby="exampleMod alCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 style="color: #3C8DBC;font: bold" class="modal-title" id="exampleModalLongTitle">Approval Request To
+                    Ticket
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <label class="text-muted">Request To: </label><br>
+                <select class="form-control form-select" id="sel1" #dept (change)="onChange($event.target)">
+                    <option selected value="select">Select</option>
+                    <option *ngFor='let dept of Names'>{{dept.username}}</option>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button mat-raised-button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button mat-raised-button class="btn btn-primary" (click)="sendApprRequest()"
+                    data-bs-dismiss="modal">Send</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--------------------- Reject MODAL---------------------->
+<div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="exampleMod alCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 style="color: #3C8DBC;font: bold" class="modal-title" id="exampleModalLongTitle">Reject To Ticket
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class=" col-lg-6">
+                    <label class="text-muted">Approval Option </label>
+                    <input type=text #reject id="reject" name="reject" class="form-control form-select" readonly
+                        value="Rejected">
+                </div>
+                <div>
+                    <label class="text-muted">Reson: </label><br>
+                    <textarea class="form-control" #reason rows="5" name="reason" id="reason"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button mat-raised-button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button mat-raised-button class="btn btn-primary" (click)="apprStatus(reject.value,reason.value)"
+                    data-bs-dismiss="modal">Reject</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--------------------- Approval MODAL---------------------->
+<div class="modal fade" id="approvalModal" tabindex="-1" role="dialog" aria-labelledby="exampleMod alCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 style="color: #3C8DBC;font: bold" class="modal-title" id="exampleModalLongTitle">Approval To Ticket
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-lg-6 ">
+                    <label class="text-muted">Approval Option </label>
+                    <input type=text #approption id="approption" name="approption" class="form-control form-select"
+                        readonly value="Approved">
+                </div>
+                <label class="text-muted"> Note: </label><br>
+                <textarea class="form-control" #note rows="5" name="note" id="note"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button mat-raised-button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button mat-raised-button class="btn btn-primary" (click)="apprStatus(approption.value,note.value)"
+                    data-bs-dismiss="modal">Approve</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-----------Capture Image Modal--------------->
+<!-- <div class="modal fade" id="cameraModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+          <app-capture-image (pictureTaken)="handleImage($event)"></app-capture-image><br>
+          <div style="text-align: center" class="snapshot" *ngIf="webcamImage">
+            <img style="width: 300px;height: 250px" [src]="webcamImage.imageAsDataUrl" />
+          </div>
+          <div style="text-align: center;margin-top: 2%" *ngIf="webcamImage">
+            <button style="background-color: #e54304" type="button" (click)="removeSnapshot()" class="btn btn-secondary">
+              <i class="fa fa-trash-o" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" (click)="closeCaptureImage()" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" (click)="addCaptureImage()" class="btn btn-primary">Add Image</button>
+        </div>
+      </div>
+
+    </div>
+  </div> -->
+
+<!-- LOADING ICON -->
+<div *ngIf="progressval == 'indeterminate'" class="loading">
+    <mat-progress-spinner [mode]="progressval">
+    </mat-progress-spinner>
+</div>
+<!-- LOADING ICON -->

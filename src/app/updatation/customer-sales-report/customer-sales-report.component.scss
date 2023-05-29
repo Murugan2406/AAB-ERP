@@ -1,0 +1,130 @@
+.gInputButton {
+    ::ng-deep.mat-icon-button {
+       width: 20px !important;
+       height: 18px !important;
+       line-height: 20px !important;
+       color: #fff;
+   }
+}
+.gInputLable{
+    display:flex;
+    justify-content:space-between;
+}
+
+::ng-deep .mat-select-panel{
+    margin-top: 35px!important;
+      border-radius: 10px!important;
+      padding: 5px!important;
+  }
+
+  :host ::ng-deep.headerS.No{
+    width: 60px;
+  }
+  
+  .example-spacer {
+    flex: 1 1 auto;
+  }
+
+  .gToggleFooter {
+    background-color: var(--table-actionHeader-bg) !important;
+    max-height: 25px !important;
+    height: 25px !important;
+    position: sticky;
+    bottom: 0;
+}
+
+.gToggleFooter td {
+    background-color: var(--table-actionHeader-bg);
+    font-weight: 600;
+    border-bottom: none !important;
+    white-space: nowrap;
+    line-height: 22px;
+    height: 22px;
+    text-transform: capitalize;
+    font-family: system-ui;
+    font-size: 12px;
+    padding: 1px 10px !important;
+    position: sticky;
+    bottom: 0;
+    color: #04003a !important;
+    font-weight: 700 !important;
+    border-bottom: none !important;
+    z-index: 3;
+}
+
+::ng-deep.mat-progress-spinner svg,
+.mat-progress-spinner {
+    height: 60px !important;
+}
+
+::ng-deep.mat-progress-spinner circle,
+.mat-spinner circle {
+    stroke: var(--button-save-color);
+    stroke-width: 10% !important;
+    stroke-dasharray: 50px !important;
+}
+
+.gIconButton .mat-icon,
+.gSaveButton .mat-icon {
+    font-size: 18px !important;
+    line-height: 22px !important;
+    font-weight: 600 !important;
+}
+button:disabled, input:read-only, .mat-select-disabled {
+    cursor: no-drop;
+    background-color: #d6ddd8 !important;
+}
+
+.gInputButton {
+    ::ng-deep.mat-icon-button {
+       width: 20px !important;
+       height: 18px !important;
+       line-height: 20px !important;
+       color: #fff;
+   }
+}
+
+@media only screen and (max-width: 560px){
+.gTableActionheaders {
+    flex-direction: column;
+    height: auto !important;
+}
+.gInnerTable{
+    max-height: calc(100vh - 205px) !important;
+}
+}
+
+
+
+::ng-deep.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle,
+::ng-deep.mat-radio-outer-circle,
+ ::ng-deep.mat-radio-inner-circle {
+    border-color: #1A194D !important;
+    border-width: 1px !important;
+}
+
+::ng-deep.mat-radio-inner-circle {
+    border-color: #1A194D !important;
+    background-color: #1A194D !important;
+}
+
+::ng-deep.mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element {
+    background-color: rgba(0, 0, 0, .1) !important;
+}
+
+::ng-deep.mat-radio-inner-circle,
+ ::ng-deep.mat-radio-outer-circle {
+    width: 18px !important;
+    height: 18px !important;
+}
+
+::ng-deep.mat-radio-button.mat-radio-disabled .mat-radio-label-content {
+    color: #1A194D!important;
+    cursor: no-drop;
+}
+
+:host:ng-deep .radioContainer.mat-radio-label-content {
+    font-size: 13px;
+    color: #1A194D !important;
+    padding-left: 2px !important;
+}

@@ -1,0 +1,151 @@
+
+<div class=" d-flex align-items-center justify-content-center " *ngIf="loading"
+    style="position: fixed; top:0; bottom: 0; left: 0; right: 0; z-index: 10001 !important; backdrop-filter: blur(2px);">
+    <mat-spinner></mat-spinner>
+</div>
+<div class="gWrapper">
+
+    <app-header Titleheader="Edit Card Settlement" back="true" (BackClick)="backNavigation()"></app-header>
+    <form class="form  mx-2  row align-items-center justify-content-center" >
+        <div class="col-xl-3 col-sm-6 col-12 mb-2 col-md-4 ">
+                <label for="inputLabel" class="gInputLable">Branch Name</label>
+            <div class="gOuterInput">
+                <input type="text" class="gInnerInput " (input)="selectBranchName($event.target.value)" [formControl]="branchValue" placeholder="Select Branch" matInput [matAutocomplete]="auto">
+                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn" class="gAutoCompleteContainer">
+                    <mat-option *ngFor="let option of filteredOptions" [value]="option" (click)="selectBranchValues(option.brcode)" class="gSelectOption">
+                        {{option.brname}}
+                    </mat-option>
+                </mat-autocomplete>
+            </div>
+        </div>
+
+        <div class="col-xl-2 col-sm-6 col-12 mb-2 col-md-3 ">
+
+                <label for="inputLabel" class="gInputLable">Date</label>
+            <div class="gOuterInput">
+                <input matInput [formControl]="dateValue" class="gInnerInput" [matDatepicker]="picker" autocomplete="off" placeholder="DD - MMM - YYYY">
+                <mat-datepicker-toggle matSuffix [for]="picker" class="gInputButton">
+                    <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                </mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </div>
+        </div>
+        <div class=" actionbuttons col-12 col-sm-12 col-md-4 col-xl-1 d-flex gap-3 ">
+            <button type="button" mat-stroked-button class="gSaveButton mt-xl-3" (click)="getTableList()">View</button>
+           
+        </div>
+         </form>
+        
+
+
+            <section class="gTableSection  mx-2" tabindex="0">
+                <div class="gTableActionheaders">
+                    <form role="search" class="search-form ml-3">
+                        <input type="search" name="Search" id="search" class="gSearchText"
+                            autocomplete="off" (ngModelChange)="applyFilterDetailed($event)"
+                            [(ngModel)]="searchValue">
+                    </form>
+                    <img Cores px-0 class="png-icon gXlButton curser " src=".\assets\gImg\excel1.png" type="submit"
+                          (click)="downloadXlOne(dataSource.data)">
+                          <button type="button" mat-stroked-button class="gSaveButton " (click)=" saveTableData()">Save</button>
+                          <button type="button" mat-stroked-button class="gSaveButton " (click)=" openDialog()">Add</button>
+
+                </div>
+                <form [formGroup]="VOForm" autocomplete="off" class="gInnerTable" style="max-height: calc(100vh - 140px)">
+                    <ng-container formArrayName="VORows">
+                        <table #table class="gNormalTable-sm table" mat-table [dataSource]="dataSource.data">
+
+                            <ng-container matColumnDef="SNo">
+                                <th mat-header-cell *matHeaderCellDef> S.No </th>
+                                <td mat-cell *matCellDef="let transaction; let i = index" [formGroup]="transaction">
+                                    <span class="runningFromToText">
+                                    {{i+1}}
+                                </span>
+                                </td>
+                                <td mat-footer-cell *matFooterCellDef> </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="BankName">
+                                <th mat-header-cell *matHeaderCellDef> BankName </th>
+                                <td mat-cell *matCellDef="let transaction;let i = index" [formGroup]="transaction"> 
+                                    <input matInput type="text" formControlName="BankName" readonly> </td>
+                                <td mat-footer-cell *matFooterCellDef> </td>
+                            </ng-container>
+                            <ng-container matColumnDef="AccNo">
+                                <th mat-header-cell *matHeaderCellDef> AccNo </th>
+                                <td mat-cell *matCellDef="let transaction;let i = index" [formGroup]="transaction"> 
+                                    <input matInput type="text" formControlName="AccNo" readonly> </td>
+                                <td mat-footer-cell *matFooterCellDef> </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Mid">
+                                <th mat-header-cell *matHeaderCellDef> Mid </th>
+                                <td mat-cell *matCellDef="let transaction;let i = index" [formGroup]="transaction">
+                                     <input matInput type="text" formControlName="Mid" readonly> </td>
+                                <td mat-footer-cell *matFooterCellDef> </td>
+                            </ng-container>
+                            <ng-container matColumnDef="TId">
+                                <th mat-header-cell *matHeaderCellDef> TId </th>
+                                <td mat-cell *matCellDef="let transaction;let i = index" [formGroup]="transaction">
+                                     <input matInput type="text" formControlName="TId" readonly> </td>
+                                <td mat-footer-cell *matFooterCellDef> </td>
+                            </ng-container>
+                            <ng-container matColumnDef="RunningFromTo">
+                                <th mat-header-cell *matHeaderCellDef> RunningFromTo </th>
+                                <td mat-cell *matCellDef="let transaction; let i = index" [formGroup]="transaction">
+                                    <span class="runningFromToText">
+                                    {{VOForm.get('VORows').at(i).get('RunFrom').value}}-{{VOForm.get('VORows').at(i).get('RunTo').value}}
+                                </span>
+                                </td>
+                                <td mat-footer-cell *matFooterCellDef>
+                                    <span *ngIf="dataSource.data.length >  0">
+                                    Total Amount </span>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Action">
+                                <th mat-header-cell *matHeaderCellDef> Action </th>
+                                <td mat-cell *matCellDef="let transaction;let i = index" [formGroup]="transaction">
+                                    <button mat-icon-button class="material-icons app-toolbar-menu save-button" *ngIf="VOForm.get('VORows').value[i].isEditable" (click)="EditAmount(VOForm,i)">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                                    <button mat-icon-button class="material-icons app-toolbar-menu save-button" (click)="SaveAmount(VOForm,i)" *ngIf="!VOForm.get('VORows').value[i].isEditable" color="primary">
+                                    <mat-icon>check_circle</mat-icon>
+                                </button>
+                                    <button mat-icon-button class="material-icons app-toolbar-menu cancel-button" color="warn" (click)="CancelEdit(VOForm,i)" *ngIf="!VOForm.get('VORows').value[i].isEditable">
+                                    <mat-icon>cancel</mat-icon>
+                                </button>
+                                </td>
+                                <td mat-footer-cell *matFooterCellDef></td>
+                            </ng-container>
+                            <ng-container matColumnDef="Amount">
+                                <th mat-header-cell *matHeaderCellDef> Amount </th>
+                                <td mat-cell *matCellDef="let transaction; let i = index" [formGroup]="transaction">
+                                    <mat-form-field class="Tableform" style="width: 30px;" [appearance]="VOForm.get('VORows').value[i].isEditable? 'none' : 'legacy'">
+                                        <input matInput formControlName="Amount" [readonly]="VOForm.get('VORows').value[i].isEditable">
+                                    </mat-form-field>
+                                </td>
+                                <td mat-footer-cell *matFooterCellDef>
+                                    <span class="totalAmount" *ngIf="dataSource.data.length >  0"> {{totalAmount|
+                                    number:'1.2-2'}} </span>
+                                </td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns ;sticky: true" class="table-row"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                            <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"
+                            [style.display]="dataSource.data.length > 0 ? 'table-row' : 'none'"></tr>
+
+                            <tr class="mat-row" *matNoDataRow>
+
+                                <td class="mat-cell text-center" *ngIf="!loading"
+                                    [attr.colspan]="displayedColumns.length+1">
+                                    No records found.
+                                </td>
+    
+                            </tr>
+                        </table>
+                    </ng-container>
+                   
+                </form>
+            </section>
+
+
+</div>

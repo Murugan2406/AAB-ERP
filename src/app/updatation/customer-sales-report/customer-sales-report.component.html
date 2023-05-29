@@ -1,0 +1,445 @@
+<div class=" d-flex align-items-center justify-content-center " *ngIf="loading"
+    style="position: fixed; top:0; bottom: 0; left: 0; right: 0; z-index: 15001 !important; backdrop-filter: blur(2px);">
+    <mat-spinner></mat-spinner>
+</div>
+
+<div class="gWrapper">
+    <app-header Titleheader="Credit Sales & Sundry Debtors Report"></app-header>
+
+    <div class="gcardContainer mt-2 mx-2">
+        <div class="row">
+    
+              <div class=" col-12 col-sm-12 col-md-5 col-xl-8 d-flex gap-2">
+                <button mat-button class="gIconButton" [disabled]='loading' (click)="toggleVoucherData()" *ngIf="!showForm">
+                    <mat-icon>add</mat-icon>
+                </button>
+                <button mat-button class="gIconButton" [disabled]='loading' (click)="toggleVoucherData()" *ngIf="showForm">
+                    <mat-icon style="line-height: 9px !important">minimize</mat-icon>
+                </button> <span class="gInputLable">  &nbsp; <b>{{reportForm.get('reportType').value}} Form</b>  </span> 
+              </div>
+             
+                <div class=" col-12  col-sm-12 col-md-7 col-xl-4 d-flex gap-2 justify-content-end">
+                <span class="gInputLable"><b>Shortcuts:</b></span>
+
+                <span class="gInputLable">Alt + V - View</span>
+                <span class="gInputLable">Alt + D - Download</span>
+                <span class="gInputLable">Alt + X - Exit</span>
+
+              </div>    
+            </div>
+
+            <div *ngIf="showForm" >
+                <form [formGroup]="reportForm" class="row mt-2"  [@fadeInOut]>
+                    <div class="col-12 col-sm-6 col-md-6 col-xl-4 ">
+                        <div class="row form-group">
+                          <label class="gInputLable  col-sm-12 col-md-4 col-lg-4" for="finyear">Financial Year <strong
+                              class="text-danger ng-star-inserted">*</strong> </label>
+                          <div class=" col-sm-12 col-md-8 col-lg-8">
+
+                            <mat-select class="gInnerInput" id="finyear" formControlName="finyear">
+                                <mat-option *ngFor="let item of Financial" [value]="item.fyear" class="gSelectOption" 
+                                 (onSelectionChange)="Fyearchange($event,item.fyear)">
+                                    {{item.fyear}}
+                                </mat-option>
+                            </mat-select>
+                          </div>
+                        </div>
+                      </div>
+                  
+                      <div class="col-12 col-sm-6 col-md-6 col-xl-4 ">
+                        <div class="row form-group">
+                          <label class="gInputLable  col-sm-12 col-md-4 col-lg-4" for="company">Company<strong
+                              class="text-danger ng-star-inserted">*</strong> </label>
+                          <div class="col-sm-12 col-md-8 col-lg-8">
+                            <mat-select class="gInnerInput" id="company" formControlName="company" [disabled]="backEndType === 'Client'">
+                                <mat-option *ngFor="let item of company" class="gSelectOption"
+                                 (onSelectionChange)="companychange($event, item.Company)" [value]="item.Company">
+                                            {{item.Company}}</mat-option>
+                            </mat-select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-6 col-md-6 col-xl-4 ">
+                        <div class="row form-group">
+                          <label class="gInputLable col-sm-12 col-md-4 col-lg-4" for="state">State<strong
+                              class="text-danger ng-star-inserted">*</strong> </label>
+                          <div class="col-sm-12 col-md-8 col-lg-8">
+                            <mat-select class="gInnerInput" id="state" formControlName="state" [disabled]="backEndType === 'Client'">
+                                <mat-option *ngFor="let item of stateslist" class="gSelectOption" (onSelectionChange)="statechange($event, item)"
+                                [value]="item.State">
+                                {{item.State}}</mat-option>
+                            </mat-select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-6 col-md-6 col-xl-4 ">
+                        <div class="row form-group">
+                          <label class="gInputLable col-sm-12 col-md-4 col-lg-4" for="branch">Branch<strong
+                              class="text-danger ng-star-inserted">*</strong> </label>
+                          <div class="col-sm-12 col-md-8 col-lg-8">
+                            <div>
+                            <input type="text"  disabled
+                            matInput formControlName="branch" [matAutocomplete]="auto"class="gInnerInput" (input)="modelChange($event.target.value)" id="branch" disabled [disabled]="backEndType === 'Client'">
+                        <mat-autocomplete #auto="matAutocomplete" class="gAutoCompleteContainer"  [displayWith]="displaybr">
+                            <mat-option *ngFor="let branchname of Branchlocation" class="gSelectOption"
+                                (onSelectionChange)="changeloc($event,branchname.brcode)"
+                                [value]="branchname">{{ branchname?.brname }}
+                            </mat-option>
+                        </mat-autocomplete>
+                      </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6 col-sm-6 col-md-6 col-xl-4 ">
+                        <div class="row form-group">
+                          <label class="gInputLable col-sm-12 col-md-4 col-lg-4" for="fromdate">Inv From <strong
+                              class="text-danger ng-star-inserted">*</strong> </label>
+                          <div class="col-sm-12 col-md-8 col-lg-5">
+                            <div class="gOuterInput">
+                                <input class="gInnerInput" [min]="minDate" [max]="maxDate" matInput id="fromdate" formControlName="fromdate"
+                                  (keydown)="keytabDate($event, 'todate', 'From')" [matDatepicker]="picker" />
+                                <mat-datepicker-toggle matSuffix [for]="picker" class="gInputButton">
+                                  <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                              </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6 col-sm-6 col-md-6 col-xl-4 ">
+                        <div class="row form-group">
+                          <label class="gInputLable col-sm-12 col-md-4 col-lg-4" for="todate">Inv To<strong
+                              class="text-danger ng-star-inserted">*</strong> </label>
+                          <div class="col-sm-12 col-md-8 col-lg-5">
+                            <div class="gOuterInput">
+                                <input class="gInnerInput" [min]="minDate" [max]="maxDate" matInput id="todate" formControlName="todate"
+                                  (keydown)="keytabDate($event, 'customer','To')" [matDatepicker]="picker2" />
+                                <mat-datepicker-toggle matSuffix [for]="picker2" class="gInputButton">
+                                  <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #picker2></mat-datepicker>
+                              </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-6 col-md-6 col-xl-4 ">
+                        <div class="row form-group">
+                          <label class="gInputLable col-sm-12 col-md-4 col-lg-4" for="customer">Customer<strong
+                              class="text-danger ng-star-inserted">*</strong> </label>
+                          <div class="col-sm-12 col-md-8 col-lg-8">
+                       <div>
+                            <input type="text" id="customer" 
+                            matInput formControlName="customer" [matAutocomplete]="auto1" class="gInnerInput" 
+                            (input)="getCustomername($event.target.value)">
+                        <mat-autocomplete #auto1="matAutocomplete" class="gAutoCompleteContainer" [displayWith]="displayFn">
+                            <mat-option *ngFor="let customer of CustomerArr" class="gSelectOption"
+                                (onSelectionChange)="customerChoosen($event, customer)"
+                                [value]="customer">{{ customer?.Custname }}
+                            </mat-option>
+                        </mat-autocomplete>
+                      </div>
+                          </div>
+                        </div>
+                      </div>
+
+
+                      <div class="col-12 col-sm-6 col-md-6 col-xl-4 ">
+                        <div class="row form-group">
+                          <label class="gInputLable col-sm-12 col-md-4 col-lg-4" for="customer">Sales Type<strong
+                              class="text-danger ng-star-inserted">*</strong> </label>
+                          <div class="col-sm-12 col-md-8 col-lg-8">
+                       <div>
+                            <mat-select class="gInnerInput" id="saleTtype" formControlName="saleType" >
+                              <mat-option *ngFor="let item of SaleTypeList" class="gSelectOption" (onSelectionChange)="saleTypeChange($event, 'reportype')"
+                              [value]="item.Saletype">
+                              {{item.Saletype}}</mat-option>
+                          </mat-select>
+                      </div>
+                          </div>
+                        </div>
+                      </div>
+
+
+
+
+                      <div class="col-12 col-sm-6 col-md-6 col-xl-4 ">
+                        <div class="row form-group">
+                          <label class="gInputLable col-sm-12 col-md-4 col-lg-4" for="customer">Report Type<strong
+                              class="text-danger ng-star-inserted">*</strong> </label>
+                          <div class="col-sm-12 col-md-8 col-lg-8">
+                      
+                            <mat-select class="gInnerInput" id="reportype" formControlName="reportType" >
+                              <mat-option *ngFor="let item of reportTypeList" class="gSelectOption" (onSelectionChange)="saleTypeChange($event, 'submit')"
+                              [value]="item.Reporttype">
+                              {{item.Reporttype}}</mat-option>
+                          </mat-select>
+                
+                          </div>
+              
+
+                        </div>
+                      </div>
+
+
+                      <div class="col-12 col-sm-6 col-md-6 col-xl-4 ">
+                        <div class="row form-group">
+                          <label class="gInputLable col-sm-12 col-md-4 col-lg-4" for="customer">Omit Ecomm Sales<strong
+                              class="text-danger ng-star-inserted">*</strong> </label>
+                          <div class="col-sm-12 col-md-8 col-lg-5">
+                   
+                        <mat-radio-group formControlName="OmitECom" class="d-flex gap-3s">
+                          <mat-radio-button value="Yes" class="gInputLable">Yes</mat-radio-button>
+                          <mat-radio-button value="No" class="gInputLable mx-2">No</mat-radio-button>
+                        </mat-radio-group>
+                            <!-- <mat-select class="gInnerInput" id="saleTtype" formControlName="saleType" >
+                              <mat-option *ngFor="let item of SaleTypeList" class="gSelectOption" (onSelectionChange)="saleTypeChange($event, 'reportype')"
+                              [value]="item.Saletype">
+                              {{item.Saletype}}</mat-option>
+                          </mat-select> -->
+                 
+                          </div>
+                          <button mat-button id="submit"  type="button" class="gSaveButton col-sm-12 col-md-8 col-lg-2" [disabled]='loading' (click)="getReport()">View</button>
+
+                        </div>
+                      </div>
+
+                      <!-- <div class="col-12 col-sm-6 col-md-6 col-xl-4 ">
+                        <div class="row form-group">
+                          <div class=" col-sm-12 mt-2 mt-md-0 ">
+                           </div>
+
+                        </div>
+                      </div> -->
+          
+
+                    </form>
+                    </div>
+
+            </div>
+
+
+            <div class="gTableSection mt-1 mx-2">
+
+ 
+                <div class="gTableActionheaders justify-content-between d-flex">
+   
+                  <div class="d-flex gap-2 gInputLable"> <b *ngIf="FullReport.length > this.limitData && extraAvailable" > Total Records: {{FullReport.length}} &nbsp; &nbsp;Load limit : </b>
+                    <input type="number" style="max-width: 100px;" class="gInnerInput-border" [(ngModel)]="limitData" *ngIf="FullReport.length > this.limitData && extraAvailable" >
+              
+                
+                  </div>
+              <div class="d-flex gap-2">
+                  <form role="search" class="search-form ml-3">
+                      <input type="search" name="Search" [ngClass]="{'gSearchText': searchTemp === '', 'gSearchText1':searchTemp!=='' }" #input autocomplete="off" [(ngModel)]="searchTemp">
+                  </form>
+                  <img Cores px-0 class="png-icon gXlButton curser " src=".\assets\gImg\excel1.png" type="submit" matTooltip="Excel Export" (click)="downloadXl(FullReport)">
+              </div>
+            </div>
+
+<div class="gInnerTable"    [ngStyle]="{'max-height': showForm ? 'calc(100vh - 260px)' : 'calc(100vh - 135px)'}" >
+<table class="table gNormalTable-sm" *ngIf="tableType === 'Credit Sales'">
+  <thead>
+      <tr>
+          <th>S.No</th>
+          <th sortable="Custcode">Custcode <i class="fa" (click)="sorts('Custcode')" [ngClass]="{'fa-sort': column != 'Custcode', 'fa-sort-asc': (column == 'Custcode' && isDesc),
+              'fa-sort-desc': (column == 'Custcode' && !isDesc) }"></i></th>
+
+              <th sortable="Custname">Custname <i class="fa" (click)="sorts('Custname')" [ngClass]="{'fa-sort': column != 'Custname', 'fa-sort-asc': (column == 'Custname' && isDesc),
+              'fa-sort-desc': (column == 'Custname' && !isDesc) }"></i></th>
+          <th sortable="Brcode" *ngIf="this.backEndType ==='Server'">Brcode <i class="fa" (click)="sorts('Brcode')" [ngClass]="{'fa-sort': column != 'Brcode', 'fa-sort-asc': (column == 'Brcode' && isDesc),
+              'fa-sort-desc': (column == 'Brcode' && !isDesc) }"></i></th>
+          <th sortable="Brname" *ngIf="this.backEndType ==='Server'">Brname <i class="fa" (click)="sorts('Brname')" [ngClass]="{'fa-sort': column != 'Brname', 'fa-sort-asc': (column == 'Brname' && isDesc),
+              'fa-sort-desc': (column == 'Brname' && !isDesc) }"></i></th>
+          <th sortable="InvDate" >InvDate <i class="fa"
+                  (click)="sorts('InvDate')" [ngClass]="{'fa-sort': column != 'InvDate', 'fa-sort-asc': (column == 'InvDate' && isDesc),
+              'fa-sort-desc': (column == 'InvDate' && !isDesc) }"></i></th>
+          <th sortable="InvNo" >InvNo <i class="fa"
+                  (click)="sorts('InvNo')" [ngClass]="{'fa-sort': column != 'InvNo', 'fa-sort-asc': (column == 'InvNo' && isDesc),
+              'fa-sort-desc': (column == 'InvNo' && !isDesc) }"></i></th>
+          <th sortable="InvAmt" style="text-align: right">InvAmt <i class="fa"
+                  (click)="sorts('InvAmt')" [ngClass]="{'fa-sort': column != 'InvAmt', 'fa-sort-asc': (column == 'InvAmt' && isDesc),
+              'fa-sort-desc': (column == 'InvAmt' && !isDesc) }"></i></th>
+
+      </tr>
+  </thead>
+  <tbody>
+      <tr *ngFor="let items of DataSource | orderby: {property: column, direction: direction} | filter:searchTemp;  index as i">
+          <td>{{i+1}}</td>
+          <td>{{items.Custcode}}</td>
+          <td>{{items.Custname}}</td>
+          <td *ngIf="this.backEndType ==='Server'">{{items.Brcode}}</td> 
+           <td *ngIf="this.backEndType ==='Server'">{{items.Brname}}</td>
+          <td>{{items.InvDate}}</td> 
+          <td>{{items.InvNo}}</td> 
+          <td style="text-align: right">{{items.InvAmt | currency:'INR'}}</td>
+      </tr>
+      <tr *ngIf="FullReport.length > this.limitData && extraAvailable">
+        <td></td>
+        <td >
+          <button mat-button class="gSaveButton"  (click)="onTableScroll(DataSource.length )">Load next {{limitData}}</button>
+        </td>
+        
+
+        <td  [colSpan]="4" *ngIf="this.backEndType ==='Server'"></td>
+        <td  [colSpan]="2" *ngIf="this.backEndType !=='Server'"></td>
+        <td  class="text-end"> <b> Sub Total</b></td>
+        <td class="text-end bold"> <b>{{getCurrentTotal(DataSource) ?? 0 | currency:'INR'}}</b>  </td>
+
+      </tr>
+      <tr class="" *ngIf="DataSource.length === 0">
+          <td [colSpan]="8" class="text-center bold" *ngIf="this.backEndType ==='Server'">No Record Found</td>
+          <td [colSpan]="6" class="text-center bold" *ngIf="this.backEndType !=='Server'">No Record Found</td>
+      </tr>
+      <tr class="gToggleFooter">
+          <td [colSpan]="5" class="text-end bold" *ngIf="this.backEndType !=='Server'">Grand Total</td>
+          <td [colSpan]="7" class="text-end bold" *ngIf="this.backEndType ==='Server'">Grand Total</td>
+          <td [colSpan]="1" class="text-end bold">
+              {{totalAmount|currency:'INR'}}
+          </td>
+      </tr>
+  </tbody>
+</table>
+
+
+
+<table class="table gNormalTable-sm" *ngIf="tableType === 'Sundry Debtors Consolidated'">
+  <thead>
+      <tr>
+          <th>S.No</th>
+          <th sortable="Custcode">Custcode <i class="fa" (click)="sorts('Custcode')" [ngClass]="{'fa-sort': column != 'Custcode', 'fa-sort-asc': (column == 'Custcode' && isDesc),
+              'fa-sort-desc': (column == 'Custcode' && !isDesc) }"></i></th>
+
+              <th sortable="Custname">Custname <i class="fa" (click)="sorts('Custname')" [ngClass]="{'fa-sort': column != 'Custname', 'fa-sort-asc': (column == 'Custname' && isDesc),
+              'fa-sort-desc': (column == 'Custname' && !isDesc) }"></i></th>
+              <th sortable="Brcode"  *ngIf="this.backEndType ==='Server'">Brcode <i class="fa" (click)="sorts('Brcode')" [ngClass]="{'fa-sort': column != 'Brcode', 'fa-sort-asc': (column == 'Brcode' && isDesc),
+                'fa-sort-desc': (column == 'Brcode' && !isDesc) }"></i></th>
+
+                <th sortable="Brname"  *ngIf="this.backEndType ==='Server'">Brname <i class="fa" (click)="sorts('Brname')" [ngClass]="{'fa-sort': column != 'Brname', 'fa-sort-asc': (column == 'Brname' && isDesc),
+                  'fa-sort-desc': (column == 'Brname' && !isDesc) }"></i></th>
+          <th sortable="Pendingamt" class="text-end">PendingAmt <i class="fa" (click)="sorts('Pendingamt')" [ngClass]="{'fa-sort': column != 'Pendingamt', 'fa-sort-asc': (column == 'Pendingamt' && isDesc),
+              'fa-sort-desc': (column == 'Pendingamt' && !isDesc) }"></i></th>
+          <!-- <th sortable="Brname">Brname <i class="fa" (click)="sorts('Brname')" [ngClass]="{'fa-sort': column != 'Brname', 'fa-sort-asc': (column == 'Brname' && isDesc),
+              'fa-sort-desc': (column == 'Brname' && !isDesc) }"></i></th>
+          <th sortable="InvDate" >InvDate <i class="fa"
+                  (click)="sorts('InvDate')" [ngClass]="{'fa-sort': column != 'InvDate', 'fa-sort-asc': (column == 'InvDate' && isDesc),
+              'fa-sort-desc': (column == 'InvDate' && !isDesc) }"></i></th>
+          <th sortable="InvNo" >InvNo <i class="fa"
+                  (click)="sorts('InvNo')" [ngClass]="{'fa-sort': column != 'InvNo', 'fa-sort-asc': (column == 'InvNo' && isDesc),
+              'fa-sort-desc': (column == 'InvNo' && !isDesc) }"></i></th>
+          <th sortable="InvAmt" style="text-align: right">InvAmt <i class="fa"
+                  (click)="sorts('InvAmt')" [ngClass]="{'fa-sort': column != 'InvAmt', 'fa-sort-asc': (column == 'InvAmt' && isDesc),
+              'fa-sort-desc': (column == 'InvAmt' && !isDesc) }"></i></th> -->
+
+      </tr>
+  </thead>
+  <tbody>
+      <tr *ngFor="let items of DataSource | orderby: {property: column, direction: direction} | filter:searchTemp;  index as i">
+          <td>{{i+1}}</td>
+          <td>{{items.Custcode}}</td>
+          <td>{{items.Custname}}</td>
+          <td *ngIf="this.backEndType ==='Server'"> {{items.Brcode}}</td> 
+          <td *ngIf="this.backEndType ==='Server'">{{items.Brname}}</td> 
+           <!-- <td>{{items.Brname}}</td>
+          <td>{{items.InvDate}}</td> 
+          <td>{{items.InvNo}}</td>  -->
+          <td style="text-align: right">{{items.Pendingamt | currency:'INR'}}</td>
+      </tr>
+      <tr *ngIf="FullReport.length > limitData && extraAvailable">
+        <!-- <td></td> -->
+        <td >
+          <button mat-button class="gSaveButton"  (click)="onTableScroll(DataSource.length )">Load next {{limitData}}</button>
+        </td>
+        <td colspan="2" *ngIf="this.backEndType ==='Server'"></td>
+        <td></td>
+        <td  class="text-end "> <b> Sub Total</b></td>
+        <td class="text-end bold"> <b>{{getpendtingotal(DataSource) ?? 0 | currency:'INR'}}</b>  </td>
+
+      </tr>
+      <tr class="" *ngIf="DataSource.length === 0">
+          <td [colSpan]="6" class="text-center bold"  *ngIf="this.backEndType ==='Server'">No Record Found</td>
+          <td [colSpan]="4" class="text-center bold"  *ngIf="this.backEndType !=='Server'">No Record Found</td>
+      </tr>
+      <tr class="gToggleFooter">
+        <td [colSpan]="2" class="text-end bold" *ngIf="this.backEndType ==='Server'"></td>
+          <td [colSpan]="3" class="text-end bold">Grand Total</td>
+          <td [colSpan]="1" class="text-end bold">
+              {{totalAmount|currency:'INR'}}
+          </td>
+      </tr>
+  </tbody>
+</table>
+
+
+<table class="table gNormalTable-sm" *ngIf="tableType === 'Sundry Debtors Detailed'">
+  <thead>
+      <tr>
+          <th>S.No</th>
+          <th sortable="Custcode">Custcode <i class="fa" (click)="sorts('Custcode')" [ngClass]="{'fa-sort': column != 'Custcode', 'fa-sort-asc': (column == 'Custcode' && isDesc),
+              'fa-sort-desc': (column == 'Custcode' && !isDesc) }"></i></th>
+
+              <th sortable="Custname">Custname <i class="fa" (click)="sorts('Custname')" [ngClass]="{'fa-sort': column != 'Custname', 'fa-sort-asc': (column == 'Custname' && isDesc),
+              'fa-sort-desc': (column == 'Custname' && !isDesc) }"></i></th>
+          <th sortable="Brcode" *ngIf="this.backEndType ==='Server'">Brcode <i class="fa" (click)="sorts('Brcode')" [ngClass]="{'fa-sort': column != 'Brcode', 'fa-sort-asc': (column == 'Brcode' && isDesc),
+              'fa-sort-desc': (column == 'Brcode' && !isDesc) }"></i></th>
+          <th sortable="Brname" *ngIf="this.backEndType ==='Server'">Brname <i class="fa" (click)="sorts('Brname')" [ngClass]="{'fa-sort': column != 'Brname', 'fa-sort-asc': (column == 'Brname' && isDesc),
+              'fa-sort-desc': (column == 'Brname' && !isDesc) }"></i></th>
+          <th sortable="InvDate" >InvDate <i class="fa"
+                  (click)="sorts('InvDate')" [ngClass]="{'fa-sort': column != 'InvDate', 'fa-sort-asc': (column == 'InvDate' && isDesc),
+              'fa-sort-desc': (column == 'InvDate' && !isDesc) }"></i></th>
+          <th sortable="InvNo" >InvNo <i class="fa"
+                  (click)="sorts('InvNo')" [ngClass]="{'fa-sort': column != 'InvNo', 'fa-sort-asc': (column == 'InvNo' && isDesc),
+              'fa-sort-desc': (column == 'InvNo' && !isDesc) }"></i></th>
+          <th sortable="InvAmt" style="text-align: right">InvAmt <i class="fa"
+                  (click)="sorts('InvAmt')" [ngClass]="{'fa-sort': column != 'InvAmt', 'fa-sort-asc': (column == 'InvAmt' && isDesc),
+              'fa-sort-desc': (column == 'InvAmt' && !isDesc) }"></i></th>
+              <th sortable="Pendingamt" style="text-align: right">Pending Amt <i class="fa"
+                (click)="sorts('Pendingamt')" [ngClass]="{'fa-sort': column != 'Pendingamt', 'fa-sort-asc': (column == 'Pendingamt' && isDesc),
+            'fa-sort-desc': (column == 'Pendingamt' && !isDesc) }"></i></th>
+
+      </tr>
+  </thead>
+  <tbody>
+      <tr *ngFor="let items of DataSource | orderby: {property: column, direction: direction} | filter:searchTemp;  index as i">
+          <td>{{i+1}}</td>
+          <td>{{items.Custcode}}</td>
+          <td>{{items.Custname}}</td>
+          <td *ngIf="this.backEndType ==='Server'">{{items.Brcode}}</td> 
+           <td *ngIf="this.backEndType ==='Server'">{{items.Brname}}</td>
+          <td>{{items.InvDate}}</td> 
+          <td>{{items.InvNo}}</td> 
+          <td style="text-align: right">{{items.InvAmt | currency:'INR'}}</td>
+          <td style="text-align: right">{{items.Pendingamt | currency:'INR'}}</td>
+      </tr>
+      <tr *ngIf="FullReport.length > limitData && extraAvailable">
+        <td></td>
+        <td >
+          <button mat-button class="gSaveButton"  (click)="onTableScroll(DataSource.length )">Load next {{limitData}}</button>
+        </td>
+
+        <td  [colSpan]="4" *ngIf="this.backEndType ==='Server'"></td>
+        <td  [colSpan]="2" *ngIf="this.backEndType !=='Server'"></td>
+        <td> <b> Sub Total</b></td>
+        <td class="text-end bold"> <b>{{getCurrentTotal(DataSource) ?? 0 | currency:'INR'}}</b>  </td>
+        <td class="text-end bold"> <b>{{getpendtingotal(DataSource) ?? 0 | currency:'INR'}}</b>  </td>
+
+      </tr>
+      <tr class="" *ngIf="DataSource.length === 0">
+          <td [colSpan]="9" class="text-center bold" *ngIf="this.backEndType !=='Server'">No Record Found</td>
+          <td [colSpan]="7" class="text-center bold" *ngIf="this.backEndType ==='Server'">No Record Found</td>
+      </tr>
+      <tr class="gToggleFooter">
+          <td [colSpan]="5" class="text-end bold" *ngIf="this.backEndType !=='Server'">Grand Total</td>
+          <td [colSpan]="7" class="text-end bold" *ngIf="this.backEndType ==='Server'">Grand Total</td>
+          <td [colSpan]="1" class="text-end bold">
+            {{totalAmount|currency:'INR'}}
+        </td>
+          <td [colSpan]="1" class="text-end bold">
+              {{totalPending|currency:'INR'}}
+          </td>
+      </tr>
+  </tbody>
+</table>
+
+</div>
+            </div>
+</div>

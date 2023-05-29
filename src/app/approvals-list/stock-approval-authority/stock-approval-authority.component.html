@@ -1,0 +1,162 @@
+<div class="wrapper">
+    <div class="fix">
+        <div class="header">
+            <mat-toolbar color="warn">
+                <mat-toolbar-row>
+                    <button mat-button (click)="backNavigation()"> BACK</button>
+                    <span class="example-spacer"></span>
+                    <button mat-button></button>
+                    <span class="example-spacer"></span>
+                    <button mat-button routerLink='/dashboard' class="btn btn-lg"> <i
+                            class="fa fa-home text-white btn btn-lg"></i></button>
+                    <button mat-button disabled>
+                        <img class="png-icon" src=".\assets\gImg\a2b2.png" style="max-width:56px;min-width:56px">
+                    </button>
+                </mat-toolbar-row>
+            </mat-toolbar>
+        </div>
+    </div>
+    <section>
+        <div class="container-fluid p-0">
+            <div class="row">
+                <div class="col-sm-12 text-center mt-1">
+                    <h5>Physical Stock Approval Authorities</h5>
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="offset-sm-3 col-sm-6 offset-sm-3">
+                    <div class="row">
+                        <div class="col-sm-6 d-inline-flex">
+                            <label class="pe-2"> Region:</label>
+                            <select (change)="view()" [(ngModel)]="patchregion" placeholder="Region"
+                                class="form-control form-control-sm round1">
+                                <option *ngFor="let reg of regionList" [value]="reg.Region" >{{reg.Region}}</option>
+                            </select>
+
+                        </div>
+                        <div class="col-sm-6 d-inline-flex">
+                            <label class="pe-1">CostCenter:</label>
+                            <select (change)="view()" [(ngModel)]="patchcostcenter" placeholder="Cost Center"
+                                class="form-control form-control-sm round1">
+                                <option *ngFor="let cost of Cost" [value]="cost.Costcenter" >{{cost.Costcenter}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-1">
+                <div class="col-sm-12">
+                    <div class="toclistscroll card">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Sno</th>
+                                    <th>Brcode </th>
+                                    <th>Location <i class="fa" style="cursor: pointer;" (click)="sort('brname')"
+                                            [ngClass]="{'fa-sort': column != 'brname', 'fa-sort-asc': (column =='brname' && isDesc),
+                                        'fa-sort-desc': (column == 'brname' && !isDesc) }" aria-hidden="true"></i></th>
+                                    <th class="text-center w-15">Level 1 Authority</th>
+                                    <th class="text-center w-15">Level 2 Authority</th>
+
+                                </tr>
+                            </thead>
+                            <tbody class="table table-bordered">
+                                <tr
+                                    *ngFor="let list of branchlist,index as i">
+                                    <td>{{i+1}}</td>
+                                    <td>{{list.brcode}}</td>
+                                    <td matTooltip="{{list.brname}}" [matTooltipPosition]="'right'">{{list.brname}}</td>
+
+                                    <td class="text-center">
+                                        <button class="btn btn-sm edit" data-bs-toggle="modal" data-bs-target="#getviewlist" (click)="editname('Level1',i)">Add
+                                            <span class="material-icons"
+                                            >
+                                            add_circle
+                                        </span>
+                                        </button>
+                                    </td>
+
+                                    <td class="text-center">
+                                        <button class="btn btn-sm edit"  data-bs-toggle="modal" data-bs-target="#getviewlist" (click)="editname('Level2',i)">Add
+                                        <span class="material-icons"
+                                        >
+                                        add_circle
+                                        </span>
+                                    </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal fade mt-5" id="getviewlist" tabindex="-1" role="dialog"
+                        aria-labelledby="myModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+                        <div class="modal-dialog modal-md">
+                            <div class="modal-content">
+                                <div class="row">
+                                    <div class="col-sm-12 text-center mhead">{{brname}}<span class="close small m-0"
+                                            (click)="closelist()"><i type="button" class="fa fa-close small text-danger"
+                                                aria-hidden="true"></i></span>
+                                    </div>
+                                </div>
+                                <div class="modal-body p-3">
+                                    <div class="row">
+                                        <div class="col-sm-12" style="overflow-x:auto">
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <label>{{level}} Authority Name</label>
+                                                    <input autocomplete="off" matInput [formControl]="Enamecntrl" [matAutocomplete]="auto1" id="browser"
+                                                        class="form-control form-control-sm"
+                                                        placeholder="Enter Authority Name" [(ngModel)]="patchauthname">
+                                                    <mat-autocomplete #auto1="matAutocomplete">
+                                                        <mat-option *ngFor="let sec of Empnamedata"
+                                                            [value]="sec?.username">{{sec?.username }}
+                                                        </mat-option>
+                                                    </mat-autocomplete>
+                                                </div>
+                                                <div class="col-sm-12  mt-3 mb-1 text-center">
+                                                    <button class="btn btn-sm small add" (click)="Update()">Add
+                                                        <span class="material-icons small">
+                                                            add_circle
+                                                        </span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                <div class="toclistscroll">
+                                                <table class="table table-borderless ">
+                                                    <thead class="rsf">
+                                                        <tr>
+                                                            <th>Sno</th>
+                                                            <th>Authority Name</th>
+                                                            <th class="text-end">Delete</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody *ngIf="viewlist.length !=0">
+                                                        <tr *ngFor="let list of viewlist,index as i">
+                                                            <td>{{i+1}}</td>
+                                                            <td>{{list.FirstLevelAppAuthority}}</td>
+                                                            <td class="text-end"><button class="btn btn-sm delete" (click)="delete(list)"><i class="fa fa-trash"></i></button></td>
+
+                                                        </tr>
+                                                    </tbody>
+
+                                                </table>
+                                                <div *ngIf="viewlist.length ==0" class="col-sm-12 text-center small">
+                                                    <p class="text-center">Add authorities..</p>
+                                                    </div>
+                                                </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</div>

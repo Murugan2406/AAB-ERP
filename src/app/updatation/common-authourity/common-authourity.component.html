@@ -1,0 +1,178 @@
+<div class="gDialogTitle">
+    <span></span>
+    <span>Approval Authority </span>
+<button mat-icon-button class="gDialogCloseButton" type="button" (click)="cancel()"><mat-icon>close</mat-icon></button>
+</div>
+<div class="gDialogContainer mx-2 my-3">
+    <div class="row ">
+        <div class="col-12 col-md-4 col-xl-4  ">
+            <label class="gInputLable"> Authorized  By</label>
+        </div>
+        <div class="col-12 col-md-8 col-xl-8 " style="padding-bottom: 20px;">
+            <mat-select class="gInnerInput-border" id="authority" (selectionChange)="changeAuthourity($event.value)">
+                <mat-option selected disabled>Select</mat-option>
+                <mat-option *ngFor="let appr of ApprUsrs" [value]="appr.empcode" class="gSelectOption">{{appr.empname}}</mat-option>
+            </mat-select>
+        </div>
+
+        <div *ngIf="isType === 'Common'">
+            <div *ngIf="isError === 'AUTHORITY'" class="alert alert-danger p-1" role="alert" style="margin-top: 1%;">
+                {{errMsg}}
+            </div>
+
+            <div class="d-flex row" *ngIf="mainOption==='ALL'">
+                <div class="col-12 col-md-4 col-xl-4 gInputLable"> Choose Option</div>
+                <div class="col-12 col-md-8 col-xl-8">
+
+                    <div class="row">
+                        <mat-radio-group [(ngModel)]="selOption" (change)="checkAuthority($event.value)" aria-labelledby="example-radio-group-label" class="example-radio-group">
+                            <mat-radio-button class="example-radio-button label" value="Otp" style="margin-left: 5px;" *ngIf="Authdata.Otp === 'Yes'">
+                                OTP
+                            </mat-radio-button>
+                            <mat-radio-button class="example-radio-button label" value="Key" style="margin-left: 5px;" *ngIf="Authdata.KeyAuth === 'Yes'">
+                                Key
+                            </mat-radio-button>
+                            <mat-radio-button class="example-radio-button label" value="Face" style="margin-left: 5px;" *ngIf="Authdata.Face === 'Yes'">
+                                Face
+                            </mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                </div>
+
+            </div>
+
+            <div *ngIf="(selOption==='Face' || mainOption==='FACEONLY') && faceOption === 'FaceOnly' ">
+                <div *ngIf="webcamImage === null" class="d-flex justify-content-center">
+                    <app-capture-image (pictureTaken)="handleImage($event)"></app-capture-image>
+                </div>
+                <div class="snapshot d-flex justify-content-center " *ngIf="webcamImage">
+                    <img [src]="webcamImage.imageAsDataUrl" />
+                </div>
+                <div class="row d-flex justify-content-center " *ngIf="webcamImage" style="margin-top: 5px;">
+                    <a (click)="retakepicture()" style="color: blue;text-decoration: underline;font-size: 14px;"> <i class="fa fa-refresh" aria-hidden="true"></i> Retake
+                    </a>
+                </div>
+
+                <div *ngIf="faceVerify === 'Success'" class="alert alert-success p-1 text-center" style="margin-top: 10px;" role="alert">
+                    Face Validation Success
+                </div>
+            </div>
+
+            <div *ngIf="(selOption==='Face' || mainOption==='FACEONLY') && faceOption === 'Both' &&  faceVerify !=='Success'">
+                <div *ngIf="webcamImage === null" class="d-flex justify-content-center">
+                    <app-capture-image (pictureTaken)="handleImage($event)"></app-capture-image>
+                </div>
+                <div class="snapshot d-flex justify-content-center " *ngIf="webcamImage">
+                    <img [src]="webcamImage.imageAsDataUrl" />
+                </div>
+                <div class="row d-flex justify-content-center " *ngIf="webcamImage" style="margin-top: 5px;">
+                    <a (click)="retakepicture()" style="color: blue;text-decoration: underline;font-size: 14px;"> <i class="fa fa-refresh" aria-hidden="true"></i> Retake
+                    </a>
+                </div>
+                <div *ngIf="faceOption === 'Both' && webcamImage" class="row d-flex justify-content-center" style="margin-top: 10px;">
+                    <button class="actionBtn" (click)="dosubmit()">Verify</button>
+                </div>
+            </div>
+
+            <div class="row" *ngIf="(selOption==='Face' || mainOption==='FACEONLY')&& faceOption !== 'FaceOnly' && faceVerify ==='Success'">
+                <div class="col-12 col-md-4 col-xl-3 col-lg-4 ">
+                    <label style="margin-top: auto;margin-bottom: auto;"> Password </label>
+                </div>
+                <div class="col-12 col-md-8 col-xl-9 col-lg-8 ">
+                    <input type="password" [ngClass]="{'is-valid': checkData === 'Success', 'is-invalid': checkData === 'Failed' }" autocomplete="off" (keypress)="facepwdKeyPress()" (keydown)="enterfacePwd($event)" class="form-control form-control-sm is-valid" id="passwrd"
+                        name="passwrd" [(ngModel)]="passwrd">
+                    <div [ngClass]="{'valid-feedback': checkData === 'Success', 'invalid-feedback': checkData === 'Failed' }">
+                        {{feedbackMsg}} </div>
+                </div>
+            </div>
+
+            <div class="d-flex row justify-content-between" *ngIf="mainOption==='OTPONLY'">
+                <div class="col-3 col-lg-4 "> </div>
+                <div class="col-9 col-lg-8 ">
+                    <div mat-dialog-actions>
+                        <button style="vertical-align:middle" class="btnn" (click)="checkAuthority('Otp')" mat-raised-button color="accent">Get OTP</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex row justify-content-between" *ngIf="mainOption==='KEYONLY'">
+                <div class="col-3 col-lg-4 "> </div>
+                <div class="col-9 col-lg-8 ">
+                    <div mat-dialog-actions>
+                        <button style="vertical-align:middle" class="btnn" (click)="checkAuthority('Key')" mat-raised-button color="accent">Get Key</button>
+                    </div>
+                </div>
+            </div>
+            <br>
+
+            <div *ngIf="isError === 'OTPLimits'||isError === 'GETOTP' || isError === 'OTP'|| isError === 'OTPVALIDATE'|| isError === 'OTPSERVER'" class="text text-danger p-1 text-center" role="alert">
+                {{errMsg}}
+            </div>
+
+            <div class="d-flex row justify-content-between" *ngIf="isOption === 'Otp'">
+                <div class="col-3 col-lg-4 ">
+                    <label *ngIf="actionView === 'key' && isSend" style="top: 2%;"> OTP </label>
+                    <label *ngIf="!isSend" style="color: dodgerblue;top: 2%;">OTP Send ....</label>
+                    <label *ngIf="actionView === 'value'&& isSend" style="top: 2%;"> OTP for {{authKey}}</label>
+                </div>
+                <div class="col-9 col-lg-8 ">
+                    <input [ngClass]="{'is-valid': checkData === 'Success', 'is-invalid': checkData === 'Failed' }" class="form-control form-control-sm is-valid" id="otp" name="otp" [(ngModel)]="authValue" (keydown)="enterAuthvalue($event)">
+                    <div [ngClass]="{'valid-feedback': checkData === 'Success', 'invalid-feedback': checkData === 'Failed' }">
+                        {{feedbackMsg}} </div>
+                </div>
+            </div>
+
+            <div *ngIf="isError === 'IMAGE' || isError === 'GETKEY'||isError === 'KEYSERVER'||isError === 'PASSWORD'||isError === 'KEYVALIDATE'" class="text text-danger p-1 text-center" role="alert">
+                {{errMsg}}
+            </div>
+
+            <div *ngIf="selOption==='Face' &&  checkData === 'Success' && faceOption !== 'FaceOnly'" class="alert alert-success p-1 text-center" role="alert">
+                {{feedbackMsg}}
+            </div>
+
+            <!-- <div *ngIf="selOption==='Face' &&  checkData === 'Failed'" class="alert alert-danger p-1 text-center" role="alert">
+      {{feedbackMsg}}
+    </div> -->
+
+            <div class="d-flex row justify-content-between" *ngIf="isOption === 'Key'">
+                <div class="col-12 col-md-4 col-xl-4 ">
+                    <label *ngIf="actionView === 'key'" style="top: 2%;" class="gInputLable"> Password </label>
+                    <label *ngIf="actionView === 'value'" style="top: 2%;" class="gInputLable"> Password for <b> {{authKey}}</b></label>
+                </div>
+                <div class="col-12 col-md-8 col-xl-8">
+                    <input [ngClass]="{'is-valid': checkData === 'Success', 'is-invalid': checkData === 'Failed' }" class="gInnerInput-border" id="password" [(ngModel)]="authValue" name="password" type="password" (keydown)="enterAuthvalue($event)">
+                    <div [ngClass]="{'valid-feedback': checkData === 'Success', 'invalid-feedback': checkData === 'Failed' }">
+                        {{feedbackMsg}} </div>
+                </div>
+            </div>
+        </div>
+        <mat-dialog-actions class="justify-content-center mt-3" *ngIf="mainOption==='ALL' && selOption === '' && Authdata.Face === 'Yes'">
+            <button mat-button (click)="openFaceVerifyHistory()" class="gSaveButton">
+            <i class="fa fa-address-book" aria-hidden="true" ></i> Face Approval History</button>
+        </mat-dialog-actions>
+
+
+
+
+
+        <!-- <div class="row d-flex justify-content-center" >
+
+</div> -->
+
+        <mat-dialog-actions class="justify-content-center gap-2" *ngIf="isType ==='Nill' ||isType ==='Common' && isOption === 'Key' ||isType ==='Common' && isOption === 'Otp'">
+            <button class="gSaveButton" (click)="dosubmit()">Submit</button>
+            <button class="gDeleteButton" (click)="cancel()">Cancel</button>
+        </mat-dialog-actions>
+
+        <div *ngIf="isType ==='Common' && isOption === 'Face'">
+            <mat-dialog-actions class="justify-content-center gap-2" *ngIf="faceOption === 'FaceOnly' || faceOption === 'PasswordOnly' || (faceOption === 'Both' && faceVerify === 'Success')">
+                <button class="gSaveButton" (click)="dosubmit()">Submit</button>
+                <button class="gDeleteButton" (click)="cancel()">Cancel</button>
+            </mat-dialog-actions>
+        </div>
+    </div>
+    
+</div>
+    <div *ngIf="progressval == 'indeterminate'" class="loading">
+        <mat-progress-spinner diameter="70" mode="determinate" value="100" [mode]="progressval"> </mat-progress-spinner>
+    </div>

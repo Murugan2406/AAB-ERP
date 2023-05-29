@@ -1,0 +1,54 @@
+.container {
+    max-width: 800px;
+}
+
+.gcardContainer {
+    box-shadow: 0 8px 32px 0 rgb(31 38 135 / 43%);
+}
+
+.toggleFooter {
+    background-color: var(--table-actionHeader-bg) !important;
+    max-height: 25px !important;
+    height: 25px !important;
+}
+
+.toggleFooter td {
+    background-color: var(--table-actionHeader-bg);
+    font-weight: 600;
+    border-bottom: none !important;
+    white-space: nowrap;
+    line-height: 22px;
+    height: 22px;
+    text-transform: capitalize;
+    font-family: system-ui;
+    font-size: 12px;
+    padding: 1px 10px !important;
+    color: #04003a !important;
+    font-weight: 700 !important;
+    border-bottom: none !important;
+    z-index: 3;
+}
+
+::ng-deep.mat-progress-spinner svg,
+.mat-progress-spinner {
+    height: 60px !important;
+}
+
+::ng-deep.mat-progress-spinner circle,
+.mat-spinner circle {
+    stroke: var(--button-save-color);
+    stroke-width: 10% !important;
+    stroke-dasharray: 50px !important;
+}
+
+.gTableSection {
+    .Amount {
+        color: #1db44a !important;
+    }
+}
+.gTableSection{
+.mat-column-CmpCode{
+    width: 500px;
+    min-width: 500px;
+} 
+}

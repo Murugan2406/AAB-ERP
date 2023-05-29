@@ -1,0 +1,481 @@
+<mat-sidenav-container>
+  <mat-sidenav-content>
+    <mat-toolbar color="warn" class="position-fixed">
+      <button mat-button (click)="backNavigation()"> BACK</button>
+      <span style="text-align: center;font-size: 16px;" class="mat-spacer"> {{header}} </span>
+      <img class="pull-right" src=".\assets\gImg\a2b2.png" style="max-width: 56px; min-width: 56px;">
+    </mat-toolbar>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+<br>
+<div class="content">
+  <div *ngIf="isCreateSubject" class="card shadow-sm p-3 mb-5 bg-white rounded">
+    <div class="card-body">
+      <div class="row" style="margin-top:5px">
+        <div class="col-lg-4 col-md-4 col-sm-12 form-group">
+          <label class="text-muted">DepartMent</label>
+          <select class="form-control form-select" [(ngModel)]="dept" id="sel1" (change)="onChangeDept($event.target)">
+            <option class="form-select" value="select" selected>Select</option>
+            <option class="form-select" *ngFor="let dept of DepartMents" [value]="dept.DeptName">{{dept.DeptName}}
+            </option>
+          </select>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12 form-group">
+          <label class="text-muted">Subject</label>
+          <input type="text" class="form-control form-select" name="createsub" id="createsub" [(ngModel)]="editsub">
+        </div>
+      </div>
+      <div class="row" style="margin-left: 4%">
+        <div class=" grp-button col-md-6 col-sm-12 form-group">
+          <button (click)="backNavigation()" mat-raised-button class="btn btn-danger "
+            style="margin-left: 5px;margin-top:3%" mat-raised-button>
+            <i class="fa fa-remove" aria-hidden="true"></i>
+            Cancel</button>
+          <button (click)="createSubject()" mat-raised-button class="btn btn-info"
+            style="margin-left: 5px;margin-top:3%" mat-raised-button>
+            <i class="fa fa-check" aria-hidden="true"></i>
+            Create</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="isEditSubject" class="card">
+    <div class="card-body">
+      <div class="row" style="margin-top:5px">
+        <div class="col-lg-4 col-md-4 col-sm-12 form-group">
+          <label class="text-muted">DepartMent</label>
+          <select class="form-control form-select" [(ngModel)]="dept" id="sel2" (change)="onChange($event.target)">
+            <option class="form-select" value="select" selected>Select</option>
+            <option class="form-select" *ngFor="let dept of DepartMents">{{dept.DeptName}}</option>
+          </select>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12 form-group">
+          <label class="text-muted">Subject</label>
+          <select class="form-control form-select" [(ngModel)]="subject" #jds id="sel3"
+            (change)="onChangeSubject($event.target)">
+            <option class="form-select" value="select" selected>Select</option>
+            <option class="form-select" *ngFor="let jds of JDS">{{jds.ListofJds}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-4 col-md-4 col-sm-12 form-group">
+          <label class="text-muted">Subject edit</label>
+          <input type="text" class="form-control form-select" name="editsub" id="editsub" [(ngModel)]="editsub">
+        </div>
+      </div>
+      <div class="row" style="margin-left: 4%">
+        <div class=" grp-button col-md-6 col-sm-12 form-group">
+          <button (click)="backNavigation()" mat-raised-button class="btn btn-danger "
+            style="margin-left: 5px;margin-top:3%" mat-raised-button>
+            <i class="fa fa-remove" aria-hidden="true"></i>
+            Cancel</button>
+          <button (click)="updateSubject()" mat-raised-button class="btn btn-info"
+            style="margin-left: 5px;margin-top:3%" mat-raised-button>
+            <i class="material-icons">update</i>
+            Update</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="isDeleteSubject" class="card">
+    <div class="card-body">
+      <div class="row" style="margin-top:5px">
+        <div class="col-lg-4 col-md-4 col-sm-12 form-group">
+          <label class="text-muted">DepartMent</label>
+          <select class="form-control form-select" [(ngModel)]="dept" id="sel4" (change)="onChange($event.target)">
+            <option class="form-select" value="select" selected>Select</option>
+            <option class="form-select" *ngFor="let dept of DepartMents" [value]="dept.DeptName">{{dept.DeptName}}
+            </option>
+          </select>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12 form-group">
+          <label class="text-muted">Subject</label>
+          <select class="form-control form-select" [(ngModel)]="subject" #jds id="sel5"
+            (change)="onChangeSubject($event.target)">
+            <option class="form-select" value="select" selected>Select</option>
+            <option class="form-select" *ngFor="let jds of JDS">{{jds.ListofJds}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-4 col-md-4 col-sm-12 form-group">
+          <label class="text-muted">Delete Subject</label>
+          <input readonly type="text" name="billAmt" [(ngModel)]="subject" class="form-control form-select">
+        </div>
+      </div>
+      <div class="row" style="margin-left: 4%">
+        <div class=" grp-button col-md-6 col-sm-12 form-group">
+          <button (click)="backNavigation()" mat-raised-button class="btn btn-danger "
+            style="margin-left: 5px;margin-top:3%" mat-raised-button>
+            <i class="fa fa-remove" aria-hidden="true"></i>
+            Cancel</button>
+          <button (click)="deleteSubject()" mat-raised-button class="btn btn-info"
+            style="margin-left: 5px;margin-top:3%" mat-raised-button>
+            <i class="fa fa-trash-o" aria-hidden="true"></i>
+            Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="isCreateTicket" class="card ">
+    <div class="card-body">
+      <form [formGroup]="profileForm">
+        <div class="row">
+          <div class="col-lg-3 col-md-4 col-sm-12 form-group">
+            <label class="text-muted">Request To</label>
+            <select class="form-control form-select " id="sel1" [(ngModel)]="reqto" (change)="onChange($event.target)"
+              formControlName="reqto" [ngClass]="{ 'is-invalid': submitted && f['reqto'].errors }">
+              <option class="form-select" value="select" selected>Select</option>
+              <option class="form-select" *ngFor='let dept of DepartMents' [value]="dept.DeptName">{{dept.DeptName}}
+              </option>
+            </select>
+          </div><br>
+          <div class="col-lg-3 col-md-4 col-sm-12 form-group">
+            <label class="text-muted">Subject </label>
+            <select class="form-control form-select" [(ngModel)]="subject" (change)="onJds($event.target)"
+              formControlName="subject" [ngClass]="{ 'is-invalid': submitted && f['subject'].errors }">
+              <option class="form-select" value="select" selected>Select</option>
+              <option class="form-select" *ngFor='let jds of JDS'>{{jds.ListofJds}}</option>
+            </select>
+          </div>
+
+          <div *ngIf="isBillDetails" class="col-lg-2 col-md-4 col-sm-3 form-group"
+            style="margin-top: auto;margin-bottom: auto;">
+            <label class="text-muted"> Bill Details </label>
+            <button type="button" (click)=getbillDetails(); class="btn btn-outline-info" data-bs-toggle="modal"
+              data-bs-target="#exampleModal" style="margin-left: 10px;">
+              Add Bill
+            </button>
+          </div>
+
+          <div class="col-lg-2 col-md-4 col-sm-3 form-group">
+            <label class="text-muted">Priority </label>
+            <select class="form-control form-select" [(ngModel)]="prority" (change)="onPrority($event.target)"
+              placeholder="Select" formControlName="prority"
+              [ngClass]="{ 'is-invalid': submitted && f['prority'].errors }">
+              <option class="form-select" value="select" selected>Select</option>
+              <option class="form-select" *ngFor='let prority of prorities'>{{prority}}</option>
+            </select>
+          </div>
+          <div class="col-lg-2 col-md-4 col-sm-3 form-group">
+            <label class="text-muted">Attachment </label><br>
+            <input style="display:none;" type='file' data-bs-max-size="10240" id="input-file-image" accept="*"
+              (change)="handleFileInput($event)" multiple>
+            <div class="form-control" class="btn-group">
+              <mat-icon class="attachFile" onclick="document.getElementById('input-file-image').click()">attach_file
+              </mat-icon>
+              <!-- <mat-icon class="attachCamera" data-bs-toggle="modal" data-bs-target="#cameraModal">camera_alt</mat-icon> -->
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12 col-md-12 col-sm-12 form-group">
+            <!--  <label class="text-muted">Comment :</label> -->
+            <a style="color: #9C27B0" (click)="changeToolOption()"><i class="fa fa-pencil-square-o"
+                aria-hidden="true"></i> Toolbar</a>
+            <div *ngIf="isToolBar!=true" formControlName="html" [ngxSummernote]="config" #richeditor name="editor"
+              id="editor"></div>
+            <div *ngIf="isToolBar" formControlName="html" [ngxSummernote]="editorConfig" name="editor" id="editor">
+            </div>
+          </div>
+        </div><br>
+        <div class="row" *ngIf="captureImage?.length > 0">
+          <div class=" col-lg-12 form-group">
+            <div *ngFor="let capture of captureImage">
+              <div class="column">
+                <div class="img-wraps">
+                  <span (click)="removeCaptureImage(capture)" class="closes" title="Delete">&times;</span>
+                  <img [src]="capture" width="100" height="100" alt="Preview">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="isAttachFiles && groupList?.length > 0 ">
+          <div class=" col-lg-12 form-group">
+            <div *ngFor="let file of groupList">
+              <div class="column" *ngIf="file.fileType ==='jpeg' || file.fileType ==='jpg' ||file.fileType ==='png' ">
+                <div class="img-wraps">
+                  <span (click)="removeFile(file.fileNames, file.fileData)" class="closes" title="Delete">&times;</span>
+                  <img [src]=" file.fileData" width="100" height="100" alt="Preview">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="billsDetailslist?.length > 0 || groupList?.length > 0 ">
+          <div class="col-lg-6 col-md-12 col-sm-12 form-group">
+            <div *ngIf="isAttachFiles && groupList?.length > 0 ">
+              <div>
+                <h6 class="text-muted">Attached Files </h6>
+                <table class="table table-sm table-hover">
+                  <thead style="background-color:#3C8DBC;color:white">
+                    <tr>
+                      <th scope="col">File</th>
+                      <th scope="col">Option</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let file of groupList">
+                      <td>{{file.fileNames}}</td>
+                      <td><i style="color: red" (click)="removeFile(file.fileNames, file.fileData)" class="fa fa-trash"
+                          aria-hidden="true"></i></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-12 col-sm-12 form-group">
+            <div *ngIf="billsDetailslist?.length > 0 ">
+              <h6 class="text-muted">Bill Details </h6>
+              <table class="table table-sm table-hover bill_table">
+                <thead style="background-color:#3C8DBC;color:white">
+                  <tr>
+                    <th scope="col">Bill NO</th>
+                    <th scope="col" class="text-end">Amount</th>
+                    <!-- <th scope="col">Option</th> -->
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let bill of billsDetailslist;let i=index">
+                    <td>{{bill.TrnNo}}</td>
+                    <td class="text-end">{{bill.TrnAmt}}</td>
+                    <!-- <td><i style="color: red" (click)="removeBillDetail(i)" class="fa fa-trash" aria-hidden="true"></i>
+                    </td> -->
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex row" *ngIf="globals.gclientServer === 'Server'">
+          <div class="col-lg-4 col-md-4 col-sm-12 form-group form-group">
+            <label class="text-muted">Location</label>
+            <input type="text" class="form-control form-control-sm" id="branch" name="branch" formControlName="branch"
+              [matAutocomplete]="auto1" [ngClass]="{ 'is-invalid': submitted && f['prority'].errors }">
+            <mat-autocomplete #auto1="matAutocomplete" (optionSelected)="selectbybranch($event.option.viewValue)">
+              <mat-option *ngFor="let item of brList" [value]="item?.brname">
+                {{ item?.brname }}
+              </mat-option>
+            </mat-autocomplete>
+          </div>
+        </div>
+        <div class="row">
+          <div class=" grp-button col-md-6 col-lg-4 col-sm-12 form-group">
+            <button mat-raised-button class="btn btn-success " style="margin-left: 5px;" mat-raised-button
+              (click)="create(profileForm.controls['html'].value)">
+              <i class="material-icons">done</i> Create</button>
+
+            <button mat-raised-button class="btn btn-primary" style="margin-left: 5px;" mat-raised-button
+              (click)="clear()"> <i class="material-icons">refresh</i>Clear</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-------------- Bill Modal --------------->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    data-bs-backdrop="static" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 style="color: #3C8DBC" class="modal-title" id="exampleModalLabel">Bill Details - {{subject}}</h5>
+        </div>
+        <div class="modal-body" style="margin-left: 2%;margin-right: 2%">
+          <form>
+            <div *ngIf="isModalalert">
+              <div class="alert alert-danger">
+                <ul style="list-style-type:none">
+                  <li><i class="fa fa-info" aria-hidden="true"></i>
+                    {{modalalert}}</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class=" col-5 form-group">
+                <label class="text-muted">Sale Type </label>
+                <select class="form-control form-select" name="saleType" id="saleTypeSelect"
+                  [(ngModel)]="billDetail.TrnType">
+                  <option class="form-select" value="select" selected>Select</option>
+                  <option class="form-select" *ngFor="let Type of saleTypes " [ngValue]="Type.Saletype">
+                    {{Type.Saletype}}</option>
+                </select>
+              </div>
+              <div class=" col-7 form-group">
+                <label class="text-muted">Bill Date </label>
+                <input type="date" name="billDate" [(ngModel)]="billDetail.TrnDate" class="form-control form-select">
+              </div>
+            </div>
+
+            <div class="row">
+              <div class=" col-5 form-group">
+                <label class="text-muted">Bill No </label>
+                <input type="number" id="billNo" maxlength="8" name="billNo" [(ngModel)]="billDetail.TrnNo"
+                  class="form-control form-select" placeholder="select">
+              </div>
+              <div style="margin: auto" class=" col-2 form-group">
+                <button mat-raised-button style="background-color: #3C8DBC;margin-top: 55%;" (click)="getamount()"
+                  class="btn btn-mini btn-primary" type="button">
+                  <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div *ngIf="billDetail.TrnAmt!='undefined'" class=" col-5 form-group">
+                <label class="text-muted">Amount <i class="fa fa-inr" aria-hidden="true"></i></label>
+                <input readonly type="text" name="billAmt" [(ngModel)]="billDetail.TrnAmt"
+                  class="form-control form-select">
+              </div>
+            </div>
+
+
+            <div class="row">
+              <div class="col-3 form-group">
+                <label class="text-muted">Reason </label>
+              </div>
+              <div class="col-9 form-group">
+                <select class="form-control form-select" name="reason" [(ngModel)]="billDetail.Reason"
+                  id="cancelReason">
+                  <option class="form-select" value="select" selected>Select</option>
+                  <option class="form-select" *ngFor="let Type of reasonList " [ngValue]="Type.ReasonNames">
+                    {{Type.ReasonNames}}</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class=" col-3 form-group">
+                <label class="text-muted">Approved </label>
+              </div>
+              <div class=" col-7 form-group">
+                <select class="form-control form-select" id="approveBySelect" [(ngModel)]="billDetail.TrnAprUsr"
+                  name="approvedBy">
+                  <option class="form-select" value="select" selected>Select</option>
+                  <option class="form-select" *ngFor="let Type of approvedNames " [ngValue]="Type.empname">
+                    {{Type.empname}}</option>
+                </select>
+              </div>
+              <div class=" col-2 form-group">
+                <button type="button" (click)="getcheckbill()" class="btn btn-sm btn-primary" id="btn_add">Add</button>
+              </div>
+            </div>
+
+            <div *ngIf="billaltList?.length > 0 ">
+              <h6 class="text-muted">Bill Details </h6>
+              <table class="table table-sm table-hover bill_table">
+                <thead style="background-color:#3C8DBC;color:white">
+                  <tr>
+                    <th scope="col">Bill NO</th>
+                    <th scope="col" class="text-end">Amount</th>
+                    <th scope="col" class="text-center">Option</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let bill of billaltList;let i=index">
+                    <td>{{bill.TrnNo}}</td>
+                    <td class="text-end">{{bill.TrnAmt}}</td>
+                    <td class="text-center"><i style="color: red" (click)="removeBillDetail(i)" class="fa fa-trash"
+                        aria-hidden="true"></i>
+                    </td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td>Total</td>
+                    <td class="text-end">{{totamt|currency:'INR'}}</td>
+                    <td></td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+
+            <div *ngIf="subject === 'CASH TO CARD'">
+              <div class="row text-muted">
+                <h6 class="col-12 form-group">Card Payment Details</h6>
+              </div>
+              <div class="row">
+                <div class=" col-5 form-group">
+                  <label class="text-muted">Card Type</label>
+                  <input type="text" [(ngModel)]="Cardtype" class="form-control form-select" name="cardtype"
+                    id="cardtype">
+                </div>
+                <div class=" col-7 form-group">
+                  <label class="text-muted">Card No</label>
+                  <input type="text" [(ngModel)]="cardno" name="cardno" id="cardno" class="form-control form-select">
+                </div>
+              </div>
+              <div class="row">
+                <div class=" col-5 form-group">
+                  <label class="text-muted">Card TrnDate</label>
+                  <input type="date" [(ngModel)]="trnDate" class="form-control form-select" name="cardtrndate"
+                    id="cardtrndate">
+                </div>
+                <div class=" col-7 form-group">
+                  <label class="text-muted">Card TrnId</label>
+                  <input type="text" [(ngModel)]="trnId" name="trnno" id="trnno" class="form-control form-select">
+                </div>
+              </div>
+              <div class="row">
+                <div class=" col-5 form-group">
+                  <label class="text-muted">Card Amount</label>
+                  <input type="test" [(ngModel)]="cardAmt" (keypress)="changeValueNumeric($event, 'CardAmt')"
+                    class="form-control form-select" name="cardtrnamt" id="cardtrnamt">
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="subject === 'BILL CANCEL' && AltBillNoReq=='Y' ">
+              <div class="row text-muted">
+                <h6 class="col-12 form-group">Alternate Bill Details</h6>
+              </div>
+              <div class="row">
+                <div class=" col-5 form-group">
+                  <label class="text-muted">Bill No</label>
+                  <input type="text" [(ngModel)]="altbillNo" class="form-control form-select" name="altbillno"
+                    id="altbillno">
+                </div>
+                <div class=" col-5 form-group">
+                  <label class="text-muted">Bill Date </label>
+                  <input type="date" [(ngModel)]="altbilldate" name="altbillDate" id="altbillDate"
+                    class="form-control form-select">
+                </div>
+                <div class="col-2 form-group" style="margin-top: auto;">
+                  <button type="button" (click)="getAtramount()" class="btn btn-sm btn-info">>></button>
+                </div>
+              </div>
+              <div class="row">
+                <!-- <div class=" col-5">
+                  <button mat-raised-button style="background-color: #3C8DBC;margin-top: auto;margin-bottom: auto;"
+                  class="btn btn-mini btn-primary" type="button">
+                  <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                </button>
+                </div> -->
+                <div class=" col-5 form-group">
+                  <label class="text-muted">Bill Amount</label>
+                  <input type="text" [(ngModel)]="altbillamt" (keypress)="changeValueNumeric($event, 'AltBillamt')"
+                    readonly class="form-control form-select" name="altbillamt" id="altbillamt">
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div class="modal-footer">
+          <button mat-raised-button (click)="closeModal()" class="btn btn-sm btn-secondary" style="margin-right: 2px;"
+            id="clsbtn" data-bs-dismiss="modal">Close</button>
+          <button mat-raised-button class="btn btn-sm btn-primary" (click)="getModalvalues()">Add Details</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- LOADING ICON -->
+  <div *ngIf="progressval == 'indeterminate'" class="loading">
+    <mat-progress-spinner [mode]="progressval">
+    </mat-progress-spinner>
+  </div>
+  <!-- LOADING ICON -->

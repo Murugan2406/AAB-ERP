@@ -1,0 +1,1831 @@
+<section class="" *ngIf="!viewSundryscreen">
+    <div *ngIf="this.submainmenu === 'sundryReceiptsEntry'">
+    <app-header [Titleheader]="SRTitleHeader" back="true" (BackClick)="backClicked(this.sundryReceiptsEntry , viewSundryReceiptDialog)" ></app-header>
+    <div class="mx-3">
+    <div class="row">
+      <div class="col-4 col-sm-4 col-md-3 col-lg-3 col-xl-2" *ngIf="viewRecepitNo">
+      <label class="gInputLable">Receipt No: <span style="color: blue;">{{ this.vNo }} </span></label>&nbsp;&nbsp;
+    </div>
+    <div class="col-4 col-sm-4 col-md-3 col-lg-3 col-xl-2" *ngIf="viewRecepitNo">
+      <label class="gInputLable">WStatus: <span style="color: blue;">{{ this.wstatus}}</span></label>
+    </div>
+    <div class="col-4 col-sm-4 col-md-3 col-lg-3 col-xl-2" *ngIf="viewRecepitNo">
+      <label class="gInputLable">DStatus: <span style="color: blue;">{{ this.dStatus}}</span></label>
+    </div>  
+      </div>
+    <div class="gcardContainer mt-2">
+      <div class="row">
+        <div class="col-12 col-sm-12 col-md-3 col-lg-3">
+          <button
+            type="button"
+            mat-button
+            class="gIconButton"
+            (click)="toggleVoucherData()"
+            *ngIf="!voucherInformation"
+          >
+            <mat-icon style="line-height: 9px !important">minimize</mat-icon>
+          </button>
+          <button
+            mat-button
+            class="gIconButton"
+            (click)="toggleVoucherData()"
+            *ngIf="voucherInformation"
+          >
+            <mat-icon>add</mat-icon>
+          </button>
+          Voucher Information
+        </div>
+       
+      </div>
+      <form [formGroup]="voucherInformationForm">
+        <div class="row" *ngIf="voucherInformation">
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="d-flex flex-column gap-0">
+              <div class="row form-group">
+                <label for="finBookName" class="gInputLable col-sm-12 col-md-4 col-lg-4"
+                  >Fin Book</label
+                >
+                <div class="col-sm-12 col-md-8 col-lg-8">
+                  <input
+                    type="text"
+                    class="gInnerInput"
+                    name="finBookName"
+                    id="finBookName"
+                    formControlName="finBookName"
+                    autocomplete="off"
+                    (input)="FilterFinbook($event.target.value, 'one')"
+                    (keydown)="keytab($event, 'costCenter')"
+                    [matAutocomplete]="fbName"
+                    [ngClass]="{'errorborder':voucherInformationForm.controls['finBookName'].hasError('required') && formsubmitted }"
+                  />
+                  <mat-autocomplete
+                    #fbName="matAutocomplete"
+                    class="gAutoCompleteContainer"
+                    [displayWith]="displayFb"
+                  >
+                    <mat-option 
+                    (onSelectionChange)="finbvalue($event,fb.FbCode,1)"
+                      class="gSelectOption"
+                      *ngFor="let fb of FbOneArr"
+                      [value]="fb " 
+                      >{{ fb.FbName }}</mat-option
+                    >
+                  </mat-autocomplete>
+                </div>
+              </div>
+              <div class="row form-group">
+                <label for="costCenter" class="gInputLable col-sm-12 col-md-4 col-lg-4"
+                  >Cost Center</label
+                >
+                <div class="col-sm-12 col-md-8 col-lg-8">
+                  <input
+                    type="text"
+                    class="gInnerInput"
+                    name="costCenter"
+                    id="costCenter"
+                    formControlName="costCenter"
+                    autocomplete="off"
+                    (keydown)="keytab($event, 'receiptRoute')"
+                    [matAutocomplete]="autoBranchName"
+                    [ngClass]="{'errorborder':voucherInformationForm.controls['costCenter'].hasError('required') && formsubmitted }"
+                    
+                  />
+                  <mat-autocomplete
+                    #autoBranchName="matAutocomplete"
+                    class="gAutoCompleteContainer"
+                  >
+                    <mat-option
+                      class="gSelectOption"
+                      *ngFor="let branchName of voucherBranchNames"
+                      [value]="branchName.brname"
+                      >{{ branchName.brname }}</mat-option
+                    >
+                  </mat-autocomplete>
+                </div>
+              </div>
+              <div class="row form-group">
+                <label for="receiptRoute" class="gInputLable col-sm-12 col-md-4 col-lg-4"
+                  >Receipt Route</label
+                >
+                <div class="col-sm-12 col-md-8 col-lg-4">
+                  <mat-select
+                  class="gInnerInput"
+                  id="receiptRoute"
+                  formControlName="receiptRoute"
+                  (selectionChange)="selectReceiptRoute($event)"
+                  [ngClass]="{'errorborder':voucherInformationForm.controls['receiptRoute'].hasError('required') && formsubmitted }"
+                  >
+                  <mat-option
+                      class="gSelectOption"
+                      *ngFor="let receiptRoute of receiptRoutes"
+                      [value]="receiptRoute.ReceiptRoute"
+                    >
+                      {{ receiptRoute.ReceiptRoute }}
+                    </mat-option>
+                  </mat-select>
+                </div>
+              </div>
+              <div class="row form-group">
+                <label  for="receiptDate"  class="gInputLable col-sm-12 col-md-4 col-lg-4"
+                  >Accounting Date</label
+                >
+                <div class="col-sm-12 col-md-8 col-lg-4">
+                  <input
+                    type="date"
+                    class="gInnerInput"
+                    name="receiptDate"
+                    id="receiptDate"
+                    formControlName="receiptDate"
+                    (keydown)="keytab($event, 'cashCode')"
+                  />
+                </div>
+              </div>
+              <div class="row form-group">
+                <label for="cashCode"  class="gInputLable col-sm-12 col-md-4 col-lg-4"
+                  >Bank/Cash Code</label
+                >
+                <div class="col-sm-12 col-md-8 col-lg-4">
+                  <mat-select
+                    class="gInnerInput"
+                    id="cashCode"
+                    formControlName="cashCode"
+                    (selectionChange)="change($event, 'remitter')"
+                  [ngClass]="{'errorborder':voucherInformationForm.controls['cashCode'].hasError('required') && formsubmitted }"
+                  >
+                    <mat-option
+                      class="gSelectOption"
+                      *ngFor="let bankorcashCode of bccode"
+                      [value]="bankorcashCode.value"
+                    >
+                      {{ bankorcashCode.value }}
+                    </mat-option>
+                  </mat-select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="d-flex flex-column gap-0">
+              <div class="row form-group">
+                <label for="remitter" class="gInputLable col-sm-12 col-md-4 col-lg-4"
+                  >Remitter</label
+                >
+                <div class="col-sm-12 col-md-8 col-lg-8">
+                  <input
+                    type="text"
+                    class="gInnerInput"
+                    name="remitter"
+                    id="remitter"
+                    formControlName="remitter"
+                    autocomplete="off"
+                    (keydown)="keytab($event, 'receiptAmount')" 
+                    [ngClass]="{'errorborder':voucherInformationForm.controls['remitter'].hasError('required') && formsubmitted }"
+                  />
+                  </div>
+              </div>
+              <div class="row form-group">
+                <label for="receiptAmount"  class="gInputLable col-sm-12 col-md-4 col-lg-4"
+                  >Receipt Amount</label
+                >
+                <div class="col-sm-12 col-md-8 col-lg-6">
+                  <input
+                    type="text"
+                    class="gInnerInput"
+                    name="receiptAmount"
+                    id="receiptAmount"
+                    formControlName="receiptAmount"
+                    autocomplete="off"
+                    (keypress)="Decimal($event)"
+                    (keydown)="keytab($event, 'attachFileId')"
+                    [ngClass]="{'errorborder':voucherInformationForm.controls['receiptAmount'].hasError('required') && formsubmitted }"
+                    />
+                </div>
+                <label class="gInputLable col-sm-12 col-md-4 col-lg-2">{{
+                  this.currency
+                }}</label>
+              </div>
+              <div class="row form-group">
+                <label
+                  class="gInputLable col-sm-12 col-md-4 col-lg-4"
+                  for="attachments"
+                  >Attachments</label
+                >
+                <div class="col-sm-12 col-md-8 col-lg-8">
+                  <div class="gOuterInput">
+                    <input
+                      type="text"
+                      class="gInnerInput"
+                      id="attachFileId"
+                      onclick="document.getElementById('attachFileId1').click()"
+                      formControlName="attachments"
+                      [(ngModel)]="filename"
+                      autocomplete="off"
+                    [ngClass]="{'errorborder':voucherInformationForm.controls['attachments'].hasError('required') && formsubmitted }"
+                    />                
+                      <input
+                        type="file"
+                        style="display: none"
+                        id="attachFileId1"
+                        accept=".png, .jpg, .jpeg, .pdf"
+                        (change)="selectFile($event)"*ngIf="viewMode"
+                      />
+                      <button *ngIf="!viewMode1"
+                        mat-button
+                        onclick="document.getElementById('attachFileId1').click()"
+                        class="gInputButton"
+                      >
+                        <mat-icon>attach_file</mat-icon>
+                      </button>
+                 
+                      <button class="gInputButton"
+                      mat-button
+                     
+                      *ngIf="viewMode1"
+                      (click)="downloadFile()"          
+                      >
+                      <mat-icon>download</mat-icon>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="row form-group">
+                <label  for="narration"  class="gInputLable col-sm-12 col-md-4 col-lg-4"
+                  >Narration</label
+                >
+                <div class="col-sm-12 col-md-8 col-lg-8">
+                  <input
+                    type="text"
+                    class="gInnerInput"
+                    name="narration"
+                    id="narration"
+                    formControlName="narration"
+                    autocomplete="off"
+                    (keydown)="keytab($event, 'divCode')"
+                    [ngClass]="{'errorborder':voucherInformationForm.controls['narration'].hasError('required') && formsubmitted }"
+  
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="d-flex flex-column gap-0">
+              <div class="row form-group">
+                <label  for="divCode"  class="gInputLable col-sm-12 col-md-4 col-lg-4"
+                  >Division Code</label
+                >
+                <div class="col-sm-12 col-md-8 col-lg-6">
+                  <mat-select
+                    class="gInnerInput"
+                    id="divCode"
+                    formControlName="divCode"
+                    (selectionChange)="selectDivCode($event)"
+                    [ngClass]="{'errorborder':voucherInformationForm.controls['divCode'].hasError('required') && formsubmitted }"
+  
+                  >
+                    <mat-option
+                      class="gSelectOption"
+                      *ngFor="let divisionCode of divCodes"
+                      [value]="divisionCode.Divcode"
+                    >
+                      {{ divisionCode.Divcode }}
+                    </mat-option>
+                  </mat-select>
+                </div>
+              </div>
+              <div class="row form-group">
+                <label for="subDivCode"  class="gInputLable col-sm-12 col-md-4 col-lg-4"
+                  >Sub Division Code</label
+                >
+                <div class="col-sm-12 col-md-8 col-lg-6">
+                  <mat-select
+                    class="gInnerInput"
+                    size="5"
+                    id="subDivCode"
+                    formControlName="subDivCode"
+                    (selectionChange)="selectSubDivCode($event)"
+                    [ngClass]="{'errorborder':voucherInformationForm.controls['subDivCode'].hasError('required') && formsubmitted }"
+                  >
+                    <mat-option
+                      class="gSelectOption"
+                      *ngFor="let subDivisionCode of subDivCodes"
+                      [value]="subDivisionCode.SubDivcode"
+                    >
+                      {{ subDivisionCode.SubDivcode }}
+                    </mat-option>
+                  </mat-select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="gcardContainer mt-1" *ngIf="!instrument">
+      <div class="row">
+        <div class="col-12 col-sm-4 col-md-6 col-lg-8">
+          <button
+            mat-button
+            class="gIconButton"
+            (click)="toggleInstrumentData()"
+            *ngIf="!InstrumentInformation"
+          >
+            <mat-icon style="line-height: 9px !important">minimize</mat-icon>
+          </button>
+          <button
+            mat-button
+            class="gIconButton"
+            (click)="toggleInstrumentData()"
+            *ngIf="InstrumentInformation"
+          >
+            <mat-icon style="line-height: 21px !important">add</mat-icon>
+          </button>
+          Instrument Information
+        </div>
+      </div>
+      <fieldset ></fieldset>
+      <form [formGroup]="instrumentInformationForm" *ngIf="!instrument">
+        <div class="row" *ngIf="InstrumentInformation">
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="d-flex flex-column gap-0">
+              <div class="row form-group">
+                <label for="receiptMode" class="gInputLable col-sm-12 col-md-4 col-lg-4"
+                  >Receipt Mode</label
+                >
+                <div class="col-sm-12 col-md-8 col-lg-5">
+                  <mat-select
+                    class="gInnerInput"
+                    id="receiptMode"
+                    formControlName="receiptMode"
+                    (selectionChange)="change($event, 'instrumentNo')"
+                    [ngClass]="{'errorborder':instrumentInformationForm.controls['receiptMode'].hasError('required') && formsubmitted }"
+                  >
+                    <mat-option
+                      class="gSelectOption"
+                      *ngFor="let receiptMode of receiptModess"
+                      [value]="receiptMode.value"
+                    >
+                      {{ receiptMode.value }}
+                    </mat-option>
+                  </mat-select>
+                </div>
+              </div>
+              <div class="row form-group">
+                <label  for="instrumentNo" class="gInputLable col-sm-12 col-md-4 col-lg-4"
+                  >Instrument No</label
+                >
+                <div class="col-sm-12 col-md-8 col-lg-8">
+                  <input
+                    type="text"
+                    class="gInnerInput"
+                    name="instrumentNo"
+                    id="instrumentNo"
+                    formControlName="instrumentNo"
+                    autocomplete="off"
+                    (keydown)="keytab($event, 'instrumentDate')"
+                    [ngClass]="{'errorborder':instrumentInformationForm.controls['instrumentNo'].hasError('required') && formsubmitted }"
+                    />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="d-flex flex-column gap-0">
+              <div class="row form-group">
+                <label for="instrumentDate" class="gInputLable col-sm-12 col-md-4 col-lg-4"
+                  >Instrument Date</label
+                >
+                <div class="col-sm-12 col-md-8 col-lg-4">
+                  <input
+                    type="date"
+                    class="gInnerInput"
+                    name="instrumentDate"
+                    id="instrumentDate"
+                    formControlName="instrumentDate"
+                    (keydown)="keytab($event, 'micrNo')"
+                  />
+                </div>
+              </div>
+              <div class="row form-group">
+                <label for="micrNo" class="gInputLable col-sm-12 col-md-4 col-lg-4"
+                  >MICR No</label
+                >
+                <div class="col-sm-12 col-md-8 col-lg-8">
+                  <input
+                    type="text"
+                    class="gInnerInput"
+                    name="micrNo"
+                    id="micrNo"
+                    formControlName="micrNo"
+                    autocomplete="off"
+                    (keydown)="keytab($event, 'InstrumentBank')"
+                    [ngClass]="{'errorborder':instrumentInformationForm.controls['micrNo'].hasError('required') && formsubmitted }"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="d-flex flex-column gap-0">
+              <div class="row form-group">
+                <label for="InstrumentBank" class="gInputLable col-sm-12 col-md-4 col-lg-4"
+                  >Instrument Bank</label
+                >
+                <div class="col-sm-12 col-md-8 col-lg-6">
+                  <input
+                    type="text"
+                    class="gInnerInput"
+                    name="InstrumentBank"
+                    id="InstrumentBank"
+                    formControlName="InstrumentBank"
+                    autocomplete="off"
+                    tabindex="3"
+                    (keydown)="keytab($event, 'instrumentAmount')"
+                    [ngClass]="{'errorborder':instrumentInformationForm.controls['InstrumentBank'].hasError('required') && formsubmitted }"
+                  />
+                </div>
+              </div>
+              <div class="row form-group">
+                <label for="instrumentAmount" class="gInputLable col-sm-12 col-md-4 col-lg-4"
+                  >Instrument Amt</label
+                >
+                <div class="col-sm-12 col-md-8 col-lg-6">
+                  <input
+                    type="text"
+                    class="gInnerInput"
+                    name="instrumentAmount"
+                    id="instrumentAmount"
+                    formControlName="instrumentAmount"
+                    autocomplete="off"
+                    (keypress)="Decimal($event)"
+                    (keydown)="keytab($event, 'accountType')"
+                    [ngClass]="{'errorborder':instrumentInformationForm.controls['instrumentAmount'].hasError('required') && formsubmitted }"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="gcardContainer mt-1" *ngIf="!Accountflage">
+      <div class="row">
+        <div class="col-12 col-sm-4 col-md-6 col-lg-8">
+          <button
+            mat-button
+            class="gIconButton"
+            (click)="toggleAccountingData()"
+            *ngIf="!AccountingInformation"
+          >
+            <mat-icon style="line-height: 9px !important">minimize</mat-icon>
+          </button>
+          <button
+            mat-button
+            class="gIconButton"
+            (click)="toggleAccountingData()"
+            *ngIf="AccountingInformation">
+            <mat-icon style="line-height: 21px !important">add</mat-icon>
+          </button>
+          Accounting Information
+        </div>
+      </div>
+      <form [formGroup]="accountingInformationForm">
+        <div class="row" *ngIf="AccountingInformation">
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="d-flex flex-column gap-0">
+              <div class="row form-group">
+                <label  for="finBookName" class="gInputLable col-sm-12 col-md-4 col-lg-4"
+                  >Fin Book</label
+                >
+                <div class="col-sm-12 col-md-8 col-lg-8">
+                  <input
+                    type="text"
+                    class="gInnerInput"
+                    name="finBookName"
+                    id="finBookName"
+                    formControlName="finBookName"
+                    autocomplete="off"
+                    (input)="FilterFinbook($event.target.value, 'two')"
+                    (keydown)="keytab($event, 'AccCostCenter')"
+                    [matAutocomplete]="fbName"
+                    [ngClass]="{'errorborder':accountingInformationForm.controls['finBookName'].hasError('required') && accFormsubmitted }"
+                    />
+                    <mat-autocomplete
+                    #fbName="matAutocomplete"
+                    class="gAutoCompleteContainer"
+                    [displayWith]="displayFb2"
+                    >
+                    <mat-option
+                    (onSelectionChange)="finbvalue($event,fb.FbCode,2)"
+                    class="gSelectOption"
+                    *ngFor="let fb of FbTwoArr"
+                    [value]="fb"
+                    >{{ fb.FbName }}</mat-option
+                    >
+                  </mat-autocomplete>
+                </div>
+              </div>
+              <div class="row form-group">
+                <label for="costCenter" class="gInputLable col-sm-12 col-md-4 col-lg-4"
+                >Cost Center</label
+                >
+                <div class="col-sm-12 col-md-8 col-lg-8">
+                  <input
+                  type="text"
+                  class="gInnerInput"
+                  name="costCenter"
+                  id="AccCostCenter"
+                  formControlName="costCenter"
+                  (keyup)="selectedFinBook($event.target.value)"
+                  autocomplete="off"
+                  [matAutocomplete]="autoBranchName"
+                    (keydown)="keytab($event, 'accountType')"
+                    [ngClass]="{'errorborder':accountingInformationForm.controls['costCenter'].hasError('required') && accFormsubmitted }"
+                    />
+                  <mat-autocomplete
+                    #autoBranchName="matAutocomplete"
+                    class="gAutoCompleteContainer"
+                  >
+                    <mat-option
+                      class="gSelectOption"
+                      *ngFor="let branchName of accBranchNames"
+                      [value]="branchName.brname"
+                      >{{ branchName.brname }}</mat-option
+                    >
+                  </mat-autocomplete>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="d-flex flex-column gap-0">
+              <div class="row form-group">
+                <label  for="accountType"  class="gInputLable col-sm-12 col-md-4 col-lg-4"
+                  >Account Type</label
+                >
+                <div class="col-sm-12 col-md-8 col-lg-6">
+                  <mat-select
+                    class="gInnerInput"
+                    id="accountType"
+                    formControlName="accountType"
+                    (selectionChange)="changeAccName($event)"
+                    [ngClass]="{'errorborder':accountingInformationForm.controls['accountType'].hasError('required') && accFormsubmitted }"
+                    >
+                    <mat-option
+                      class="gSelectOption"
+                      *ngFor="let accountType of accountTypes"
+                      [value]="accountType.Acctype"
+                    >
+                      {{ accountType.Acctype }}
+                    </mat-option>
+                  </mat-select>
+                </div>
+              </div>
+              <div class="row form-group">
+                <label for="AccName"  class="gInputLable col-sm-12 col-md-4 col-lg-4" *ngIf="accName"
+                  >Account Name</label>
+                <label  for="AccName"  class="gInputLable col-sm-12 col-md-4 col-lg-4" *ngIf="!accName"
+                >Usage Name</label>
+                <div class="col-sm-12 col-md-8 col-lg-8" *ngIf="accName">
+                  <input
+                    type="text"
+                    class="gInnerInput"
+                    name="name"
+                    id="accname"
+                    formControlName="AccName"
+                    autocomplete="off"
+                    [matAutocomplete]="autoNames"
+                    [ngClass]="{'errorborder':accountingInformationForm.controls['AccName'].hasError('required') && accFormsubmitted }"
+                    />
+                  <mat-autocomplete
+                    #autoNames="matAutocomplete"
+                    [displayWith]="displayAccName"
+                    class="gAutoCompleteContainer"
+                  >
+                    <mat-option
+                      class="gSelectOption"
+                      *ngFor="let accName of accountNames"
+                      [value]="accName"
+                      (onSelectionChange)="AccountNameSelected($event, accName)"
+                    >
+                      {{ accName.AcCodeName }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </div>
+                <div class="col-sm-12 col-md-8 col-lg-8" *ngIf="!accName">
+                  <input
+                    type="text"
+                    class="gInnerInput"
+                    name="name"
+                    id="ussageName"
+                    formControlName="AccName"
+                    autocomplete="off"
+                    [matAutocomplete]="autoNames"
+                    [ngClass]="{'errorborder':accountingInformationForm.controls['AccName'].hasError('required') && accFormsubmitted }"
+                    />
+                  <mat-autocomplete
+                    #autoNames="matAutocomplete"
+                    [displayWith]="displayUssageName"
+                    class="gAutoCompleteContainer"
+                  >
+                    <mat-option
+                      class="gSelectOption"
+                      *ngFor="let usgName of ussageNames"
+                      [value]="usgName"
+                      (onSelectionChange)="UssageNameSelected($event, usgName)"
+                    >
+                      {{ usgName.UsageCodeName }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="d-flex flex-column gap-0">
+              <div class="row form-group">
+                <label class="gInputLable col-sm-12 col-md-4 col-lg-4"
+                  >Amount</label
+                >
+                <div class="col-sm-12 col-md-8 col-lg-6">
+                  <input
+                    type="text"
+                    class="gInnerInput"
+                    name="amount"
+                    id="amount"
+                    formControlName="amount"
+                    autocomplete="off"
+                    (keypress)="Decimal($event)"
+                    (keydown)="keytab($event, 'remarks')"
+                    [ngClass]="{'errorborder':accountingInformationForm.controls['amount'].hasError('required') && accFormsubmitted }"
+                  />
+                </div>
+              </div>
+              <div class="row form-group">
+                <label class="gInputLable col-sm-12 col-md-4 col-lg-4"
+                  >Remarks</label
+                >
+                <div class="col-sm-12 col-md-8 col-lg-8">
+                  <input
+                    type="text"
+                    class="gInnerInput"
+                    name="remarks"
+                    id="remarks"
+                    formControlName="remarks"
+                    autocomplete="off"
+                    (keyup)="remarksSelection($event,accountingInformationForm.value)"
+                    [ngClass]="{'errorborder':accountingInformationForm.controls['remarks'].hasError('required') && accFormsubmitted }"
+                    />
+                </div>
+              </div>
+              <div class="row form-group mt-1">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 text-center">
+                  <button
+                    type="button"
+                    id="add_button"
+                    mat-button
+                    class="gNormalButton"
+                    (click)="
+                      addAccountingDetails(accountingInformationForm.value)"
+                  >
+                    <mat-icon style="font-size: 20px !important">add</mat-icon>
+                    Add
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="mt-1">
+      <section class="gTableSection">
+        <div class="gTableActionheaders">
+          <form role="search" class="search-form ml-3">
+            <input
+              type="search"
+              name="Search"
+              class="gSearchText"
+              #input
+              autocomplete="off"
+              [(ngModel)]="viewSearch"
+            />
+          </form>
+          <div class="row m-0 p-0">
+            <div class="col-12" align="end">            
+              <button style="background: transparent;"
+                type="button"
+                mat-button
+                class="gNormalButton" *ngIf="show && rejectflag"
+                (click)="openAccountPostingDialog()"
+              >
+                <mat-icon>note</mat-icon> Account Posting
+              </button>
+              <button style="background: transparent;"
+                type="button"
+                mat-button
+                class="gNormalButton"
+                *ngIf="sundryReceiptsEntry === 'sundryReceiptsApproval' && IsFresh"
+                (click)="approveSR()"
+              >
+                <mat-icon>check</mat-icon>
+                Approve
+              </button>
+              <button style="background: transparent;"
+                type="button"
+                mat-button
+                class="gNormalButton"
+                *ngIf="sundryReceiptsEntry === 'sundryReceiptsApproval' && IsFresh"
+                (click)="rejectSRReason()"
+              >
+                <mat-icon>cancel</mat-icon>
+                Reject
+              </button>
+              <button style="background: transparent;"
+                type="button"
+                mat-button
+                class="gNormalButton"
+                *ngIf="sundryReceiptsEntry === 'sundryReceiptsEntry'  && !this.show  && shows"
+                (click)="saveSundryReceipt()"
+              >
+                <mat-icon>save</mat-icon> Save
+              </button>
+              <button style="background: transparent;"
+                type="button"
+                mat-button
+                class="gNormalButton"
+                (click)="deleteSundryReceipt()"
+                *ngIf="sundryReceiptsEntry === 'sundryReceiptsEntry' && SRDelete &&  !this.show"
+              >
+                <mat-icon>delete</mat-icon>
+                Delete
+              </button>
+              <button style="background: transparent;"
+                type="button"
+                mat-button
+                class="gNormalButton"
+                *ngIf="sundryReceiptsEntry === 'sundryReceiptsEntry'"
+               (click)="viewSundryReceipt()"
+                >
+                <mat-icon>remove_red_eye</mat-icon>
+                View
+              </button>
+              <button style="background: transparent;"
+                type="button"
+                mat-button
+                class="gNormalButton"
+                *ngIf="sundryReceiptsEntry === 'sundryReceiptsEntry'"
+                (click)="clearSundryReceipt()"
+              >
+                <mat-icon>refresh</mat-icon>
+                Clear
+              </button>
+              <button style="background: transparent;"
+                type="button"
+                mat-button
+                class="gNormalButton"
+                *ngIf="sundryReceiptsEntry === 'sundryReceiptsEntry' && printFlag " 
+                (click)="printSR(printSundryReceipt)"
+              >
+                <mat-icon>print</mat-icon>
+                Print
+              </button>
+            </div>
+          </div>        
+        </div>
+        <div class="gInnerTable">
+          <table class="gNormalTable-md table" id="table" width="100%">
+            <thead>
+              <tr>
+                <th scope="col">SNo</th>
+                <th scope="col">Ac Selection</th>
+                <th scope="col">AcCode/UsCode</th>
+                <th scope="col">AcName/Ussage</th>
+                <th scope="col">Fin Book</th>
+                <th scope="col">Cost Center</th>
+                <th scope="col">Remarks</th>
+                <th style="text-align: right;" scope="col">Amount</th>
+                <th style="text-align: center;" scope="col" *ngIf="this.sundryReceiptsEntry !== 'sundryReceiptsApproval' && accDelete">Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="
+                  let row of accountingDetails | filter: viewSearch;
+                  let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ row.AccType }}</td>
+                <td>{{ row.AccCode }}</td>
+                <td>{{ row.AccName }}</td>
+                <td>{{ row.finBookName }}</td>
+                <td>{{ row.costCenter }}</td>
+                <td>{{ row.remarks }}</td>
+                <td style="text-align: right;">{{ row.amount | currency:"INR":"symbol" }}</td>
+                <td style="text-align: center" *ngIf="this.sundryReceiptsEntry !== 'sundryReceiptsApproval' && accDelete">
+                  <button mat-icon-button class="gDeleteIcon" (click)="deleteAccountingData(i)">
+                    <mat-icon >delete</mat-icon>
+                  </button>
+                </td>
+              </tr>
+            </tbody> 
+          </table>
+        </div>
+      </section>
+    </div>
+    <div class="row form-group mt-2 me-1">
+      <div class="col-4 col-sm-6 col-md-9 col-lg-9 col-xl-9"></div>
+      <label class="gInputLable col-3 col-sm-2 col-md-1 col-lg-1 col-xl-1"
+        >Total</label
+      >
+      <div class="col-5 col-sm-4 col-md-2 col-lg-2 col-xl-2">
+        <input
+        type="text"
+        style="text-align: right;"
+        class="gInnerInput"
+        name="srTotal"
+        id="srTotal"
+        value="{{getTotalAmount()}}"
+        disabled
+      />
+      </div>
+    </div>
+    <div class="row m-2">
+      <div class="col-4 col-sm-4 col-md-12 col-lg-12 col-xl-12"  *ngIf="view">
+        <a style="text-decoration: underline; color: blue; float: right;" (click)="reverseSR()">Reverse Request for this transaction</a>
+      </div>
+    </div>
+    <div class="row bottom">
+      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <label class="gInputLable">Note: <span style="color: rgb(9, 86, 100);">Exit - Alt + X, Clear - Alt + C, View - Alt+ V , Save - Alt + S</span></label>
+      </div>
+    </div>
+  </div>
+    </div>
+  
+    <div class="gWrapper p-0" *ngIf="this.submainmenu === 'sundryReceiptsApproval'">
+        <app-header Titleheader="Sundry Receipt Approval" back="true" (BackClick)="backNavigation1(this.sundryReceiptsEntry)"></app-header>
+      <div class="">
+            <div class="gcardContainer m-1">
+                <form [formGroup]="sundryReceiptApprovalForm">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-3 col-lg-4">
+                    <div class="d-flex flex-column gap-0">
+                      <div class="row form-group">
+                        <label class="gInputLable col-sm-12 col-md-12 col-lg-4"
+                          >Company Name</label
+                        >
+                        <div class="col-sm-12 col-md-12 col-lg-8">
+                          <input
+                            type="text"
+                            class="gInnerInput"
+                            formControlName="companyName" 
+                            [matAutocomplete]="compList"
+                            readonly
+                           />
+                        </div>
+                      </div>  
+                      <div class="row form-group">
+                        <label class="gInputLable col-sm-12 col-md-12 col-lg-4"
+                          >Fin Book</label
+                        >
+                        <div class="col-sm-12 col-md-12 col-lg-7">
+                          <input
+                            type="text"
+                            class="gInnerInput"
+                            name="finBookName"
+                            id="finBookName"
+                            formControlName="finBookName"
+                            autocomplete="off"
+                            (input)="filtergetApproveFinbook($event.target.value)"
+                            (keydown)="keytab($event, 'approvalFromDate')"
+                            [matAutocomplete]="fbName"
+                          />
+                          <mat-autocomplete
+                            #fbName="matAutocomplete"
+                            class="gAutoCompleteContainer"
+                            [displayWith]="displayFb3"
+                          >
+                            <mat-option
+                            (onSelectionChange)="finbvalue($event,fb.FbCode,3)"
+                              class="gSelectOption"
+                              *ngFor="let fb of sundryAprFilterList"
+                              [value]="fb"
+                              >{{ fb.FbName }}</mat-option
+                            >
+                          </mat-autocomplete>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-sm-3 col-md-3 col-lg-3">
+                    <div class="d-flex flex-column gap-0">
+                      <div class="row form-group">
+                        <label class="gInputLable col-sm-12 col-md-12 col-lg-4"
+                          >From Date</label
+                        >
+                        <div class="col-sm-12 col-md-12 col-lg-6">
+                          <input
+                            type="date"
+                            class="gInnerInput"
+                            name="fromDate"
+                            id="approvalFromDate"
+                            formControlName="fromDate"
+                            (keydown)="onApprovalFromDate($event)"
+                          />
+                        </div>
+                      </div>
+                      <div class="row form-group">
+                        <label class="gInputLable col-sm-12 col-md-12 col-lg-4"
+                          >To Date</label
+                        >
+                        <div class="col-sm-12 col-md-12 col-lg-6">
+                          <input
+                            type="date"
+                            class="gInnerInput"
+                            name="toDate"
+                            id="approvalToDate"
+                            formControlName="toDate"
+                            (keydown)="onApprovalToDate($event)"
+                            tabindex="2"
+                            min="{{ minTemp }}"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>           
+                  <div class="col-12 col-sm-4 col-md-4 col-lg-3">
+                    <div class="d-flex flex-column gap-0">
+                      <div class="row form-group">
+                        <label class="gInputLable col-sm-12 col-md-12 col-lg-3"
+                          >Status</label
+                        >
+                        <div class="col-sm-12 col-md-12 col-lg-7">
+                          <mat-select
+                            class="gInnerInput statusModel"
+                            size="5"
+                            id="status"
+                            formControlName="status"
+                            (selectionChange)="selectApprovalStatus($event)"
+                          >
+                            <mat-option
+                            class="gSelectOption"
+                              *ngFor="let status of receiptStatus"
+                              [value]="status"
+                            >
+                              {{ status }}
+                            </mat-option>
+                          </mat-select>
+                        </div>
+                      </div>
+                      <div class="row form-group">
+                        <label class="gInputLable col-sm-12 col-md-12 col-lg-3"
+                          >Tran Type</label
+                        >
+                        <div class="col-sm-12 col-md-12 col-lg-8">
+                          <mat-select
+                            class="gInnerInput"
+                            id="status"
+                            formControlName="tranType"
+                            (selectionChange)="selectTranType($event)"
+                          >
+                            <mat-option
+                            class="gSelectOption"
+                              *ngFor="let eType of entryTypes"
+                              [value]="eType.VoucherId"
+                              >
+                                {{ eType.VoucherType }}
+                            </mat-option>
+                          </mat-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-sm-1 col-md-1 col-lg-1">
+                    <div class="d-flex flex-column gap-0">
+                      <div class="row form-group">
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                          <button
+                            type="button"
+                            mat-button
+                            class="gNormalButton"
+                            id="button"
+                            (click)="filterApprovalSR()"
+                          >
+                          <mat-icon>remove_red_eye</mat-icon>
+                          View
+                          </button>
+                        </div>
+                      </div>
+                      </div>
+                      </div>
+                </div>
+              </form>
+            </div>
+          <section class="gTableSection mt-1">
+            <div class="gTableActionheaders">
+              <form role="search" class="search-form">
+                <input
+                  type="search"
+                  name="Search"
+                  class="gSearchText"
+                  #input
+                  autocomplete="off"
+                  [(ngModel)]="viewSearch"
+                />
+              </form>
+            </div>
+            <div class="gInnerTable" style="max-height: calc(100vh - 130px);">
+              <table class="gNormalTable-md table" id="table" width="100%">
+                <thead>
+                  <tr>
+                    <th scope="col">S.NO</th>
+                    <th scope="col">Fin Book</th>
+                    <th scope="col">Receipt Route</th>
+                    <th></th>
+                    <th scope="col">Transaction Date</th>
+                    <th scope="col">Transaction Id</th>
+                    <th scope="col">WStatus</th>
+                    <th scope="col">Created User</th>
+                    <th scope="col">From Location</th>
+                    <th scope="col">DCStatus</th>
+                    <th scope="col">Approved Date</th>
+                    <th scope="col">Approved User</th>
+                    <th scope="col">Rejected Reason</th>
+                    <th scope="col">Receipt Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngIf="approvalSundryReceipts.length === 0" >
+                        <td colspan="16" class="text-center" > No record found.</td>
+                      </tr>
+                  <tr
+                    *ngFor="
+                      let data of approvalSundryReceipts | filter: viewSearch;
+                      let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ data.FbName }}</td>
+                    <td>{{ data.NewOld }}</td>
+                    <td>
+                      <i
+                        style="font-size: 14px"
+                        (click)="approvalSRDetails(data)"
+                        class="fa fa-hand-o-right"
+                        aria-hidden="true"
+                      ></i>
+                    </td>
+                    <td>{{ data.Time }}</td>
+                    <td>{{ data.Trnid }}</td>
+                    <td>{{ data.WStatus }}</td>
+                     <td>{{ data.usr }}</td>
+                    <td>{{ data.FromLocation }}</td>
+                    <td>{{ data.VStatus }}</td>
+                    <td>{{ data.ApprovalTime }}</td>
+                    <td>{{ data.ApprovalUsr }}</td>
+                    <td>{{ data.RejectedReason }}</td>
+                    <td style="text-align: right;">{{ data.ReceiptAmt }}</td>
+                  </tr>
+                  <tr *ngIf="loading">
+                    <td [colSpan]="16">
+                    <div class="SkeltonLoader text-center justify-content-center d-flex" >
+                      <mat-spinner></mat-spinner>
+                    </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+    </div>
+  </section>
+  
+  <div class="container-fulid" *ngIf="viewSundryscreen" >
+   <div class="gWrapper">    
+    <app-header Titleheader="View Sundry Receipts" back="true" (BackClick)="closeViewSundryReceipt()" ></app-header>
+      <div class="gDialogContainer"  style="z-index: 999 !important;">
+      <div class="gcardContainer mb-2">
+      <form [formGroup]="viewSundryReceiptForm">
+        <div class="row body">
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="d-flex flex-column gap-0">
+              <div class="row form-group">
+                <label class="gInputLable col-sm-12 col-md-12 col-lg-3"
+                  >Tran Type</label
+                >
+                <div class="col-sm-12 col-md-12 col-lg-7">
+                  <mat-select
+                    class="gInnerInput"
+                    id="trntype"
+                    formControlName="tranType"
+                    (selectionChange)="selectViewTranType($event)"
+                  >
+                    <mat-option
+                    class="gSelectOption"
+                      *ngFor="let eType of entryTypes"
+                      [value]="eType.VoucherId"
+                    >
+                      {{ eType.VoucherType }}
+                    </mat-option>
+                  </mat-select>
+                </div>
+              </div>
+              <div class="row form-group">
+                <label class="gInputLable col-sm-12 col-md-12 col-lg-3"
+                  >Fin Book</label
+                >
+                <div class="col-sm-12 col-md-12 col-lg-7">
+                  <input
+                    type="text"
+                    class="gInnerInput"
+                    name="finBookName"
+                    id="vFinBookName"
+                    formControlName="finBookName"
+                    autocomplete="off"
+                    (input)="FilterFinbook($event.target.value, 'three')"
+                    (keydown)="keytab($event, 'viewCostCenter')"
+                    [matAutocomplete]="fbName"
+                  />
+                  <mat-autocomplete
+                    #fbName="matAutocomplete"
+                    class="gAutoCompleteContainer"
+                    [displayWith]="displayFb3"
+                  >
+                    <mat-option
+                    (onSelectionChange)="finbvalue($event,fb.FbCode,4)"
+                      class="gSelectOption"
+                      *ngFor="let fb of FbThreeArr"
+                      [value]="fb"
+                      >{{ fb.FbName }}</mat-option
+                    >
+                  </mat-autocomplete>
+                </div>
+              </div>
+              <div class="row form-group">
+                <label class="gInputLable col-12 col-sm-12 col-md-12 col-lg-3"
+                  >Cost Center</label
+                >
+                <div class="col-12 col-sm-12 col-md-12 col-lg-8">
+                  <input
+                    type="text"
+                    class="gInnerInput"
+                    name="costCenter"
+                    id="viewCostCenter"
+                    formControlName="costCenter"
+                    autocomplete="off"
+                    (input)="getViewBranchName()"
+                    [matAutocomplete]="autoBranchName"
+                    (keydown)="keytab($event, 'fromDate')"
+                  />
+                  <mat-autocomplete
+                    #autoBranchName="matAutocomplete"
+                    class="gAutoCompleteContainer"
+                  >
+                    <mat-option (onSelectionChange)="viewBrSelect($event,branchName.brcode)"
+                      class="gSelectOption"
+                      *ngFor="let branchName of viewBranchNames"
+                      [value]="branchName.brname"
+                      >{{ branchName.brname }}</mat-option
+                    >
+                  </mat-autocomplete>
+                </div>
+              </div>         
+            </div>
+          </div>
+          <div class="col-12 col-sm-4 col-md-2 col-lg-3">
+            <div class="d-flex flex-column gap-0">
+          <div class="row form-group">
+            <label class="gInputLable col-sm-12 col-md-12 col-lg-4"
+              >From Date</label
+            >
+            <div class="col-sm-12 col-md-12 col-lg-6">
+              <input
+                type="date"
+                class="gInnerInput"
+                name="fromDate"
+                id="fromDate"
+                formControlName="fromDate"
+                (keydown)="onfromDateSelect($event)"
+              />
+            </div>
+          </div>
+          <div class="row form-group mb-2">
+            <label class="gInputLable col-sm-12 col-md-12 col-lg-4"
+              >To Date</label
+            >
+            <div class="col-sm-12 col-md-12 col-lg-6">
+              <input
+                type="date"
+                class="gInnerInput"
+                name="toDate"
+                id="toDate"
+                formControlName="toDate"
+                (keydown)="onToDateSelect($event)"
+                min="{{ minTemp }}"
+              />
+            </div>
+          </div>
+        </div>
+          </div>
+          <div class="col-12 col-sm-4 col-md-2 col-lg-3">
+            <div class="d-flex flex-column gap-0">
+              <div class="row form-group">
+                <label class="gInputLable col-sm-12 col-md-12 col-lg-4"
+                  >Receipt Route</label
+                >
+                <div class="col-sm-12 col-md-12 col-lg-6">
+                  <mat-select
+                    class="gInnerInput"
+                    id="viewReceiptRoute"
+                    formControlName="receiptRoute"
+                    (selectionChange)="selectViewReceiptRoute($event)"
+                  >
+                    <mat-option class="gSelectOption" value="All">All</mat-option>
+                    <mat-option
+                      class="gSelectOption"
+                      *ngFor="let receiptRoute of receiptRoutes"
+                      [value]="receiptRoute.ReceiptRoute"
+                    >
+                      {{ receiptRoute.ReceiptRoute }}
+                    </mat-option>
+                  </mat-select>
+                </div>
+              </div>
+              <div class="row form-group">
+                <label class="gInputLable col-sm-12 col-md-12 col-lg-4"
+                  >Receipt Mode</label
+                >
+                <div class="col-sm-12 col-md-12 col-lg-6">
+                  <mat-select
+                    class="gInnerInput"
+                    id="viewReceiptMode"
+                    formControlName="receiptMode"
+                    (selectionChange)="selectViewReceiptMode($event)"
+                  >
+                    <mat-option class="gSelectOption" value="All">All</mat-option>
+                    <mat-option
+                      class="gSelectOption"
+                      *ngFor="let receiptMode of receiptModes"
+                      [value]="receiptMode.ReceiptMode"
+                    >
+                      {{ receiptMode.ReceiptMode }}
+                    </mat-option>
+                  </mat-select>
+                </div>
+              </div>
+             
+            </div>
+          </div>
+          <div class="col-12 col-sm-4 col-md-4 col-lg-2">
+            <div class="d-flex flex-column gap-0">
+              <div class="row form-group">
+                <label class="gInputLable col-12 col-sm-12 col-md-12 col-lg-3"
+                  >Status</label
+                >
+                <div class="col-12 col-sm-12 col-md-12 col-lg-9">
+                  <mat-select
+                    class="gInnerInput"
+                    id="status"
+                    formControlName="status"
+                    (selectionChange)="selectStatus($event)"
+                  >
+                    <mat-option
+                      class="gSelectOption"
+                      *ngFor="let status of receiptViewStatus"
+                      [value]="status"
+                    >
+                      {{ status }}
+                    </mat-option>
+                  </mat-select>
+                </div>
+              </div>
+              <div class="row form-group text-center mt-1">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                  <button
+                    type="button"
+                    mat-button
+                    class="gNormalButton"
+                    id="button"
+                    (click)="filterViewSR()"
+                  >
+                  <mat-icon>remove_red_eye</mat-icon>
+                  View
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+   <section class="gTableSection">
+        <div class="gTableActionheaders">
+          <form role="search" class="search-form ml-3">
+            <input
+              type="search"
+              name="Search"
+              class="gSearchText"
+              #input
+              autocomplete="off"
+              [(ngModel)]="viewSearch"
+            />
+          </form>
+        </div>
+        <div class="gInnerTable" style="max-height: calc(100vh - 210px);">
+          <table class="gNormalTable-md table" id="viewTable" width="100%">
+            <thead>
+              <tr class="murugan" tabindex="0"    >
+                <th scope="col">S.NO</th>
+                <th scope="col">Select</th>
+                <th scope="col">FinBook</th>
+                <th scope="col">CostCenter</th>
+                <th scope="col">Accounting Date</th>
+                <th scope="col">Receipt No</th>
+                <th scope="col">Received From</th>
+                <th scope="col">Receipt Route</th>
+                <th scope="col">Receipt Mode</th>
+                <th scope="col">DCStatus</th>
+                <th scope="col">WStatus</th>
+                <th scope="col">Re Use</th>
+                <th scope="col">Entry User</th>
+                <th scope="col">Entry DateTime</th>
+                <th scope="col">Is Reversed</th>
+                <th scope="col" style="text-align: right;">Receipt Amt</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngIf="filterViewSRData.length === 0" tabindex="1"  >
+                <td colspan="15" class="text-center">No record found.</td>
+              </tr>
+              <tr class="murugan" tabindex="1"  
+                *ngFor="
+                  let data of filterViewSRData | filter: viewSearch;
+                  let i = index
+                "
+              >
+              <td>{{ i + 1 }}</td>
+              <td >
+                <i
+                  style="font-size: 14px"
+                  (click)="SRDetails(data, 'SRView',i )"
+                  class="fa fa-hand-o-right"
+                  aria-hidden="true"
+                ></i>
+              </td>
+                <td>{{ data.FbName }}</td>
+                <td>{{ data.brname }}</td>
+                <td>{{ data.AccDate }}</td>
+                <td>{{ data.VoucherNo }}</td>
+                <td>{{ data.ReceivedFrm }}</td>
+                <td>{{ data.ReceiptRoute }}</td>
+                <td>{{ data.ReceiptMode }}</td>
+                <td>{{ data.ReceiptStatus }}</td>
+                <td>{{ data.WStatus }}</td>
+                <td>
+                  <i
+                    style="font-size: 14px"
+                    (click)="SRDetails(data, 'SRreEntry',i)"
+                    class="fa fa-hand-o-right"
+                    aria-hidden="true"
+                    ></i>
+                </td>
+                <td>{{ data.CreatedUsr }}</td>
+                <td>{{ data.CreatedTime }}</td>
+                <td>{{ data.IsReversed }}</td>
+                <td style="text-align: right;">{{ data.ReceiptAmt | currency:"INR":"symbol" }}</td>
+              </tr>
+              <tr *ngIf="loading">
+                <td [colSpan]="16">
+                <div class="SkeltonLoader text-center justify-content-center d-flex" >
+                  <mat-spinner></mat-spinner>
+              </div>
+            </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+    </div>
+  </div>
+  <ng-template #SRReverseDialog >
+      <div class="gDialogTitle">
+      <span>Sundry Receipt Reverse</span>
+      <button type="button" id="submit" class="gDialogCloseButton" (click)="closeReverse()">&#x2715;</button>
+      </div>
+      <div class="gDialogContainer mx-2">
+        <div class="row" >
+          <label class="gInputLable">Receipt No: <span class="gInputLable">{{ this.vNo }} </span></label>
+        </div>
+        <div class="row" >
+          <label class="gInputLable">Receipt Amount: <span class="gInputLable">{{ this.RecptAmt }} </span></label>
+        </div>
+          <form class="example-form" [formGroup]="srReverseForm">
+            <div class="gcardContainer">
+            <div class="row">
+              <div class="col-sm-12 col-md-12 col-lg-10">
+                <div class="row form-group">
+                  <label class="gInputLable col-sm-12 col-md-4 col-lg-4">Reason for Reverse</label>
+                  <div class="col-sm-12 col-md-7 col-lg-7">
+                    <textarea 
+                    class="gInnerInput" style="height:45px !important ;"
+                    #message
+                   formControlName="reverseReason"
+                  ></textarea>
+               </div>
+                </div>
+                </div>
+              <div class="col-sm-12 col-md-12 col-lg-2">
+                <button
+                type="button" 
+                mat-button class="gNormalButton" id="button"
+                (click)="reverseSRData(srReverseForm.value)"
+                >
+                Reverse
+                </button>
+              </div>
+            </div>
+          </div>
+          </form>
+        </div>
+  </ng-template>
+  
+  <ng-template #SRRejectDialog>
+    <div class="gDialogTitle">
+    <span>Sundry Receipt Reject</span>
+    <button type="button" id="submit" class="gDialogCloseButton" (click)="closeReject()">&#x2715;</button>
+    </div>
+    <div class="gDialogContainer mt-2">
+        <form class="example-form" [formGroup]="srRejectForm">
+          <div class="gcardContainer">
+          <div class="row">
+            <div class="col-sm-12 col-md-8 col-lg-10">
+              <div class="row form-group">
+                <label class="gInputLable col-sm-12 col-md-4 col-lg-4">Reason for Rejection</label>
+                <div class="col-sm-12 col-md-7 col-lg-7">
+                <input
+                class="gInnerInput"
+                  #message
+                 formControlName="Reason"
+                />
+             </div>
+              </div>
+              </div>
+            <div class="col-sm-12 col-md-4 col-lg-2">
+              <button
+              type="button" 
+              mat-button class="gNormalButton" id="button"
+              (click)="rejectSR(srRejectForm.value)">
+              <mat-icon>cancel</mat-icon>
+              Reject
+              </button>
+            </div>
+          </div>
+        </div>
+        </form>
+      </div>
+  </ng-template>
+  
+  <!-- preview file -->
+  <ng-template #printSundryReceipt>
+  <div class="m-3">
+    <div class="row">
+      <div class="col-3">
+        <img [src]="imgUrl">
+      </div>
+      <div class="col-8">
+        <h4 style="text-align: left; margin: 0px; font-weight: bold;font-size: large;">
+          {{ this.CompanyName }}
+        </h4>
+        <h6 style="text-align: left; font-size: 12px; ">
+          {{ this.shopAddress }}, {{ this.city }}, {{ this.state }}, Pin:
+          {{ this.pinCode }} Ph: {{ this.phoneNumber }}
+          <br>
+          Web: {{ this.webSite }}
+          <br>
+          <span style="text-align: left; margin: 0px; font-weight: bold;font-size: larger; text-transform: capitalize;">GSTIN: {{ this.gst }}</span>
+        </h6>
+      </div>
+      <div class="col-1">
+        <div class="row">
+          <div class="col-6">
+            <button
+              type="button"
+              style="float: right"
+              mat-icon-button
+              class="gNormalButton1"
+              [elementToPrint]="printSRFile"
+              ngPrint
+            >
+              <mat-icon>print</mat-icon>
+            </button>
+          </div>
+          <div class="col-6">
+            <div class="d-flex justify-content-end">
+              <span class="closeBtn" (click)="closeModal()">X</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> 
+    <h4 style="text-align: center; font-weight: bolder">Sundry Receipts</h4>
+    <div class="row">
+      <div class="col-2">Receipt Route</div>
+      <div class="col-3">
+        {{ this.voucherInformationForm.get("receiptRoute").value }}
+      </div>
+      <div class="col-3">Accounting Date</div>
+      <div class="col-4">
+        {{ this.voucherInformationForm.get("receiptDate").value }}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-2">Bank/Cash Code</div>
+      <div class="col-3">
+        {{ this.voucherInformationForm.get("cashCode").value }}
+      </div>
+      <div class="col-3">Remitter</div>
+      <div class="col-4">
+        {{ this.voucherInformationForm.get("remitter").value }}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-2">Receipt Amount</div>
+      <div class="col-3">
+        {{ this.voucherInformationForm.get("receiptAmount").value }}
+      </div>
+      <div class="col-3">Cost Center/Branch</div>
+      <div class="col-4">
+        {{ this.voucherInformationForm.get("costCenter").value }}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-2">Division Code</div>
+      <div class="col-3">
+        {{ this.voucherInformationForm.get("divCode").value }}
+      </div>
+      <div class="col-3">Sub Division Code</div>
+      <div class="col-4">
+        {{ this.voucherInformationForm.get("subDivCode").value }}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-2">Receipt Mode</div>
+      <div class="col-3">
+        {{ this.instrumentInformationForm.get("receiptMode").value }}
+      </div>
+      <div class="col-3">Instrument Number</div>
+      <div class="col-4">
+        {{ this.instrumentInformationForm.get("instrumentNo").value }}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-2">Instrument Date</div>
+      <div class="col-3">
+        {{ this.instrumentInformationForm.get("instrumentDate").value }}
+      </div>
+      <div class="col-3">MICR No</div>
+      <div class="col-4">
+        {{ this.instrumentInformationForm.get("micrNo").value }}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-2">Bank Code</div>
+      <div class="col-3">
+        {{ this.instrumentInformationForm.get("InstrumentBank").value }}
+      </div>
+      <div class="col-3">Instrument Amount</div>
+      <div class="col-4">
+        {{ this.instrumentInformationForm.get("instrumentAmount").value }}
+      </div>
+    </div>
+    <div class="table-responsive tablerow">
+      <table
+        class="table-responsive tablerow"
+        width="100%"
+        style="
+          margin-top: 10px;
+          font-family: Roboto, Helvetica, sans-serif;
+          font-size: 13px;
+          border: 1px solid black;
+          border-collapse: collapse;
+        "
+      >
+        <thead class="thead1">
+          <tr style="border: 1px solid black; border-collapse: collapse">
+            <th style="min-width: 40px">SNo</th>
+            <th style="min-width: 60px">Account Code</th>
+            <th style="min-width: 60px">Account Name</th>
+            <th style="min-width: 60px">Fin Book</th>
+            <th style="min-width: 70px">Cost Center/ Branch</th>
+            <th style="min-width: 80px">Remarks</th>
+            <th style="min-width: 60px">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of accountingDetails; let i = index">
+            <td style="min-width: 40px" class="tabledate">{{ i + 1 }}</td>
+            <td style="min-width: 60px" class="tabledate">{{ row.AccCode }}</td>
+            <td style="min-width: 60px" class="tabledate">{{ row.AccName }}</td>
+            <td style="min-width: 60px" class="tabledate">
+              {{ row.finBookName }}
+            </td>
+            <td style="min-width: 70px" class="tabledate">
+              {{ row.costCenter }}
+            </td>
+            <td style="min-width: 80px" class="tabledate">
+              {{ row.remarks | titlecase}}
+            </td>
+            <td style="text-align: right; min-width: 60px" class="tabledate">
+              {{ row.amount }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="row">
+      <div class="col-9"></div>
+      <div class="col-2">Total Amount</div>
+      <div class="col-1" style="text-align: right">
+        {{ getTotalAmount() }}
+      </div>
+    </div>
+    <div class="row" style="margin-top: 60px">
+      <div class="col-6">
+        <div class="row">
+          <div class="col-12">Data Entered By</div>
+        </div>
+        <div class="row">
+          <div class="col-12">{{ this.User }}</div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            [ {{ today | date: "yyyy-MM-dd hh:mm:ss a":"+0530" }} ]
+          </div>
+        </div>
+      </div>
+      <div class="col-5">Verified By</div>
+    </div>
+    </div>
+  </ng-template>
+  
+  <!-- print file -->
+  <div #printSRFile [hidden]="true">
+    <div class="row">
+    <div class="col-4">
+      <img [src]="imgUrl">
+    </div>
+    <div class="col-8">
+      <h4 style="text-align: left; margin: 0px; font-weight: bold;font-size: large; text-transform: capitalize;">
+        {{ this.CompanyName }}
+      </h4>
+      <h6 style="text-align: left; font-size: 12px; ">
+        {{ this.shopAddress }}, {{ this.city }}, {{ this.state }}, Pin:
+        {{ this.pinCode }}, Ph: {{ this.phoneNumber }}
+        <br>
+        Web: {{ this.webSite }}
+        <br>
+        <span style="text-align: left; margin: 0px; font-weight: bold;font-size: larger; text-transform: capitalize;">GSTIN: {{ this.gst }}</span>
+      </h6>
+    </div>
+  </div>
+    <h4 style="text-align: center; font-weight: bolder">Sundry Receipts</h4>
+    <div class="row" style="margin-top: 10px">
+      <div class="col-3">Receipt Route</div>
+      <div class="col-2">
+        {{ this.voucherInformationForm.value.receiptRoute }}
+      </div>
+      <div class="col-3">Accounting Date</div>
+      <div class="col-4">
+        {{ this.voucherInformationForm.get("receiptDate").value }}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-3">Bank/Cash Code</div>
+      <div class="col-2">
+        {{ this.voucherInformationForm.get("cashCode").value }}
+      </div>
+      <div class="col-3">Remitter</div>
+      <div class="col-4">
+        {{ this.voucherInformationForm.get("remitter").value }}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-3">Receipt Amount</div>
+      <div class="col-2">
+        {{ this.voucherInformationForm.get("receiptAmount").value }}
+      </div>
+      <div class="col-3">Cost Center/Branch</div>
+      <div class="col-4">
+        {{ this.voucherInformationForm.get("costCenter").value }}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-3">Division Code</div>
+      <div class="col-2">
+        {{ this.voucherInformationForm.get("divCode").value }}
+      </div>
+      <div class="col-3">Sub Division Code</div>
+      <div class="col-4">
+        {{ this.voucherInformationForm.get("subDivCode").value }}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-3">Receipt Mode</div>
+      <div class="col-2">
+        {{ this.instrumentInformationForm.get("receiptMode").value }}
+      </div>
+      <div class="col-3">Instrument Number</div>
+      <div class="col-4">
+        {{ this.instrumentInformationForm.get("instrumentNo").value }}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-3">Instrument Date</div>
+      <div class="col-2">
+        {{ this.instrumentInformationForm.get("instrumentDate").value }}
+      </div>
+      <div class="col-3">MICR No</div>
+      <div class="col-4">
+        {{ this.instrumentInformationForm.get("micrNo").value }}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-3">Bank Code</div>
+      <div class="col-2">
+        {{ this.instrumentInformationForm.get("InstrumentBank").value }}
+      </div>
+      <div class="col-3">Instrument Amount</div>
+      <div class="col-4">
+        {{ this.instrumentInformationForm.get("instrumentAmount").value }}
+      </div>
+    </div>
+    <div class="table-responsive tablerow">
+      <table
+        class="table-responsive tablerow"
+        width="100%"
+        style="
+          margin-top: 10px;
+          font-family: Roboto, Helvetica, sans-serif;
+          font-size: 13px;
+          border: 1px solid black;
+          border-collapse: collapse;
+        "
+      >
+        <thead class="thead1">
+          <tr style="border: 1px solid black; border-collapse: collapse">
+            <th style="min-width: 40px">SNo</th>
+            <th style="min-width: 60px">Account Code</th>
+            <th style="min-width: 60px">Account Name</th>
+            <th style="min-width: 60px">Fin Book</th>
+            <th style="min-width: 70px">Cost Center/ Branch</th>
+            <th style="min-width: 80px">Remarks</th>
+            <th style="min-width: 60px">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of accountingDetails; let i = index">
+            <td style="min-width: 40px" class="tabledate">{{ i + 1 }}</td>
+            <td style="min-width: 60px" class="tabledate">{{ row.AccCode }}</td>
+            <td style="min-width: 60px" class="tabledate">{{ row.AccName }}</td>
+            <td style="min-width: 60px" class="tabledate">
+              {{ row.finBookName }}
+            </td>
+            <td style="min-width: 70px" class="tabledate">
+              {{ row.costCenter }}
+            </td>
+            <td style="min-width: 80px" class="tabledate">
+              {{ row.remarks }}
+            </td>
+            <td style="text-align: right; min-width: 60px" class="tabledate">
+              {{ row.amount }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="row">
+      <div class="col-8"></div>
+      <div class="col-2">Total Amount</div>
+      <div class="col-2" style="text-align: right">
+        {{ getTotalAmount() }}
+      </div>
+    </div>
+  
+    <div class="row" style="margin-top: 60px">
+      <div class="col-6">
+        <div class="row">
+          <div class="col-12">Data Entered By</div>
+        </div>
+        <div class="row">
+          <div class="col-12">{{ this.User }}</div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            [ {{ today | date: "yyyy-MM-dd hh:mm:ss a":"+0530" }} ]
+          </div>
+        </div>
+      </div>
+      <div class="col-5">Verified By</div>
+    </div>
+  </div>
+  

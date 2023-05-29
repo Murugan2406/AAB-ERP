@@ -1,0 +1,101 @@
+.gcardContainer, .gTableSection{
+    box-shadow: 0 8px 32px 0 rgb(31 38 135 / 23%);
+    border: 0.5px solid rgb(31 38 135 / 23%);
+}
+::ng-deep.gAutoCompleteContainer{
+    padding: 0 !important;
+}
+::ng-deep.gSelectOption{
+    margin: 10px 10px !important;
+}
+.toggleFooter {
+    background-color: var(--table-actionHeader-bg) !important;
+    td {
+background-color: transparent;
+        font-weight: 600;
+        border-bottom: none !important;
+        white-space: nowrap;
+        line-height: 22px;
+        height: 22px;
+        text-transform: capitalize;
+        font-family: system-ui;
+        font-size: 12px;
+        padding: 1px 10px !important;
+        color: var(--table-th-color) !important;
+        font-weight: 700 !important;
+        border-bottom: none !important;
+        z-index: 3;
+    }
+}
+
+.gInputButton {
+    ::ng-deep.mat-icon-button {
+       width: 20px !important;
+       height: 18px !important;
+       line-height: 20px !important;
+       color: #fff;
+   }
+}
+
+.gIconButton .mat-icon,
+.gSaveButton .mat-icon {
+    font-size: 18px !important;
+    line-height: 22px !important;
+    font-weight: 600 !important;
+}
+.gInputLable{
+    display: flex;
+    justify-content: space-between;
+}
+button:disabled, input:read-only {
+    cursor: no-drop;
+    background-color: #d6ddd8 !important;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  display: none;
+}
+.hrline{
+  border-top:1px dotted  var(--button-save-color); 
+  padding-top: 10px;
+}
+
+.rotate {
+    animation: rotation infinite 0.5s linear;
+    margin-top: -6px;
+    margin-left: -3px;
+    
+  }
+  .redCircle{
+    border: 1px solid #f44336 !important;
+    color: #f44336;
+
+  }
+  .greenCircle{
+    border: 1px solid #449f44 !important;
+    color: #449f44;
+
+  }
+  // ::ng-deep .mat-icon:hover{
+  //   animation: rotation infinite 1s linear;
+  //   // margin-top: -6px;
+  //   // margin-left: -3px;
+  // }
+  
+  
+  @keyframes rotation {
+    from {
+      transform: rotate(0deg);
+    }
+  
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @media only screen and (max-width: 767px) {
+    .gInputLable{
+      display: flex;
+      justify-content: flex-start;
+  }
+  }

@@ -1,0 +1,120 @@
+
+<div class=" d-flex align-items-center justify-content-center " *ngIf="loading" style="position: fixed; top:0; bottom: 0; left: 0; right: 0; z-index: 10001 !important; backdrop-filter: blur(2px);">
+    <mat-spinner></mat-spinner>
+</div>
+<div class="gWrapper">
+    <app-header Titleheader="Tare Weight"></app-header>
+    <!-- <div class="gcardContainer mt-1"> -->
+
+        <!-- <div class="row" style="margin-top: 1%;">
+            <div class="col-12 form-group align-self-end" style="text-align: right;">
+              
+            </div>
+        </div> -->
+      
+        <div class="gTableSection m-3 ">
+            <div class="gTableActionheaders">
+                <form role="search" class="search-form">
+                    <input type="search" name="Search" id="search" class="gSearchText" #input autocomplete="off"
+                        [(ngModel)]="searchValue" />
+                </form>
+                <button (click)="openTarepopup(adTarWeight)" class="gSaveButton">Add New</button>
+            </div>
+        <div class=" gInnerTable " style="max-height: calc(100vh - 100px);">
+            <table  class="gNormalTable-sm table ">
+                <thead>
+                    <th style="width: 5%;">S.No</th>
+                    <th>Tray & Vessels Description</th>
+                    <th>Weight</th>
+                    <th>Barcode</th>
+                    <th style="text-align: center;">Option</th>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let tare of tareweightList|filter:searchValue; let i=index">
+                        <td style="width: 5%;">{{i+1}}</td>
+                        <td>{{tare.Mettype}}</td>
+                        <td>{{tare.wgt}}</td>
+                        <td></td>
+                        <td style="text-align: center;">
+                            <button mat-icon-button (click)="itemRemove(i)" class="gDeleteIcon">
+                              <mat-icon>delete</mat-icon>
+                            </button>
+                           
+                        </td>
+                    </tr>
+                    <tr *ngIf="tareweightList.length === 0">
+                        <td colspan="5" class="text-center">No record found.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- </div> -->
+</div>
+
+<div *ngIf="progressval == 'indeterminate'" class="loading">
+    <mat-progress-spinner [mode]="progressval"> </mat-progress-spinner>
+</div>
+
+
+<ng-template #adTarWeight>
+    <div class="gDialogTitle">
+        <span></span>
+        <span class=""> Add Tare Weight</span>
+
+        <button type="button" id="submit" mat-button class="gDialogCloseButton" (click)="dialog.closeAll()">
+            <mat-icon style="line-height: 20px !important">close</mat-icon>
+        </button>
+    </div>
+
+    <div class="gDialogContainer">
+
+        <div class="row mt-2">
+            <div class="col-4 form-group">
+                <label class="gInputLable">Type</label>
+            </div>
+            <div class="col-8 form-group">
+                <input type="text" [(ngModel)]="tareData.desc" id="taredesc" name="taredesc"
+                    class="gInnerInput-border" autocomplete="off" (keydown)="focusNext($event,'tarewgt')">
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col-4 form-group">
+                <label class="gInputLable">Weight</label>
+            </div>
+            <div class="col-8 form-group">
+                <input type="text" [(ngModel)]="tareData.weight" autocomplete="off"
+                    (keypress)="OnlyNumericDecimal($event, 'Addtare_weight')" id="tarewgt" name="tarewgt"
+                    class="gInnerInput-border" (keydown)="focusNext($event,'tarebarcode')">
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col-4 form-group">
+                <label class="gInputLable">Barcode</label>
+            </div>
+            <div class="col-8 form-group">
+                <input type="text" [(ngModel)]="tareData.barcode" id="tarebarcode" name="tarebarcode"
+                    autocomplete="off" class="gInnerInput-border" (keydown)="focusNext($event,'save')">
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-4 form-group"></div>
+            <div class="col-8  form-group">
+                <div class="btn-group btn-group-sm gap-3" role="group" aria-label="Basic example">
+                    <button type="button" class="gSaveButton" id="save" (click)="addtareweight()">
+                        Save
+                    </button>
+                    <button type="button" id="modalClosedbtn" class="gDeleteButton"
+                    (click)="dialog.closeAll()">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+        </div>
+
+
+</ng-template>

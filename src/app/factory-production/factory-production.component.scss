@@ -1,0 +1,41 @@
+.modelImg{
+    height: 250px;
+}
+.newCard{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+@media only screen and (max-width: 1000px) {
+  .links{
+    position: relative !important;
+    margin-top: 30px;
+}
+
+}
+@media only screen and (max-width: 600px) {
+     
+    .box {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      margin:0;
+    }
+    .modelImg{
+        height: 150px;
+    }
+  
+    .demo{
+      display: flex;
+      justify-content: center;
+    }
+    .gNewModel{
+      .modal-header{
+        padding: 5px;
+      }
+    }
+
+    .linkButtons{
+        margin: 10px 0 !important;
+    }
+  }

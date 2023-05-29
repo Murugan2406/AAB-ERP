@@ -1,0 +1,1118 @@
+<div class=" d-flex align-items-center justify-content-center " *ngIf="viewMoreLoad" style="position: fixed; top:0; bottom: 0; left: 0; right: 0; z-index: 10001 !important; backdrop-filter: blur(2px);">
+    <mat-spinner></mat-spinner>
+</div>
+<!-- <div class="loading" *ngIf="viewMoreLoad" style="position: fixed; top:0; bottom: 0; left: 0; right: 0; z-index: 10001 !important; backdrop-filter: blur(3px);">
+
+    <div class="pendulum-container">
+  
+      <div class="ball-first">
+        <div id="ball-1" class="first"></div>
+        <div id="shadow-1" class="first-shadow"></div>
+      </div>
+      <div id="ball-2"></div>
+      <div id="ball-3"></div>
+      <div id="ball-4"></div>
+      <div id="ball-5"></div>
+      <div id="ball-6"></div>
+      <div class="ball-first">
+        <div id="ball-7" class="last"></div>
+        <div id="shadow-2" class="last-shadow"></div>
+      </div>
+    </div>
+    <div class="loader">
+      <span class="gInputLable">Just Hold On 👋</span>
+
+    </div>
+  </div> -->
+<div class="gWrapper">
+    <app-header [Titleheader]="groupName"></app-header>
+
+
+    <section class="sectionContainerFinbook">
+
+        <mat-tab-group (selectedTabChange)="onTabChanged($event.index);">
+
+            <!--   ============================ tab1 ============================================== -->
+            <mat-tab label="{{FirstTabName}}" [disabled]='loading || loadingTwo || loadingThree' >
+
+                <div class="sectionContainerFinbook1 banner row">
+                    <form class="form col-12 col-md-3  col-xl-3 my-2 ">
+
+
+                        <div class="row  form-group branchOutInput">
+                            <div class="col-12  col-xl-12 p-0">
+                                <label class="gInputLable">Company Name</label>
+                            </div>
+                            <div class="col-12 d-flex p-0  col-xl-12">
+                                <input class="gInnerInput" (input)="filterCmp($event.target.value, 'one')" #autoCompleteInput [matAutocomplete]="autocmpsingle" [formControl]="companyName" matInput>
+                                <mat-autocomplete autoActiveFirstOption class=" gAutoCompleteContainer" id="autocmpsingle" #autocmpsingle="matAutocomplete" [displayWith]="displayFn">
+                                    <mat-option class=" gSelectOption" *ngFor="let option of CampNameOptionsList" [value]="option" (onSelectionChange)="CmpSelected($event,'inputs')">
+                                        {{option.company}}
+                                    </mat-option>
+                                </mat-autocomplete>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="row  form-group branchOutInput">
+                            <div class="col-12  col-xl-12 p-0">
+                                <label class="gInputLable">Finance Book </label>
+                            </div>
+                            <div class="col-12 d-flex p-0  col-xl-12 gOuterInput">
+                                <input class="gInnerInput" (input)="checkcmpselected($event.target.value)" id="brFB" [formControl]="finbookName" matInput [matAutocomplete]="fbook">
+                                <mat-autocomplete autoActiveFirstOption #fbook="matAutocomplete" class="gAutoCompleteContainer" [displayWith]="displayFinbookname1">
+                                    <mat-option class="gSelectOption" *ngFor="let option of FinBookOptionsList " [value]="option" (onSelectionChange)="brFbSelected($event, option.FbCode, 'inputs')">
+                                        {{option.FbName}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <button mat-button class="gInputButton" (click)="masterReload(mainMenuSelected)">
+                                    <mat-icon>refresh</mat-icon>
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+                    </form>
+
+                    <div autocomplete="off" class="my-2 col-md-9 col-12 col-xl-9 mobileView">
+
+
+                        <div class="section1 gTableSection ">
+                            <div class="d-flex  text-end  gTableActionheaders">
+
+                                <form role="search" class="search-form ml-3">
+                                    <input type="search" name="Search" class="gSearchText" #input (ngModelChange)="applyFilter($event)" [(ngModel)]="searchTemp" autocomplete="off">
+                                </form>
+                                <img Cores px-0 class="gXlButton " src=".\assets\gImg\excel1.png" type="submit" matTooltip="Excel Export" (click)="XLExportBranchMapTable(datasource.data, FirstTabName)">
+
+
+                                <button *ngIf="HaveAccess" type="button" mat-button class="gNormalButton mx-0" (click)="openCreateDialog(createVendorGroup, 'Create')">
+                                    Create
+                                </button>
+                            </div>
+
+                            <section #XLTABLE class="gInnerTable">
+
+                                <table class="gNormalTable-sm   table" #table mat-table [dataSource]="datasource" matSort>
+                                    <ng-container *ngFor="let col of displayedColumns" [matColumnDef]="col">
+                                        <th mat-header-cell mat-sort-header *matHeaderCellDef >
+
+                                            <ng-container *ngIf="mainMenuSelected === 'VendorGroup' ">
+                                                <span *ngIf="col ==='SNo'" style="max-width: 40px !important;">SNo</span>
+                                                <span *ngIf="col =='VgId'">VG Code</span>
+                                                <span *ngIf="col =='VgName'">VG Name</span>
+                                                <span *ngIf="col =='Action'">Action</span>
+                                            </ng-container>
+                                            <ng-container *ngIf="mainMenuSelected ==='ItemGroup'">
+                                                <span *ngIf="col ==='SNo'" style="max-width: 40px !important;">SNo</span>
+                                                <span *ngIf="col =='IgCode'">IG Code</span>
+                                                <span *ngIf="col =='IgName'">IG Name</span>
+                                                <span *ngIf="col =='Action'">Action</span>
+                                            </ng-container>
+                                            <ng-container *ngIf="mainMenuSelected ==='CustomerGroup'">
+                                                <span *ngIf="col ==='SNo'" style="max-width: 40px !important;">SNo</span>
+                                                <span *ngIf="col =='CgCode'">CG Code</span>
+                                                <span *ngIf="col =='CgName'">CG Name</span>
+                                                <span *ngIf="col =='Action'">Action</span>
+                                            </ng-container>
+                                        </th>
+                                        <td mat-cell *matCellDef="let row; let i = index" style="text-align: left !important;">
+
+                                            <span *ngIf="col ==='SNo'" style="max-width: 40px !important;">{{i+1}}</span>
+                                            <span *ngIf="col !=='SNo' && col !=='Action'">{{row[col] ? row[col] :  'null'}}</span>
+                                            <span *ngIf="col ==='Action'" style="min-width: 80px;">
+                                                <button mat-icon-button class="gEditIcon" color="primary"
+                                                    (click)="editMasterTable(row, createVendorGroup)" >
+                                                    <mat-icon>edit</mat-icon>
+                                                </button>
+                                                <button mat-icon-button class="gDeleteIcon" color="warn"
+                                                     (click)="deleteConfirmation(row,'MasterTab')">
+                                                    <mat-icon>delete</mat-icon>
+                                                </button>
+                                            </span>
+                                        </td>
+                                    </ng-container>
+
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                                    <tr class="mat-row" *matNoDataRow>
+                                        <td class="mat-cell text-center" *ngIf="!loading" [attr.colspan]="displayedColumns.length+1">
+                                            No records found.
+                                        </td>
+                                    </tr>
+                                </table>
+                                <div class="SkeltonLoader text-center justify-content-center d-flex" *ngIf="loading">
+                                    <mat-spinner></mat-spinner>
+                                </div>
+
+                            </section>
+                        </div>
+
+                    </div>
+                    <ng-template #createVendorGroup let-data>
+
+                        <div class="gDialogTitle">
+                            <span></span>
+                            <span class=""> {{data}} {{groupName}}</span>
+
+
+                            <button type="button" id="submit" class="gDialogCloseButton" (click)="dialog.closeAll()">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                        </div>
+
+                        <div class="gDialogContainer">
+                            <form [formGroup]="CreateMasterForm" class="row ">
+                                <mat-form-field class="col-12">
+                                    <mat-label>Company Name</mat-label>
+                                    <input type="text" formControlName="campName" readonly (keydown)="keytab($event)" (input)="filterCmpPopUp($event.target.value, 'one')" matInput [matAutocomplete]="autopoup">
+                                    <mat-autocomplete autoActiveFirstOption class=" gAutoCompleteContainer" #autopoup="matAutocomplete" [displayWith]="displayFn">
+                                        <mat-option class=" gSelectOption" *ngFor="let option of ViewCampNameOptionsListOne" [value]="option" (onSelectionChange)="CmpSelected($event,'view')">
+                                            {{option.company}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+
+                                </mat-form-field>
+                                <mat-form-field class="col-12">
+                                    <mat-label>Finance book</mat-label>
+                                    <input type="text" (input)="checkcmpselectedMC($event.target.value)" readonly id="FbName" formControlName="FbName" matInput [matAutocomplete]="fnbook">
+                                    <mat-autocomplete autoActiveFirstOption #fnbook="matAutocomplete" class="gAutoCompleteContainer" [displayWith]="displayFinbookname">
+                                        <mat-option class="gSelectOption" *ngFor="let option of ViewFinBookOptionsList " [value]="option" (onSelectionChange)="brFbSelected($event, option.FbCode, 'view')">
+                                            {{option.FbName}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+
+                                </mat-form-field>
+                                <mat-form-field class=" col-12">
+                                    <mat-label>{{groupName}} Code</mat-label>
+                                    <input type="text" class="" formControlName="VgId" id="vgCode" (keydown)="keytab($event)" matInput autocomplete="off">
+
+                                </mat-form-field>
+
+
+                                <mat-form-field class="col-12">
+                                    <mat-label>{{groupName}} Name</mat-label>
+                                    <input matInput type="text" formControlName="VgName" id="vgName" (keydown)="keytab($event)" autocomplete="off">
+                                </mat-form-field>
+
+                                <div class="col-12 mb-2 d-flex text-end justify-content-end">
+
+                                    <button type="button" id="submit" mat-button class="gSaveButton" (click)="submitMasterCreateDialog('Create')" *ngIf="data === 'Create'">Save</button>
+                                    <button type="button " id="submit" mat-button class="gSaveButton" (click)="submitMasterCreateDialog('Edit')" *ngIf="data === 'Edit'">Update</button>
+
+                                </div>
+
+                            </form>
+                        </div>
+                    </ng-template>
+                </div>
+
+
+            </mat-tab>
+
+            <!--   ============================ tab2 ============================================== -->
+            <mat-tab label="{{SecondTabName}}" [disabled]='loading || loadingTwo || loadingThree' >
+           
+                <div class="sectionContainerFinbook1 banner row">
+                    <form    [ngClass]="toggleForm ? 'form col-12 col-md-3  col-xl-3 my-2 form1' : 'form col-12 col-md-3 col-xl-1 my-2 form1'">
+                        <button mat-button class=" toggleButton" (click)="toggleForm = !toggleForm"><mat-icon>keyboard_arrow_left</mat-icon></button>
+ 
+                        <div class="row  form-group branchOutInput">
+                            <div class="col-12  col-xl-12 p-0">
+                                <label class="gInputLable">Company Name</label>
+                            </div>
+                            <div class="col-12 d-flex p-0  col-xl-12">
+                                <input class="gInnerInput" (input)="filterCmp($event.target.value, 'two')" #autoCompleteInput [matAutocomplete]="autocmpsingleTwo" [formControl]="companyNameTwo" matInput>
+                                <mat-autocomplete autoActiveFirstOption class=" gAutoCompleteContainer" id="autocmpsingle" #autocmpsingleTwo="matAutocomplete" [displayWith]="displayFn">
+                                    <mat-option class=" gSelectOption" *ngFor="let option of CampNameOptionsListTwo" [value]="option" (onSelectionChange)="MapcmpSelected($event,'inputs')">
+                                        {{option.company}}
+                                    </mat-option>
+                                </mat-autocomplete>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="row  form-group branchOutInput">
+                            <div class="col-12  col-xl-12 p-0">
+                                <label class="gInputLable">Finance book</label>
+                            </div>
+                            <div class="col-12 d-flex p-0 gOuterInput  col-xl-12">
+                                <input class="gInnerInput" (input)="checkcmpselectedTwo($event.target.value, 'inputs')" id="fbookTwo" [formControl]="finbookNameTwo" matInput [matAutocomplete]="fbookTwo">
+                                <mat-autocomplete autoActiveFirstOption #fbookTwo="matAutocomplete" class="gAutoCompleteContainer" [displayWith]="displayFinbookname1">
+                                    <mat-option class="gSelectOption" *ngFor="let option of FinBookOptionsListTwo " [value]="option" (onSelectionChange)="FbSelectedTwo($event, option.FbCode, 'inputs')">
+                                        {{option.FbName}}
+                                    </mat-option>
+                                </mat-autocomplete>
+
+                                <button mat-button class="gInputButton" (click)="loadAcCodeToVGdata()">
+                                    <mat-icon>refresh</mat-icon>
+                                </button>
+                            </div>
+
+                        </div>
+
+
+
+                    </form>
+
+                    <div autocomplete="off" [ngClass]="toggleForm ? 'my-2 col-md-9 col-12 col-xl-9 mobileView' : 'my-2 col-md-9 col-12 col-xl-11 mobileView'">
+                        <div class="section1">
+
+                            <div class="gTableActionheaders">
+                                
+         
+                                <form role="search" class="search-form ml-3">
+                                    <input type="search" name="Search" class="gSearchText" #input (ngModelChange)="applyFilter($event)" [(ngModel)]="searchTempTwo" autocomplete="off">
+                                </form>
+                                <img Cores px-0 class="gXlButton  " src=".\assets\gImg\excel1.png" type="submit" matTooltip="Excel Export" (click)="XLExportBranchMapTable(datasourceTwo.data, SecondTabName)">
+
+                
+                                <button type="button"  *ngIf="HaveAccess" mat-button class="gNormalButton mx-0" (click)="openCreateDialog(MapAcVendorGroup, 'Two')">
+                                    Create
+                                </button>
+
+                                <button type="button" class="gIconButton" matTooltip="Displayed Columns" mat-button style="position: relative;"
+                                (click)="openBottomSheet(bottomSheet)" *ngIf="IndName === 'Item'" >
+                                <!-- <span style="position: absolute; top: -1px;right: -3px; font-size: 32px;" class="text-danger" *ngIf="displayedArr.length !== displayedColumnsTwo.length">{{displayedArr.length - displayedColumnsTwo.length}}</span> -->
+                                <mat-icon  *ngIf="displayedArr.length === displayedColumnsTwo.length">drag_indicator</mat-icon>
+                                <span class="text-danger"   *ngIf="displayedArr.length !== displayedColumnsTwo.length">{{displayedArr.length - displayedColumnsTwo.length}}</span>
+                            </button>
+         
+                            </div>
+                            <ng-template #bottomSheet>
+                                <div class="gDialogTitle d-flex justify-content-between">
+                                    <span></span>
+                                    <span>Displayed Columns</span>
+                                    <button class="gIconButton"
+                                    (click)="headerLoadAll()"><mat-icon>close</mat-icon></button>
+                                </div>
+                                <div class="gDialogContainer p-3">
+                                    <div class="d-flex row">
+                                        <div *ngFor="let header of displayedArr;let i =index" class=" col-6 col-sm-4 my-2">
+
+                                            <mat-checkbox class="example-margin" [checked]="header.display"
+                                                [disabled]="i=== 0 || i=== displayedArr.length -1"
+                                                (change)=" header.display = !header.display;headerLoad()">
+                                                <span class="gInputLable">{{header.leble}}</span>
+    
+                                            </mat-checkbox>
+    
+                                        </div>
+    
+                                    </div>
+                                </div>
+                            </ng-template>
+
+                            <section #XLTABLE class="gInnerTable">
+
+                                <table class="gNormalTable-sm table " #table2 mat-table [dataSource]="datasourceTwo" matSort>
+                                    <ng-container *ngFor="let col of displayedColumnsTwo" [matColumnDef]="col">
+                                        <th mat-header-cell mat-sort-header *matHeaderCellDef>
+
+
+                                            <ng-container *ngIf="mainMenuSelected ==='VendorGroup'">
+                                                <span *ngIf="col ==='SNo'" style="max-width: 40px !important;">SNo
+                                                    {{datasourceTwo.length}}</span>
+                                                <span *ngIf="col =='AcCode'">Account Code</span>
+                                                <span *ngIf="col =='AcName'">Account Name</span>
+                                                <span *ngIf="col =='Action'">Action</span>
+                                                <span *ngIf="col ==='VgId'">VG Code</span>
+                                                <span *ngIf="col ==='VgName'">VG Name</span>
+                                                <span *ngIf="col ==='FromDate'">Effective Date</span>
+                                                <span *ngIf="col ==='AcType'">Account Type</span>
+                                            </ng-container>
+                                            <ng-container *ngIf="mainMenuSelected ==='ItemGroup'">
+
+                                                <span *ngIf="col ==='SNo'" style="max-width: 40px !important;">SNo
+                                                    {{datasourceTwo.length}}</span>
+                                                <span *ngIf="col ==='IgCode'">IG Code</span>
+                                                <span *ngIf="col ==='IgName'">IG Name</span>
+                                                <span *ngIf="col ==='AcCode'">Stock Acc Code</span>
+                                                <span *ngIf="col ==='AcName'">Stock Acc Name</span>
+
+                                                <span *ngIf="col ==='PayableAcCode'">PayableAcCode</span>
+                                                <span *ngIf="col ==='PayableAcName'">PayableAcName</span>
+
+                                                <span *ngIf="col ==='AdvanceAcCode'">AdvanceAcCode</span>
+                                                <span *ngIf="col ==='AdvanceAcName'">AdvanceAcName</span>
+
+                                                <span *ngIf="col ==='DepositsAcCode'">DepositsAcCode</span>
+                                                <span *ngIf="col ==='DepositsAcName'">DepositsAcName</span>
+
+                                                <span *ngIf="col ==='Action'">Action</span>
+                                                <span *ngIf="col ==='FromDate'">Effective Date</span>
+
+                                            </ng-container>
+                                            <ng-container *ngIf="mainMenuSelected ==='CustomerGroup'">
+                                                <span *ngIf="col ==='SNo'" style="max-width: 40px !important;">SNo</span>
+                                                <span *ngIf="col =='CgCode'">CG Code</span>
+                                                <span *ngIf="col =='CgName'">CG Name</span>
+                                                <span *ngIf="col =='AcCode'">Account Code</span>
+                                                <span *ngIf="col =='AcName'">Account Name</span>
+                                                <span *ngIf="col =='Action'">Action</span>
+                                                <span *ngIf="col ==='FromDate'">Effective Date</span>
+                                            </ng-container>
+
+
+
+                                        </th>
+                                        <td mat-cell *matCellDef="let row; let i = index" style="text-align: left !important;" >
+
+                                            <span *ngIf="col ==='SNo'" style="max-width: 40px !important;">{{i+1}}</span>
+                                            <span *ngIf="col !=='SNo' && col !=='Action'">{{row[col] ? row[col] :  'null'}}</span>
+                                            <span *ngIf="col ==='Action'" style="min-width: 80px;">
+
+                                                <button mat-icon-button class="gEditIcon" 
+                                                    (click)="EditAccMap(row, MapAcVendorGroup, 'VgAcCodeMap')">
+                                                    <mat-icon>edit</mat-icon>
+                                                </button>
+
+
+                                                <button mat-icon-button class="gDeleteIcon" color="warn"
+                                                    
+                                                    (click)="deleteConfirmation(row,'VgAcCodeMap')">
+                                                    <mat-icon>delete</mat-icon>
+                                                </button>
+                                            </span>
+                                        </td>
+                                    </ng-container>
+
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumnsTwo"></tr>
+
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumnsTwo;"></tr>
+
+                                    <tr class="mat-row" *matNoDataRow>
+
+                                        <td class="mat-cell text-center" *ngIf="!loadingTwo" [attr.colspan]="displayedColumnsTwo.length">
+                                            No records found.
+                                        </td>
+
+                                    </tr>
+                                </table>
+                                <div class="SkeltonLoader text-center justify-content-center d-flex" *ngIf="loadingTwo">
+                                    <mat-spinner></mat-spinner>
+                                </div>
+                            </section>
+                        </div>
+
+                    </div>
+                    <ng-template #MapAcVendorGroup>
+
+                        <div class="gDialogTitle">
+                            <span></span>
+                            <span class="" *ngIf="!AccMapEdit">Map Account Code to {{groupName}}</span>
+                            <span class="" *ngIf="AccMapEdit">Edit Account Code to {{groupName}} Map</span>
+
+
+                            <button type="button" id="close" class="gDialogCloseButton" (click)="dialog.closeAll()">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                        </div>
+                        <div class="gDialogContainer">
+
+                            <form [formGroup]="MapAcVGForm" class="row  pt-3">
+                                <mat-form-field class="col-12 col-md-12 col-xl-6">
+                                    <mat-label>Company Name</mat-label>
+                                    <input type="text" readonly formControlName="campName" (input)="filterCmpPopUp($event.target.value, 'two')" matInput [matAutocomplete]="autopoup">
+                                    <mat-autocomplete autoActiveFirstOption class=" gAutoCompleteContainer" #autopoup="matAutocomplete" [displayWith]="displayFn">
+                                        <mat-option class=" gSelectOption" *ngFor="let option of ViewCampNameOptionsListTwo" [value]="option" (onSelectionChange)="MapcmpSelected($event, 'view')">
+                                            {{option.company}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+
+                                </mat-form-field>
+
+
+
+
+                                <mat-form-field class="col-12 col-md-12 col-xl-6">
+                                    <mat-label>Fin Book</mat-label>
+
+                                    <input type="text" readonly (input)="checkcmpselectedTwo($event.target.value, 'view')" id="fbookTwoView" formControlName="FinBook" matInput [matAutocomplete]="fbookTwoView">
+                                    <mat-autocomplete autoActiveFirstOption #fbookTwoView="matAutocomplete" class="gAutoCompleteContainer" [displayWith]="displayFinbookname1">
+                                        <mat-option class="gSelectOption" *ngFor="let option of FinBookOptionsListTwoView " [value]="option" (onSelectionChange)="FbSelectedTwo($event, option.FbCode, 'view')">
+                                            {{option.FbName}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+
+                                </mat-form-field>
+
+
+                                <mat-form-field class="col-12 col-md-12 col-xl-6" *ngIf="mainMenuSelected === 'VendorGroup'">
+                                    <mat-label>{{groupName}} Name</mat-label>
+                                    <input type="text" [readonly]="AccMapEdit" formControlName="VgName" id="vgCodeView" (input)="filterVGName($event.target.value, 'view')" matInput [matAutocomplete]="viewVgnameTwo">
+                                    <mat-autocomplete autoActiveFirstOption class=" gAutoCompleteContainer" #viewVgnameTwo="matAutocomplete" [displayWith]="displayVgName">
+                                        <mat-option class=" gSelectOption" *ngFor="let option of VGnameListTwoView" [value]="option" (onSelectionChange)="focusNext('paymentType')">
+                                            {{option.VgName}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                                <mat-form-field class="col-12 col-md-12 col-xl-6" *ngIf="mainMenuSelected === 'ItemGroup'">
+                                    <mat-label>{{groupName}} Name</mat-label>
+                                    <input type="text" [readonly]="AccMapEdit" formControlName="VgName" id="vgCodeView" (input)="filterVGName($event.target.value, 'view')" matInput [matAutocomplete]="viewVgnameTwo">
+                                    <mat-autocomplete autoActiveFirstOption class=" gAutoCompleteContainer" #viewVgnameTwo="matAutocomplete" [displayWith]="displayIgName">
+                                        <mat-option class=" gSelectOption" *ngFor="let option of VGnameListTwoView" [value]="option" (onSelectionChange)="focusNext('AcCode')">
+                                            {{ option.IgName}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+
+
+
+                                <mat-form-field class="col-12 col-md-12 col-xl-6" *ngIf="mainMenuSelected === 'CustomerGroup'">
+                                    <mat-label>{{groupName}} Name</mat-label>
+                                    <input type="text" [readonly]="AccMapEdit" formControlName="VgName" id="vgCodeView" (input)="filterVGName($event.target.value, 'view')" matInput [matAutocomplete]="viewVgnameTwo">
+                                    <mat-autocomplete autoActiveFirstOption class=" gAutoCompleteContainer" #viewVgnameTwo="matAutocomplete" [displayWith]="displayCgName">
+                                        <mat-option class=" gSelectOption" *ngFor="let option of VGnameListTwoView" [value]="option" (onSelectionChange)="focusNext('AcCode')">
+                                            {{option.CgName }}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+
+
+                                <mat-form-field class="col-12 col-md-12 col-xl-6" *ngIf="mainMenuSelected === 'VendorGroup'">
+                                    <mat-label>Account Type</mat-label>
+                                    <mat-select formControlName="pytype" id="paymentType" [disabled]="AccMapEdit">
+                                        <mat-option *ngFor="let payment of PaymentOptions" class="gSelectOption" [value]="payment" (onSelectionChange)="focusNext('AcCode')">
+                                            {{payment}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <mat-form-field class="col-12 col-md-12 col-xl-6">
+                                    <mat-label> {{ mainMenuSelected === 'ItemGroup' ? 'Stock Account Code' : 'Account Code'}} </mat-label>
+                                    <input type="text"  formControlName="AcCode" id="AcCode" matInput (input)="filterAcCode($event.target.value, 'view','normal')" [matAutocomplete]="viewAcCode">
+                                    <mat-autocomplete autoActiveFirstOption class=" gAutoCompleteContainer" #viewAcCode="matAutocomplete" [displayWith]="displayAcCode">
+                                        <mat-option class=" gSelectOption" *ngFor="let option of AcCodeListTwoView" [value]="option" (onSelectionChange)="focusNext('payableAccCode')">
+                                            {{option.AcCodeName}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+
+                                <!-- New fields For Item Mapping -->
+
+
+                                <mat-form-field class=" col-12 col-md-12 col-xl-6" *ngIf="mainMenuSelected === 'ItemGroup'">
+                                    <mat-label>Payable Account Code</mat-label>
+                                    <input type="text"  formControlName="payableAccCode" id="payableAccCode" matInput (input)="filterAcCode($event.target.value, 'view', 'payable')" [matAutocomplete]="viewpayableAccCode">
+                                    <mat-autocomplete autoActiveFirstOption class=" gAutoCompleteContainer" #viewpayableAccCode="matAutocomplete" [displayWith]="displayAcCode">
+                                        <mat-option class=" gSelectOption" *ngFor="let option of PayableAcCodeListTwoView" [value]="option" (onSelectionChange)="focusNext('AdvAccCode')">
+                                            {{option.AcCodeName}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+
+                                <mat-form-field class=" col-12 col-md-12 col-xl-6" *ngIf="mainMenuSelected === 'ItemGroup'">
+                                    <mat-label>Advance Account Code</mat-label>
+                                    <input type="text"  formControlName="AdvAccCode" id="AdvAccCode" matInput (input)="filterAcCode($event.target.value, 'view', 'advance')" [matAutocomplete]="viewAdvAccCode">
+                                    <mat-autocomplete autoActiveFirstOption class=" gAutoCompleteContainer" #viewAdvAccCode="matAutocomplete" [displayWith]="displayAcCode">
+                                        <mat-option class=" gSelectOption" *ngFor="let option of AdvanceAcCodeListTwoView" [value]="option" (onSelectionChange)="focusNext('DepAccCode')">
+                                            {{option.AcCodeName}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+
+                                <mat-form-field class=" col-12 col-md-12 col-xl-6" *ngIf="mainMenuSelected === 'ItemGroup'">
+                                    <mat-label> Deposit Account Code</mat-label>
+                                    <input type="text"  formControlName="DepAccCode" id="DepAccCode" matInput (input)="filterAcCode($event.target.value, 'view', 'deposit')" [matAutocomplete]="viewDepAccCode">
+                                    <mat-autocomplete autoActiveFirstOption class=" gAutoCompleteContainer" #viewDepAccCode="matAutocomplete" [displayWith]="displayAcCode">
+                                        <mat-option class=" gSelectOption" *ngFor="let option of DepositAcCodeListTwoView" [value]="option" (onSelectionChange)="focusNext('effDate')">
+                                            {{option.AcCodeName}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+
+
+
+                                <!--End Of Item Mapping new accounts-->
+                                <mat-form-field class="col-12 col-md-12 col-xl-6">
+                                    <mat-label *ngIf="!AccMapEdit">Effective Date</mat-label>
+                                    <mat-label *ngIf="AccMapEdit">From Date</mat-label>
+                                    <input *ngIf="!AccMapEdit" matInput formControlName="EffDate" id="effDate" [matDatepicker]="effDate" (keyenter)="focusNext('submit')" (dateChange)="focusNext('submit')">
+                                    <input *ngIf="AccMapEdit" matInput formControlName="EffDate" id="effDate" [matDatepicker]="effDate" (keyenter)="focusNext('effToDate')" (dateChange)="focusNext('effToDate')">
+
+                                    <mat-datepicker-toggle matSuffix [for]="effDate ">
+                                        <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #effDate></mat-datepicker>
+                                </mat-form-field>
+
+                                <mat-form-field class="col-12 col-md-12 col-xl-6" *ngIf="AccMapEdit">
+                                    <mat-label>To Date</mat-label>
+                                    <input matInput formControlName="EffToDate" id="effToDate" [matDatepicker]="effToDate" (keyenter)="focusNext('submit')" (dateChange)="focusNext('submit')">
+                                    <mat-datepicker-toggle matSuffix [for]="effToDate ">
+                                        <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #effToDate></mat-datepicker>
+                                </mat-form-field>
+
+
+
+                                <div class="col-12 mb-2 d-flex text-end justify-content-end">
+                                    <button type="button" id="submit" mat-button class="gSaveButton" *ngIf="AccMapEdit" (click)="UpdateAcMapVIC(MapAcVGForm.value)">Update</button>
+
+                                    <button type="button" id="submit" mat-button class="gSaveButton" *ngIf="!AccMapEdit" (click)="submitMapAcVgDialog()">Save</button>
+
+                                </div>
+
+                            </form>
+                        </div>
+                    </ng-template>
+                </div>
+            </mat-tab>
+
+            <!--   ============================ tab3 ============================================== -->
+            <mat-tab label="{{ThirdTabName}}" [disabled]='loading || loadingTwo || loadingThree' >
+
+                <div class="sectionContainerFinbook1 banner row">
+                    <section class="form col-12 col-md-4  col-xl-3 my-2 ">
+
+
+                        <div class="row  form-group branchOutInput">
+                            <div class="col-12  col-xl-12 p-0">
+                                <label class="gInputLable">Company Name</label>
+                            </div>
+                            <div class="col-12 d-flex p-0  col-xl-12">
+                                <input class="gInnerInput" (input)="filterCmp($event.target.value, 'three')" [matAutocomplete]="autocmpsingleThree" [formControl]="companyNameThree" matInput>
+                                <mat-autocomplete autoActiveFirstOption class=" gAutoCompleteContainer" id="autocmpsingleThree" #autocmpsingleThree="matAutocomplete" [displayWith]="displayFn">
+                                    <mat-option class=" gSelectOption" *ngFor="let option of CampNameOptionsListThree" [value]="option" (onSelectionChange)="CmpSelectedThree($event, ThirdTabName)">
+                                        {{option.company}}
+                                    </mat-option>
+                                </mat-autocomplete>
+
+                            </div>
+
+
+
+                        </div>
+                        <div class="row  form-group branchOutInput">
+                            <div class="col-12  col-xl-12 p-0">
+                                <label class="gInputLable">Finance book  </label>
+                            </div>
+
+                            <div class="col-12 d-flex p-0  col-xl-12">
+
+                                <input type="text" class="gInnerInput" (input)="FBThreeInput($event.target.value, 'inputs')" id="fbookThree" [formControl]="FinBookThree" matInput [matAutocomplete]="fbookThree">
+                                <mat-autocomplete autoActiveFirstOption #fbookThree="matAutocomplete" class="gAutoCompleteContainer" [displayWith]="displayFinbookname1">
+                                    <mat-option class="gSelectOption" *ngFor="let option of FbTabThree " [value]="option" (onSelectionChange)="FbSelectedThree($event, option.FbCode, 'inputs')">
+                                        {{option.FbName}}
+                                    </mat-option>
+                                </mat-autocomplete>
+
+
+                            </div>
+
+
+
+                        </div>
+
+
+                        <div class="row  form-group branchOutInput">
+                            <div class="col-12  col-xl-12 p-0">
+                                <label class="gInputLable">{{groupName}} Name</label>
+                            </div>
+                            <div class="col-12 d-flex p-0  col-xl-12" *ngIf="mainMenuSelected ==='VendorGroup'">
+                                <div class="gOuterInput w-100">
+                                <input class="gInnerInput" id="vgThreeInput" (input)="filterVGNameThree($event.target.value, 'inputs')" [matAutocomplete]="autocmpVG" [formControl]="VGNameThree" matInput>
+                                <mat-autocomplete autoActiveFirstOption class=" gAutoCompleteContainer" id="autocmpVG" #autocmpVG="matAutocomplete" [displayWith]="displayVgName">
+                                    <mat-option class=" gSelectOption" *ngFor="let option of VGnameListThree" [value]="option" (onSelectionChange)="vgnameThreeselected($event, 'inputs')">
+                                        {{option.VgName}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <button mat-button class="gInputButton" (click)="loadThirdTabData()"><mat-icon>refresh</mat-icon></button>
+                            </div>
+
+                            </div>
+                            <div class="col-12 d-flex p-0  col-xl-12" *ngIf="mainMenuSelected ==='ItemGroup'">
+                                <div class="gOuterInput w-100">
+                                <input class="gInnerInput" id="vgThreeInput" (input)="filterVGNameThree($event.target.value, 'inputs')" [matAutocomplete]="autocmpVG" [formControl]="VGNameThree" matInput>
+                                <mat-autocomplete autoActiveFirstOption class=" gAutoCompleteContainer" id="autocmpVG" #autocmpVG="matAutocomplete" [displayWith]="displayIgName">
+                                    <mat-option class=" gSelectOption" *ngFor="let option of VGnameListThree" [value]="option" (onSelectionChange)="vgnameThreeselected($event, 'inputs')">
+                                        {{option.IgName}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <button mat-button class="gInputButton" (click)="loadThirdTabData()"><mat-icon>refresh</mat-icon></button>
+                            </div>
+                            </div>
+                            <div class="col-12 d-flex p-0  col-xl-12" *ngIf="mainMenuSelected ==='CustomerGroup'">
+                                <div class="gOuterInput w-100">
+                                <input class="gInnerInput" id="vgThreeInput" (input)="filterVGNameThree($event.target.value, 'inputs')" [matAutocomplete]="autocmpVG" [formControl]="VGNameThree" matInput>
+                                <mat-autocomplete autoActiveFirstOption class=" gAutoCompleteContainer" id="autocmpVG" #autocmpVG="matAutocomplete" [displayWith]="displayCgName">
+                                    <mat-option class=" gSelectOption" *ngFor="let option of VGnameListThree" [value]="option" (onSelectionChange)="vgnameThreeselected($event, 'inputs')">
+                                        {{option.CgName}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <button mat-button class="gInputButton" (click)="loadThirdTabData()"><mat-icon>refresh</mat-icon></button>
+                            </div>
+                            </div>
+
+
+                            <div class="col-12 d-flex p-0 mt-2  col-xl-12" *ngIf="FullReport.length > this.limitData && extraAvailable">
+                                <span class="gInputLable">Total Records: &nbsp;&nbsp; <b> {{FullReport.length}}  </b></span>
+                                </div>
+                                <div class="col-12 d-flex p-0 mt-2  col-xl-12" >
+                                    <span class="gInputLable">Load Limit :&nbsp;&nbsp; </span>
+                                <input type="number" style="max-width: 100px;" class="gInnerInput-border" [(ngModel)]="limitData" >
+                          
+                            
+                              </div>
+                          
+
+                        </div>
+                        <div *ngIf="ShowMapInput">
+                            <hr>
+
+                            <div class="row  form-group branchOutInput">
+
+                                <div class="col-12  col-xl-12 p-0">
+                                    <label class="gInputLable">Choose Mapping Option</label> <br>
+                                </div>
+
+                                <div class="col-12 mt-2 col-xl-12 p-0 radioContainer">
+                                    <mat-radio-group class="d-flex align-items-center   mr-3" *ngIf="HaveAccess" [formControl]="MapOption" (change)="mapOptionChoosed()">
+                                        <mat-radio-button value="single" id="mapping"  required>Indivual Map</mat-radio-button>
+                                        <mat-radio-button value="bulk" required class="mx-2">Bulk Map</mat-radio-button>
+                                    </mat-radio-group>
+                                </div>
+                            </div>
+                            <div class="row  form-group branchOutInput" *ngIf="MapOption.value === 'single' || MapOption.value === 'bulk'">
+                                <div class="col-12  col-xl-12 p-0">
+                                    <label class="gInputLable">Effective Date</label>
+                                </div>
+                                <div class="gOuterInput col-12 d-flex p-0  col-xl-12">
+                                    <input class="gInnerInput" matInput [formControl]="EffDateThree" id="threeEffDate" [matDatepicker]="threeEffDate" autocomplete="off ">
+
+                                    <mat-datepicker-toggle matSuffix [for]="threeEffDate" class="gInputButton">
+                                        <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #threeEffDate></mat-datepicker>
+                                </div>
+
+                            </div>
+
+                            <div class="row  form-group  mb-2 branchOutInput " *ngIf="MapOption.value === 'single'" [@enterAnimation]>
+                                <div class="col-12  col-xl-4 p-0 ">
+                                    <label class="gInputLable" *ngIf="mainMenuSelected ==='VendorGroup'">Supplier
+                                    Name</label>
+                                    <label class="gInputLable" *ngIf="mainMenuSelected ==='ItemGroup'">Item
+                                    Name</label>
+                                    <label class="gInputLable" *ngIf="mainMenuSelected ==='CustomerGroup'">Customer
+                                    Name</label>
+                                </div>
+                                <div class="col-12 d-flex p-0 gOuterInput  col-xl-12" *ngIf="mainMenuSelected ==='VendorGroup'">
+
+                                    <input class="gInnerInput w-60" (input)="supplierNameSearch($event.target.value, 'inputs')" id="brCCenter" matInput [matAutocomplete]="fbAcc" [formControl]="SupplierName">
+                                    <mat-autocomplete autoActiveFirstOption class=" gAutoCompleteContainer" #fbAcc="matAutocomplete" [displayWith]="displaySupplier">
+                                        <mat-option class=" gSelectOption" *ngFor="let option of SupplierNameList" [value]="option" (onSelectionChange)="focusNext('singleAdd')">
+                                            {{option.supcode}} - {{option.SupName}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                    <button type="button" id="singleAdd" mat-button class="gInputButton" matTooltip="Save" (click)="SupplierMapToVg('single')">
+                                    <mat-icon>save</mat-icon>
+                                </button>
+                                </div>
+                                <div class="col-12 d-flex p-0  col-xl-12" *ngIf="mainMenuSelected ==='ItemGroup'">
+
+                                    <input class="gInnerInput w-60" (input)="supplierNameSearch($event.target.value, 'inputs')" id="brCCenter" matInput [matAutocomplete]="fbAcc" [formControl]="SupplierName">
+                                    <mat-autocomplete autoActiveFirstOption class=" gAutoCompleteContainer" #fbAcc="matAutocomplete" [displayWith]="displayItem">
+                                        <mat-option class=" gSelectOption" *ngFor="let option of SupplierNameList" [value]="option" (onSelectionChange)="focusNext('singleAdd')">
+                                            {{option.icode}} -  {{option.iname}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                    <button type="button" id="singleAdd" mat-button class="gIconButton uploadbutton" matTooltip="Save" (click)="SupplierMapToVg('single')">
+                                    <mat-icon>save</mat-icon>
+                                </button>
+                                </div>
+                                <div class="col-12 d-flex p-0  col-xl-12" *ngIf="mainMenuSelected ==='CustomerGroup'">
+
+                                    <input class="gInnerInput w-60" (input)="supplierNameSearch($event.target.value, 'inputs')" id="brCCenter" matInput [matAutocomplete]="fbAcc" [formControl]="SupplierName">
+                                    <mat-autocomplete autoActiveFirstOption class=" gAutoCompleteContainer" #fbAcc="matAutocomplete" [displayWith]="displayCustomer">
+                                        <mat-option class=" gSelectOption" *ngFor="let option of SupplierNameList" [value]="option" (onSelectionChange)="focusNext('singleAdd')">
+                                            {{option.CustCode}} - {{option.CustName}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                    <button type="button" id="singleAdd" mat-button class="gIconButton uploadbutton" matTooltip="Save" (click)="SupplierMapToVg('single')">
+                                    <mat-icon>save</mat-icon>
+                                </button>
+                                </div>
+
+                            </div>
+
+                            <div class="row  form-group branchOutInput" *ngIf="MapOption.value === 'bulk'" [@enterAnimation]>
+                                <div class="col-12  col-xl-4 p-0">
+                                    <label class="gInputLable">Choose Action</label>
+                                </div>
+
+                                <div class="col-12 p-0 d-flex  col-xl-12 gap-3">
+
+                                    <button type="button" mat-button class="gNormalButton gNormalButton2 mb-2 col-md-4 col-xl-5" (click)="browsebutton()"> Browse XL
+                                    &nbsp;<mat-icon>attachment</mat-icon> </button>
+                                    <input type="file" [(ngModel)]="inputValue" hidden id="import" accept=".xlsx, .xls" (change)="onFileChange($event, invalidBrCode)">
+
+                                    <button mat-button class="gNormalButton gNormalButton2 mb-2 col-xl-5 col-md-4" (click)="previewclick()"> Template
+                                    &nbsp;
+                                    <mat-icon>save_alt</mat-icon>
+                                </button>
+                                    <button type="button" mat-button class="gIconButton mb-1 col-md-4 col-xl-2" matTooltip="Save" (click)="SupplierMapToVg('bulk')">
+                                    <mat-icon>save</mat-icon>
+                                </button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div autocomplete="off" class="my-2 col-md-8 col-12 col-xl-9 mobileView">
+                        <div class="section1">
+
+                            <div class="d-flex  text-end justify-content-between  gTableActionheaders">
+                                <div *ngIf="bulkMapNotification === '' ">
+
+
+                                </div>
+                                <div *ngIf="bulkMapNotification !== '' ">
+                                    <span style="font-family: monospace;">Records are not saved click here to save &nbsp; </span>
+                                    <button type="button" mat-button class="gNormalButton mb-1 col-md-4 col-xl-2" matTooltip="Save" (click)="SupplierMapToVg('bulk')">
+                                       Save
+                                    </button>
+
+                                </div>
+                                <div class="d-flex">
+
+                                    <form role="search" class="search-form ml-3">
+                                        <input type="search" name="Search" class="gSearchText" #input (ngModelChange)="applyFilter($event)" [(ngModel)]="searchTempThree" autocomplete="off">
+                                    </form>
+                                    <img Cores px-0 class="gXlButton " src=".\assets\gImg\excel1.png" type="submit" matTooltip="Excel Export" (click)="XLExportBranchMapTable(FullReport,'' )">
+
+                                    <button type="button" mat-button class="gIconButton mx-0" (click)="openViewDateWise(Viewdialog)" matTooltip="View">
+                                    <mat-icon>remove_red_eye</mat-icon>
+                                </button>
+                                    <button mat-utton class="gNormalButton" *ngIf="HaveAccess" (click)="ShowMapOption()">Create</button>
+                                </div>
+                            </div>
+
+
+                            <section #XLTABLE class="gInnerTable">
+
+                                <table class="gNormalTable-sm table " #table3 mat-table [dataSource]="datasourceThree" matSort>
+                                    <ng-container *ngFor="let col of displayedColumnsThree" [matColumnDef]="col">
+                                        <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                                            <ng-container *ngIf="mainMenuSelected ==='VendorGroup' || mainMenuSelected ==='CustomerGroup'">
+                                                <span *ngIf="col ==='SNo'" style="max-width: 40px !important;">SNo</span>
+                                                <span *ngIf="col =='supcode'">Supplier Code</span>
+                                                <span *ngIf="col =='SupName'">Supplier Name</span>
+                                                <span *ngIf="col =='FromDate'">Effective Date </span>
+                                                <span *ngIf="col =='Action'">Action</span>
+
+                                            </ng-container>
+                                            <ng-container *ngIf="mainMenuSelected ==='ItemGroup'">
+                                                <span *ngIf="col ==='SNo'" style="max-width: 40px !important;">SNo</span>
+                                                <span *ngIf="col =='Icode'">Item Code</span>
+                                                <span *ngIf="col =='Iname'">Item Name</span>
+                                                <span *ngIf="col =='Action'">Action</span>
+                                                <span *ngIf="col =='FromDate'">Effective Date </span>
+                                            </ng-container>
+                                            <ng-container *ngIf="mainMenuSelected ==='Customer Group'">
+                                                <span *ngIf="col ==='SNo'" style="max-width: 40px !important;">SNo</span>
+                                                <span *ngIf="col =='CustCode'">Customer  Code</span>
+                                                <span *ngIf="col =='CustName'">Customer Name</span>
+                                                <span *ngIf="col =='Action'">Action</span>
+                                                <span *ngIf="col =='FromDate'">Effective Date </span>
+                                            </ng-container>
+                                        </th>
+
+                                        <td mat-cell *matCellDef="let row; let i = index" style="text-align: left !important;">
+
+                                            <span *ngIf="col ==='SNo'" style="max-width: 40px !important;">{{i+1}}</span>
+                                            <span *ngIf="col !=='SNo' && col !=='Action'">{{row[col] ? row[col] :  'null'}}</span>
+                                            <span *ngIf="col ==='Action'" style="min-width: 80px;">
+                                                <button mat-icon-button class="gEditIcon" 
+                                                (click)="EditThirdTab(row,'SuppToVG', EditThirdTabTemp)">
+                                                <mat-icon>edit</mat-icon>
+                                            </button>
+
+                                                <button mat-icon-button class="gDeleteIcon" color="warn"
+                                                    *ngIf="this.mainMenuSelected === 'VendorGroup'" 
+                                                    (click)="deleteSupToVGdata(row['supcode'])">
+                                                    <mat-icon>delete</mat-icon>
+                                                </button>
+                                                <button mat-icon-button class="gDeleteIcon" color="warn"
+                                                    *ngIf="this.mainMenuSelected === 'ItemGroup'" 
+                                                    (click)="deleteItemToIGdata(row['Icode'])">
+                                                    <mat-icon>delete</mat-icon>
+                                                </button>
+                                            </span>
+                                        </td>
+                                        <td mat-footer-cell *matFooterCellDef>
+<button mat-button class="gSaveButton" [disabled]="viewMoreLoad" *ngIf="col === 'SupName' || col === 'Iname' || col === 'CustName'" (click)="onTableScroll(datasourceThree.data.length )"> load Next 
+     {{limitData}}</button>
+                                        </td>
+                                    </ng-container>
+
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumnsThree"></tr>
+
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumnsThree;"></tr>
+                                    <tr mat-footer-row *matFooterRowDef="displayedColumnsThree; sticky: true"
+                                    class="gtoggleFooter" [style.display]="extraAvailable ? 'table-row' : 'none'"></tr>
+
+                                    <tr class="mat-row" *matNoDataRow>
+
+                                        <td class="mat-cell text-center" *ngIf="!loadingThree" [attr.colspan]="displayedColumnsThree.length+1">
+                                            No records found.
+                                        </td>
+
+                                    </tr>
+                                </table>
+                                <div class="SkeltonLoader text-center justify-content-center d-flex" *ngIf="loadingThree">
+                                    <mat-spinner></mat-spinner>
+                                </div>
+
+                            </section>
+                        </div>
+
+                    </div>
+
+                    <ng-template #invalidBrCode>
+
+                        <div class="gDialogTitle">
+
+                            <span class=""> The following row(s) has invalid content / already exist, please check the
+                                file</span>
+
+
+                            <button type="button" id="submit" class="gDialogCloseButton" (click)="dialog.closeAll()">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                        </div>
+
+                        <div class="gDialogContainer gInnerTable">
+                            <table mat-table class="gNormalTable-sm table" #table [dataSource]="invalidbranchCodev " *ngIf="invalidbranchCodev.length>0">
+                                <ng-container [matColumnDef]="column " *ngFor="let column of datnew; ">
+                                    <th mat-header-cell *matHeaderCellDef>
+                                        {{column === 'SNo' ? 'Row.No' :column }}
+                                    </th>
+                                    <td mat-cell *matCellDef="let element ; let i=index ">
+                                        {{element[column] ? element[column] : 'Null'}} </td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="datnew"></tr>
+                                <tr mat-row *matRowDef="let row; columns: datnew;"></tr>
+                            </table>
+                        </div>
+
+                    </ng-template>
+
+                    <ng-template #Viewdialog>
+
+                        <div class="gDialogTitle">
+
+                            <span class="">View Mapped List</span>
+
+
+                            <button type="button" id="submit" class="gDialogCloseButton" (click)="dialog.closeAll()">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                        </div>
+                        <div class="gDialogContainer">
+                            <form [formGroup]="ViewSupplierVGForm" class="row mx-2" style="border-radius: 0;">
+                                <mat-form-field class="col-12 col-xl-6">
+                                    <mat-label>Company Name</mat-label>
+                                    <input type="text" formControlName="campName" (input)="filterCmpPopUp($event.target.value,'three')" matInput [matAutocomplete]="autopoup">
+                                    <mat-autocomplete autoActiveFirstOption class=" gAutoCompleteContainer" #autopoup="matAutocomplete" (input)="filterCmp($event.target.value, 'two')" [displayWith]="displayFn">
+                                        <mat-option class=" gSelectOption" *ngFor="let option of ViewCampNameOptionsListThree" [value]="option" (onSelectionChange)="CmpSelectedThree($event, 'view')">
+                                            {{option.company}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+
+                                </mat-form-field>
+
+                                <mat-form-field class="col-12 col-xl-6">
+                                    <mat-label>Fiance Book </mat-label>
+                                    <input type="text" class="" (input)="FBThreeInput($event.target.value, 'view')" id="fbookThreeView" formControlName="finbook" matInput [matAutocomplete]="fbookThreeView">
+                                    <mat-autocomplete autoActiveFirstOption #fbookThreeView="matAutocomplete" class="gAutoCompleteContainer" [displayWith]="displayFinbookname2">
+                                        <mat-option class="gSelectOption" *ngFor="let option of FbTabThreeView " [value]="option" (onSelectionChange)="FbSelectedThree($event, option.FbCode, 'view')">
+                                            {{option.FbName}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                                <mat-form-field class=" col-12 col-xl-6" *ngIf="mainMenuSelected ==='VendorGroup'">
+                                    <mat-label>Vendor Group Name</mat-label>
+                                    <input type="text" formControlName="VgName" id="vgCode" (input)="filterVGNameThree($event.target.value, 'view')" matInput [matAutocomplete]="viewVgnameTwo">
+                                    <mat-autocomplete autoActiveFirstOption class=" gAutoCompleteContainer" #viewVgnameTwo="matAutocomplete" [displayWith]="displayVgName">
+                                        <mat-option class=" gSelectOption" *ngFor="let option of VGnameListThreeView" [value]="option" (onSelectionChange)="viewVIGChange($event)">
+                                            {{option.VgName}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                                <mat-form-field class=" col-12 col-xl-6" *ngIf="mainMenuSelected ==='ItemGroup'">
+                                    <mat-label>Item Group Name</mat-label>
+                                    <input type="text" formControlName="VgName" id="vgCode" (input)="filterVGNameThree($event.target.value, 'view')" matInput [matAutocomplete]="viewVgnameTwo">
+                                    <mat-autocomplete autoActiveFirstOption class=" gAutoCompleteContainer" #viewVgnameTwo="matAutocomplete" [displayWith]="displayIgName">
+                                        <mat-option class=" gSelectOption" *ngFor="let option of VGnameListThreeView" [value]="option" (onSelectionChange)="focusNext('startDate')">
+                                            {{option.IgName}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                                <mat-form-field class=" col-12 col-xl-6" *ngIf="mainMenuSelected ==='CustomerGroup'">
+                                    <mat-label>Customer Group Name</mat-label>
+                                    <input type="text" formControlName="VgName" id="vgCode" (input)="filterVGNameThree($event.target.value, 'view')" matInput [matAutocomplete]="viewVgnameTwo">
+                                    <mat-autocomplete autoActiveFirstOption class=" gAutoCompleteContainer" #viewVgnameTwo="matAutocomplete" [displayWith]="displayVgName">
+                                        <mat-option class=" gSelectOption" *ngFor="let option of VGnameListThreeView" [value]="option" (onSelectionChange)="focusNext('startDate')">
+                                            {{option.CgName}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+
+
+                                <mat-form-field class="col-6 col-xl-4 ">
+                                    <mat-label>From Date</mat-label>
+                                    <input matInput formControlName="viewstartDate" id="startDate" [matDatepicker]="startDate" autocomplete="off " (dateChange)="submitMapSupVgDialog('change')">
+                                    <mat-datepicker-toggle matSuffix [for]="startDate ">
+                                        <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #startDate></mat-datepicker>
+                                </mat-form-field>
+
+                                <mat-form-field class="col-6 col-xl-4 ">
+                                    <mat-label>To Date</mat-label>
+                                    <input matInput formControlName="viewendDate" [matDatepicker]="endDate" autocomplete="off " (dateChange)="submitMapSupVgDialog('change')">
+                                    <mat-datepicker-toggle matSuffix [for]="endDate ">
+                                        <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #endDate></mat-datepicker>
+                                </mat-form-field>
+
+
+                                <div class="col-4 mb-2 d-flex text-end justify-content-end">
+
+                                    <button type="button" id="submit" mat-button class="gSaveButton" (click)="submitMapSupVgDialog('submit')">View</button>
+
+
+                                </div>
+
+                            </form>
+
+                            <div class="popUp_container gInnerTable" style="border-radius: 0;">
+
+                                <table class=" gNormalTable-sm table gTableStriped" mat-table #viewtable [dataSource]="SuplierMapFilterList " style="border-radius: 0;">
+                                    <ng-container [matColumnDef]="column " *ngFor="let column of MapFilterdisplayedColumns; ">
+                                        <th mat-header-cell *matHeaderCellDef>
+                                            <span *ngIf="column ==='tdate'">TrnDate</span>
+                                            <span *ngIf="column !=='tdate'">{{column}}</span>
+                                        </th>
+                                        <td mat-cell *matCellDef="let element ;let i=index ">
+
+
+                                            <span *ngIf="column==='SNo' ">{{i+1}}</span>
+                                            <span *ngIf="column !=='SNo' && column !=='Action' ">{{element[column] ?
+                                                element[column]:
+                                                '' }}</span>
+                                            <span *ngIf="column==='Action' " style="min-width: 80px; ">
+                                                <button mat-icon-button class="gEditIcon " matTooltip="Details "
+                                                    (click)="viewMoreBRMap(element) ">
+                                                    <i class="fa fa-hand-o-right "></i>
+                                                </button>
+                                            </span>
+                                        </td>
+                                    </ng-container>
+
+                                    <tr mat-header-row *matHeaderRowDef="MapFilterdisplayedColumns "></tr>
+                                    <tr mat-row *matRowDef="let row; columns: MapFilterdisplayedColumns; "></tr>
+                                    <tr class="mat-row" *matNoDataRow>
+                                        <td class="mat-cell text-center" [attr.colspan]="MapFilterdisplayedColumns.length+1">
+                                            No records found.
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                    </ng-template>
+
+                </div>
+            </mat-tab>
+
+        </mat-tab-group>
+
+
+        <ng-template #EditThirdTabTemp>
+
+            <div class="gDialogTitle">
+                <span></span>
+                <span class="">Edit {{IndName}} to {{groupName}}</span>
+
+
+
+                <button type="button" id="close" class="gDialogCloseButton" (click)="dialog.closeAll()">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </div>
+            <div class="gDialogContainer">
+
+                <form [formGroup]="EditThirdTabForm" class="row  pt-3">
+                    <mat-form-field class="col-12 col-xl-6">
+                        <mat-label>Company Name</mat-label>
+                        <input type="text" readonly formControlName="campName" matInput>
+                    </mat-form-field>
+
+                    <mat-form-field class="col-12 col-xl-6">
+                        <mat-label>Fin Book Name</mat-label>
+                        <input type="text" readonly id="fbookTwoView" formControlName="finbook" matInput>
+                    </mat-form-field>
+
+
+                    <mat-form-field class=" col-12 col-xl-6">
+                        <mat-label>{{groupName}} Name</mat-label>
+                        <input type="text" readonly formControlName="vgName" id="vgCodeView" matInput>
+                    </mat-form-field>
+
+
+                    <mat-form-field class=" col-12 col-xl-6">
+                        <mat-label *ngIf="groupName === 'Vendor Group'">Vendor Name</mat-label>
+                        <mat-label *ngIf="groupName === 'Customer Group'">Customer Name</mat-label>
+                        <mat-label *ngIf="groupName === 'Item Group'">Item Name</mat-label>
+                        <input type="text" readonly formControlName="vendor" id="AcCode" matInput>
+                    </mat-form-field>
+
+                    <mat-form-field class="col-12 col-xl-6">
+                        <mat-label>From Date</mat-label>
+                        <input matInput formControlName="fromDate" id="fromDate" [matDatepicker]="fromDate" (keyenter)="focusNext('toDate')" (dateChange)="focusNext('toDate')">
+                        <mat-datepicker-toggle matSuffix [for]="fromDate ">
+                            <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #fromDate></mat-datepicker>
+                    </mat-form-field>
+
+                    <mat-form-field class="col-12 col-xl-6">
+                        <mat-label>To Date</mat-label>
+                        <input matInput formControlName="toDate" id="toDate" [matDatepicker]="toDate" (keyenter)="focusNext('submit')" (dateChange)="focusNext('submit')">
+                        <mat-datepicker-toggle matSuffix [for]="toDate ">
+                            <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #toDate></mat-datepicker>
+                    </mat-form-field>
+
+
+
+                    <div class="col-12 mb-2 d-flex text-end justify-content-end">
+                        <button type="button" id="submit" mat-button class="gSaveButton" (click)="UpdateThirdTabEdit(EditThirdTabForm.value)">Update</button>
+                    </div>
+
+                </form>
+            </div>
+        </ng-template>
+
+
+    </section>
+
+
+</div>
+

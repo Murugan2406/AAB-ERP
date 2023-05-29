@@ -1,0 +1,113 @@
+<div class="loading"  *ngIf="progressval == 'indeterminate'"
+    style="position: fixed; top:0; bottom: 0; left: 0; right: 0; z-index: 10001 !important; backdrop-filter: blur(3px);">
+
+    <div class="pendulum-container">
+
+        <div class="ball-first">
+            <div id="ball-1" class="first"></div>
+            <div id="shadow-1" class="first-shadow"></div>
+        </div>
+        <div id="ball-2"></div>
+
+        <div id="ball-5"></div>
+        <div id="ball-6"></div>
+        <div class="ball-first">
+            <div id="ball-7" class="last"></div>
+            <div id="shadow-2" class="last-shadow"></div>
+        </div>
+    </div>
+
+</div>
+<div class="example-container mx-2 gNewWrapper1">
+  <div class="row mx-2">
+    <div class="col-6 col-md-2">
+      <label class="gInputLable">From Date</label>
+      <!-- <input type="date" [(ngModel)]="fromdate" id="fdate" name="fdate" autocomplete="off"
+        class="gNewInput"> -->
+        <div class="gOuterInput  gNewOuterInput">
+          <input matInput class="gNewInput" id="fromDate" [matDatepicker]="picker"
+          [(ngModel)]="fromdate" id="viewfrdate"(keydown)="enterKeyEvent($event,'tdate')" autocomplete="off">
+      <mat-datepicker-toggle matSuffix [for]="picker" class="gInputButton gNewButton">
+          <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+      </mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      </div>
+    </div>
+    <div class="col-6 col-md-2">
+      <label class="gInputLable">To Date</label>
+      <!-- <input type="date" [(ngModel)]="todate" id="tdate" name="tdate" autocomplete="off"
+        class="gNewInput"> -->
+        <div class="gOuterInput  gNewOuterInput">
+          <input matInput class="gNewInput" id="fromDate" [matDatepicker]="picker2"
+          [(ngModel)]="todate" id="tdate"(keydown)="enterKeyEvent($event,'itemName')" autocomplete="off">
+      <mat-datepicker-toggle matSuffix [for]="picker2" class="gInputButton gNewButton">
+          <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+      </mat-datepicker-toggle>
+      <mat-datepicker #picker2></mat-datepicker>
+      </div>
+    </div>
+    <div class="col-6 col-xl-1">
+      <label class="gInputLable">Icode</label>
+      <input type="text" [(ngModel)]="icode" id="icode" name="icode" autocomplete="off"
+      disabled  (keydown)="enterKeyEvent($event, 'icode')" class="gNewInput">
+    </div>
+    <div class="col-md-3 col-12">
+      <label class="gInputLable">Item Name</label>
+      <input type="text" [matAutocomplete]="auto3" [formControl]="itemControl" (keydown)="enterKeyEvent($event,'viewbtn')" id="itemName" name="item"
+        class="gNewInput">
+      <mat-autocomplete #auto3="matAutocomplete" class="gAutoCompleteContainer" (optionSelected)='getItem($event.option.viewValue)'>
+        <mat-option *ngFor="let item of itemList" [value]="item?.iname" class="gSelectOption">
+          {{item?.iname}}</mat-option>
+      </mat-autocomplete>
+    </div>
+    <div class="col-6 col-md-2  mt-md-4">
+      <mat-checkbox [(ngModel)]="isDeleted" class="gInputLable">Deleted Barcodes</mat-checkbox>
+    </div>
+    <div class="col-6 col-xl-1  mt-md-4">
+      <button (click)="checkOption()" class="InfoButton" id="viewbtn">
+        <i class="fa fa-arrow-right" aria-hidden="true"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="gTableSection" style="margin-top: 1%;">
+    <div class="gTableActionheaders justify-content-between gTableActionheaders1">
+      <span class="gInputLable " style="color: #a2b7f9 !important;">Barcodewise Production Details</span>
+      <form role="search" class="search-form ">
+        <input type="search" name="Search" class="gSearchText" #input
+            autocomplete="off"
+            [(ngModel)]="viewSearch1" />
+    </form>
+    </div>
+    <div class="gInnerTable" style="max-height: calc(100vh - 150px);">
+    <table style="width: 100%;" class="gNormalTable-sm table ">
+        <thead>
+            <th style="width: 5%;">Sno</th>
+            <th>Barcode</th>
+            <th>Qty</th>
+            <th>Uom</th>
+            <th>Tare</th>
+            <th>User Name</th>
+            <th>ProdTime</th>
+            <th>DcNo</th>
+            <th>Tobranch</th>
+        </thead>
+        <tbody>
+            <tr *ngFor="let li of viewList|filter:viewSearch1;let i=index">
+                <td style="width: 5%;">{{i+1}}</td>
+                <td>{{li.sno}}</td>
+                <td>{{li.icode}}</td>
+                <td>{{li.iname}}</td>
+                <td>{{li.qty}}</td>
+                <td>{{li.typ}}</td>
+                <td>{{li.tobranch}}</td>
+                <td>{{li.qty}}</td>
+                <td>{{li.typ}}</td>
+            </tr>
+        </tbody>
+    </table>
+  </div>
+
+</div>
+
+</div>

@@ -1,0 +1,483 @@
+.example-container {
+  width: 100%;
+  height: calc(100vh - 30px); 
+  background-color: #f9f9f9;
+}
+.gNewHeader {
+  overflow-x: hidden;
+  transition: ease-in-out 0.4s;
+}
+
+.example-sidenav-content {
+  /* // display: flex; */
+  height: 100%;
+  /* // align-items: center;
+  // justify-content: center; */
+}
+
+.example-sidenav {
+  /* padding: 5px 5px 10px 5px; */
+  width: 300px;
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  background-color: #F2F8FF;
+  animation: 0.5s ease 0s 1 normal forwards running fadeIn;
+  transform: translateX(-130%);
+  border:none;
+  box-shadow: 0 4px 90px 10px #d7def4;
+
+}
+.gTableSection{
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  box-shadow: rgb(212 222 234) 13px 2px 33px;
+  // box-shadow: none;
+  background-color: #FFFFFF;
+  width: 100%;
+  border-radius: 15px;
+  padding: 5px 15px;
+  border:none
+}
+
+.sidnavCloseButton{
+  color: #000;
+  padding: 0;
+  font-weight: 900;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  min-width: 30px;
+  background-color: var(--button-dialog-close-bg-color);
+  line-height: 29px;
+  border: 1px solid transparent;
+}
+
+ .burger{
+  position: sticky;
+  width: 23px !important;
+  height: 40px !important;
+  background-color: #3c6aff;
+  left: 0px;
+  z-index: 99 !important;
+  top: 5%;
+  line-height: 10px !important;
+  cursor: pointer;
+  color: #fff;
+  border-radius: 0 5px 5px 0;
+  transition: all 0.5s;
+ }
+
+ ::ng-deep.mat-progress-spinner svg,
+.mat-progress-spinner {
+    height: 60px !important;
+}
+
+::ng-deep.mat-progress-spinner circle,
+.mat-spinner circle {
+    stroke:#3c6aff;
+    stroke-width: 10% !important;
+    stroke-dasharray: 50px !important;
+}
+.gNewOuterInput{
+  display: flex !important;
+  height: 30px !important;
+  padding: 2px !important;
+  background-color: var(--inner-input-bg) !important;
+  border-radius: 8px !important;
+  border: none !important;
+  outline: none !important;
+  margin: 1px ;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  .gNewInput{
+      margin: 0 !important;
+      box-shadow:none ;
+  }
+  .mat-datepicker-toggle{
+      color: rgb(44 37 86 / 78%);
+
+  ::ng-deep.mat-icon-button{
+      width: 22px;
+      height: 23px;
+      line-height: 26px;
+  }
+}
+}
+
+
+.gNewInput{
+  // background-color: #dedef4;
+  padding: 3px 15px;
+  border-radius: 5px;
+  margin: 2px 0 !important;
+  font-weight: 500 !important;
+  color: var(--inner-input-color) !important;
+  font-family: system-ui !important;
+  border:  1px solid transparent;
+  width: 100% !important;
+  outline: none;
+font-size: 13px;
+box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    border-radius: 10px;
+}
+.gNewInput:focus{
+  border:  1px solid #fff;
+}
+.gNewButton{
+  background-color: #3c6aff;
+  color: #ffffff;
+  height: 27px !important;
+  .mat-icon{
+    color: #fff !important;
+    width: 20px !important;
+  }
+
+}
+
+.gNewSaveButton{
+  border: 1px solid #3c6aff !important;
+    color: #3c6aff !important;
+    transition: ease-in-out 0.5s;
+    outline: none;
+}
+
+.gNewSaveButton:hover, .gNewSaveButton:focus{
+  border: 1px solid #3c6aff !important;
+    color: #fff !important;
+    background-color: #3c6aff !important;
+    transition: ease-in-out 0.5s;
+}
+
+
+.mat-drawer-content{
+  position: relative;
+}
+
+.gNewHeader{
+  // position: relative;
+::ng-deep.gHeader{
+  background: #3c6aff;
+}
+::ng-deep.gTableSection{
+  background-color: #fff !important;
+
+}
+ ::ng-deep.gTableActionheaders{
+  background-color: #fff !important;
+  color: #a2b7f9 !important;
+  font-size: 12px;
+  height: 25px;
+
+}
+::ng-deep.gNormalTable-sm th{
+  background-color: #eef4fc !important;
+  font-size: 13px;
+  font-weight: 600;
+  color: #13131d !important;
+
+}
+.table{
+  min-height: 200px;
+}
+::ng-deep.gNormalTable-sm td,.gNormalTable-sm{
+  border: none;
+  color: #13131d;
+}
+
+}
+
+
+.firstCol{
+  border-top-left-radius: 5px;
+}
+.lastCol{
+  border-top-right-radius: 5px;
+}
+
+::ng-deep.gSelectOption:hover, ::ng-deep.mat-option:hover{
+    color: #ffffff !important;
+    background-color: #98affa !important;
+  }
+
+
+  .ExitIcon,  .ExitIcon:hover,  .ExitIcon:focus{
+    background-color: transparent;
+    border: none;
+    color:#fb6b63 ;
+    position: absolute;
+    bottom: 35px;
+    left: 10px;
+    border-radius: 25px;
+  }
+
+  .tips,  .tips:hover,  .tips:focus{
+    background-color: transparent;
+    border: none;
+    color:#3c6aff ;
+    position: absolute;
+    bottom: 35px;
+    right: 10px;
+    border-radius: 25px;
+  }
+
+
+  ::ng-deep.mat-drawer-content::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+    background-color: #fff;
+  }
+  
+  ::ng-deep.mat-drawer-content::-webkit-scrollbar-track {
+    background: #fff;
+  }
+  
+  ::ng-deep.mat-drawer-content::-webkit-scrollbar-thumb {
+    background: #3c69ff72;
+    opacity: 0.5;
+    border-radius: 15px;
+  }
+  
+  ::ng-deep.mat-drawer-content::-webkit-scrollbar-thumb:hover, ::ng-deep.mat-drawer-content::-webkit-scrollbar:hover {
+    background: #3c6aff;
+    width: 5px ;
+  }
+
+  .linkButtons{
+    height: 40px;
+    background-color: #ffffff70;
+    margin: 10px;
+    font-size: 14px;
+    min-width: 150px !important;
+    border-radius: 25px;
+    box-shadow: 0 0 32px -2px #e6eaf8;
+    color: #3c6aff;
+    padding-left: 1px;
+    transition: all 0.5s;
+    ::ng-deep.mat-button-wrapper{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      // transition: all 1s;
+    }
+    .firstIcon{
+      // background-color: #fff;
+      border-radius: 50%;
+      // color: #3c6aff;
+      width: 38px;
+      height: 38px;
+      padding: 12px;
+      transition: all 1s;
+    }
+    ::ng-deep.gInputLable{
+      color: #3c6aff !important;
+      margin-left: -15px !important;
+    }
+  }
+
+  .linkButtons:hover,.linkButtons:focus{
+    background-color: #3c6aff;
+    color: #fff;
+    padding-left: 1px;
+    transition: all 0.5s;
+    .firstIcon{
+      background-color: #fff;
+      border-radius: 50%;
+      color: #3c6aff;
+      width: 38px;
+      height: 38px;
+      padding: 12px;
+      transition: all 1s;
+    }
+    ::ng-deep .gInputLable{
+      color: #fff !important;
+      margin-left: -15px !important;
+    }
+  }
+
+
+  
+
+.loading{
+  //   height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    }
+    .pendulum-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    }
+    .ball-first{
+    position: relative;
+    }
+    #ball-1,#ball-2,#ball-3,#ball-4,#ball-5,#ball-6,#ball-7{
+    width: 1em;
+    height: 1em;
+    padding: 0.625rem;
+    border-radius: 50%;
+    // background-color: var(--button-save-color);
+    }
+    #ball-1{
+    background:linear-gradient(to right, #f55e4f, #78c77f);;
+    }
+    #ball-2{
+    background: linear-gradient(to right, #78c77f,#78c77f, #1eb2d4);;
+    position: relative;
+    }
+    
+    #ball-3{
+    // position: relative;
+  //   background-image: linear-gradient(to right, #5f4f5f, #8a484b);
+    }
+    #ball-4{
+    position: relative;
+    // background-image: linear-gradient(to right, #8a484b, #b14239);
+    }
+    #ball-5{
+      background: linear-gradient(to right, #1eb2d4, #1eb2d4);;
+
+    position: relative;
+    }
+    #ball-6{
+      background: linear-gradient(to right, #1eb2d4,#6fc281, #f6dc19);;
+
+    position: relative;
+    }
+    #ball-7{
+      background: linear-gradient(to right, #1eb2d4,#f6dc19 ,#f6dc19 ,#f6dc19, #f6dc19);;
+
+    }
+    #ball-2::before,
+    #ball-3::before,
+    #ball-4::before,
+    #ball-5::before,
+    #ball-6::before{
+    content: '';
+    position: absolute;
+    bottom: -28px;
+    left: 5%;
+    width: 85%;
+    height: 10%;
+    background-color: rgb(119, 119, 119, 0.3);
+    border-radius: 50%;
+    z-index: 100;
+    filter: blur(2px);
+    }
+    
+    #shadow-1, #shadow-2{
+    content: '';
+    position: absolute;
+    bottom: -28px;
+    left: 5%;
+    width: 100%;
+    height: 10%;
+    background-color: rgb(119, 119, 119, 0.3);
+    border-radius: 50%;
+    z-index: 100;
+    filter: blur(2px);
+    }
+    .first{
+    animation: left 0.7s ease-out infinite alternate;
+    }
+    .last{
+    animation: right 0.7s ease-in infinite alternate;
+    }
+    .first-shadow{
+    animation: leftshadow 0.7s ease-out infinite alternate;
+    }
+    .last-shadow{
+    animation:righthadow  0.7s ease-in infinite alternate;
+    }
+    .loader{
+    position: relative;
+    margin-top: 20px;
+    }
+    .loader span{
+    font-size: 22px;
+    color: #3a3837;
+    font-family: system-ui;
+    }
+    @keyframes left{
+    0%,
+    47%{
+      transform: rotate(0) translateX(0);
+    }
+    100%{
+      transform: rotate(50deg) translateX(-5rem);
+    }
+    }
+    @keyframes right{
+    0%
+    {
+      transform: rotate(-50deg) translateX(5rem);
+    }
+    47%,
+    100%{
+      transform: rotate(0) translateX(0);
+    }
+    }
+    
+    @keyframes leftshadow{
+    0%,
+    47%{
+      transform: rotate(0) translateX(0);
+    }
+    100%{
+      transform: rotate(50deg) translateX(-5rem);
+    }
+    }
+    @keyframes righthadow{
+    0%
+    {
+      transform: rotate(-50deg) translateX(5rem);
+    }
+    47%,
+    100%{
+      transform: rotate(0) translateX(0);
+    }
+    }
+    
+
+    ::ng-deep.mat-menu-panel {
+      min-width: 111px;
+      max-width: revert;
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
+      max-height: calc(100vh - 48px);
+      border-radius: 25px !important;
+      outline: 0;
+      min-height: 64px;
+      padding: 9px;
+      background: #e7eef5;
+      box-shadow: 0 0 16px #bdc0db;
+    }
+    
+    ::ng-deep.mat-menu-content:not(:empty) {
+      padding: 0 !important;
+    }
+    
+    ::ng-deep button.mat-menu-item {
+      width: 100%;
+      margin: 2px 2px;
+      padding: 0 auto;
+      background-color: white;
+      margin: 9px 0 !important;
+      height: 35px;
+      line-height: 35px;
+      border-radius: 50px;
+      font-family: system-ui;
+      color: #000;
+      font-weight: 500;
+    }
+    
+    .gMenuLable1 {
+      height: 30px !important;
+      line-height: 30px !important;
+      font-size: 13px;
+      min-width: 120px !important;
+    }
+    
+    ::ng-deep.mat-menu-item .mat-icon {
+      color: #000;
+    }
+    

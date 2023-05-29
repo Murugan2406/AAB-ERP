@@ -1,0 +1,331 @@
+<div class="loading" *ngIf="isLoading">
+    <mat-progress-spinner class=" spinner" diameter="50" mode="indeterminate"></mat-progress-spinner>
+</div>
+<div class="gWrapper">
+    <app-header Titleheader="Section Common Product Issue" back="true" (BackClick)="backNavigation()"></app-header>
+
+
+    <div class="content">
+        <div [style.display]="deletevalue ? 'block' : 'none'" class="modal backdrop" role="dialog"
+            aria-labelledby="myModalLabel" aria-hidden="true" style="padding:20px;">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content gModalContent">
+                    <div class="gDialogTitle">
+                        <span></span>
+                        <span style="margin-left: 15px;">Delete Product
+                        </span>
+                        <button type="button" id="submit" class="btn-close gDialogCloseButton" (click)="cancel()"
+                            data-bs-dismiss="modal" #closeAddExpenseModal4 aria-label="Close"></button>
+                    </div>
+
+                    <div class="gDialogContainer">
+                        <form [formGroup]="newform">
+                            <div class="col-12 text-center" style=" padding-bottom:5px">
+                                <span class="gInputLable text-center" id="myModalLabel"> Enter Delete Reason ?
+                                </span>
+                                <div class="col-12 ">
+                                    <input matInput class="gInnerInput-border" formControlName="reason" name="reason"
+                                        [(ngModel)]="reason" style="border-radius: 1px;">
+                                    <mat-error *ngIf="newform.controls['reason'].hasError('required')"
+                                        class="text-danger">
+                                        Enter the Delete Reason</mat-error>
+                                </div>
+                                <button type="submit" class="gSaveButton mt-2  mx-2" (click)="deletefun()"
+                                    mat-button>Confirm</button>
+                                <button type="button" mat-button class="float-end gDeleteButton mt-2 mx-2"
+                                    data-bs-dismiss="modal" (click)="cancel()">Cancel</button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="select == 'sectionissue'">
+            <!-- <h5 class="text-xs font-weight-bold text-info1 text-uppercase mb-1">Section Common Product issue
+            </h5> -->
+            <div class="col-12 mx-2">
+                <form [formGroup]="SearchForm1" class=" gcardContainer my-2">
+                    <div class="row mx-2 py-2    justify-content-center">
+                        <div class="col-12 col-md-6 col-xl-2 d-flex align-items-center gap-3">
+                            <label class="gInputLable">Date </label>
+
+                            <div class="gOuterInput">
+                                <input class="gInnerInput" matInput id="date1" [(ngModel)]="date1"
+                                    formControlName="date1" (keydown)="keytab($event, 'narration')"
+                                    [matDatepicker]="picker" [readonly]="auth" />
+                                <mat-datepicker-toggle matSuffix [for]="picker" class="gInputButton">
+                                    <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6 col-xl-3 d-flex align-items-center gap-3">
+                            <label class="gInputLable">To Section </label>
+                            <input type="text" [(ngModel)]="toname" formControlName="toname" id="searchitemb1"
+                                aria-label="Number" [formControl]="Branchloc1" [matAutocomplete]="auto1"
+                                class="gInnerInput-border" style="font-size: 12px; " [readonly]="auth">
+                            <mat-autocomplete #auto1="matAutocomplete" class="gAutoCompleteContainer">
+                                <mat-option *ngFor="let opear of loadtoselectionitem"
+                                    (onSelectionChange)="changeloc1($event,opear)" [value]="opear?.name"
+                                    class="gSelectOption">
+                                    {{opear?.name}}</mat-option>
+                            </mat-autocomplete>
+                            <div class="text-danger" *ngIf="Branchloc1.invalid  && submitted">
+
+                                To Section is required.
+
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-xl-3 d-flex align-items-center gap-3">
+                            <label class="gInputLable">Section List</label>
+                            <input type="text" [(ngModel)]="lname" formControlName="lname" id="searchitemb2"
+                                aria-label="Number" [formControl]="Branchloc2" [matAutocomplete]="auto2"
+                                class="gInnerInput-border" style="font-size: 12px; " [readonly]="auth">
+                            <mat-autocomplete #auto2="matAutocomplete" class="gAutoCompleteContainer">
+                                <mat-option *ngFor="let opear of loadlistitem" class="gSelectOption"
+                                    (onSelectionChange)="changeloc2($event,opear)" [value]="opear?.name">
+                                    {{opear?.name}}</mat-option>
+                            </mat-autocomplete>
+                            <div class="text-danger" *ngIf="Branchloc2.invalid  && submitted">
+
+                                Section List is required.
+
+                            </div>
+                        </div>
+
+                        </div>
+                        <div class="row mx-2 my-2 pt-2   justify-content-center" style="border-top: 1px dotted var(--button-save-color);">
+                        <div class="col-12 col-md-6 col-xl-1">
+                            <label class="gInputLable">Item code</label>
+                            <input class="gInnerInput-border" type="number" min="0" formControlName="icode"
+                                [(ngModel)]="icode" id="code" (keydown)="onKeydown($event,'add')" [readonly]="auth1">
+                            <div class="text-danger" *ngIf="SearchForm1.get('icode').invalid  && submitted">
+                                <div *ngIf="SearchForm1.get('icode').errors.required">
+                                    Item code is required.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class=" col-12 col-md-6 col-xl-3">
+                            <label class="gInputLable">Item Name</label>
+                            <input type="text" [(ngModel)]="iname" formControlName="iname" id="searchitemb3"
+                                aria-label="Number" [formControl]="Branchloc3" [matAutocomplete]="auto3"
+                                class="gInnerInput-border" style="font-size: 12px; " [readonly]="auth1">
+                            <mat-autocomplete #auto3="matAutocomplete" class="gAutoCompleteContainer">
+                                <mat-option *ngFor="let opear of loaditemmaster"
+                                    (onSelectionChange)="changeloc3($event,opear)" [value]="opear?.iname"
+                                    class="gSelectOption">
+                                    {{opear?.iname}}</mat-option>
+                            </mat-autocomplete>
+
+                        </div>
+
+                        <div class="  col-md-1">
+                            <label class="gInputLable">Rate</label>
+
+                            <input class="gInnerInput-border" type="text" [(ngModel)]="irate" formControlName="irate"
+                                readonly>
+
+
+                        </div>
+                        <div class=" col-md-1" *ngIf="inputmm && mment">
+                            <label class="gInputLable">Unit</label>
+                            <input class="gInnerInput-border" type="text" [(value)]="mment" readonly>
+                        </div>
+                        <div class="  col-md-1">
+                            <label class="gInputLable">Qty</label>
+                            <input class="gInnerInput-border" type="number" id="dataqty" formControlName="qty"
+                                [(ngModel)]="qty" (keyup)="changesave($event)" (keydown)="onKeydown1($event)"
+                                [readonly]="auth1">
+                            <div class="text-danger" *ngIf="SearchForm1.get('qty').invalid  && submitted">
+                                <div *ngIf="SearchForm1.get('qty').errors.required">
+                                    Item qty is required.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="  col-md-1">
+                            <label class="gInputLable">Amount</label>
+                            <input class="gInnerInput-border" type="text" [(ngModel)]="amount" formControlName="amount"
+                                readonly>
+
+                        </div>
+                        <div class="col-md-1 d-flex align-items-center">
+                            <button *ngIf="viewdett" mat-raised-button class="gSaveButton mt-3" id="button"
+                                type="button" (click)="addvalue()">Add </button>
+
+
+                            <button *ngIf="viewdett1" mat-raised-button class="gDeleteButton mt-3" type="button"
+                                (click)="viewRemove()">Delete </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="gTableSection">
+                <div class="gTableActionheaders">
+                    <button *ngIf="viewdett" mat-button class="gSaveButton" type="button" (click)="save()">Save
+                    </button>
+                    <button *ngIf="viewdett" mat-button class="gDeleteButton" type="button" (click)="clear()">Clear
+                    </button>
+                    <button *ngIf="viewdett1" mat-button class="gNormalButton" type="button" (click)="clear1()">Clear
+                    </button>
+                    <div class="float-end">
+                        <button mat-button class="gNormalButton" type="button" (click)="viewsec()">View </button>
+                    </div>
+                </div>
+                <div class="gInnerTable" style="max-height: calc(100vh - 215px);">
+                    <table class="table  gNormalTable-sm" id="table" width="100%">
+                        <thead>
+                            <tr>
+                                <th>S.no</th>
+                                <th>Date</th>
+                                <th>ICode</th>
+                                <th>Item Name</th>
+                                <th style="text-align: right;">Qty</th>
+                                <th>Uom</th>
+                                <th style="text-align: right;">Rate</th>
+                                <th style="text-align: right;">Amount</th>
+                                <th *ngIf="viewdett" style="text-align: center;">Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="viewdett">
+                            <tr *ngFor="let ask of dataadd; let i = index;">
+                                <td>{{i+1}}</td>
+                                <td>{{ask.date | date:'dd-MMM-yyyy'}}</td>
+                                <td>{{ask.Icode}}</td>
+                                <td>{{ask.Iname}}</td>
+                                <td style="text-align: right;">{{ask.Qty}}</td>
+                                <td>{{ask.Uom}}</td>
+                                <td style="text-align: right;">{{ask.Rate}}</td>
+                                <td style="text-align: right;">{{ask.Amount}}</td>
+                                <td style="text-align: center;">
+                                    <i style="color: rgb(247, 31, 49);" class="material-icons md curser"
+                                        (click)="eduRemove(i)">delete </i>
+                                    <!--  -->
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tbody *ngIf="viewdett1">
+                            <tr *ngFor="let ask of getviewseledet; let i = index;">
+                                <div
+                                    *ngIf="getviewseledet.length === 1 && (getviewseledet[0].StatusRes =='No record found') ; else view2">
+                                </div>
+                                <ng-template #view2>
+                                    <td>{{i+1}}</td>
+                                    <td>{{ask.TrnDate }}</td>
+                                    <td>{{ask.Icode}}</td>
+                                    <td>{{ask.Iname}}</td>
+                                    <td style="text-align: right;">{{ask.Qty}}</td>
+                                    <td>{{ask.Uom}}</td>
+                                    <td style="text-align: right;">{{ask.Rate}}</td>
+                                    <td style="text-align: right;">{{ask.Amount.toFixed(2)}}</td>
+                                </ng-template>
+                            </tr>
+                        </tbody>
+
+                    </table>
+                    <div *ngIf="getviewseledet.length === 1 && (getviewseledet[0].StatusRes =='No record found')"
+                        style="text-align:center; white-space: nowrap;  color: #007bff; font-family: 'Oswald', sans-serif;">
+                        No Records Found
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="select == 'viewissue'">
+            <h5 class="text-xs font-weight-bold text-info1 text-uppercase mb-1">
+            </h5>
+            <div class="col-12">
+
+                <div class="row addval justify-content-center">
+                    <div class="col-6 col-sm-4 col-md-3 col-xl-2 d-flex align-items-center gap-3 mb-2">
+                        <label class="gInputLable">From </label>
+
+                        <div class="gOuterInput">
+                            <input class="gInnerInput" matInput id="frmdate" [(ngModel)]="frmdate"
+                                (keydown)="keytab1($event,'add')" [matDatepicker]="picker1" />
+                            <mat-datepicker-toggle matSuffix [for]="picker1" class="gInputButton">
+                                <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #picker1></mat-datepicker>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-4 col-md-3 col-xl-2 d-flex align-items-center gap-3 mb-2">
+                        <label class="gInputLable">To </label>
+
+                        <div class="gOuterInput">
+                            <input class="gInnerInput" matInput id="todate" [(ngModel)]="todate"
+                                (keydown)="keytab2($event,'view')" [matDatepicker]="picker2" />
+                            <mat-datepicker-toggle matSuffix [for]="picker2" class="gInputButton">
+                                <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #picker2></mat-datepicker>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-2 col-md-1 d-flex align-items-center justify-content-center mb-2">
+                        <button mat-button id="view" class="gSaveButton" type="submit" (click)="viewvalue()">View
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="gTableSection mx-1 ">
+                <div class="gTableActionheaders">
+                    <form role="search" class="search-form ml-3">
+                        <input type="search" name="Search" class="gSearchText" #input autocomplete="off"
+                            [(ngModel)]="viewSearch" />
+                    </form>
+                </div>
+                <div class="gInnerTable" style="max-height: calc(100vh  - 130px);">
+                    <table class="gNormalTable-sm table gTableStriped" id="table" width="100%">
+                        <thead>
+                            <tr>
+                                <th style="width:5%">S.no</th>
+                                <th style="width:15%">Tran Date</th>
+
+                                <th style="width:5%"></th>
+                                <th style="width:40%">To Section</th>
+
+                                <th style="width:10%">Tran No</th>
+                                <th style="width:25%">Entry User</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let ask of getviewselection | filter:viewSearch; let i = index;">
+                                <div
+                                    *ngIf="getviewselection.length === 1 && (getviewselection[0].StatusRes =='No record found') ; else view1">
+                                </div>
+                                <ng-template #view1>
+                                    <td>{{i+1}}</td>
+                                    <td>{{ask.TrnDate }}</td>
+
+                                    <td>
+                                        <button mat-button class="gHandIcon" (click)="viewdet(ask)">
+                                            <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+                                        </button>
+                                    </td>
+                                    <td>{{ask.ToSection}}</td>
+
+                                    <td>{{ask.TrnNo}}</td>
+                                    <td>{{ask.EntrytUsr}} / {{ask.EntryTime }}</td>
+
+                                </ng-template>
+                            </tr>
+                            <tr
+                                *ngIf="getviewselection.length === 0 || (getviewselection.length === 1 && (getviewselection[0].StatusRes =='No record found'))">
+                                <td colspan="6" class="text-center"> No Records Found</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                    <div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

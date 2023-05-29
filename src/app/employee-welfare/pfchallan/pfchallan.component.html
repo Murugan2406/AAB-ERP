@@ -1,0 +1,687 @@
+<div class="wrapper">
+    <div class="header">
+        <mat-toolbar color="warn">
+            <mat-toolbar-row class="header-nav">
+                <button mat-button (click)="backNavigation()" type="button" [hidden]="toggleContent"> BACK</button>
+                <button mat-button (click)="ontoggleContent()" type="button" [hidden]="!toggleContent"> BACK</button>
+                <span>
+                    <button mat-button (click)="homeNavigate()" type="button">
+                        <mat-icon style="color:#fff;">home</mat-icon>
+                </button>
+                <button mat-button disabled type="button">
+                        <img class="png-icon" src=".\assets\gImg\a2b2.png" style="max-width: 16px; min-width: 56px;">
+                    </button>
+                </span>
+            </mat-toolbar-row>
+        </mat-toolbar>
+    </div>
+
+    <section class="container" [hidden]="toggleContent">
+
+        <div class="row cardRow">
+
+            <mat-card>
+
+                <form class="form">
+                    <div class="sectionTitle text-center my-3 mb-5">
+                        <label for="" class="formTitle"> PF
+                            CHALLAN </label>
+                    </div>
+
+                    <div class="form-group row d-flex">
+                        <div class="col-12 col-md-5 col-xl-5 formlables">
+                            <label for="">Type</label>
+                        </div>
+                        <div class=" branchOutInput col-12 col-md-7 col-xl-7">
+
+                            <input (keydown)="keytab1($event,'Month')" class="datepickerInput branchInInput" matInput [formControl]="PfTypeForm" [matAutocomplete]="type">
+                            <mat-autocomplete autoActiveFirstOption #type="matAutocomplete">
+                                <mat-option *ngFor="let option of pyFormTypeOption | filter : PfTypeForm.value" [value]="option?.val" (click)="typeSelected(option?.val)">
+                                    {{option?.val}}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
+                    </div>
+
+                    <div class="form-group row d-flex" *ngIf="PfType !== 'Form 3A' && PfType !== 'Form 6A'">
+                        <div class="col-12 col-md-5 col-xl-5 formlables">
+                            <label for="">Month</label>
+                        </div>
+
+                        <div class="datpicker col-12 col-md-7 col-xl-7">
+                            <input matInput class="datepickerInput" id="Month" [matDatepicker]="dp" [formControl]="month" style="border: none;">
+                            <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                            <mat-datepicker #dp startView="year" (monthSelected)="setMonthAndYear($event, dp)" panelClass="example-month-picker">
+                            </mat-datepicker>
+
+
+                        </div>
+                    </div>
+
+                    <div class="form-group row d-flex" *ngIf="PfType === 'Form 3A' || PfType === 'Form 6A'">
+                        <div class="col-12 col-md-5 col-xl-5 formlables">
+                            <label for=""> Fin-Year</label>
+                        </div>
+
+                        <div class=" branchOutInput col-12 col-md-7 col-xl-7">
+
+                            <input type="text" class="datepickerInput branchInInput" matInput [formControl]="finYear" [matAutocomplete]="finyear">
+                            <mat-autocomplete autoActiveFirstOption #finyear="matAutocomplete">
+                                <mat-option *ngFor="let option of finYearList | filter : finYear.value" [value]="option?.finyear" (onSelectionChange)="FinYearSelected($event)">
+                                    {{option?.finyear}}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
+                    </div>
+
+                    <div class="form-group row  d-flex" *ngIf="PfType === 'Form 3A'">
+
+                        <div class="col-12 col-md-5 col-xl-5 formlables">
+                            <label for="">Employee Code</label>
+                        </div>
+
+                        <div class=" branchOutInput col-12 col-md-7 col-xl-7">
+                            <input type="text" matInput class="datepickerInput branchInInput" (input)="getEmployeeName($event.target.value)" (keydown)="setEmpNamebyEnter($event, $event.target.value)" id="empCode" [formControl]="emplyeeCode" [matAutocomplete]="EmployeeCode">
+
+                            <mat-autocomplete autoActiveFirstOption #EmployeeCode="matAutocomplete">
+                                <mat-option *ngFor="let option of EmlpoyeeNameFilter" [value]="option?.empcode" (click)="setEmpName(option.empname)">
+                                    {{option.empcode}}
+                                </mat-option>
+
+
+                            </mat-autocomplete>
+                        </div>
+                    </div>
+
+                    <div class="form-group row  d-flex" *ngIf="PfType === 'Form 3A'">
+
+                        <div class="col-12 col-md-5 col-xl-5 formlables">
+                            <label for="">Employee Name</label>
+                        </div>
+
+                        <div class=" branchOutInput col-12 col-md-7 col-xl-7">
+                            <input type="text" matInput class="datepickerInput branchInInput" (input)="getEmployeeName($event.target.value)" (keydown)="setEmpCodebyEnter($event, $event.target.value)" id="empName" [formControl]="emplyeename" [matAutocomplete]="autoEmployeeName">
+
+                            <mat-autocomplete autoActiveFirstOption #autoEmployeeName="matAutocomplete">
+                                <mat-option *ngFor="let option of EmlpoyeeNameFilter" [value]="option?.empname" (click)="setEmpCode(option.empcode)">
+                                    {{option.empname}}
+                                </mat-option>
+
+
+                            </mat-autocomplete>
+                        </div>
+                    </div>
+
+                    <div class="form-group row  d-flex" *ngIf="PfType === 'Form 6A'">
+
+                        <div class="col-12 col-md-5 col-xl-5 formlables">
+                            <label for="">With / Without Left</label>
+                        </div>
+
+                        <div class=" branchOutInput col-12 col-md-7 col-xl-7">
+                            <mat-radio-group class="d-flex " [formControl]="leftValue">
+                                <mat-radio-button value="Yes" required>With Left</mat-radio-button>
+                                <mat-radio-button value="No" class="mx-4" required>Without Left</mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+                    </div>
+                    <div class="form-group row  d-flex" *ngIf="PfType === 'Form 6A'">
+
+                        <div class="col-12 col-md-5 col-xl-5 formlables">
+                            <label for="">With / Without Zero</label>
+                        </div>
+
+                        <div class=" branchOutInput col-12 col-md-7 col-xl-7">
+                            <mat-radio-group class="d-flex " [formControl]="ZeroValue">
+                                <mat-radio-button value="Yes" required>With Zero</mat-radio-button>
+                                <mat-radio-button value="No" class="mx-4" required>Without Zero</mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row  d-flex" *ngIf="PfType !== 'Form 3A'">
+                        <div class="col-12 col-md-5 col-xl-5 formlables">
+                            <label for="">PF Region</label>
+                        </div>
+
+                        <div class=" branchOutInput col-12 col-md-7 col-xl-7">
+                            <input type="text" matInput class="datepickerInput branchInInput" (keydown)="keytab1($event,'Branch')" id="Region" [formControl]="PFRegionValue" [matAutocomplete]="auto">
+                            <mat-autocomplete autoActiveFirstOption="false" #auto="matAutocomplete">
+                                <mat-option *ngFor="let option of RegionOptions | filter : PFRegionValue.value" [value]="option.pfregion" (click)="enableBranchValue(option.pfregion)">
+                                    {{option.pfregion}}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
+                    </div>
+
+                    <div class="form-group row  d-flex" *ngIf="PfType === 'PF Employee wise'">
+                        <div class="col-12 col-md-5 col-xl-5 formlables">
+                            <label for="">Branch</label>
+                        </div>
+
+
+                        <div class=" branchOutInput col-12 col-md-7 col-xl-7">
+                            <input type="text" class="datepickerInput branchInInput" (keydown)="keytab1($event,'view')" id="Branch" [formControl]="branchValue" matInput [matAutocomplete]="branch">
+                            <mat-autocomplete autoActiveFirstOption #branch="matAutocomplete">
+                                <mat-option *ngFor="let option of AllBranchList | filter : branchValue.value" [value]="option?.BranchName" (click)="selectBranchValues(option)">
+                                    {{option?.BranchName}}
+                                </mat-option>
+                            </mat-autocomplete>
+
+                        </div>
+                    </div>
+                    <div class="form-group row  d-flex" *ngIf="PfType === 'PF Challan Regular' || PfType === 'PF Challan Arrear'">
+
+                        <div class="col-6 col-md-5 col-xl-5 formlables">
+                            <label for="">No.of Exempted</label>
+                        </div>
+
+                        <div class="col-6  col-md-7 col-xl-7 branchOutInput formlables">
+                            <label for="">{{No_of_exempted}}</label>
+                        </div>
+
+                    </div>
+                    <div class="form-group row  d-flex" *ngIf="PfType === 'PF Challan Regular' || PfType === 'PF Challan Arrear'">
+                        <div class="col-6 col-md-5 col-xl-5 formlables">
+                            <label for="">Exempted Amount</label>
+                        </div>
+
+                        <div class="col-6  col-md-7 col-xl-7 branchOutInput formlables">
+                            <label for="">{{exempted_Amount}}</label>
+                        </div>
+                    </div>
+
+                </form>
+                <div class=" actionbuttons justify-content-center ">
+                    <button type="button" [disabled]="loading" mat-raised-button class="buttons " id="view" *ngIf="PfType !== 'Form 3A' &&  PfType !== 'Form 5' &&  PfType !== 'Form 6A' &&  PfType !== 'Form 10'" (click)="processFunc(printsection)"><i class="fa fa-spinner fa-spin" *ngIf="loading " ></i>  View</button>
+                    <button type="button" [disabled]="loading" mat-raised-button class="buttons " id="view" *ngIf="PfType === 'Form 3A'" (click)="processFunc(printForm3A)"><i class="fa fa-spinner fa-spin" *ngIf="loading " ></i> View</button>
+                    <button type="button" [disabled]="loading" mat-raised-button class="buttons " id="view" *ngIf="PfType === 'Form 5'" (click)="processForm5(printForm5)"><i class="fa fa-spinner fa-spin" *ngIf="loading " ></i> View</button>
+                    <button type="button" [disabled]="loading" mat-raised-button class="buttons " id="view" *ngIf="PfType === 'Form 6A'" (click)="processForm6A(printForm6A)"><i class="fa fa-spinner fa-spin" *ngIf="loading " ></i> View</button>
+                    <button type="button" [disabled]="loading" mat-raised-button class="buttons " id="view" *ngIf="PfType === 'Form 10'" (click)="processFunc(printForm10)"><i class="fa fa-spinner fa-spin" *ngIf="loading " ></i> View</button>
+                </div>
+
+
+            </mat-card>
+
+
+        </div>
+    </section>
+
+
+    <div class="printPrivew mt-1" *ngIf="PfType !== 'Form 3A' &&  PfType !== 'Form 5' &&  PfType !== 'Form 6A' &&  PfType !== 'Form 10'" #printfile [hidden]="!toggleContent">
+        <div class="col-12 text-end ">
+
+            <button type="button" mat-icon-button [elementToPrint]="printFormfile" ngPrint>
+                <i class="fa fa-print" style="font-size: 20px;color:#000000;" aria-hidden="true"></i>
+            </button>
+
+        </div>
+        <div #printFormfile style="margin-top: -24px;">
+
+            <h3 class="mt-1 mb-0 text-center" style="font-size: 15px;color:#000000 !important;">{{PfType}} - {{PFMonthPrintFormat}}</h3> <br>
+
+            <table mat-table [dataSource]="dataSource" *ngIf="openprintdialog" class="table m-0">
+
+                <ng-container *ngFor="let col of displayedColumns" [matColumnDef]="col">
+                    <th mat-header-cell *matHeaderCellDef style="padding-left: 1px !important;" [ngStyle]="col === 'Empname' ? {'min-width': '100px'} : {'min-width': 'none'}">{{ col === 'WorkingDays' ? 'W.D' : col }}</th>
+                    <td mat-cell *matCellDef="let row; let i = index" [ngStyle]="row['SNo'] === true ? {'font-weight': '800 !important'} : '' " [ngClass]="{'LastRow': row['Empname'] === 'Grand Total','subtotal': row['subtotal'] === true,'text-start' : col === 'SNo' || col === 'Empcode' ||col ===  'Empname' || col === 'PFUAN' ||col ===  'WorkingDays' ,  'text-end' : col === 'EPFWAGES' || col === 'EPSWages' ||col ===  'PFEmployeeAmt' || col === 'PFEmployerAmt' ||col ===  'AdmnChrgAmt' ||col ===  'EDLIAmt' || col === 'Total' || col === 'PF' }">
+                        {{row[col]}} </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+                <tr mat-row *matRowDef="let row;let i = index; columns: displayedColumns;" [ngClass]="{'LastRow': row.Empname == 'Grand Total'}">{{row}}</tr>
+                <ng-container matColumnDef="groupHeader">
+                    <td colspan="1000" mat-cell *matCellDef="let group">
+                        <strong>{{group.groupName ? group.groupName : '' }}</strong>
+
+                    </td>
+                </ng-container><br>
+
+                <tr mat-row class="clickable" *matRowDef="let row; columns:['groupHeader']; when: isGroup" (click)="reduceGroup(row)">
+                </tr>
+
+
+            </table>
+        </div>
+    </div>
+
+    <div class="printPrivew mt-1" [hidden]="!toggleContent" *ngIf="PfType === 'Form 3A'">
+        <div class="col-12 text-end ">
+
+
+            <button type="button" mat-icon-button [elementToPrint]="printForm3Afile" ngPrint>
+                <i class="fa fa-print" style="font-size: 20px;color:#000000;" aria-hidden="true"></i>
+            </button>
+
+        </div>
+        <div #printForm3Afile>
+
+            <div class="form3Aheading row mb-0" style="margin-top: -5px;">
+                <span class="col-12 text-center mb-0"> <b>THE EMPLOYEE'S PROVIDENT FUND SCHEME,1952. ( Paras 35 & 42 ) and The
+                    Employees Family Pension Scheme,1995 (Para 19)</b> </span>
+
+                <span class="col-5 text-end mt-0"> <b>FORM NO. 3A (Revised) </b></span>
+                <span class="col-5 text-center mt-0">
+                <b>(For unexempted Establishment only)</b>
+            </span>
+
+            </div>
+            <div class="form3AtopContent row mt-0">
+                <span class="col-12"><b>Contribution Card for the Currency Period from&nbsp; &nbsp; </b> {{periodFrom}}
+                <b>&nbsp; &nbsp;To&nbsp; &nbsp;</b> {{periodTo}}</span>
+                <span class="col-6">1. Account No :&nbsp; &nbsp;{{Estcode}}&nbsp; / &nbsp;{{brcode}}&nbsp; / &nbsp;
+                {{PFUAN}} </span>
+                <span class="col-6">2. Name/Surname :&nbsp;&nbsp; <b>{{nameSurname}}</b> </span>
+                <span class="col-6">3. Father's / Husband's Name :&nbsp;&nbsp;{{fatherHusName}}</span>
+
+                <span class="col-6">4. Statutory rate of contribution :</span>
+                <span class="col-3">5. Voluntary higher rate of :</span>
+                <span class="col-5">6. ER Cont. on Hr wages to EPF (ER) : Y / N</span>
+                <span class="col-4">7. Vol Cont. to pension : Y/N</span>
+                <span class="col-12">8. Name & Address of the Establishment : &nbsp;&nbsp;
+                    {{companyName}} &nbsp;&nbsp;{{add1}}&nbsp;&nbsp; {{add2}}&nbsp;&nbsp;
+                        {{add3}}&nbsp;&nbsp;{{city}}&nbsp;&nbsp;{{pinCode}}
+                </span>
+            </div>
+            <div class="form6">
+
+                <div class="form6">
+
+                    <table class="table table-bordered">
+
+                        <tr class=" form3A">
+                            <th class="p-0" rowspan="2" style="text-align:center;color: #000 !important;font-size: 10px;"> <br> Month <br>(March Paid in)</th>
+                            <th class="p-0" colspan="2" style="horizontal-align : middle;text-align:center; width: 30%;color: #000 !important;font-size: 10px;">Worker's Share
+                            </th>
+                            <th class="p-0" colspan="2" style="horizontal-align : middle;text-align:center; width: 30%;color: #000 !important;font-size: 10px;">Employer's Share
+                            </th>
+                            <th class="p-0" rowspan="2" style="text-align:center;color: #000 !important;font-size: 10px;"> <br><br> Refund ofadvances </th>
+                            <th class="p-0" rowspan="2" style="text-align:center;color: #000 !important;font-size: 10px;">No. of days/period of non-contributing Service (If Any)
+                            </th>
+                            <th class="p-0" rowspan="2" style="text-align:center;color: #000 !important;font-size: 10px;"><br><br>Remarks</th>
+                        </tr>
+                        <tr class=" subform3A">
+                            <th class="p-0" scope="col" style="text-align:center;color: #000 !important;font-size: 10px;"><br>Amount of wages
+                            </th>
+                            <th class="p-0" scope="col" style="text-align:center;color: #000 !important;font-size: 10px;"><br>EPF</th>
+
+                            <th class="p-0" scope="col" style="text-align:center;color: #000 !important;font-size: 10px;">EPF&8-1/3% (if any) 4(a)
+                            </th>
+                            <th class="p-0" scope="col" style="text-align:center;color: #000 !important;font-size: 10px;">PENSION FUND Contribution 8-1/3%
+                            </th>
+                        </tr>
+                        <tr *ngFor="let element of form3AList; let i=index">
+                            <td>{{element.mname}}</td>
+                            <td style="text-align:end; padding-right:10px;height: 15px !important; ">{{element.amt}}.00</td>
+                            <td style="text-align:end; padding-right:10px;height: 15px !important;">{{element.pfamt}}.00</td>
+                            <td style="text-align:end; padding-right:10px;height: 15px !important;">{{element.EmployerShare}}.00</td>
+                            <td style="text-align:end; padding-right:10px;height: 15px !important;">{{element.Pension}}.00</td>
+                            <td *ngIf="i === 0" [attr.rowspan]="form3AList.length"> </td>
+                            <td style="text-align:end; padding-right:10px;height: 15px !important;">{{element.lop}}.00</td>
+                            <td *ngIf="i === 0" [attr.rowspan]="form3AList.length" id="rowSpan">
+                                <div class="inlinetextform3A"> <span>(a) Date of leaving service, if any</span>
+                                    <span>(b) Reasons for leaving service, if any</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td> <b>Total</b> </td>
+                            <td style="text-align:end; font-size:12px;height: 15px !important;"> <b>{{totalamt}}.00</b> </td>
+                            <td style="text-align:end; font-size:12px;height: 15px !important;"> <b>{{totalEpf}}.00</b> </td>
+                            <td style="text-align:end; font-size:12px;height: 15px !important;"> <b>{{totalempShare}}.00</b> </td>
+                            <td style="text-align:end; font-size:12px;height: 15px !important;"> <b>{{totalPension}}.00</b></td>
+                            <td></td>
+                            <td style="text-align:end; font-size:12px;height: 15px !important;"> <b>{{totalLop}}.00</b> </td>
+                            <td></td>
+
+                        </tr>
+
+                    </table>
+                </div>
+            </div>
+
+            <div class="form3AbottomContent row">
+                <span class="col-12 ">
+                <p> Certified that the total amount of Contribution (both shares) indicated in this card i.e.
+                    &nbsp;<b>{{totalEpf + totalempShare}}&nbsp;</b>
+                    has already been remitted in full in E.P.F A/c No.1 and Pension Fund A/c No.10___
+                    &nbsp;<b>{{totalPension}}</b>&nbsp;(Vide note
+                    below) Certified that the difference between
+                    the total of the contributions shown under the columns 3 & 4a & 4b of the above table and that
+                    arrived at on the total wages shown in column (2) at the prescribed rate is solely due to the
+                    rounding off the contributions to the nearest
+                    rupee under the rules. </p>
+            </span>
+                <span class="col-1 m-0">Date :</span>
+                <span class="col-11 m-0">{{currentDate | date: 'dd-MMM-YYYY'}}</span>
+                <span class="col-1 ">Note :</span>
+                <span class="col-11 "></span>
+                <span class="col-9 ">
+                <p>1. In respect of the Form(3A) sent to the Regional Office during the course of the currency period
+                    for the purpose of the final settlement of the accounts of the members who had left service details
+                    of
+                    date and reasons for leaving service should be furnished under Col.7(a) & (b).</p>
+            </span>
+                <span class="col-9">
+                <p>2.In respect of those who are not members of the Pension Fund the employers share of contribution
+                    to the EPF will be 8-1/3 or 10% as the case may be and is to be shown under column 4(a).</p>
+            </span>
+                <span class="col-3 text-center">Signature of the Employer <br>with office Seal</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="printPrivew mt-1" [hidden]="!toggleContent" *ngIf="PfType === 'Form 5'">
+
+        <div class="col-12 text-end ">
+
+            <button type="button" mat-icon-button [elementToPrint]="printForm5file" ngPrint>
+                <i class="fa fa-print" style="font-size: 20px;color:#000000;" aria-hidden="true"></i>
+            </button>
+
+        </div>
+
+        <div #printForm5file>
+            <div class="form5 mt-3">
+                <div class=" grid-container row">
+                    <div class=" item1 "> <b> FORM NO.5</b> [See Paragraph 36(2)(a) of the employees' Provident Funds Scheme,1952] [See Paragraph 20(4) of the Employees' Pension Scheme,1995]</div>
+                    <div class="item2"> Name and address of the Factory / Establishment :&nbsp;{{from5[0].Company}}&nbsp;{{from5[0].Address1}} &nbsp;{{from5[0].Address2}} &nbsp; {{from5[0].city}} &nbsp; {{from5[0].pincode}}
+
+                    </div>
+                    <div class="item5">Code No.of the Factory / Establishment {{from5[0].pfregion}} &nbsp;&nbsp; {{from5[0].code}}
+                    </div>
+
+                </div>
+                <div class="w-100 mx-0 row">
+                    <span class="col-12 form5div">
+                    RETURN OF THE EMPLOYEES QUALIFYING FOR MEMBERSHIP OF THE EMPLOYEES' PROVIDENT FUND, EMPLOYEES'
+                    PENSION FUND AND EMPLOYEES DEPOSIT LINKED INSURANCE FUND
+                    FOR THE FIRST TIME DURING THE MONTH OF&nbsp;&nbsp; <b>{{from5[0].MonthYear}}</b>&nbsp; &nbsp; <b>(To
+                        be sent to the commissioner with Form No.2) (EPF AND EPS)</b>
+                </span>
+                </div>
+            </div>
+            <div class="form5 mt-3  w-100 ">
+
+                <table class="table p-0  form5" style="outline: 1px solid #dee2e6; border-radius: 0;">
+
+                    <tr class=" form5">
+                        <th style="max-width:40px ;border-right: 1px solid #dee2e6; color: #000;"> <br><br><br> SI.No</th>
+                        <th style="border-right: 1px solid #dee2e6;color: #000;"><br><br><br>Account No.</th>
+                        <th style="border-right: 1px solid #dee2e6;color: #000;"><br><br>Name of the Employee(IN BLOCK CAPITALS)</th>
+                        <th style="border-right: 1px solid #dee2e6;color: #000;"><br><br>Father's Name (or Husband's Name) incase of married woman)</th>
+                        <th style="border-right: 1px solid #dee2e6;color: #000;"><br><br><br>Date of Birth
+                        </th>
+                        <th style="border-right: 1px solid #dee2e6;color: #000;"><br><br><br>Sex</th>
+                        <th style="border-right: 1px solid #dee2e6;color: #000;"><br><br><br>Date of joining the Fund </th>
+                        <th style="border-right: 1px solid #dee2e6;color: #000;">Total period of previous service as on the date of joining the Fund (Enclose Scheme Certificate if applicable)
+                        </th>
+                        <th style="color: #000;"><br><br><br>Remarks</th>
+                    </tr>
+                    <tr class=" subform3A">
+                        <th style="border-right: 1px solid #dee2e6;color: #000;">(1)</th>
+                        <th style="border-right: 1px solid #dee2e6;color: #000;">(2)</th>
+                        <th style="border-right: 1px solid #dee2e6;color: #000;">(3)</th>
+                        <th style="border-right: 1px solid #dee2e6;color: #000;">(4)</th>
+                        <th style="border-right: 1px solid #dee2e6;color: #000;">(5)</th>
+                        <th style="border-right: 1px solid #dee2e6;color: #000;">(6)</th>
+                        <th style="border-right: 1px solid #dee2e6;color: #000;">(7)</th>
+                        <th style="border-right: 1px solid #dee2e6;color: #000;">(8)</th>
+                        <th style="color: #000;">(9)</th>
+                    </tr>
+                    <tr *ngFor="let element of form5List; let i=index">
+                        <td>{{element.sno}}</td>
+                        <td>{{element.pfno}}</td>
+                        <td style="min-width: 120px;">{{element.empname}}</td>
+                        <td style="min-width: 120px;">{{element.Father_HusName}}</td>
+
+                        <td style="min-width: 90px;">{{element.dob | date: 'dd-MMM-YYYY'}}</td>
+                        <td>{{element.gender}}</td>
+                        <td style="min-width: 90px;">{{element.dateofjoining | date: 'dd-MMM-YYYY'}}</td>
+                        <td style="min-width: 100px;"></td>
+                        <td></td>
+                    </tr>
+
+                </table>
+            </div>
+            <br> <br><br>
+            <div class="row d-flex align-items-center ">
+                <div class="col-4 d-flex align-items-center">
+                    <span>DATE &nbsp; ________________________</span>
+                </div>
+                <div class="col-4">
+                    <span> Stamp of the Factory / Establishment</span>
+
+                </div>
+                <div class="col-4 text-center">
+                    <span>Signature of the employer or other Authorised Officer
+                    of the Factory / Establishment
+                </span>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="printPrivew mt-1" [hidden]="!toggleContent" *ngIf="PfType === 'Form 6A'">
+        <div class="col-12 text-end ">
+
+            <button type="button" mat-icon-button [elementToPrint]="printForm6Afile" ngPrint>
+                <i class="fa fa-print" style="font-size: 20px;color:#000000;" aria-hidden="true"></i>
+            </button>
+
+        </div>
+        <div #printForm6Afile>
+            <div class="form6Aheading row text-center">
+                <span class="col-12" style="font-size: 18px;"> <b>FORM 6A</b> </span>
+                <span>The Employee's Provident fund Scheme,1952
+                (paragraph 43) and</span>
+                <span>The Employee's Pension Scheme,1995
+                [paragraph 15(4)]</span>
+
+                <span>Annual statement of contribution for the currency period
+            </span>
+                <span>From &nbsp;&nbsp; {{from6[0].fromDate | date : 'MMM-YYYY'}}&nbsp; &nbsp;To
+                &nbsp;&nbsp;{{from6[0].toDate | date : 'MMM-YYYY'}}</span>
+            </div>
+
+            <div class="form6Acontent mt-3 row">
+                <span class="col-6"> Name and Address of the Factory /
+                Establishment : </span>
+                <span class="col-6">
+                {{from6[0].Company}}&nbsp;&nbsp;
+                {{from6[0].add1}}&nbsp;&nbsp;
+                {{from6[0].add2}}&nbsp;&nbsp;
+                {{from6[0].add3 }}&nbsp;&nbsp;
+                {{from6[0].city}}&nbsp;&nbsp;
+                {{from6[0].pincode}}
+
+            </span>
+
+                <span class="col-6"> Statutory rate of Contribution : </span>
+                <span class="col-6">12%</span>
+
+                <span class="col-6"> No.of members voluntary contributing at a higher rate :
+            </span>
+                <span class="col-6">Nil</span>
+
+            </div>
+
+
+            <div class="form6 mt-3  w-100 mb-5">
+                <table class=" form6Table">
+
+                    <tr class=" form6" style="border-top: 1px solid #dee2e6 !important;">
+                        <th style="min-width:50px ;color: #000;"> <br><br> <br> SI.No.</th>
+                        <th style="color: #000;"> <br><br><br> Account Number
+                        </th>
+                        <th style="color: #000;"><br><br><br> Name of member</th>
+                        <th rowspan="2" style="text-align:center;border-bottom: 1px solid #dee2e6 !important; color: #000;">Wages retaining allow.(if any) & DA incl.cash value of food conces. paid during the currency period
+                        </th>
+                        <th rowspan="2" style="text-align:center;border-bottom: 1px solid #dee2e6 !important; color: #000;">EPF Amount of worker's contrib. deducted from the wages
+                        </th>
+                        <th colspan="2" style="horizontal-align : middle;text-align:center; width: 30%;color: #000;">Employee's Contribution
+                        </th>
+                        <th rowspan="2" style="text-align:center;min-width: 50px;border-bottom: 1px solid #dee2e6 !important;color: #000;">
+                            <br><br>Refund of Adv.
+                        </th>
+                        <th rowspan="2" style="text-align:center; min-width: 50px;border-bottom: 1px solid #dee2e6 !important;color: #000;">Rate of High vol. cont. (if any)
+
+                        </th>
+                        <th rowspan="2" style="text-align:center;border-bottom: 1px solid #dee2e6 !important;color: #000;"><br><br><br> Remarks
+                        </th>
+                    </tr>
+                    <tr class=" subform3A" style="border-bottom: 1px solid #dee2e6 !important;">
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th scope="col" style="text-align:center;color: #000;">EPF diff. between 12% & 8-1/3%
+                        </th>
+                        <th scope="col" style="text-align:center;color: #000;">Pension fund 8-1/3%
+                        </th>
+                    </tr>
+                    <tr *ngFor="let ele of form6List ; let i = index">
+                        <td>{{i+1}}</td>
+                        <td>{{ele.PfUAN}}</td>
+                        <td style="min-width:160px ;"> {{ele.Empname}}</td>
+                        <td style="min-width: 100px;text-align:end;">{{ele.EWages}}</td>
+                        <td style="text-align:end;">{{ele.EPF}}</td>
+
+                        <td style="text-align:end;">{{ele.ACNO1}}</td>
+                        <td style="text-align:end;">{{ele.ACNO10}}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td> <b> Grand Total</b></td>
+                        <td style="text-align:end;"> <b> {{from6[0].TotalEWages}}</b> </td>
+                        <td style="text-align:end;"> <b> {{from6[0].TotalEPF}}</b></td>
+                        <td style="text-align:end;"> <b> {{from6[0].TotalEPFDiff}}</b></td>
+                        <td style="text-align:end;"><b> {{from6[0].TotalPensionFund}}</b></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                </table>
+            </div>
+
+            <div class="row mt-5">
+                <span class="col-8"></span>
+                <span class="col-4 mt-3 text-center">For ADYAR ANANDA BHAVAN SWEETS
+                INDIA PRIVATE LTD</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="printPrivew" [hidden]="!toggleContent" *ngIf="PfType === 'Form 10'">
+
+
+        <div class="col-12 text-end ">
+
+            <button type="button" mat-icon-button [elementToPrint]="printForm10file" ngPrint>
+                <i class="fa fa-print" style="font-size: 20px;color:#000000;" aria-hidden="true"></i>
+            </button>
+
+        </div>
+        <div #printForm10file>
+            <div class="form5 mt-2 ">
+                <div class=" grid-container row">
+                    <div class=" item1 "> <b>FORM NO.10
+                    </b> [See Paragraph 36(2)(a) & (b) of the employees' Provident Funds Scheme,1952] <br> [See Paragraph 20(2) of the Employees' Pension Scheme,1995}</div>
+                    <div class="item2"> Name and address of the Factory / Establishment :&nbsp;&nbsp;&nbsp;{{from10[0].company}}&nbsp;{{from10[0].Address1}} &nbsp;{{from10[0].Address2}} &nbsp; {{from10[0].City}} &nbsp; {{from10[0].pincode}}
+
+                    </div>
+                    <div class="item5">Code No.of the Factory / Establishment {{PFRegionValue.value}} &nbsp;&nbsp; {{from10[0].code}}
+                    </div>
+
+                </div>
+                <div class="w-100 mx-0 row">
+                    <span class="col-12 form5div">
+                    RETURN OF THE MEMBERS LEAVING SERVICE DURING THE MONTH OF &nbsp;&nbsp;
+                    <b>{{from10[0].MonthYear}}</b>
+                </span>
+                </div>
+            </div>
+
+            <div class="form5 mt-2  w-100 mb-4">
+
+                <table class="table p-0 form5" style="border: 1px solid #dee2e6; border-radius: 0; border-bottom-color: transparent !important;">
+
+
+                    <tr class=" form5" style="border-bottom:1px solid #dee2e6;">
+                        <th style="max-width:40px ;border-right: 1px solid #dee2e6;color: #000;"> <br> SI.No</th>
+                        <th style="border-right: 1px solid #dee2e6;color: #000;">Account No.</th>
+                        <th style="border-right: 1px solid #dee2e6;color: #000;">Name of the Employee(IN BLOCK LETTERS)</th>
+                        <th style="max-width: 200px;border-right: 1px solid #dee2e6;color: #000;"> Father's Name (or Husband's Name incase of married woman)</th>
+                        <th style="max-width: 80px;border-right: 1px solid #dee2e6;color: #000;">Date of leaving service
+                        </th>
+                        <th style="min-width: 50px;border-right: 1px solid #dee2e6;color: #000;">Reasons for Leaving service*
+                        </th>
+                        <th style="min-width: 80px;color: #000;"><br>Remarks</th>
+                    </tr>
+                    <tr class=" subform3A" style="border-bottom:1px solid #dee2e6;">
+                        <th style="border-right: 1px solid #dee2e6; color: #000;">(1)</th>
+                        <th style="border-right: 1px solid #dee2e6;color: #000;">(2)</th>
+                        <th style="border-right: 1px solid #dee2e6;color: #000;">(3)</th>
+                        <th style="border-right: 1px solid #dee2e6;color: #000;">(4)</th>
+                        <th style="border-right: 1px solid #dee2e6;color: #000;">(5)</th>
+                        <th style="border-right: 1px solid #dee2e6;color: #000;">(6)</th>
+                        <th style="color: #000;">(7)</th>
+
+                    </tr>
+                    <tr *ngFor="let element of form10List; let i=index" style="border-bottom:1px solid #dee2e6;">
+                        <td>{{i+1}}</td>
+                        <td>{{element.sno}}</td>
+                        <td>{{element.empname}}</td>
+                        <td>{{element.Father_HusName}}</td>
+                        <td style="min-width: 100px;">{{element.DOL | date: 'dd-MMM-YYYY'}}</td>
+                        <td>{{element.Reason}}</td>
+                        <td></td>
+
+                    </tr>
+
+                </table>
+            </div>
+
+
+            <div class="row d-flex align-items-center mb-3 mt-5">
+                <div class="col-4 d-flex align-items-center">
+                    <span>DATE &nbsp;________________________ </span>
+
+                </div>
+                <div class="col-4">
+                    <span> <b> Stamp of the Factory / Establishment</b> </span>
+
+                </div>
+                <div class="col-4 pt-2 text-center">
+                    <span> <br> Signature of the employer or other Authorised Officer
+                    of the Factory / Establishment
+                </span>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <span class="col-12">
+                <p>*Please state whether the member is (a) retiring according to para 69(1) (a) or (b) of the Scheme;(b)
+                    leaving India for permanent settlement abroad; (c) retrenchment; (d) Permanent and total disablement
+                    due to
+                    employment injury; (e) discharged; (f) resigning from or leaving service; (g) taking up employment
+                    elsewhere (The Name and address of the Employees should be stated); (h) death; (i) attained the age
+                    of 58 </p>
+            </span>
+                <br><br>
+                <span class="col-12 mt-3 mb-5" style="line-height:25px ;">"Certified that the member mentioned at Serial No
+                &nbsp;&nbsp; ____________________________&nbsp;&nbsp; Shri / Smt. / Kum.&nbsp;&nbsp;____________________________&nbsp;&nbsp;was paid / not paid retrenchment compensation of
+                Rs &nbsp; &nbsp; ____________________________&nbsp;&nbsp;Under the Industrial Dispute Act, 1947"</span>
+                <br><br><br>
+                <span class="col-12 text-end">Signature of the Employer</span>
+            </div>
+        </div>
+    </div>

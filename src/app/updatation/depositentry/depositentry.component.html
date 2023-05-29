@@ -1,0 +1,307 @@
+<div>
+    <div class="loader text-center" *ngIf="isload">
+        <img src="assets/gImg/blueload.gif" class="load">
+    </div>
+</div>
+<div class="gWrapper">
+    <app-header Titleheader="Deposit View"></app-header>
+    <!-- <div class="fix">
+        <div class="header ">
+            <mat-toolbar color="warn">
+                <mat-toolbar-row>
+                    <button mat-button (click)="backNavigation()"> BACK</button>
+                    <span class="example-spacer"></span>
+                    <button mat-button class="btn btn-lg" routerLink='/dashboard'> <i
+                            class="fa fa-home btn btn-lg text-white"></i></button>
+                    <button mat-button disabled>
+                        <img class="png-icon" src=".\assets\gImg\a2b2.png" style="max-width:56px;min-width:56px">
+                    </button>
+                </mat-toolbar-row>
+            </mat-toolbar>
+        </div>
+    </div> -->
+    <section *ngIf="showPageONE" class="">
+        <div class="container-fluid  px-0">
+            <div class="row my-2 mx-2">
+                <div class="offset-sm-2 col-sm-8 offset-sm-2 border1 px-0">
+                    <form [formGroup]="Reportform" class="reportformclass">
+                        <div class="row">
+                            <div class="col-sm-6" *ngIf="globals.gclientServer === 'Server'">
+                                <div class="">
+                                    <label class="gInputLable" >Company</label>
+                                    <select class="gInnerInput" formControlName="company"
+                                        placeholder="Enter Company" [(ngModel)]="patchcompany"
+                                        (change)="companychange(patchcompany)">
+                                        <option *ngFor="let list of company" [value]="list.Company">{{list.Company}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6" *ngIf="globals.gclientServer === 'Server'">
+                                <div class="">
+                                    <label class="gInputLable" >State</label>
+                                    <select class="gInnerInput" formControlName="state"
+                                        placeholder="Enter State" [(ngModel)]="patchstate"
+                                        (change)="statechange(patchstate)">
+                                        <option *ngFor="let list of stateslist" [value]="list.State">{{list.State}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6" *ngIf="globals.gclientServer === 'Server'">
+                                <div class="">
+                                    <label class="gInputLable" >Region</label>
+                                    <select class="gInnerInput" formControlName="region"
+                                        placeholder="Enter Region" [(ngModel)]="patchregion"
+                                        (change)="Regionchange(patchregion)"
+                                        >
+                                        <option *ngFor="let list of regionList" [value]="list.Region">{{list.Region}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6" *ngIf="globals.gclientServer === 'Server'">
+                                <div class="">
+                                    <label class="gInputLable" >Costcenter</label>
+                                    <select class="gInnerInput" formControlName="ccnter"
+                                        placeholder="Enter Costcenter" [(ngModel)]="patchccenter"
+                                        (change)="Costcntrchange(patchccenter)"
+                                       >
+                                        <option *ngFor="let list of Cost" [value]="list.Costcenter">{{list.Costcenter}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-12" *ngIf="globals.gclientServer === 'Server'">
+                                <div class="">
+                                    <label class="gInputLable" >Branch Name</label>
+                                    <input [formControl]="Branchloccntrl" [matAutocomplete]="auto"
+                                        [(ngModel)]="patchbranch" class="gInnerInput"
+                                        placeholder="Enter Branch Name"
+                                       >
+                                    <mat-autocomplete #auto="matAutocomplete">
+                                        <mat-option *ngFor="let sec of Branchdata" [value]="sec?.brname"
+                                            (click)="changeloc(sec?.brcode)">{{
+                                            sec?.brname }}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="" style="position: relative;">
+                                    <label class="gInputLable" >Dep From date</label>
+                                    <input [matDatepicker]="picker" formControlName="fromdate"
+                                        class="gInnerInput" placeholder="Enter Date of left"
+                                        [(ngModel)]="Fdate"
+                                       >
+                                    <mat-datepicker-toggle matSuffix [for]="picker">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #picker [startAt]="startDate"></mat-datepicker>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="" style="position: relative;">
+                                    <label class="gInputLable" >Dep To date</label>
+                                    <input [matDatepicker]="pickere" formControlName="todate"
+                                        class="gInnerInput" placeholder="Enter Date of left"
+                                        [(ngModel)]="Tdate">
+                                    <mat-datepicker-toggle matSuffix [for]="pickere">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #pickere [startAt]="startDate"></mat-datepicker>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-6 small  text-center mt-3">
+                                <mat-radio-button [checked]="myModel" (click)="myClick('Consolidated')">
+                                    Consolidated </mat-radio-button>
+                            </div>
+                            <div class="col-sm-6 col-6 small text-center mt-3">
+                                <mat-radio-button [checked]="myModelOUT" (click)="myClick('Datewise')">Datewise
+                                </mat-radio-button>
+                            </div>
+                        </div>
+                        <div class="row small">
+                            <div class="col-sm-12 col-12 text-center small">
+                                <button class="gSaveButton  col-sm-3 col-3" (click)="viewreport()">View
+                                    <i class="fa fa-chevron-right small text-white py-0"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section [hidden]="!showPageTWO" class="mx-2">
+        <div class="row mx-2">
+            <div class="col-sm-12 text-center">
+                <p class="my-2">Company - {{patchcompany}} / State - {{patchstate}} / Region - {{patchregion}} / Ccenter -
+                    {{patchccenter}} / Fdate - {{Fdate|date:'dd-MMM-yy'}} / Tdate - {{Tdate|date:'dd-MMM-yyyy'}} /
+                    Branch - {{patchbranch}}</p>
+            </div>
+            <div class="gTableSection" *ngIf="ID ==='Datewise'">
+                <div class="gInnerTable">
+                    <table class="gNormalTable-sm table" id="tableexcel">
+                        <thead class="">
+                            <tr>
+                                <th class="text-center" style="width: 5%;">Sno</th>
+                                <th class="" *ngIf="patchbranch =='ALL'">Branch
+                                    <i class="fa" style="cursor: pointer;" (click)="sort('brname')" [ngClass]="{'fa-sort': column != 'brname', 'fa-sort-asc': (column =='brname' && isDesc),
+                                            'fa-sort-desc': (column == 'brname' && !isDesc) }" aria-hidden="true"></i>
+                                </th>
+                                <th class="">Depositedate
+                                    <i class="fa" style="cursor: pointer;" (click)="sort('Depositdate')" [ngClass]="{'fa-sort': column != 'Depositdate', 'fa-sort-asc': (column =='Depositdate' && isDesc),
+                                            'fa-sort-desc': (column == 'Depositdate' && !isDesc) }"
+                                        aria-hidden="true"></i>
+                                </th>
+                                <th class="">Saledate
+                                    <i class="fa" style="cursor: pointer;" (click)="sort('Saledate')" [ngClass]="{'fa-sort': column != 'Saledate', 'fa-sort-asc': (column =='Saledate' && isDesc),
+                                            'fa-sort-desc': (column == 'Saledate' && !isDesc) }"
+                                        aria-hidden="true"></i>
+                                </th>
+                                <th class="text-end"><i (click)="exportexcel()" type="button" class="p-1 fa fa-file-excel-o excel float-start"></i> Depositamt
+                                    <i class="fa" style="cursor: pointer;" (click)="sort('Depamt')" [ngClass]="{'fa-sort': column != 'Depamt', 'fa-sort-asc': (column =='Depamt' && isDesc),
+                                            'fa-sort-desc': (column == 'Depamt' && !isDesc) }" aria-hidden="true"></i>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="table table-hover">
+                            <tr *ngFor="let overall of tabledata|orderby: {property: column, direction: direction},index as i">
+                                <td class="text-center">{{i+1}}</td>
+                                <td class="" *ngIf="patchbranch =='ALL'">
+                                    {{overall.brname}}</td>
+                                <td class="">
+                                    {{overall.Depositdate|date:'dd-MMM-yyyy'}} </td>
+                                <td class=""> {{overall.Saledate|date:'dd-MMM-yyyy'}}
+                                </td>
+                                <td class="  text-end"> {{overall.Depamt.toFixed(2)}}
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot *ngIf="tabledata.length !=0">
+                                    <tr>
+                                        <td></td>
+                                        <td class="">Total</td>
+                                        <td  *ngIf="patchbranch =='ALL'" class="text-end">
+                                        </td>
+                                        <td  class="text-end">
+                                        </td>
+                                        <td class="text-end"> {{depamt|currency:'INR'}}
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <div class="gTableSection" *ngIf="ID != 'Datewise'">
+                <div class="gInnerTable">
+                    <table class="gNormalTable-sm table">
+                        <thead class="">
+                            <tr>
+                                <th class="text-center" style="width: 5%;">Sno</th>
+
+                                <th class="">Branch
+                                    <i class="fa" style="cursor: pointer;" (click)="sort('brname')" [ngClass]="{'fa-sort': column != 'brname', 'fa-sort-asc': (column =='brname' && isDesc),
+                                            'fa-sort-desc': (column == 'brname' && !isDesc) }"
+                                        aria-hidden="true"></i>
+                                </th>
+                                <th style="width: 5%;"></th>
+                                <th class="text-end">DepositAmt
+                                    <i class="fa" style="cursor: pointer;" (click)="sort('Depamt')" [ngClass]="{'fa-sort': column != 'Depamt', 'fa-sort-asc': (column =='Depamt' && isDesc),
+                                            'fa-sort-desc': (column == 'Depamt' && !isDesc) }"
+                                        aria-hidden="true"></i>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="table table-hover">
+                            <tr *ngFor="let overall of tabledata|orderby: {property: column, direction: direction},index as i">
+                                <td class="text-center">{{i+1}}</td>
+                                <td class="">{{overall.brname}}</td>
+                                <td class="text-center">
+                                    <button class="gHandIcon"  mat-icon-button (click)="viewdetail(overall)">
+                                        <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+                                    </button>
+                                    
+
+                                    </td>
+                                <td class="  text-end"> {{overall.Depamt.toFixed(2)}}
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot *ngIf="tabledata.length !=0">
+                            <tr>
+                                <td>Total</td>
+                                <td ></td>
+                                <td></td>
+                                <td class="text-end">{{depamt|currency:'INR'}}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section [hidden]="!showPageTHREE" class="mx-2">
+        <div class="row mx-2">
+            <div class="col-sm-12 text-center">
+                <p class="my-2">Company - {{patchcompany}} / State - {{patchstate}} / Region - {{patchregion}} / Ccenter -
+                    {{patchccenter}} / Fdate - {{Fdate|date:'dd-MMM-yy'}} / Tdate - {{Tdate|date:'dd-MMM-yyyy'}} /
+                    Branch - {{branch}}</p>
+            </div>
+            <div class="gTableSection">
+                <div class="gInnerTable">
+                    <table class="gNormalTable-sm table" id="tableexcelone">
+                        <thead class="">
+                            <tr>
+                                <th class="text-center" style="width: 5%;">Sno</th>
+                                <th *ngIf="patchbranch =='ALL'" class="">Branch
+                                    <i class="fa" style="cursor: pointer;" (click)="sort('brname')" [ngClass]="{'fa-sort': column != 'brname', 'fa-sort-asc': (column =='brname' && isDesc),
+                                            'fa-sort-desc': (column == 'brname' && !isDesc) }" aria-hidden="true"></i>
+                                </th>
+                                <th class="">Depositedate
+                                    <i class="fa" style="cursor: pointer;" (click)="sort('Depositdate')" [ngClass]="{'fa-sort': column != 'Depositdate', 'fa-sort-asc': (column =='Depositdate' && isDesc),
+                                            'fa-sort-desc': (column == 'Depositdate' && !isDesc) }"
+                                        aria-hidden="true"></i>
+                                </th>
+                                <th class="">Saledate
+                                    <i class="fa" style="cursor: pointer;" (click)="sort('Saledate')" [ngClass]="{'fa-sort': column != 'Saledate', 'fa-sort-asc': (column =='Saledate' && isDesc),
+                                            'fa-sort-desc': (column == 'Saledate' && !isDesc) }"
+                                        aria-hidden="true"></i>
+                                </th>
+                                <th class="text-end"><i (click)="exportexcel1()" type="button" class="p-1 float-start fa fa-file-excel-o excel"></i> Depositamt
+                                    <i class="fa" style="cursor: pointer;" (click)="sort('Depamt')" [ngClass]="{'fa-sort': column != 'Depamt', 'fa-sort-asc': (column =='Depamt' && isDesc),
+                                            'fa-sort-desc': (column == 'Depamt' && !isDesc) }" aria-hidden="true"></i>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="table table-hover">
+                            <tr *ngFor="let overall of detaildata|orderby: {property: column, direction: direction},index as i">
+                                <td class="text-center">{{i+1}}</td>
+                                <td *ngIf="patchbranch =='ALL'" class="">
+                                    {{overall.brname}}</td>
+                                <td class="">
+                                    {{overall.Depositdate|date:'dd-MMM-yyyy'}} </td>
+                                <td class=""> {{overall.Saledate|date:'dd-MMM-yyyy'}}
+                                </td>
+                                <td class="  text-end"> {{overall.Depamt.toFixed(2)}}
+                                </td>
+
+                            </tr>
+                        </tbody>
+                        <tfoot *ngIf="detaildata.length !=0">
+                            <tr>
+                                <td></td>
+                                <td class="">Total</td>
+                                <td *ngIf="patchbranch =='ALL'"></td>
+                                <td></td>
+                                <td>{{depamt1|currency:'INR'}}</td>
+                            </tr>
+                        </tfoot>
+
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

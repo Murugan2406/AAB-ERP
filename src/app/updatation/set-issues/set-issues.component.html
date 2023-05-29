@@ -1,0 +1,646 @@
+<div class="loading"  *ngIf="progressval == 'indeterminate'"
+    style="position: fixed; top:0; bottom: 0; left: 0; right: 0; z-index: 10001 !important; backdrop-filter: blur(3px);">
+
+    <div class="pendulum-container">
+
+        <div class="ball-first">
+            <div id="ball-1" class="first"></div>
+            <div id="shadow-1" class="first-shadow"></div>
+        </div>
+        <div id="ball-2"></div>
+
+        <div id="ball-5"></div>
+        <div id="ball-6"></div>
+        <div class="ball-first">
+            <div id="ball-7" class="last"></div>
+            <div id="shadow-2" class="last-shadow"></div>
+        </div>
+    </div>
+
+</div>
+<div class="wrapper gNewWrapper1">
+    <app-header Titleheader="  Set Issue" back="true" (BackClick)="backNavigation()"></app-header>
+
+    <div class="content">
+        <div class="example-container mx-3">
+            <div class="container-fluid mt-md-5" *ngIf="isSelection==='OPTION'">
+                <div class="row justify-content-center m-align">
+                    <div class="newCard col-12 col-sm-8 col-md-12 col-lg-9 col-xl-8 mt-3">
+                        <div class="row" id='dcCard' >
+                            <div class="demo img col-12 col-md-6">
+                                <!-- <input type="checkbox" id="mask-switch"><label for="mask-switch">show hover point.</label> -->
+                                <div class="box">
+                                  <div class="hover-point"></div>
+                                  <div class="hover-point"></div>
+                                  <div class="hover-point"></div>
+                                  <div class="hover-point"></div>
+                                  <div class="hover-point"></div>
+                                  <div class="hover-point"></div>
+                                  <div class="hover-point"></div>
+                                  <div class="hover-point"></div>
+                                  <div class="box-contents"></div>
+                                </div>
+                              </div>
+                              <div class="col-12 col-md-6 mt-3 mt-md-0">
+                        <div class="headbox" >
+                            <mat-radio-group aria-labelledby="example-radio-group-label"
+                                class="example-radio-group form-group" (change)="changeAssignType($event)"  [(ngModel)]="headerType">
+                                <mat-radio-button color="accent"
+                                    class="example-radio-button " *ngFor="let season of assignButtonHeaders" [disabled]="showItemAdd"
+                                    [value]="season.value">
+                                    {{season.type}}
+                                </mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+
+                        <div class="mt-4 mt-md-5 row justify-content-between" >
+                            <div class="col-4  ">
+                                <label *ngIf="isSecondOption==='SAVE'" class="gInputLable">Indent Date</label>
+                                <label *ngIf="isSecondOption==='VIEWLIST'" class="gInputLable">From Date</label>
+                            </div>
+                            <div class="col-8 ">
+                                <div class="gOuterInput  gNewOuterInput">
+                                    <input matInput class="gNewInput" id="fromDate" [matDatepicker]="picker2"
+                                        [(ngModel)]="sDate" autocomplete="off" (keydown)="focusNext($event)">
+                                    <mat-datepicker-toggle matSuffix [for]="picker2" class="gInputButton gNewButton">
+                                        <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #picker2></mat-datepicker>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                        <div class=" mt-4 row justify-content-between" *ngIf="isSecondOption==='VIEWLIST'">
+                            <div class="col-4  ">
+                                <label class="gInputLable">To Date</label>
+                            </div>
+                            <div class="col-8 ">
+
+                                <div class="gOuterInput  gNewOuterInput">
+                                    <input matInput class="gNewInput" [matDatepicker]="picker"
+                                        [(ngModel)]="toDate" id="toDate" autocomplete="off " (keydown)="enterKeyEvent($event, 'IndentType')">
+                                    <mat-datepicker-toggle matSuffix [for]="picker" class="gInputButton gNewButton">
+                                        <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #picker></mat-datepicker>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class=" mt-4 row justify-content-between" *ngIf="isSecondOption==='SAVE'">
+                            <div class="col-4  ">
+                                <label class="gInputLable"> Section </label>
+                            </div>
+                            <div class="col-8 ">
+                                <input type="text" id="indentTo" aria-label="Number" [(ngModel)]="section" matInput
+                                    [formControl]="sectionControl" [matAutocomplete]="auto3" class="gNewInput"  (keydown)="enterKeyEvent($event, 'nextbtn')">
+                                <mat-autocomplete #auto3="matAutocomplete"
+                                    (optionSelected)="changeList($event.option.viewValue)" class="gAutoCompleteContainer">
+
+                                    <mat-option *ngFor="let item of secList" [value]="item?.brname" class="gSelectOption">{{ item?.brname}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <!-- </mat-form-field> -->
+                            </div>
+                        </div>
+
+                        <div class="mt-4 row justify-content-between" *ngIf="isSecondOption==='VIEWLIST'">
+                            <div class="col-4  ">
+                                <label class="gInputLable"> Indent Type </label>
+                            </div>
+                            <div class="col-8 ">
+                                <!-- <mat-form-field class="example-full-width"> -->
+                                <mat-select (selectionChange)="issueTypeChange($event.value)"   class="gNewInput" id="IndentType">
+                                    <mat-option *ngFor="let option of optionTypes" [value]="option.val" selected
+                                        class="gSelectOption">
+                                        {{option.type}}
+                                    </mat-option>
+                                </mat-select>
+                                <!-- </mat-form-field> -->
+                            </div>
+                        </div>
+
+                        <div class="d-flex mt-4 row justify-content-between" *ngIf="isSecondOption==='SAVE'">
+                            <div class="col-4  "></div>
+                            <div class="col-8  ">
+                                <mat-checkbox class="gInputLable" id="checkbox" [(ngModel)]="isChecked" >{{viewd}}
+                                </mat-checkbox>
+                            </div>
+                        </div>
+
+                        <div class=" row justify-content-center mt-md-5 mt-3">
+
+                            <div class="col-6 d-flex justify-content-center">
+
+
+                                <button class="linkButtons m-0" id="nextbtn" mat-button (click)="selectNext()">
+                                    <i class="fa fa-hand-o-right firstIcon" aria-hidden="true"></i>
+                                    <span class="gInputLable">Next</span>
+                                    <i class="fa fa-caret-right" aria-hidden="true"></i>
+                                </button>
+
+
+
+
+                                <!-- <button class="linkButtons m-0" *ngIf="isSecondOption==='SAVE'" mat-button
+                                    (click)="selectView('view')">
+                                    <i class="fa fa-hand-o-right firstIcon" aria-hidden="true"></i>
+                                    <span class="gInputLable">View</span>
+                                    <i class="fa fa-caret-right" aria-hidden="true"></i>
+                                </button> -->
+
+
+
+
+
+                                <!-- <button *ngIf="isSecondOption==='VIEWLIST'" class="linkButtons linkDelete m-0"
+                                    mat-button (click)="selectView('cancel')">
+                                    <i class="fa fa-hand-o-left firstIcon" aria-hidden="true"></i>
+
+                                    <span class="gInputLable">Cancel</span>
+                                    <i class="fa fa-caret-right" aria-hidden="true"></i>
+                                </button> -->
+
+                            </div>
+                        </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="isSelection==='LIST'">
+                <div class="headbox mt-2">
+                    <mat-radio-group aria-labelledby="example-radio-group-label" *ngIf="isSecondOption==='SAVE'"
+                        (change)="getFilterItems($event)" class="example-radio-group form-group">
+                        <mat-radio-button [checked]="season.value == isType" color="accent"
+                            class="example-radio-button " *ngFor="let season of assignButton" [value]="season.value">
+                            {{season.type}}
+                        </mat-radio-button>
+                    </mat-radio-group>
+                </div>
+
+                <div class="gTableSection mt-2" *ngIf="isSecondOption==='SAVE'">
+                    <div class="gTableActionheaders">
+                        <form role="search" class="search-form ml-3">
+                            <input type="search" name="Search" class="gSearchText" #input
+                                autocomplete="off" [(ngModel)]="viewSearch"  (ngModelChange)="viewChange($event, 1)"/>
+                        </form>
+
+                    </div>
+                    <div class="gInnerTable">
+
+
+
+
+                        <table mat-table [dataSource]="filterDataSource" class="gNormalTable-sm table viewTable" matSort >
+                            <ng-container matColumnDef="SNo" >
+                              <th mat-header-cell  *matHeaderCellDef  mat-sort-header> S.No </th>
+                              <td mat-cell *matCellDef="let element;let i = index"> {{i+1}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="ReqType">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Intent Type </th>
+                                <td mat-cell *matCellDef="let element"> {{element.ReqType}} </td>
+                              </ng-container>
+                            <ng-container matColumnDef="BatchNo">
+                              <th mat-header-cell *matHeaderCellDef mat-sort-header> BatchNo </th>
+                              <td mat-cell *matCellDef="let element"> {{element.BatchNo}} </td>
+                            </ng-container>
+                          
+      
+                            <ng-container matColumnDef="View">
+                              <th mat-header-cell *matHeaderCellDef mat-sort-header> View </th>
+                              <td mat-cell *matCellDef="let element">
+                                <button mat-icon-button class="gHandIcon" (click)="loadDataByid(element)">
+                                    <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+                                </button>
+                                 </td>
+                            </ng-container>
+                            <ng-container matColumnDef="FgIname">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> IndentFrom </th>
+                                <td mat-cell *matCellDef="let element"> {{element.FgIname}} </td>
+                              </ng-container>
+                              <ng-container matColumnDef="qtyReq">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="flex-header"> Req Qty </th>
+                                <td mat-cell *matCellDef="let element" class="text-end" style="padding-right: 30px !important;"> {{element.qtyReq}} </td>
+                              </ng-container>
+                              <ng-container matColumnDef="qty">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="flex-header"> Pending Qty </th>
+                                <td mat-cell *matCellDef="let element"  class="text-end" style="padding-right: 30px !important;"> {{element.qty}} </td>
+                              </ng-container>
+                              <ng-container matColumnDef="Emaster">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>MasterName</th>
+                                <td mat-cell *matCellDef="let element"> {{element.Emaster}} </td>
+                              </ng-container>
+                              <ng-container matColumnDef="timenow">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>	IndentTime</th>
+                                <td mat-cell *matCellDef="let element"> {{element.timenow}} </td>
+                              </ng-container>
+                              <ng-container matColumnDef="usr">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>PreparedBy </th>
+                                <td mat-cell *matCellDef="let element"> {{element.usr}} </td>
+                              </ng-container>
+                        
+                          
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnsFilter"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumnsFilter;let i = index"
+                            tabindex="0"
+                                [ngClass]="classArrTable[i] ? 'rowClick' : 'rowUnClick'" (click)="rowClick(i)" (keyup)="keyTab1($event, i,row, 'entry')"></tr>
+                                <tr class="mat-row" *matNoDataRow>
+                                    <td class="mat-cell text-center" [attr.colspan]="displayedColumnsFilter.length">
+                                     No record found.
+                                    </td>
+                                  </tr>
+                          </table>
+
+
+
+                    <!-- <table class="gNormalTable-sm table viewTable">
+                            <thead>
+                                <tr>
+                                    <th>Sno</th>
+                                    <th>Indent</th>
+                                    <th>BatchNo</th>
+                                    <th>
+                                        View
+                                    </th>
+                                    <th>IndentFrom</th>
+                                    <th *ngIf="isType=='All'||isType=='Set'">Req</th>
+                                    <th *ngIf="isType=='All'||isType=='Set'">Pending
+                                    </th>
+                                    <th>MasterName</th>
+                                    <th>IndentTime</th>
+                                    <th>PreparedBy</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of  filterList|filter:viewSearch;let i = index"tabindex="0"
+                                [ngClass]="classArrTable[i] ? 'rowClick' : 'rowUnClick'" (click)="rowClick(i)" (keyup)="keyTab1($event, i,items)">
+                                    <td>{{i+1}}</td>
+                                    <td>{{item.ReqType}}</td>
+                                    <td>{{item.BatchNo}}</td>
+                                    <td >
+                                        <button mat-icon-button class="gHandIcon" (click)="loadDataByid(item)">
+                                            <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+                                        </button>
+                                    </td>
+                                    <td>{{item.FgIname}}</td>
+                                    <td *ngIf="isType=='All'||isType=='Set'">
+                                        {{item.qtyReq}}</td>
+                                    <td *ngIf="isType=='All'||isType=='Set'">
+                                        {{item.qty}}</td>
+                                    <td>{{item.Emaster}}</td>
+                                    <td>{{item.timenow}}</td>
+                                    <td>{{item.usr}}</td>
+                                </tr>
+
+                                <tr *ngIf="filterList.length ===0">
+                                    <td colspan="10" class="text-center">No record found.</td>
+                                </tr>
+                            </tbody>
+                        </table> -->
+                    </div>
+                </div>
+<div class="row" *ngIf="isSecondOption==='VIEWLIST'">
+    <span class="gInputLable col-6 col-md-4">From Date : &nbsp;{{sDate |date:'dd-MMM-YYYY'}}</span>
+    <span class="gInputLable col-6 col-md-4">To Date : &nbsp;{{toDate|date:'dd-MMM-YYYY'}}</span>
+    <span class="gInputLable col-12 col-md-4">Intent Type : &nbsp;{{issueType}}</span>
+
+</div>
+
+                <div class="gTableSection mt-1" *ngIf="isSecondOption==='VIEWLIST'">
+                    <div class="gTableActionheaders">
+                        <form role="search" class="search-form ml-3">
+                            <input type="search" name="Search" class="gSearchText" #input
+                                autocomplete="off" [(ngModel)]="viewSearch" (ngModelChange)="viewChange($event, 2)" />
+                        </form>
+
+                    </div>
+                    <div class="gInnerTable" style="max-height: calc(100vh - 110px);">
+
+
+                        <table mat-table [dataSource]="dataSource" class="gNormalTable-sm table viewTable" matSort >
+                            <ng-container matColumnDef="SNo" >
+                              <th mat-header-cell  *matHeaderCellDef  mat-sort-header> S.No </th>
+                              <td mat-cell *matCellDef="let element;let i = index"> {{i+1}} </td>
+                            </ng-container>
+                          
+
+                            <ng-container matColumnDef="DestiBrname">
+                              <th mat-header-cell *matHeaderCellDef mat-sort-header> Indent To </th>
+                              <td mat-cell *matCellDef="let element"> {{element.DestiBrname}} </td>
+                            </ng-container>
+                          
+         
+                            <ng-container matColumnDef="BatchNo">
+                              <th mat-header-cell *matHeaderCellDef mat-sort-header> BatchNo </th>
+                              <td mat-cell *matCellDef="let element"> {{element.BatchNo}} </td>
+                            </ng-container>
+                          
+      
+                            <ng-container matColumnDef="View">
+                              <th mat-header-cell *matHeaderCellDef mat-sort-header> View </th>
+                              <td mat-cell *matCellDef="let element">
+                                <button mat-icon-button (click)="viewSavedDataById(element)" class="gHandIcon">
+                                    <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+                                </button>
+                                 </td>
+                            </ng-container>
+                            <ng-container matColumnDef="todaydate">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
+                                <td mat-cell *matCellDef="let element"> {{element.todaydate}} </td>
+                              </ng-container>
+                              <ng-container matColumnDef="TrnTime">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Time </th>
+                                <td mat-cell *matCellDef="let element"> {{element.TrnTime}} </td>
+                              </ng-container>
+                              <ng-container matColumnDef="TrnNo">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> 	Trn No </th>
+                                <td mat-cell *matCellDef="let element"> {{element.TrnNo}} </td>
+                              </ng-container>
+                              <ng-container matColumnDef="Delete">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Delete </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <button mat-icon-button (click)="openDialog(element.TrnNo, i)"
+                                    class="gDeleteIcon">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                                   </td>
+                              </ng-container>
+                          
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;let i = index"
+                            tabindex="0"
+                                [ngClass]="classArrTable[i] ? 'rowClick' : 'rowUnClick'" (click)="rowClick(i)" (keyup)="keyTab1($event, i,row, 'view')"></tr>
+                                <tr class="mat-row" *matNoDataRow>
+                                    <td class="mat-cell text-center" [attr.colspan]="displayedColumns.length">
+                                     No record found.
+                                    </td>
+                                  </tr>
+                          </table>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="isSelection==='VIEW' && isSecondOption==='SAVE'">
+                <div class="d-flex justify-content-start gInputLable">
+                    Batch No: {{setItems.batch}}/ &nbsp; &nbsp; Master Name:{{setItems.reqMastername}}/ &nbsp; &nbsp;To Item: {{setItems.fginame}}  &nbsp; &nbsp;Intent Type: {{IntentType}}
+                </div>
+
+                <div class="row mt-3" *ngIf="setItems.reqType==='Set'" >
+                    <div class="col-12 col-lg-12 col-xl-6">
+                        <div class="row">
+                            <div class="col-3 col-md-2 col-lg-1 col-xl-2">
+                                <label class="gInputLable">No.of sets </label>
+                            </div>
+                            <div class="col-5 col-md-2 col-lg-2 col-xl-2 ">
+                                <input class=" gNewInput" id="setsPending" [(ngModel)]="setItems.setPending"
+                                    (keyup)="onlyNumericValue($event.target)" (keydown)="onlyKeyEnter($event)"
+                                    (keypress)="changeValue($event, $event.target.value, 'set' )" type="text" [readOnly]="isOutputchk"
+                                    [ngClass]="{'input_disabled':isOutputchk}" autocomplete="off">
+                            </div>
+                            <div class="col-2  col-md-1 col-lg-1 col-xl-1 ">
+                                <!-- <button id="itemDetail" class="btn_arr" (click)="getItemCalculates()">
+                                    <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                                </button> -->
+                                <button type="button" (click)="getItemCalculates()" class=" InfoButton" id="itemDetail"
+                                    style="opacity: 1;font-size: 16px;">
+                                    <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                                    <!-- <span aria-hidden="true">&times;</span> -->
+                                </button>
+                            </div>
+                            <div class="col-3  col-md-1 col-lg-1 col-xl-2">
+                                <label class="gInputLable">Output </label>
+                            </div>
+                            <div class="col-5 col-md-2 col-lg-2 col-xl-2 ">
+                                <input class=" gNewInput" type="text" [(ngModel)]="output"
+                                    (keypress)="changeValue($event,  $event.target.value, 'out')" (keydown)="enterKeyOutputQty($event)"
+                                    (keyup)="calculateOutputSet()" placeholder="00"
+                                    [ngClass]="{'input_disabled':!isOutputchk}" [readOnly]="!isOutputchk" autocomplete="off">
+                            </div>
+                            <div class="col-2 col-lg-2 col-xl-2 " *ngIf="isQtyEnable">
+                                <mat-checkbox class="gInputLable" [(ngModel)]="isOutputchk"
+                                    (change)="changeOutput($event.checked)">Output Qty
+                                </mat-checkbox>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gTableSection mt-2">
+                    <div class="gInnerTable" id="table_list" style="max-height:calc(100vh - 160px);">
+                        <table class="gNormalTable-sm table">
+                            <thead>
+                                <tr>
+                                    <th>Sno</th>
+                                    <th>Code</th>
+                                    <th>Item Name</th>
+                                    <th class="text-center" *ngIf="setItems.reqType==='Set'">
+
+                                        Interchange
+                                    </th>
+                                    <th class="text-end" >ReqQty</th>
+                                    <th class="text-end" style="width: 100px !important;" >IssQty</th>
+                                    <th>Uom</th>
+                                    <th class="text-end" >Rate</th>
+                                    <th class="text-end" >Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of items;let i = index">
+                                    <td>{{i+1}}</td>
+                                    <td>{{item.ricode}}</td>
+                                    <td>{{item.riname}}</td>
+                                    <td class="text-center" *ngIf="setItems.reqType==='Set'">
+                                        <button mat-icon-button class="gHandIcon"
+                                            (click)="openInterchangeModal(item, i)">
+                                            <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+
+                                        </button>
+                                    </td>
+                                    <td  class="text-end">{{item.rqty | number}}</td>
+                                    <td *ngIf="setItems.reqType==='Set'"  class="text-end">
+                                        {{item.Issqty }}</td>
+
+                                    <td *ngIf="setItems.reqType !=='Set'"  style="width: 100px !important;" >
+                                        <input type="number" [(ngModel)]="item.Issqty" (keyup)="addIssuQty(i)" [max]="item.Issqty "  (focusout)="checkQty(item.rqty,item.Issqty)"
+                                            (keypress)="changeValue1($event, item.ruom,$event.target.value)"  (keydown)="enterKeyEvent($event, 'name')" class=" gInnerInput text-end" style="min-width: 100px;margin: 0 !important;">
+                                    </td>
+                                    <td>{{item.ruom}}</td>
+                                    <td  class="text-end">{{item.rirate | currency:'INR'}}</td>
+                                    <td  class="text-end">{{item.Amt | currency:'INR'}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row mt-2"  >
+                    <div class="col-12 col-md-6 col-lg-6 col-xl-6">
+                        <div class="row">
+                            <div class="col-5 col-md-3 ">
+                                <label class="gInputLable">Received By Mr/Mrs </label>
+                            </div>
+                            <div class="col-7 col-md-6">
+                                <input class=" gNewInput" type="text" [(ngModel)]="receice" id="name" placeholder="Alt + R" 
+                                (keydown)="enterKeyEvent($event,'SaveBtn')">
+                            </div>
+                        </div>
+                    </div>
+        
+                </div>
+
+                <div class="d-flex row justify-content-center " >
+                    <div class="col-sm-12 text-center">
+           
+                        <button mat-button (click)="saveConfirm()" type="button" id="SaveBtn" class="linkButtons ">
+                            <i class="fa fa-hand-o-right firstIcon" aria-hidden="true"></i>
+                            <span class="gInputLable">Save</span>
+                            <i class="fa fa-caret-right" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="isSelection==='VIEW' && isSecondOption==='VIEWLIST'">
+                <div class="row">
+                    <span class="d-flex  gInputLable col-12 col-md-6 my-1">
+                        GTN: {{savedItems.TrnNo}} / Date: {{savedItems.todaydate }} / Time: {{savedItems.TrnTime }}
+                    </span>
+                    <span class="d-flex  gInputLable col-12 col-md-6 my-1">
+                        IssueTo: {{savedItems.DestiBrname}} / Type: {{savedItems.DriverName }} / TrnId:
+                        {{savedItems.VehicleNo }}
+                    </span>
+
+                  
+                </div>
+
+
+                <div class="gTableSection ">
+                    <div class="gTableActionheaders">
+                        <form role="search" class="search-form ml-3">
+                            <input type="search" name="Search" class="gSearchText" #input
+                                autocomplete="off" [(ngModel)]="viewSearch1" />
+                        </form>
+
+                    </div>
+                    <div class="gInnerTable" id="table_list " style="max-height:calc(100vh - 160px);">
+                        <table class="gNormalTable-sm table">
+                            <thead>
+                                <tr>
+                                    <th>Sno</th>
+                                    <th>Code</th>
+                                    <th>Item Name</th>
+                                    <th class="text-end">Qty</th>
+                                    <th>Uom</th>
+                                    <th class="text-end">Rate</th>
+                                    <th class="text-end">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of items|filter:viewSearch1;let i = index">
+                                    <td>{{i+1}}</td>
+                                    <td>{{item.icode}}</td>
+                                    <td>{{item.iname}}</td>
+                                    <td class="text-end">{{item.qty | number}}</td>
+                                    <td>{{item.uom}}</td>
+                                    <td class="text-end">{{item.irate| currency:'INR'}}</td>
+                                    <td class="text-end">{{item.qty* item.irate| currency:'INR'}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-12 col-xl-8" *ngIf="isSelection === 'VIEW'">
+                    <div class="row">
+                        <span class="d-flex col-12 col-sm-6 col-md-3 gInputLable align-items-center" style="white-space:nowrap;"
+                        *ngIf="savedItems?.DriverName == 'Set'">
+                        <label class="gInputLable" style="min-width: 100px;">No.of sets &nbsp; &nbsp;</label>
+                        <input class="gNewInput input_disabled" id="setsPending"[(ngModel)]="savedItems.NoOfSet"
+                        type="number" (keydown)="enterKeyEvent($event,'Output' )"  readonly>
+                    </span>
+
+                    <span class="d-flex col-12 col-sm-6  col-md-3 gInputLable align-items-center" style="white-space:nowrap;"
+                        *ngIf="savedItems?.DriverName == 'Set'">
+                        <label class="gInputLable" style="min-width: 100px;">Output &nbsp; &nbsp;</label>
+                        <input class=" gNewInput input_disabled" type="number" id="Output" [(ngModel)]="savedItems.OutputQty"
+                        (keydown)="enterKeyEvent($event,'qrcount' )" readonly>
+                    </span>
+                      
+                        <div class="d-flex col-12 col-sm-6 col-md-3 gInputLable align-items-center" style="white-space:nowrap;">
+                            <label class="gInputLable" style="min-width: 100px;">No.of Qrcodes &nbsp; &nbsp;</label>
+                            <input class=" gNewInput py-1" (keydown)="printcountEnter($event)" 
+                                (keypress)="keypressValidation($event)" type="text" [(ngModel)]="tcount" id="qrcount"
+                                name="qrcount" placeholder="Alt + Q" autocomplete="off">
+                        </div>
+                        <div class="col-12 col-sm-6  col-md-3 ">
+                            <button id="printqrcode" (click)="printCheck()" mat-button class="linkButtons">
+
+                                <i class="fa fa-print firstIcon" aria-hidden="true"></i>
+                                <span class="gInputLable">Print</span>
+                                <i class="fa fa-caret-right" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="interchangeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog gNewModel" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span></span>
+                    <span class="gInputLable" style="font-size: 16px;">
+                        Set Item Interchange
+                    </span>
+                    <!-- <h5 class="modal-title" id="exampleModalLabel"></h5> -->
+                    <button type="button" class="close InfoButton" data-bs-dismiss="modal" aria-label="Close" style="opacity: 1;font-size: 16px;">
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                        <!-- <span aria-hidden="true">&times;</span> -->
+                    </button>
+                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button> -->
+                </div>
+                <div class="modal-body">
+                    <div class="gTableSection my-2">
+                        <div class="gInnerTable" id="table_list">
+                            <table class="gNormalTable-sm table">
+                                <thead>
+                                    <tr>
+                                        <th>Icode</th>
+                                        <th>
+                                            View
+
+                                        </th>
+                                        <th>Item Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let cng of cngeItemsList;let i = index">
+                                        <td>{{cng.subicode}}</td>
+                                        <td>
+                                            <button mat-icon-button class="gHandIcon" (click)="interChangeItem(cng)">
+                                                <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+
+                                            </button>
+
+                                        </td>
+                                        <td>{{cng.subiname}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>

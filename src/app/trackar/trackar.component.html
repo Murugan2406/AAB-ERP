@@ -1,0 +1,443 @@
+<div class="example-container" [class.example-is-mobile]="mobileQuery.matches">
+  <mat-toolbar color="warn" class="example-toolbar">
+    <button mat-icon-button>
+      <mat-icon (click)="sidenav.toggle()">menu</mat-icon>
+    </button>
+    <button style="margin-left: auto" mat-button (click)="backNavigation()"> BACK</button><br>
+    <button mat-button disabled>
+      <img class="png-icon" src=".\assets\gImg\a2b2.png" style="max-width: 56px; min-width: 56px;">
+    </button>
+  </mat-toolbar>
+
+  <mat-sidenav-container class="example-sidenav-container gTicketContainer" [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
+    <mat-sidenav class="app-sidenav" #sidenav mode="push" fixedTopGap="56">
+      <div class="sidenavheader">
+        <img src=".\assets\gImg\person.jpg" class="avatar">
+        <!-- <img class="avatar" src="data:image/png;base64,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"> -->
+        <span class="toolbar-filler"></span>
+        <div class=sidenavcontet>
+          <p>{{userName}}</p>
+        </div>
+      </div>
+      <li style="background-color:#D0DDF2 " class="list-group-item d-flex justify-content-between align-items-center">
+        <a>Tickets</a>
+      </li>
+      <ul style="margin-top: 2%" class="list-group borderless list-group-flush" *ngIf="clientServer == 'Client'">
+        <li style="font-size: 14px" (click)="goToMenu('createTicket')"
+        class="list-group-item d-flex justify-content-between align-items-center">
+        <a><i class="fa fa-pencil" aria-hidden="true"></i>Create Ticket</a>
+      </li>
+      <li style="font-size: 14px" (click)="goToMenu('outbox')"
+          class="list-group-item d-flex justify-content-between align-items-center">
+          <a><i class="fa fa-paper-plane-o" aria-hidden="true"></i> Complaints</a>
+        </li>
+        <li style="font-size: 14px" (click)="goToMenu('trash')"
+          class="list-group-item d-flex justify-content-between align-items-center">
+          <a><i class="fa fa-trash-o" aria-hidden="true"></i> Trash</a>
+          <span class="badge bg-primary bg-pill">{{requestDetails.Trash}}</span>
+        </li>
+      </ul>
+
+      <ul style="margin-top: 2%" class="list-group borderless list-group-flush" *ngIf="clientServer == 'Server'">
+        <li style="font-size: 14px" (click)="goToMenu('createTicket')"
+          class="list-group-item d-flex justify-content-between align-items-center">
+          <a><i class="fa fa-pencil" aria-hidden="true"></i>Create Ticket</a>
+        </li>
+        <li style="font-size: 14px" (click)="goToMenu('inbox')"
+          class="list-group-item d-flex justify-content-between align-items-center">
+          <a><i class="fa fa-envelope-o"></i> Inbox</a>
+          <span class="badge bg-primary bg-pill">{{requestDetails.Inbox}}</span>
+        </li>
+        <li style="font-size: 14px" (click)="goToMenu('outbox')"
+          class="list-group-item d-flex justify-content-between align-items-center">
+          <a><i class="fa fa-paper-plane-o" aria-hidden="true"></i> Complaints</a>
+        </li>
+        <li style="font-size: 14px" (click)="goToMenu('pendings')"
+          class="list-group-item d-flex justify-content-between align-items-center">
+          <a><i class="fa fa-user-o" aria-hidden="true"></i> My NewTickets</a>
+          <span class="badge bg-primary bg-pill">{{requestDetails.Mytickets}}</span>
+        </li>
+        <li style="font-size: 14px" (click)="goToMenu('unassigned')"
+          class="list-group-item d-flex justify-content-between align-items-center">
+          <a><i class="fa fa-table" aria-hidden="true"></i> New Requests</a>
+          <span class="badge bg-primary bg-pill">{{requestDetails.Unassigned}}</span>
+        </li>
+        <li style="font-size: 14px" (click)="onChange('deptTicket')"
+          class="list-group-item d-flex justify-content-between align-items-center">
+          <a><i class="fa fa-area-chart" aria-hidden="true"></i>
+            Department Tickets</a>
+        </li>
+        <!-- <li style="font-size: 14px" (click)="goToMenu('overdue')" class="list-group-item d-flex justify-content-between align-items-center">
+          <a><i class="fa fa-calendar-times-o" aria-hidden="true"></i>  OverDue</a>
+          <span class="badge bg-primary bg-pill">{{requestDetails.Overdue}}</span>
+        </li> -->
+        <li style="font-size: 14px" (click)="goToMenu('trash')"
+          class="list-group-item d-flex justify-content-between align-items-center">
+          <a><i class="fa fa-trash-o" aria-hidden="true"></i> Trash</a>
+          <span class="badge bg-primary bg-pill">{{requestDetails.Trash}}</span>
+        </li>
+      </ul>
+      <div *ngIf="requestDetails.approvalAuthYN ==='Y'">
+        <li style="background-color:#D0DDF2 " class="list-group-item d-flex justify-content-between align-items-center">
+          <a>Approval</a>
+        </li>
+        <ul style="margin-top: 2%" class="list-group borderless list-group-flush">
+          <li style="font-size: 14px" (click)="goToMenu('approval')"
+            class="list-group-item d-flex justify-content-between align-items-center">
+            <a><i class="fa fa-empire" aria-hidden="true"></i>Approved Tickets</a>
+          </li>
+          <li style="font-size: 14px" (click)="goToMenu('unapproval')"
+            class="list-group-item d-flex justify-content-between align-items-center">
+            <a><i class="fa fa-fire" aria-hidden="true"></i>Approval Pending</a>
+            <span class="badge bg-primary bg-pill">{{requestDetails.apprPending}}</span>
+          </li>
+          <li style="font-size: 14px" (click)="goToMenu('rejected')"
+            class="list-group-item d-flex justify-content-between align-items-center">
+            <a><i class="fa fa-warning" aria-hidden="true"></i>Rejected Tickets</a>
+          </li>
+        </ul>
+      </div>
+      <li style="background-color:#D0DDF2 " *ngIf="clientServer == 'Server'" class="list-group-item d-flex justify-content-between align-items-center">
+        <a data-bs-toggle="collapse" (click)="changeSubject()">Options</a>
+        <i *ngIf="isSubject==false" (click)="changeSubject()" style="margin-left: auto" data-bs-toggle="collapse"
+          data-bs-target="#options" class="material-icons" aria-hidden="true">expand_more</i>
+        <i *ngIf="isSubject==true" (click)="changeSubject()" style="margin-left: auto" data-bs-toggle="collapse"
+          data-bs-target="#options" class="material-icons" aria-hidden="true">expand_less</i>
+      </li>
+      <div *ngIf="isSubject==true">
+        <li *ngIf="requestDetails.MultiDeptRights==='Y'" style="font-size: 14px;color: darkblue"
+          class="list-group-item d-flex justify-content-between align-items-center">
+          <a data-bs-toggle="collapse" data-bs-target="#Suboptions" role="button" aria-expanded="false"
+            aria-controls="options">
+            <i class="fa fa-tags" aria-hidden="true"></i>
+            Subject</a>
+        </li>
+        <ul id="Suboptions" style="margin-top: 2%" class=" collapse list-group borderless list-group-flush">
+          <li style="font-size: 14px" (click)="goToMenu('createSubject')"
+            class="list-group-item d-flex justify-content-between align-items-center">
+            <a style="margin-left: 7%"><i class="fa fa-genderless" aria-hidden="true"></i>
+              Create Subject</a>
+          </li>
+          <li style="font-size: 14px" (click)="goToMenu('editSubject')"
+            class="list-group-item d-flex justify-content-between align-items-center ">
+            <a style="margin-left: 7%"><i class="fa fa-genderless" aria-hidden="true"></i>
+              Edit Subject</a>
+          </li>
+          <li style="font-size: 14px" (click)="goToMenu('deleteSubject')"
+            class="list-group-item d-flex justify-content-between align-items-center ">
+            <a style="margin-left: 7%"><i class="fa fa-genderless" aria-hidden="true"></i>
+              Delete Subject</a>
+          </li>
+        </ul>
+        <li style="font-size: 14px;color: darkblue"
+          class="list-group-item borderless d-flex justify-content-between align-items-center">
+          <a (click)="gotoFilter(deptName)"><i class="fa fa-filter" aria-hidden="true"></i>
+            Reports</a>
+        </li>
+        <li style="font-size: 14px;color: darkblue"
+        class="list-group-item borderless d-flex justify-content-between align-items-center">
+        <a (click)="gotoBranchwiseFilter(deptName)"><i class="fa fa-filter" aria-hidden="true"></i>
+          Consolidate</a>
+      </li>
+      </div>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <div style="height: 88vh;margin-top: auto">
+        <div class="row" style="margin-left: 2px;margin-right: 2px;margin-top: 1%;">
+          <div class="col-12">
+            <div class="card card-stats ">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-6 col-md-8 col-xl-9 col-lg-9 reqhead" style="margin-bottom: auto;margin-top: auto;">
+                    REQUEST TRACKER
+                  </div>
+                  <div class="col-6 col-md-4 col-xl-3 col-lg-3">
+                    <div class="row">
+                      <div class="col-md-4 col-xl-3 col-lg-4 col-4 ms-auto text-center">
+                        <img class="optionicon row " (click)="goToMenu('createTicket')"
+                          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAA7AAAAOwBeShxvQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAS4SURBVFiFtZdbbBRVGMd/58zMXrrdXbqthQJtRTBRCBeDQdFEXky4xPiABkNA4gVQEU2MTz6Y8GC8YKIxRBMuRkKEhyogWozG9AXjhUiAKFVEItIrlG27953d2ZnjQ7sN7c52e0n/j99+3/z+e875vjMjmKLmt3wzT+h82NWfqVeIZ9mx6Vqlmt61ry2RwtkPrEBxJp0svCQmC165/5xxq753l1K8BVR3RtMAWZTaSy78Dq9uyLnV3Vz7ynKEbANqAfJ9yVRuMPXTpAzMP/H1GoH8BNTiYmzYQFFXQexm51Pf3x7MfLB2VfKHe75FDcOjSfLRFChSEzLQfPy7Blta7wnFVmBUzRgDRbWiq108t7lTnV2wXOG0Zc83h1Jf32fkbw3DAVA/jm9gzx7ZtPz+7Uqp94GQW0oZAwDprZHznx1patnM8LKn22ryfQfu9qBAQL/t2Gu0ctVNJ1tXhmY3fAW8AHjL5SUylmt8RbDbc3TFsVXSxqc7StiZGFrtf5oezlrmpbkxgXp04fUv/9BLwK2tNU5e7anzend7NCnLgYsSWYEaE1sc6OLzJYeIGBnwIK0eE5GJARB4+N+kWdA3NOy9chFu30+lxPwTrc8LwbtA7aFHHmJZbaQSn2RyNN5b+JOG5BY0NTAUSAtESpCKD2BatnpjcOvbn27Z/yZCqBEDdadOBf22OAxiY/FBUzHgCk8PLeKA5Wf91af5LXcXwHEs+Qwvb0pJlBJj4VPRePC8DLHu2vYiHOAJDHUUpYTedPL0k2ra8PZh+GAJ3NECnAnu41ymd0yVepyDLRulgh3TgUuVYE56uytcaV56Go8yoN9bplrtlErw4HQMhM3D6HZPCdzRgnQ3tmD6lpWtFUI8oHvqZ1WNbSMA4SnpUFf5C7+4wMP0NB7B9C0FwNAks2f53coDepXPq2Vs283ehAzodjekdUR66G8UjAZ65x0k5xu5LpACPHrpSBG6pusRQ8fVwASlzCAFay6FQBNZ/2pikW040nVqlxrwGuhNAR/duTxKuW1EZXXOOT2lOgBZ7UeGdJ2FAdf9mVHJUABh6OgAiwJ+NOBKOjvllZiMtFAAGaoCYOSoLwj4iXgM2hNpEoXCjICFoSNrqpEeYyQ2qtfChs7qSIgOM1dyw01HNqDNqkZWl251SbMLIWj2+2iLR0HA0kCQSb843qazqRj7+jtc4a4GikrZNqf6b3IhlWB95A7qDc+kwN15k49vXOd8Jj5uXsVx15HLcuhGJ4u8VTxWW0+VVvYlCgDTsfmit5OWVBRLORWNVjTgKMXviRSns1GO9dzgxcZG1tXWueb+Gr3JR5fb6TOzyCovWk2w4kQVu67/U/a8mbbDhXiSuDW6K1aGQrzefCfNPj/JpKI3m2Hf3+2cjfaNfriho9eFYJxVK2tgMF/gYjxJznFfRo+UbGuYixbLceDqZfK2e56QEi0SQvgM99/dDHRlTdoT6Qm1otV1awJZoIWrkcEKbegoxaVkmp6s69fVtGTHUyirgFZTPepcjBjIDe93zJqZKQjgZExUoYAeCcPw9SwBYpbFzwPxGYUXpfIFCn2DOLmhDxq9I2tm/kqk/YppDbzJmXAc7GhcEQqY/wN1HwPHrWjsdgAAAABJRU5ErkJggg==">
+                        <span class="opttext row justify-content-center">Create</span>
+                      </div>
+                      <div class="col-md-4 col-xl-3 col-lg-4 col-4 text-center">
+                        <img class="optionicon row " (click)="goToMenu('outbox')"
+                          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAA3NCSVQICAjb4U/gAAAACXBIWXMAAADlAAAA5QGP5Zs8AAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAAL1QTFRF////AGbMGoD/AGDPII///+V2/+qaAF7OJYf/G2zFPJP1ZaPXZabiQYG3XKLkKnS/L3a+SZjvS5rtpL6wpMPDPpPvPpPyssSossi9NY/1NZD4sLuRu8y5wcmfwc+2ur+NxNC0MI34MI36Lo34Lo35Lo36Loz5Loz6K4v8K4v929GE4NynJoj+Al/OJon+8N6B8OOg8N6B8OSf8d5/8eWg9+F99+ed+uJ6+uib/eN4/eqaAF7OJIj//+R3/+uZDePOqgAAADt0Uk5TAAoKEBCIiKCgs7O/v8DAxMTExMfHycnMzM/Pz8/R0dPT1dXW1tbX197e5OTs7e3v7/Dw8fH19fn5/f3/4HbCAAAApklEQVQ4T93Sxw7CMAyA4bD33rOMslKgg9FCDO//WKSpLFEJ54gEv3z8DnYUxlTZJ/bAMuy9bwLH1gNns7Z1wFsBmC4NPBNkS5cC5wWo5icClAH2akoECLrDNkBr0PGpHYJrH6B38TVnhkD7Dj8BprvtRAs+/YdkXlZsysYIRnVZISdLSJAGrIGgJrBUDBzvEbgdCACzCBiCAlXLsjjnFRKEiVj/Al42AptcqEiG1AAAAABJRU5ErkJggg==">
+                        <span class="opttext row justify-content-center">Complaints</span>
+                      </div>
+                      <div class="col-md-4 col-xl-3 col-lg-4 col-4 text-center">
+                        <img class="optionicon row " (click)="goToMenu('trash')"
+                          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAA7AAAAOwBeShxvQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAKfSURBVFiF7Za7ctNQEIa/c5HwJU5sA7k+AtDwBFDQMFRAwQxDyxvQpEl4DOoMJRVDHZ4hQ0lBAY4zg+1gCcW2zoVCVq5kYgeZNPkbSbt7zv+f3dXsgWtcMYTfflAi6b9H8AQIZ8w3Aj5C/6V4/HUIIONub915//Q/kAOEzvln8aC8nhuksdxtdQxR4mbOHiWOVsdgjLx3KKBeVTtLDc3ByLHbSRmOfOHEw9TR7hqSoWWxoalX1U7u0wCBFizWNQdDx89+SqAlzZpCK/FPxNZ6erFlkDoac5pqSWaOY2eUxxeUb0hWb4WEgWC3a9j/bfF++ox4D1FiaXUNUgrWmuER+Sno0wYB1KuKWknRiw2tjqExp6ics8FpDIaebmTQWrDS1Bdm8YyAHErBrQXNIHV0+5bowNKsaQL99w1T6+lFFmMcjfmAcjhZ+c4VkKMUSFabkujA0u4ZqiVJvaqQeTk9/EosUeKoVSS36yHTdM6FAgAQUKtkZdiPLa1uynwlU9BPHOVQsHpTo+T0TTuZgDGUFNyc14xSTzywACwuaMLg8n/LVAJyhIGgGVxq6RlM1tozhPCf7m8i2Chis+32XT7v3plmydsrz0AxhRzj4fIXvoWPMD6YJDx+/erFZuEZqMjfk4a2YQZNWBaZgDiKiKMoY2r9OLLFUR66NxYgvhcqQCbZi4A0TQEwxmTPND2chF7kAsSvLeAD2XWpAAExAFJKnLMnfNZZlFKZ32cC9Phu9rwIcoB3W282BWwoqXD25C3LOofMhwgiL0GxEF5mzaXUmQw4e5QBh59NEyLdHoCSCntGgEOoGWeAcW2FkiiZnVaP54ZSEjm2eTcjAd5mGwtgaWUVgOWVNRh/53Mz1OlsBJTlqD1JnLZ2r2jua1wKfwC+JwASZI798QAAAABJRU5ErkJggg==">
+                        <span class="opttext row justify-content-center">Trash</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" style="margin-left: 2px;margin-right: 2px" *ngIf="clientServer == 'Server'">
+          <div class="col-lg-3 col-md-6 col-sm-6 card-stats-warn">
+            <div class="card card-stats ">
+              <div class="card-body ">
+                <div class="row">
+                  <div class="col-5 col-md-4" style="margin:auto">
+                    <div class="icon-big text-center icon-warning">
+                      <!-- <i style="color: #FF9900" class="fa fa-bell " ></i> -->
+                      <img class="iconImg"
+                        src="data:image/png;base64,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">
+                    </div>
+                  </div>
+                  <div class="col-7 col-md-8" style="margin-top:2%">
+                    <div class="numbers">
+                      <div class="row">
+
+                        <div class="col form-group">
+                          <a (click)="goToMenu('pendings')">
+                            <p class="card-category">My NewTickets</p>
+                          </a>
+                          <a (click)="goToMenu('pendings')">
+                            <p class="card-title">{{requestDetails.Mytickets}}</p>
+                          </a>
+                        </div>
+
+
+                        <div class="col form-group" style="margin-top: auto;">
+                          <a (click)="goToMenu('inbox')">
+                            <p class="card-category">My Complaints</p>
+                          </a>
+                          <a (click)="goToMenu('inbox')">
+                            <p class="card-title">{{requestDetails.Inbox}}</p>
+                          </a>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-6 card-stats-success">
+            <div class="card card-stats">
+              <div class="card-body ">
+                <div class="row">
+                  <div class="col-5 col-md-4" style="margin:auto">
+                    <div class="icon-big text-center icon-warning">
+                      <!-- <i style="color: #109618" class="fa fa-folder-open "></i> -->
+                      <img class="iconImg"
+                        src="data:image/png;base64,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">
+                    </div>
+                  </div>
+                  <div class="col-7 col-md-8">
+                    <div class="numbers">
+                      <div class="row">
+
+                        <div class="col form-group">
+                          <a (click)="goToMenu('unassigned')">
+                            <p class="card-category">New Requests </p>
+                          </a>
+                          <a (click)="goToMenu('unassigned')">
+                            <p class="card-title">{{requestDetails.Unassigned}}</p>
+                          </a>
+                        </div>
+
+                        <div class="col form-group">
+                          <a (click)="onChange('deptOpen')">
+                            <p class="card-category">Department Open</p>
+                          </a>
+                          <a (click)="onChange('deptOpen')">
+                            <p class="card-title">{{requestDetails.myTicketsDept}}</p>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-6 card-stats-primary">
+            <div class="card card-stats">
+              <div class="card-body ">
+                <div class="row">
+                  <div class="col-5 col-md-4" style="margin:auto">
+                    <div class="icon-big text-center icon-warning">
+                      <!-- <i style="color: #990099" class="fa fa-users "></i> -->
+                      <img class="iconImg"
+                        src="data:image/png;base64,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">
+                    </div>
+                  </div>
+                  <div class="col-7 col-md-8">
+                    <div class="numbers">
+                      <div class="row">
+                        <div class="col form-group">
+                          <a (click)="onChange('resolvedDept')">
+                            <p class="card-category">Dept Resolved</p>
+                          </a>
+                          <a (click)="onChange('resolvedDept')">
+                            <p class="card-title">{{requestDetails.resolvedDept}}<p>
+                          </a>
+                        </div>
+                        <div class="col form-group">
+                          <a (click)="onChange('resolvedMe')">
+                            <p class="card-category">Resolved Me</p>
+                          </a>
+                          <a (click)="onChange('resolvedMe')">
+                            <p class="card-title">{{requestDetails.resolvedMe}}<p>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-6 card-stats-info">
+            <div class="card card-stats">
+              <div class="card-body ">
+                <div class="row">
+                  <div class="col-5 col-md-4" style="margin:auto">
+                    <div class="icon-big text-center icon-warning">
+                      <!-- <i style="color: #3366CC" class="fa fa-warning " ></i> -->
+                      <img class="iconImg"
+                        src="data:image/png;base64,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">
+                    </div>
+                  </div>
+                  <div class="col-7 col-md-8">
+                    <div class="numbers">
+                      <div class="row">
+                        <div class="col form-group">
+                          <a (click)="onChange('apprPending')">
+                            <p class="card-category">Approval Pending</p>
+                          </a>
+                          <a (click)="onChange('apprPending')">
+                            <p class="card-title">{{requestDetails.apprPendingDept}}</p>
+                          </a>
+                        </div>
+                        <div class="col form-group" style="margin-top: auto;">
+                          <a (click)="onChange('inprogress')">
+                            <p class="card-category">In Progress</p>
+                          </a>
+                          <a (click)="onChange('inprogress')">
+                            <p class="card-title">{{requestDetails.InprogressDept}}</p>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" style="margin-left: 2px;margin-right: 2px">
+          <div class="col-lg-12 col-lg-6">
+            <div class="card ">
+              <div class="card-header" style="margin-bottom: 1%">
+                <i style="color: #3C8DBC;" class="fa fa-line-chart" aria-hidden="true"></i>
+                REPORT
+                <i data-bs-toggle="collapse" data-bs-target="#report" style="margin-left: auto;color: #3C8DBC;"
+                  class="fa pull-right" (click)="isReportChange()"
+                  [ngClass]="{'fa-window-minimize': isReportView===true, 'fa-plus': isReportView===false }"
+                  aria-hidden="true"> </i>
+                <br>
+              </div>
+              <div id="report" class="collapse show">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-12 form-group">
+                      <label>Department</label>
+                      <select style="font-size: 12px" class="form-control form-control-sm" [(ngModel)]="chartDept"
+                        (change)="onChangeDepartment()" #names name="user">
+                        <option *ngFor="let dept of DepartMents" selected="chartDept===dept" [value]="dept">{{dept}}
+                        </option>
+                      </select>
+                    </div>
+                    <div class="col-xl-2 col-lg-3 col-md-4 col-5 form-group">
+                      <label for="sel1">Start Date</label>
+                      <input type=date class="form-control form-control-sm" [(ngModel)]="startDate" id="startDate"
+                        name="startDate">
+                    </div>
+                    <div class="col-xl-2 col-lg-3 col-md-4 col-5 form-group">
+                      <label for="sel1">End Date</label>
+                      <input type=date class="form-control form-control-sm" name="endDate" [(ngModel)]="endDate"
+                        id="endDate">
+                    </div>
+                    <div class="col-xl-1 col-lg-1 col-md-2 col-2 form-group">
+                      <label for="sel1">Filter</label>
+                      <button style="font-size: 12px;background-color:#3C8DBC" (click)="onChangeDepartment()"
+                        class="form-control btn btn-primary">submit</button>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <canvas baseChart height="30" width="100px" [datasets]="lineChartData" [labels]="lineChartLabels"
+                      [options]="lineChartOptions" [colors]="lineChartColors" [legend]="lineChartLegend"
+                      [chartType]="lineChartType">
+                      <!--[plugins]="lineChartPlugins"-->
+                    </canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" style="margin-left: 2px;margin-right: 2px" *ngIf="clientServer == 'Server'">
+          <div class="col-lg-12 col-lg-6">
+            <div class="card">
+              <div class="card-header" style="margin-bottom: 1%">
+                <i style="color: #3C8DBC;" class="fa fa-th-list" aria-hidden="true"></i>
+                STATISTICS
+                <i data-bs-toggle="collapse" data-bs-target="#statistics" style="margin-left: auto;color: #3C8DBC;"
+                  class="fa pull-right " (click)="isStatisticsChange()"
+                  [ngClass]="{'fa-window-minimize': isStatisctics===true, 'fa-plus': isStatisctics===false }"
+                  aria-hidden="true"> </i>
+                <br>
+              </div>
+              <div id="statistics" class="collapse show">
+                <div class="card-body">
+                  <div class="row table-responsive" style="margin-left: 2px;margin-right: 2px">
+                    <table class="table table-bordered table-sm table-hover">
+                      <thead>
+                        <tr>
+                          <th scope="col">Department</th>
+                          <th scope="col">Created</th>
+                          <th scope="col">Unassigned</th>
+                          <th scope="col">Open</th>
+                          <th scope="col">In Progress</th>
+                          <th scope="col">Aproval Pending</th>
+                          <th scope="col">Resolved</th>
+                          <th scope="col">Closed</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let boardTable of dashbordTable" (click)="gotoFilter(boardTable.Department)">
+                          <td>{{boardTable.Department}}</td>
+                          <td>{{boardTable.CreatedT}}</td>
+                          <td>{{boardTable.Unassigned}}</td>
+                          <td>{{boardTable.OpenTicket}}</td>
+                          <td>{{boardTable.Inprogress}}</td>
+                          <td>{{boardTable.ApprovalPending}}</td>
+                          <td>{{boardTable.ResolvedT}}</td>
+                          <td>{{boardTable.ClosedT}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
+
+<!-- LOADING ICON -->
+<div *ngIf="progressval == 'indeterminate'" class="loading">
+  <mat-progress-spinner [mode]="progressval">
+  </mat-progress-spinner>
+</div>
+<!-- LOADING ICON -->

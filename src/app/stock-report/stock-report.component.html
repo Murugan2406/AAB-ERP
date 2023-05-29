@@ -1,0 +1,943 @@
+<div>
+    <div class="loader text-center" *ngIf="isload">
+        <img src="assets/gImg/green.gif" class="load">
+    </div>
+</div>
+<div class="wrapper">
+    <div class="fix">
+        <div class="header">
+            <mat-toolbar color="warn">
+                <mat-toolbar-row>
+                    <button mat-button (click)="backNavigation()"> BACK</button>
+                    <span class="example-spacer"></span>
+                    <button mat-button></button>
+                    <span class="example-spacer"></span>
+                    <button *ngIf="showpageONE" mat-button [matMenuTriggerFor]="menu" class="btn btn-lg"><span
+                            class="material-icons text-white btn btn-lg">
+                            filter_list
+                        </span></button>
+                    <mat-menu #menu="matMenu" class="filterform">
+                        <form [formGroup]="FILTERform">
+                            <div class="row">
+                                <div class="col-sm-12 col-12">
+                                    <mat-form-field class="col-sm-12 col-12" (click)="$event.stopPropagation()">
+                                        <mat-label>Category Selection</mat-label>
+                                        <mat-select formControlName="cat" [(ngModel)]="patch">
+                                            <mat-option *ngFor="let item of SUBLOW" [value]="item.item"
+                                                (click)="changesel(item.item)">
+                                                {{item.item}}</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-12 col-12"
+                                    *ngIf="patchqty == 'Valuewise' || patchcatitem == 'Categorywise'">
+                                    <mat-form-field class="col-sm-12 col-12" (click)="$event.stopPropagation()">
+                                        <mat-label>Rate Applied</mat-label>
+                                        <mat-select formControlName="rate" [(ngModel)]="patchrate">
+                                            <mat-option *ngFor="let item of rate" [value]="item.item">
+                                                {{item.item}}</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-12 col-12" *ngIf="patchcatitem == 'Itemwise'">
+                                    <mat-form-field class="col-sm-12 col-12" (click)="$event.stopPropagation()">
+                                        <mat-label>Qty Applied</mat-label>
+                                        <mat-select formControlName="qty" [(ngModel)]="patchqty">
+                                            <mat-option *ngFor="let item of qtywise" [value]="item.qty">
+                                                {{item.qty}}</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-sm-12 col-12 text-center">
+                                    <mat-checkbox class="example-margin col-sm-12 col-12 small" formControlName="display"
+                                        (change)="checkCheckBoxvalue($event)" (click)="$event.stopPropagation()">Display
+                                        all Category</mat-checkbox>
+                                </div>
+                                <div class="col-sm-12 col-12 text-center">
+                                    <button mat-raised-button color="accent" class="btn btn-sm  rounded searchbtn"
+                                        (click)="searchFilter()">View
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </mat-menu>
+                    <button mat-button routerLink='/dashboard' class="btn btn-lg"> <i
+                            class="fa fa-home text-white btn btn-lg"></i></button>
+                    <button mat-button disabled>
+                        <img class="png-icon" src=".\assets\gImg\a2b2.png" style="max-width:56px;min-width:56px">
+                    </button>
+                </mat-toolbar-row>
+            </mat-toolbar>
+        </div>
+
+    </div>
+    <section *ngIf="showpageONE">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12 col-12 text-center">
+                    <h2 class="mb-0"><u>
+                            Stock Reports</u></h2>
+                </div>
+            </div>
+            <div class="row stockreport">
+                <div class="offset-sm-1 col-sm-10 offset-sm-1 border  py-2 my-2">
+                    <form [formGroup]="StockReportform" id="submitForm" class="stockreportformclass">
+                        <div class="row" *ngIf="!GclientServer">
+                            <div class="col-sm-6">
+                                <mat-form-field class="col-sm-12 col-12">
+                                    <mat-label>Company</mat-label>
+                                    <mat-select formControlName="company" [(ngModel)]="patchcompany">
+                                        <mat-option *ngFor="let item of company" (click)="companychange(item.Company)"
+                                            [value]="item.Company">
+                                            {{item.Company}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-6">
+                                <mat-form-field class="col-sm-12 col-12">
+                                    <mat-label>State</mat-label>
+                                    <mat-select formControlName="state" [(ngModel)]="patchstate">
+                                        <mat-option *ngFor="let item of stateslist" (click)="statechange(item)"
+                                            [value]="item.State">
+                                            {{item.State}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row" *ngIf="!GclientServer">
+                            <div class="col-sm-6">
+                                <mat-form-field class="col-sm-12 col-12">
+                                    <mat-label>Region</mat-label>
+                                    <mat-select formControlName="region" [(ngModel)]="patchregion">
+                                        <mat-option *ngFor="let item of regionList" (click)="Regionchange(item)"
+                                            [value]="item.Region">
+                                            {{item.Region}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-6">
+                                <mat-form-field class="col-sm-12 col-12">
+                                    <mat-label>CostCntr</mat-label>
+                                    <mat-select formControlName="costcntr" [(ngModel)]="patchcostcntr">
+                                        <mat-option *ngFor="let item of Cost" [value]="item.Costcenter"
+                                            (click)="Costcntrchange(item)">
+                                            {{item.Costcenter}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row" *ngIf="!GclientServer">
+                            <div class="col-sm-12 col-12">
+                                <mat-form-field class="col-sm-12 col-12">
+                                    <mat-label>Branch</mat-label>
+                                    <input type="text" [(ngModel)]="patchbranch" id="searchitemb" aria-label="Number"
+                                        matInput [formControl]="Branchloccntrl" [matAutocomplete]="auto"
+                                        placeholder="Select Location">
+                                    <mat-autocomplete #auto="matAutocomplete">
+                                        <mat-option *ngFor="let branchname of Branchlocation"
+                                            (onSelectionChange)="changeloc($event,branchname.brcode)"
+                                            [value]="branchname?.brname">{{ branchname?.brname }}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <mat-form-field class="col-sm-12 col-12">
+                                    <mat-label>From Date</mat-label>
+                                    <input matInput [matDatepicker]="picker" formControlName="fromdate"
+                                        (dateInput)="inputEvent1($event)" [(ngModel)]="patchfromdate">
+                                    <mat-datepicker-toggle matSuffix [for]="picker">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #picker [startAt]="startDate"></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-6">
+                                <mat-form-field class="col-sm-12 col-12">
+                                    <mat-label>To Date</mat-label>
+                                    <input matInput [matDatepicker]="picker1" formControlName="todate"
+                                        (dateInput)="inputEvent($event)" [(ngModel)]="patchtodate">
+                                    <mat-datepicker-toggle matSuffix [for]="picker1">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #picker1></mat-datepicker>
+
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 pt-3">
+                                <div class="row">
+                                    <div class="multiselectstock col-sm-12 col-12" style="position: relative;">
+                                        <label class="cat">Select SubCategory</label>
+                                        <div class="overlaptext" *ngIf="showtrue"> ALL</div>
+                                        <ng-multiselect-dropdown #multi class="dropdown custom-font-size1"
+                                            [settings]="dropdownSettings" [data]="dropdownList" formControlName="subcat"
+                                                   [(ngModel)]="patchsubcat" (onSelect)="onItemSelect($event)"
+                                            (onSelectAll)="onSelectAll($event)" (onDeSelectAll)="onDeselectAll($event)"
+                                            (onDeSelect)="onItemDeSelect($event)">
+                                        </ng-multiselect-dropdown>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 pt-3" *ngIf="patch1 == 'Low level cat'">
+                                <div class="row">
+                                    <div class="multiselectstock col-sm-12 col-12">
+                                        <label class="cat">Select Category</label>
+                                        <div class="overlaptext1" *ngIf="showtrue1"> ALL</div>
+                                        <ng-multiselect-dropdown #multi1 class="dropdown custom-font-size1"
+                                            [settings]="dropdownSettings1" [data]="dropdownList1" formControlName="cat"
+                                            [(ngModel)]="patchcat" (onSelect)="onItemSelect1($event)"
+                                            (onSelectAll)="onSelectAll1($event)"
+                                            (onDeSelectAll)="onDeselectAll1($event)"
+                                            (onDeSelect)="onItemDeSelect1($event)">
+                                        </ng-multiselect-dropdown>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6" *ngIf="patch1 != 'Low level cat'">
+                                <mat-form-field class="col-sm-12 col-12">
+                                    <mat-label>Grid View</mat-label>
+                                    <mat-select formControlName="grid" [(ngModel)]="patchgrid">
+                                        <mat-option *ngFor="let item of gridview" [value]="item.grid">
+                                            {{item.grid}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-sm-6" *ngIf="patch1 == 'Low level cat'">
+                                <mat-form-field class="col-sm-12 col-12">
+                                    <mat-label>Grid View</mat-label>
+                                    <mat-select formControlName="grid" [(ngModel)]="patchgrid">
+                                        <mat-option *ngFor="let item of gridview" [value]="item.grid">
+                                            {{item.grid}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-6">
+                                <mat-form-field class="col-sm-12 col-12">
+                                    <mat-label>Cat-Item</mat-label>
+                                    <mat-select formControlName="catitem" [(ngModel)]="patchcatitem">
+                                        <mat-option *ngFor="let item of catitems" [value]="item.citem"
+                                            (click)="changeitem(patchcatitem)">
+                                            {{item.citem}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-6" *ngIf="patch1 != 'Low level cat'">
+                                <mat-form-field class="col-sm-12 col-12">
+                                    <mat-label>Date-Cons</mat-label>
+                                    <mat-select formControlName="datecon" [(ngModel)]="patchdatecon">
+                                        <mat-option *ngFor="let item of datecons" [value]="item.dcon">
+                                            {{item.dcon}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6" *ngIf="patch1 == 'Low level cat'">
+                                <mat-form-field class="col-sm-12 col-12">
+                                    <mat-label>Date-Cons</mat-label>
+                                    <mat-select formControlName="datecon" [(ngModel)]="patchdatecon">
+                                        <mat-option *ngFor="let item of datecons" [value]="item.dcon">
+                                            {{item.dcon}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-6">
+                                <mat-form-field class="col-sm-12 col-12"
+                                    *ngIf="patchcatitem == 'Itemwise' && patch1 == 'Low level cat'">
+                                    <mat-label>Product</mat-label>
+                                    <input type="text" [(ngModel)]="patchproduct" id="searchitem1" aria-label="Number"
+                                        matInput [formControl]="Productcntrl" [matAutocomplete]="auto1"
+                                        placeholder="Select ProductName">
+                                    <mat-autocomplete #auto1="matAutocomplete">
+                                        <mat-option *ngFor="let Product of itemlist"
+                                            (onSelectionChange)="Productchange($event.source.value,Product.icode)"
+                                            [value]="Product?.iname">{{ Product?.iname }}</mat-option>
+                                    </mat-autocomplete>
+                                 
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-12 col-12" *ngIf="patchcatitem == 'Itemwise' && patch1 != 'Low level cat'">
+                                <mat-form-field class="col-sm-12 col-12">
+                                    <mat-label>Product</mat-label>
+                                    <input type="text" [(ngModel)]="patchproduct" id="searchitem1" aria-label="Number"
+                                        matInput [formControl]="Productcntrl" [matAutocomplete]="auto1"
+                                        placeholder="Select ProductName">
+                                    <mat-autocomplete #auto1="matAutocomplete">
+                                        <mat-option *ngFor="let Product of itemlist"
+                                            (onSelectionChange)="Productchange($event.source.value,Product.icode)"
+                                            [value]="Product?.iname">{{ Product?.iname }}</mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-12 text-center">
+                                <button class="btn view rounded-0 px-3 py-1"
+                                    (click)="StockviewONE()"><span>View</span></button>
+                            </div>
+                           
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="modal fade" id="getdate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm offset-sm-1 col-sm-10 offset-sm-1">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12 col-12 text-center">
+                            <img src="assets/gImg/date.png" alt="" width="40%">
+                            <h6>From date is greater than To date!</h6>
+                            <button mat-raised-button color="accent" class="ok_btn" (click)="closedate()">OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="getsubcat" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-sm offset-sm-1 col-sm-10 offset-sm-1">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12 col-12 text-center">
+                            <img src="assets/gImg/food-icon-7.png" alt="" width="40%">
+                            <h6>Selected Subcategory limit exceeded!</h6>
+                            <button mat-raised-button color="accent" class="ok_btn" (click)="closesub()">OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="getcat" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm offset-sm-1 col-sm-10 offset-sm-1">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12 col-12 text-center">
+                            <img src="assets/gImg/food-icon-7.png" alt="" width="40%">
+                            <h6>Selected Category limit exceeded!</h6>
+                            <button mat-raised-button color="accent" class="ok_btn" (click)="closecat()">OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="backcolor" *ngIf="!showpageONE">
+    <section *ngIf="showpageTWO" >
+        <div class="container-fluid two px-0">
+            <div class="row  col-sm-12 col-12 m-0 p-0">
+                <div *ngIf="patchdatecon == 'Consolidate'" class="col-sm-12 col-12 col-12 text-center p-0">
+                    <ul>
+                        <li><a>Company : </a></li>
+                        <li><b>{{patchcompany}} |</b></li>
+                        <li><a>State : </a></li>
+                        <li><b>{{patchstate}} |</b></li>
+                        <li><a>Region : </a></li>
+                        <li><b>{{patchregion}} |</b></li>
+                        <li><a>Costcntr : </a></li>
+                        <li><b>{{patchcostcntr}} |</b></li>
+                        <li><a>Cat-Item : </a></li>
+                        <li><b>{{patchcatitem}} |</b></li>
+                        <li><a>Date-Cons : </a></li>
+                        <li><b>{{patchdatecon}} |</b></li>
+                        <li><a>Branch : </a></li>
+                        <li><b>{{patchbranch}} |</b></li>
+                        <li><a>From : </a></li>
+                        <li><b>{{patchfromdate|date:'dd-MMM-yy'}} |</b></li>
+                        <li><a>To : </a></li>
+                        <li><b>{{patchtodate|date:'dd-MMM-yy'}} |</b></li>
+                        <li><a>Rate Applied : </a></li>
+                        <li><b>{{patchrate}} |</b></li>
+                        <li *ngIf="patch1 == 'Low level cat'"><a> Category : </a></li>
+                        <li *ngIf="patch1 == 'Low level cat' && stockviewone.categorylist =='ALL'">
+                            <b>{{stockviewone.categorylist}} |</b>
+                        </li>
+                        <li *ngIf="patch1 == 'Low level cat' && stockviewone.categorylist !='ALL' "><b
+                                class="limittext">{{stockviewone.categorylist}} |</b></li>
+                        <li><a>Sub Category : </a></li>
+                        <li *ngIf="stockviewone.subcategorylist == 'ALL'"><b>{{stockviewone.subcategorylist}} </b></li>
+                        <li *ngIf="stockviewone.subcategorylist != 'ALL'"><b
+                                class="limittext">{{stockviewone.subcategorylist}} </b></li>
+                        <li *ngIf="patchcatitem == 'Itemwise'"><a> | Product Name: </a></li>
+                        <li *ngIf="patchcatitem == 'Itemwise'"><b>{{patchproduct}}</b></li>
+                    </ul>
+                </div>
+                <div *ngIf="patchdatecon == 'Datewise' && patchsubcat.length == '1' || patchcat.length == '1'" class="col-sm-12 col-12 col-12 text-center p-0">
+                    <ul>
+                        <li><a>Company : </a></li>
+                        <li><b>{{patchcompany}} |</b></li>
+                        <li><a>State : </a></li>
+                        <li><b>{{patchstate}} |</b></li>
+                        <li><a>Region : </a></li>
+                        <li><b>{{patchregion}} |</b></li>
+                        <li><a>Costcntr : </a></li>
+                        <li><b>{{patchcostcntr}} |</b></li>
+                        <li><a>Cat-Item : </a></li>
+                        <li><b>{{patchcatitem}} |</b></li>
+                        <li><a>Date-Cons : </a></li>
+                        <li><b>{{patchdatecon}} |</b></li>
+                        <li><a>Branch : </a></li>
+                        <li><b>{{patchbranch}} |</b></li>
+                        <li><a>From : </a></li>
+                        <li><b>{{patchfromdate|date:'dd-MMM-yy'}} |</b></li>
+                        <li><a>To : </a></li>
+                        <li><b>{{patchtodate|date:'dd-MMM-yy'}} |</b></li>
+                        <li><a>Rate Applied : </a></li>
+                        <li><b>{{patchrate}} |</b></li>
+                        <li *ngIf="patch1 == 'Low level cat'"><a> Category : </a></li>
+                        <li *ngIf="patch1 == 'Low level cat' && stockviewone.categorylist =='ALL'">
+                            <b>{{stockviewone.categorylist}} |</b>
+                        </li>
+                        <li *ngIf="patch1 == 'Low level cat' && stockviewone.categorylist !='ALL' "><b
+                                class="limittext">{{stockviewone.categorylist}} |</b></li>
+                        <li><a>Sub Category : </a></li>
+                        <li *ngIf="stockviewone.subcategorylist == 'ALL'"><b>{{stockviewone.subcategorylist}} </b></li>
+                        <li *ngIf="stockviewone.subcategorylist != 'ALL'"><b
+                                class="limittext">{{stockviewone.subcategorylist}} </b></li>
+                        <li *ngIf="patchcatitem == 'Itemwise'"><a> | Product Name: </a></li>
+                        <li *ngIf="patchcatitem == 'Itemwise'"><b>{{patchproduct}}</b></li>
+                    </ul>
+                </div>
+                <div *ngIf="patchdatecon == 'Datewise' && patchsubcat.length != '1' && patchcat.length != '1'" class="col-sm-10 col-8 text-center p-0">
+                    <ul>
+                        <li><a>Company : </a></li>
+                        <li><b>{{patchcompany}} |</b></li>
+                        <li><a>State : </a></li>
+                        <li><b>{{patchstate}} |</b></li>
+                        <li><a>Region : </a></li>
+                        <li><b>{{patchregion}} |</b></li>
+                        <li><a>Costcntr : </a></li>
+                        <li><b>{{patchcostcntr}} |</b></li>
+                        <li><a>Cat-Item : </a></li>
+                        <li><b>{{patchcatitem}} |</b></li>
+                        <li><a>Date-Cons : </a></li>
+                        <li><b>{{patchdatecon}} |</b></li>
+                        <li><a>Branch : </a></li>
+                        <li><b>{{patchbranch}} |</b></li>
+                        <li><a>From : </a></li>
+                        <li><b>{{patchfromdate|date:'dd-MMM-yy'}} |</b></li>
+                        <li><a>To : </a></li>
+                        <li><b>{{patchtodate|date:'dd-MMM-yy'}} |</b></li>
+                        <li><a>Rate Applied : </a></li>
+                        <li><b>{{patchrate}} |</b></li>
+                        <li *ngIf="patch1 == 'Low level cat'"><a> Category : </a></li>
+                        <li *ngIf="patch1 == 'Low level cat' && stockviewone.categorylist =='ALL'">
+                            <b>{{stockviewone.categorylist}} |</b>
+                        </li>
+                        <li *ngIf="patch1 == 'Low level cat' && stockviewone.categorylist !='ALL' "><b
+                                class="limittext">{{stockviewone.categorylist}} |</b></li>
+                        <li><a>Sub Category : </a></li>
+                        <li *ngIf="stockviewone.subcategorylist == 'ALL'"><b>{{stockviewone.subcategorylist}} </b></li>
+                        <li *ngIf="stockviewone.subcategorylist != 'ALL'"><b
+                                class="limittext">{{stockviewone.subcategorylist}} </b></li>
+                        <li *ngIf="patchcatitem == 'Itemwise'"><a> | Product Name: </a></li>
+                        <li *ngIf="patchcatitem == 'Itemwise'"><b>{{patchproduct}}</b></li>
+                    </ul>
+                </div>
+                <div class="col-sm-1 col-1">
+                <button class="btn excel" (click)="exportexcelone()">
+                    <i class="fa fa-file-excel-o" aria-hidden="true"> </i></button>
+                </div>
+                <ng-container *ngIf="showdaategroup && storedata.length !=0">
+                    <div class=" col-sm-1 col-3 text-center">
+                        <div class="row border" style="position: relative;">
+                            <div class="col-sm-12 col-12 text-center overalldiv px-0">
+                                <div class="row col-sm-12 col-12 m-0 bgcolor">
+                                    <h6 class="col-sm-10 col-11 text-white">Date</h6>
+                                    <span (click)="showicon()" class="col-sm-2 col-1 p-0" type="button"><i
+                                            class="fa fa-close align-items-center d-flex small float-end text-light"
+                                            aria-hidden="true"></i></span>
+                                </div>
+                                <ul *ngFor="let date of result">
+                                    <div class="alert alert-success small text-dark p-0  rounded-0 border-0 m-0"
+                                        role="alert" [class.selected]="currentpage == date.id" type="button"
+                                        (click)="filterdate(date.id)">
+                                        {{date.id}} <i class="fa fa-caret-right text-success ps-2"></i>
+                                    </div>
+                                </ul>
+                               
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="showicondate">
+                    <div class=" col-sm-1 col-3 text-end">
+                        <span (click)="showdate()">
+                            <img src="assets/gImg/date.png" alt="" width="37%" class="rounded-circle dateimg">
+                        </span>
+                    </div>
+                </ng-container>
+        </div>
+            <div class="row" *ngIf="VERTICALview">
+                <div class="col-sm-12 col-12">
+                    <div class="toclistscroll mb-2">
+                        <table class="table table-hover" id="tableexcelone">
+                            <thead>
+                                <tr>
+                                    <th class="text-start">TRANSACTION</th>
+                                    <th></th>
+                                    <th class="text-end">VALUE</th>
+                                    <th class="text-start">TRANSACTION</th>
+                                    <th></th>
+                                    <th class="text-end">VALUE</th>
+                                </tr>
+                            </thead>
+                            <tbody *ngFor="let item of showstockviewtwo,index as Lsno">
+                                <tr *ngFor="let list of storedata">
+                                    <td class="text-start">{{item.LThead}}</td>
+                                    <td class="text-center">
+                                        <i class="fa fa-arrow-circle-right medium"
+                                            (click)="StockviewTWO(list,item.LRec,item.LThead,list[item.LRec],item.L_OptSel)"
+                                            *ngIf="item.LThead !='' && list[item.LRec]!=0 && item.LRec !=0 && item.LThead !=0 && item.LRec !='' && item.L_Grddblclickopt =='Need dblClick'
+                                           "></i>
+                                    </td>
+                                    <ng-container *ngIf="list[item.LRec] == 0">
+                                        <td>{{empty}} </td>
+                                    </ng-container>
+                                    <ng-container *ngIf="list[item.LRec] != 0">
+                                        <td class="text-end" *ngIf="patchqty !='Qtywise' && item.LRec !='IN-EMPTY'">
+                                            {{list[item.LRec].toFixed(2)}}</td>
+                                        <td class="text-end" *ngIf="patchqty =='Qtywise' && item.LRec !='IN-EMPTY'">
+                                            {{list[item.LRec].toFixed(3)}}</td>
+                                        <td class="text-end" style="padding: 0.55rem!important"
+                                            *ngIf="patchqty =='' && item.LRec =='IN-EMPTY'">{{list[item.LRec]}}</td>
+                                        <td class="text-end" style="padding: 0.55rem!important"
+                                            *ngIf="patchqty !='' && item.LRec =='IN-EMPTY'">{{list[item.LRec]}}</td>
+                                    </ng-container>
+
+                                    <td class="text-start">{{item.RThead}}</td>
+                                    <td class="text-center">
+                                        <i class="fa fa-arrow-circle-right medium"
+                                            (click)="StockviewTWO(list,item.RRec,item.RThead,list[item.RRec],item.R_OptSel)"
+                                            *ngIf="item.RThead !='' && list[item.RRec]!=0  && 
+                                             item.RRec !=0 && item.RThead !=0 && item.RRec!='' && item.R_Grddblclickopt =='Need dblClick'"></i>
+                                    </td>
+                                    <ng-container *ngIf="list[item.RRec] == 0">
+                                        <td>{{empty}}</td>
+                                    </ng-container>
+                                    <ng-container *ngIf="list[item.RRec] != 0">
+                                        <td class="text-end" *ngIf="patchqty !='Qtywise' && item.RRec !='OUT-EMPTY'">
+                                            {{list[item.RRec].toFixed(2)}}</td>
+                                        <td class="text-end" *ngIf="patchqty =='Qtywise' && item.RRec !='OUT-EMPTY'">
+                                            {{list[item.RRec].toFixed(3)}}</td>
+                                        <td class="text-end" style="padding: 0.55rem!important"
+                                            *ngIf="patchqty =='' && item.RRec =='OUT-EMPTY'">{{list[item.RRec]}}</td>
+                                        <td class="text-end" style="padding: 0.55rem!important"
+                                            *ngIf="patchqty !='' && item.RRec =='OUT-EMPTY'">{{list[item.RRec]}}</td>
+                                    </ng-container>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="col-sm-12 col-12 text-center" *ngIf="storedata.length==0 && isload == false">
+                            <img src="assets/gImg/unnamed.png" alt="" width="50%">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" *ngIf="HORIZONTALview">
+                <div class="col-sm-12 col-12">
+                    <div class="toclistscroll mt-1 mb-2">
+                        <table class="table  table1" id="tableexcelone">
+                            <thead>
+                                <tr class="tr1">
+                                    <td *ngFor="let item of showstockviewtwo;let idx = index;" [ngClass]="
+                                    [(item.Align == 'AlignRight')?'AlignRight':'',
+                                    (item.Align == 'AlignLeft')?'AlignLeft':'', idx === 0? 'FirstRow1':'' ]">{{item.TransName}}</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let list of storedata">
+                                    <td *ngFor="let item of showstockviewtwo;let idx = index;" [ngClass]="
+                                    [(item.Align == 'AlignRight')?'AlignRight':'',
+                                    (item.Align == 'AlignLeft')?'AlignLeft':'' , idx === 0? 'FirstRow':'']">
+                                        <ng-container *ngIf="list[item.RecordField] == 0">
+                                            <span>{{list[item.RecordField].toFixed(3)}}</span>
+                                        </ng-container>
+                                        <ng-container >
+                                            <span class="text-center" *ngIf="item.Align == 'AlignLeft'">
+                                                {{list[item.RecordField]}}
+                                            </span>
+                                            <span class="text-center" *ngIf="item.TransName == 'BALANCE'|| item.TransName == 'CLOSING'">
+                                                {{list[item.RecordField].toFixed(2)}}
+                                            </span>
+                          
+                                            <span class="text-center cursor-pointer"
+                                                *ngIf="patchqty !='Qtywise' && item.Align == 'AlignRight' && item.Grddblclickopt == 'Need dblClick' && list[item.RecordField]!='0'"
+                                                (dblclick)="StockviewTWOhor(item,list.others,list[item.RecordField],item.OptSel,list)">
+                                                {{list[item.RecordField].toFixed(2)}}
+                                            </span>
+                                            <span class="text-center cursor-pointer"
+                                            *ngIf="patchqty !='Qtywise' && item.Align == 'AlignRight' && item.Grddblclickopt !== 'Need dblClick' && list[item.RecordField]!='0'">
+                                            {{list[item.RecordField].toFixed(2)}}
+                                        </span>
+                                            <span class="text-center cursor-pointer "
+                                                *ngIf="patchqty =='Qtywise' && item.Align == 'AlignRight' && item.Grddblclickopt == 'Need dblClick' && list[item.RecordField]!='0'"
+                                                (dblclick)="StockviewTWOhor(item,list.others,list[item.RecordField],item.OptSel,list)">
+                                                {{list[item.RecordField].toFixed(3)}}
+                                            </span>
+
+                                            <span class="text-center cursor-pointer "
+                                            *ngIf="patchqty =='Qtywise' && item.Align == 'AlignRight' && item.Grddblclickopt !== 'Need dblClick' && list[item.RecordField]!='0'">
+
+                                            {{list[item.RecordField].toFixed(3)}}
+                                        </span>
+                                        </ng-container>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                        <div class="col-sm-12 col-12 text-center" *ngIf="storedata.length==0 && isload == false">
+                            <img src="assets/gImg/unnamed.png" alt="" width="50%">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section *ngIf="showpageTHREE">
+        <div class="container-fluid px-0">
+            <div class="row col-sm-12 col-12">
+                <div class=" offset-sm-1 col-sm-2 col-2 text-center  px-0">
+                    <div class="form-group  mb-0" *ngIf="!showsearchicon">
+                        <span class="material-icons search btn btn-sm" (click)="clickevt()">search
+                        </span>
+                        <input type="text" placeholder="Search..." [(ngModel)]="term2" class="form-control">
+                    </div>
+                  
+                   
+                </div>
+                <div class="col-sm-6 col-8 text-center">
+                    <h6 class="text-uppercase my-1">{{Sub_Grid_Captione}}</h6>
+                </div>
+                <div class=" col-sm-2 col-2  text-end  px-0">
+                    <button class="btn excel m-1" (click)="exportexceltwo()">
+                        <i class="fa fa-file-excel-o" aria-hidden="true"> </i></button>
+                </div>
+              
+           
+            </div>
+         
+            <div class="row">
+                <div class="offset-sm-1 col-sm-10 offset-sm-1">
+                    <div class="toclistscroll mt-1 mb-2">
+                        <table class="table  table-hover" id="tableexceltwo">
+                            <thead>
+                                <tr>
+                                    <th class="text-start  w-50">Branch  
+                                        <span class="material-icons search11 btn btn-sm" (click)="clickevt()">search
+                                        </span>
+                                    </th>
+                                    <th class="w-auto" ></th>
+                                    <th class="w-50 text-end">{{head}} <i class="fa fa-inr" *ngIf="patchqty == 'Valuewise'"></i></th>
+                                </tr>
+                            </thead>
+                            <tbody *ngIf="branchlist.length!=0">
+                                <tr *ngFor="let br of branchlist|filter:term2">
+                                    <td class="text-start textshade">{{br.brname}}</td>
+                                    <td class="text-center tbdy"  (click)="StockviewTHREE(br.brcode,br.brname)">
+                                        <i class="fa fa-arrow-circle-right medium"></i>
+                                    </td>
+                                    <td class="text-end">{{br.BrTransTot.toFixed(2)}}</td>
+                                </tr>
+
+                            </tbody>
+                            <tfoot *ngIf="branchlist!='' && branchlist != undefined && branchlist != []">
+                                <tr>
+                                    <td class="text-start">
+Total
+                                    </td>
+                                    <td ></td>
+                                    <td class="text-end"><i class="fa fa-inr text-success" *ngIf="patchqty == 'Valuewise'"></i>{{totalbr.toFixed(2)}}</td>
+                                </tr>
+                            </tfoot>
+
+                        </table>
+                        <div class="col-sm-12 col-12 text-center"
+                            *ngIf="branchlist == '' || branchlist == undefined || branchlist == [] && isload==false">
+                            <img src="assets/gImg/unnamed.png" alt="" width="50%">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section *ngIf="showpageFOUR">
+        <div class="container-fluid px-0">
+            <div class="row">
+                <div class="col-sm-3 col-3 text-end">
+                    <div class="form-group  mb-0" *ngIf="!showsearchicon">
+                        <span class="material-icons search btn btn-sm" (click)="clickevt()">search
+                        </span>
+                        <input type="text" placeholder="Search..." [(ngModel)]="term1" class="form-control">
+                    </div>
+                </div>
+                <div class="col-sm-9 col-9 text-center" *ngIf="!showsearchicon">
+                    <ul>
+                        <li><a> From : </a></li>
+                        <li><b>{{patchfromdate|date:'dd-MMM-yy'}} |</b></li>
+                        <li><a> To : </a></li>
+                        <li><b>{{patchtodate|date:'dd-MMM-yy'}} |</b></li>
+                        <li><a>Branch : </a></li>
+                        <li *ngIf="patchbranch != 'ALL'"><b>{{patchbranch}} |</b></li>
+                        <li *ngIf="patchbranch == 'ALL'"><b>{{brname}} |</b> </li>
+                        <li><a>Std/Weighted rate : </a></li>
+                        <li><b class="text-capitalise">{{patchrate}} |</b> </li>
+                        <li><a>Qty/Valuewise : </a></li>
+                        <li><b class="text-capitalise">{{patchqty}}</b></li>
+                    </ul>
+                </div>
+                <div class="col-sm-12 col-12 col-12 text-center" *ngIf="showsearchicon">
+                    <ul>
+                        <li><a> From : </a></li>
+                        <li><b>{{patchfromdate|date:'dd-MMM-yy'}} |</b></li>
+                        <li><a> To : </a></li>
+                        <li><b>{{patchtodate|date:'dd-MMM-yy'}} |</b></li>
+                        <li><a>Branch : </a></li>
+                        <li *ngIf="patchbranch != 'ALL'"><b>{{patchbranch}} |</b></li>
+                        <li *ngIf="patchbranch == 'ALL'"><b>{{brname}} |</b> </li>
+                        <li><a>Std/Weighted rate : </a></li>
+                        <li><b class="text-capitalise">{{patchrate}} |</b> </li>
+                        <li><a>Qty/Valuewise : </a></li>
+                        <li><b class="text-capitalise">{{patchqty}}</b></li>
+                    </ul>
+                </div>
+              
+             
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12 col-12">
+                    <div class="toclistscroll mt-1 mb-2">
+                        <table class="table  table-hover" id="tableexcelthree">
+                            <thead>
+                                <tr>
+                                    <th class="text-start">Sno</th>
+                                    <th class="text-start">Date</th>
+                                    <!-- opening -->
+                                    <th class="text-start" *ngIf="brright === 'opening'">Time</th>
+                                    <!-- InwPhyD -->
+                                    <th class="text-start" *ngIf="brright === 'InwPhyD'">Time</th>
+                                    <th class="text-start" *ngIf="brright === 'InwPhyD'">GRN</th>
+                                    <!-- 'factinward' || 'infromsup' || 'ownproduction' || 'returnfrombr' -->
+                                    <th class="text-start" *ngIf="brright === 'factinward' ">Time</th>
+                                    <th class="text-start" *ngIf="brright === 'factinward' ">GRN</th>
+                                    <th class="text-start" *ngIf="brright === 'factinward' ">From</th>
+                                    <th class="text-start" *ngIf="brright === 'factinward' ">DcNo</th>
+                                    <th class="text-start" *ngIf="brright === 'infromsup'">Time</th>
+                                    <th class="text-start" *ngIf="brright === 'infromsup'">GRN</th>
+                                    <th class="text-start" *ngIf="brright === 'infromsup'">From</th>
+                                    <th class="text-start" *ngIf="brright === 'infromsup'">DcNo</th>
+                                    <th class="text-start" *ngIf="brright === 'ownproduction'">Time</th>
+                                    <th class="text-start" *ngIf="brright === 'ownproduction'">GRN</th>
+                                    <th class="text-start" *ngIf="brright === 'ownproduction'">From</th>
+                                    <th class="text-start" *ngIf="brright === 'ownproduction'">DcNo</th>
+                                    <th class="text-start" *ngIf="brright === 'returnfrombr'">Time</th>
+                                    <th class="text-start" *ngIf="brright === 'returnfrombr'">GRN</th>
+                                    <th class="text-start" *ngIf="brright === 'returnfrombr'">From</th>
+                                    <th class="text-start" *ngIf="brright === 'returnfrombr'">DcNo</th>
+                                    <!-- assort || sales -->
+                                    <th class="text-start" *ngIf="brright === 'assort'">BillNo</th>
+                                    <th class="text-start" *ngIf="brright === 'sales'">BillNo</th>
+                                    <!-- gvar1 -->
+                                    <th class="text-start" *ngIf="brright === 'gvar1'">Time</th>
+                                    <th class="text-start" *ngIf="brright === 'gvar1'">GRN</th>
+                                    <th class="text-start" *ngIf="brright === 'gvar1'">From</th>
+                                    <th class="text-start" *ngIf="brright === 'gvar1'">DcNo</th>
+                                    <!-- broken || issuestobr || issuestopro || trays || Sno || returntofac || grindingissue || free || sample || gvar3 || gvar2 || OutPhyD || wastage-->
+                                    <th class="text-start" *ngIf="brright === 'broken' ">Time</th>
+                                    <th class="text-start" *ngIf="brright === 'broken' ">GTN</th>
+                                    <th class="text-start" *ngIf="brright === 'broken' ">From</th>
+
+                                    <th class="text-start" *ngIf="brright ===  'issuestobr'">Time</th>
+                                    <th class="text-start" *ngIf="brright ===  'issuestobr'">GTN</th>
+                                    <th class="text-start" *ngIf="brright ===  'issuestobr'">From</th>
+
+                                    <th class="text-start" *ngIf="brright ===  'issuestopro' ">Time</th>
+                                    <th class="text-start" *ngIf="brright ===  'issuestopro' ">GTN</th>
+                                    <th class="text-start" *ngIf="brright === 'issuestopro' ">From</th>
+
+                                    <th class="text-start" *ngIf="brright === 'trays'">Time</th>
+                                    <th class="text-start" *ngIf="brright === 'trays'">GTN</th>
+                                    <th class="text-start" *ngIf="brright ===  'trays'">From</th>
+
+                                    <th class="text-start" *ngIf="brright === 'Sno' ">Time</th>
+                                    <th class="text-start" *ngIf="brright ===  'Sno' ">GTN</th>
+                                    <th class="text-start" *ngIf="brright ===  'Sno' ">From</th>
+
+                                    <th class="text-start" *ngIf="brright === 'returntofac'">Time</th>
+                                    <th class="text-start" *ngIf="brright === 'returntofac'">GTN</th>
+                                    <th class="text-start" *ngIf="brright ===  'returntofac'">From</th>
+
+                                    <th class="text-start" *ngIf="brright ===  'grindingissue'">Time</th>
+                                    <th class="text-start" *ngIf="brright ===  'grindingissue'">GTN</th>
+                                    <th class="text-start" *ngIf="brright ===  'grindingissue'">From</th>
+
+                                    <th class="text-start" *ngIf="brright === 'free'">Time</th>
+                                    <th class="text-start" *ngIf="brright ===  'free'">GTN</th>
+                                    <th class="text-start" *ngIf="brright ===  'free'">From</th>
+
+                                    <th class="text-start" *ngIf="brright === 'sample' ">Time</th>
+                                    <th class="text-start" *ngIf="brright ===  'sample'">GTN</th>
+                                    <th class="text-start" *ngIf="brright ===  'sample' ">From</th>
+
+                                    <th class="text-start" *ngIf="brright === 'gvar3'">Time</th>
+                                    <th class="text-start" *ngIf="brright ===  'gvar3' ">GTN</th>
+                                    <th class="text-start" *ngIf="brright ===  'gvar3'">From</th>
+
+                                    <th class="text-start" *ngIf="brright ===  'gvar2'">Time</th>
+                                    <th class="text-start" *ngIf="brright ===  'gvar2'">GTN</th>
+                                    <th class="text-start" *ngIf="brright ===  'gvar2'">From</th>
+
+                                    <th class="text-start" *ngIf="brright === 'OutPhyD'">Time</th>
+                                    <th class="text-start" *ngIf="brright === 'OutPhyD'">GTN</th>
+                                    <th class="text-start" *ngIf="brright ===  'OutPhyD'">From</th>
+
+                                    <th class="text-start" *ngIf="brright === 'wastage'">Time</th>
+                                    <th class="text-start" *ngIf="brright === 'wastage'">GTN</th>
+                                    <th class="text-start" *ngIf="brright === 'wastage'">From</th>
+                                    <th class="text-start">Product Name
+                                        
+                                            <span class="material-icons search11 btn btn-sm" (click)="clickevt()">search
+                                            </span>
+                                    </th>
+                                    <th class="text-start">Qty</th>
+                                    <th class="text-start">UOM</th>
+                                    <th class="text-end">Rate</th>
+                                    <th class="text-end">Value</th>
+                                    <th class="text-start" >User 
+                                            <button class="btn excel float-end" (click)="exportexcelthree()">
+                                                <i class="fa fa-file-excel-o" aria-hidden="true"> </i></button>
+                                      
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody *ngIf="finalview.length != 0">
+                                <tr *ngFor="let list of finalview|filter:term1;let i = index">
+                                    <td class="text-start">{{i+1}}</td>
+                                    <td class="text-start">{{list.todaydate |date:'dd-MMM-yy'}}</td>
+                                    <!-- opening -->
+                                    <td class="text-start" *ngIf="brright === 'opening'">{{list.timenow}}</td>
+                                    <!-- 'factinward' || 'infromsup' || 'ownproduction' || 'returnfrombr' -->
+                                    <td class="text-start" *ngIf="brright === 'factinward' ">{{list.timenow}}</td>
+                                    <td class="text-start" *ngIf="brright === 'factinward' ">{{list.grnno}}</td>
+                                    <td class="text-start" *ngIf="brright === 'factinward' ">{{list.sname}}</td>
+                                    <td class="text-start" *ngIf="brright === 'factinward' ">{{list.invno}}</td>
+
+                                    <td class="text-start" *ngIf="brright === 'infromsup' ">{{list.timenow}}</td>
+                                    <td class="text-start" *ngIf="brright ===  'infromsup' ">{{list.grnno}}</td>
+                                    <td class="text-start" *ngIf="brright === 'infromsup' ">{{list.sname}}</td>
+                                    <td class="text-start" *ngIf="brright ===  'infromsup' ">{{list.invno}}</td>
+
+                                    <td class="text-start" *ngIf="brright === 'ownproduction' ">{{list.timenow}}</td>
+                                    <td class="text-start" *ngIf="brright === 'ownproduction' ">{{list.grnno}}</td>
+                                    <td class="text-start" *ngIf="brright ===  'ownproduction'">{{list.sname}}</td>
+                                    <td class="text-start" *ngIf="brright ===  'ownproduction' ">{{list.invno}}</td>
+
+                                    <td class="text-start" *ngIf="brright ===  'returnfrombr'">{{list.timenow}}</td>
+                                    <td class="text-start" *ngIf="brright ===  'returnfrombr'">{{list.grnno}}</td>
+                                    <td class="text-start" *ngIf="brright ===  'returnfrombr'">{{list.sname}}</td>
+                                    <td class="text-start" *ngIf="brright ===  'returnfrombr'">{{list.invno}}</td>
+                                    <!-- assort || sales -->
+                                    <td class="text-start" *ngIf="brright === 'assort' ">{{list.invno}}</td>
+
+                                    <td class="text-start" *ngIf="brright ===  'sales'">{{list.invno}}</td>
+                                    <!-- gvar1 -->
+                                    <td class="text-start" *ngIf="brright === 'gvar1'">{{list.timenow}}</td>
+                                    <td class="text-start" *ngIf="brright === 'gvar1'">{{list.grnno}}</td>
+                                    <td class="text-start" *ngIf="brright === 'gvar1'">{{list.sname}}</td>
+                                    <td class="text-start" *ngIf="brright === 'gvar1'">{{list.invno}}</td>
+                                    <!-- InwPhyD -->
+                                    <td class="text-start" *ngIf="brright === 'InwPhyD'">{{list.timenow}}</td>
+                                    <td class="text-start" *ngIf="brright === 'InwPhyD'">{{list.grnno}}</td>
+                                    <!-- broken || issuestobr || issuestopro || trays || Sno || returntofac || grindingissue || free || sample || gvar3 || gvar2 || OutPhyD || wastage-->
+                                    <td class="text-start" *ngIf="brright === 'broken'">{{list.timenow}}</td>
+                                    <td class="text-start" *ngIf="brright === 'broken'">{{list.invno }}</td>
+                                    <td class="text-start" *ngIf="brright === 'broken'">{{list.towhere }}</td>
+
+                                    <td class="text-start" *ngIf="brright ===  'issuestobr'">{{list.timenow}}</td>
+                                    <td class="text-start" *ngIf="brright ===  'issuestobr'">{{list.invno}}</td>
+                                    <td class="text-start" *ngIf="brright ===  'issuestobr'">{{list.towhere}}</td>
+
+                                    <td class="text-start" *ngIf="brright ===  'issuestopro'">{{list.timenow}}</td>
+                                    <td class="text-start" *ngIf="brright ===  'issuestopro'">{{list.invno}}</td>
+                                    <td class="text-start" *ngIf="brright ===  'issuestopro'">{{list.towhere}}</td>
+
+                                    <td class="text-start" *ngIf="brright === 'trays'">{{list.timenow}}</td>
+                                    <td class="text-start" *ngIf="brright === 'trays'">{{list.invno}}</td>
+                                    <td class="text-start" *ngIf="brright === 'trays'">{{list.towhere}}</td>
+
+                                    <td class="text-start" *ngIf="brright ==='Sno'">{{list.todaydate}}</td>
+                                    <td class="text-start" *ngIf="brright ==='Sno'">{{list.invno}}</td>
+                                    <td class="text-start" *ngIf="brright ==='Sno'">{{list.towhere}}</td>
+
+                                    <td class="text-start" *ngIf="brright === 'returntofac'">{{list.timenow}}</td>
+                                    <td class="text-start" *ngIf="brright === 'returntofac'">{{list.invno}}</td>
+                                    <td class="text-start" *ngIf="brright === 'returntofac'">{{list.towhere}}</td>
+
+                                    <td class="text-start" *ngIf="brright ===  'grindingissue'">{{list.timenow}}</td>
+                                    <td class="text-start" *ngIf="brright ===  'grindingissue'">{{list.invno}}</td>
+                                    <td class="text-start" *ngIf="brright ===  'grindingissue'">{{list.towhere}}</td>
+
+                                    <td class="text-start" *ngIf="brright === 'free'">{{list.timenow}}</td>
+                                    <td class="text-start" *ngIf="brright === 'free'">{{list.invno}}</td>
+                                    <td class="text-start" *ngIf="brright === 'free'">{{list.towhere}}</td>
+
+                                    <td class="text-start" *ngIf="brright === 'sample' ">{{list.timenow }}</td>
+                                    <td class="text-start" *ngIf="brright === 'sample' ">{{list.invno}}</td>
+                                    <td class="text-start" *ngIf="brright === 'sample' ">{{list.towhere}}</td>
+
+                                    <td class="text-start" *ngIf="brright === 'gvar3'">{{list.timenow}}</td>
+                                    <td class="text-start" *ngIf="brright === 'gvar3'">{{list.invno}}</td>
+                                    <td class="text-start" *ngIf="brright === 'gvar3'">{{list.towhere}}</td>
+
+                                    <td class="text-start" *ngIf="brright ===  'gvar2'">{{list.timenow}}</td>
+                                    <td class="text-start" *ngIf="brright === 'gvar2'">{{list.invno}}</td>
+                                    <td class="text-start" *ngIf="brright ===  'gvar2'">{{list.towhere}}</td>
+
+                                    <td class="text-start" *ngIf="brright ===  'OutPhyD'">{{list.timenow}}</td>
+                                    <td class="text-start" *ngIf="brright === 'OutPhyD'">{{list.invno}}</td>
+                                    <td class="text-start" *ngIf="brright ===  'OutPhyD'">{{list.towhere}}</td>
+
+                                    <td class="text-start" *ngIf="brright ===  'wastage'">{{list.timenow}}</td>
+                                    <td class="text-start" *ngIf="brright === 'wastage'">{{list.invno}}</td>
+                                    <td class="text-start" *ngIf="brright ===  'wastage'">{{list.towhere}}</td>
+                                    <td class="text-start" matTooltip="{{list.iname}}">{{list.iname}}</td>
+                                    <td class="text-start">{{list.qty}}</td>
+                                    <td class="text-start">{{list.typ}}</td>
+                                    <td class="text-end">{{list.irate.toFixed(2)}}</td>
+                                    <td class="text-end">{{list.ivalue.toFixed(2)}}</td>
+                                    <td class="text-start">{{list.Tuser}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="col-sm-12 col-12 text-center foot" *ngIf="finalview != '' && finalview != undefined && finalview != []">
+                            Total Value : <i class="fa fa-inr text-success"></i> {{total.toFixed(2)}} |
+                            Total Qty :  {{qtytot.toFixed(3)}}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-12 text-center"
+                *ngIf="finalview == undefined || finalview.length == 0 && isload==false">
+                <img src="assets/gImg/unnamed.png" alt="" width="50%">
+            </div>
+            </div>
+        </div>
+    </section>
+</div>
+</div>
+

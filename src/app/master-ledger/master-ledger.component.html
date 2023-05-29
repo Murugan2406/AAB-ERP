@@ -1,0 +1,651 @@
+
+
+<div class=" d-flex align-items-center justify-content-center " *ngIf="loading" style="position: fixed; top:0; bottom: 0; left: 0; right: 0; z-index: 10001 !important; backdrop-filter: blur(2px);">
+    <mat-spinner></mat-spinner>
+</div>
+<div class="gWrapper" >
+    <app-header Titleheader="{{DebtorForm.get('LedgerType').value ?? 'General Ledger'}}" back="true" (BackClick)="backclick()"></app-header>
+    <mat-drawer-container class="example-container" autosize>
+        <mat-drawer #drawer class="example-sidenav" [mode]="sidebarMode" [opened]="sideNavOpen" (closed)="hideAutoCompletepanle()"  hasBackdrop="true">
+            <div class=" text-end" *ngIf="this.sidebarMode === 'over'">
+                <button mat-button class="sidnavCloseButton" type="button" z
+                    (click)=" toggleVoucherData(); drawer.toggle()"><mat-icon>close</mat-icon></button>
+            </div>
+            <form [formGroup]="DebtorForm" id="masterForm" class="masterForm row mx-1 mt-2">
+
+
+                    <div class=" col-12 ">
+                        <mat-label class="gInputLable">Ledger Type</mat-label>
+                        <input class="gInnerInput" (keydown)="keytab($event)" id="ledgerType" [readonly]="loading"
+                            formControlName="LedgerType" matInput [matAutocomplete]="LedgerType">
+                        <mat-autocomplete autoActiveFirstOption #LedgerType="matAutocomplete"
+                            class="gAutoCompleteContainer">
+                            <mat-option *ngFor="let option of ledgerType " [value]="option" class="gSelectOption"
+                                (onSelectionChange)="optionSelected($event, 'finYear')">
+                                {{option}}
+                            </mat-option>
+                        </mat-autocomplete>
+
+                    </div>
+
+                    <div class=" col-12 mt-2">
+                        <mat-label class="gInputLable">Financial Year</mat-label>
+                        <input class="gInnerInput" (keydown)="keytab($event)" id="finYear" formControlName="FinYear"
+                            matInput [matAutocomplete]="finyear" [readonly]="loading" (input)="FinYearFilter($event.target.value)">
+                        <mat-autocomplete autoActiveFirstOption #finyear="matAutocomplete"
+                            class="gAutoCompleteContainer">
+                            <mat-option *ngFor="let option of DisplayedFinyear; let i=index"
+                                [value]="option.fyear" class="gSelectOption"
+                                (onSelectionChange)="YearOnChange($event, option, i-1)">
+                                {{option.fyear}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </div>
+
+
+                    <div class=" col-12  mt-2">
+                        <label for="exampleInputEmail1 " class="gInputLable">Company Name</label>
+                        <input class="gInnerInput" (keydown)="keytab($event)" formControlName="Company" matInput
+                            [matAutocomplete]="company" id="autocmpsingle" (input)="cmpFilter($event.target.value)"
+                           [readonly]="loading">
+                        <mat-autocomplete autoActiveFirstOption #company="matAutocomplete"
+                            class="gAutoCompleteContainer" (keydown)="keytab($event)" [displayWith]="displayCmp">
+                            <mat-option *ngFor="let option of CampNameList" [value]="option" class="gSelectOption"
+                                (onSelectionChange)="CmpChange($event)">
+                                {{option.company}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </div>
+
+                    <div class=" col-12 mt-2">
+                        <label for="exampleInputEmail1" class="gInputLable">Finbook Name</label>
+                        <input class="gInnerInput" (input)="loadFinbook($event.target.value)" id="brFB"
+                            [readonly]="loading" (keydown)="keytab($event)" formControlName="Finbook" matInput
+                            [matAutocomplete]="fbook">
+                        <mat-autocomplete autoActiveFirstOption #fbook="matAutocomplete" class="gAutoCompleteContainer"
+                            [displayWith]="displayFb">
+                            <mat-option class="gSelectOption" *ngFor="let option of FinBookList " [value]="option"
+                                (onSelectionChange)="brFbSelected($event)">
+                                {{option.FbName}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </div>
+
+                    <div class=" col-12 mt-2">
+                        <label for="exampleInputEmail1" class="gInputLable">Ledger Name</label>
+                        <input class="gInnerInput" (input)="filterledgerName($event.target.value)" id="ledger"
+                            [readonly]="loading" (keydown)="keytab($event)" formControlName="ledgername" matInput
+                            [matAutocomplete]="ledger">
+                        <mat-autocomplete autoActiveFirstOption #ledger="matAutocomplete" class="gAutoCompleteContainer"
+                            [displayWith]="displayLedger">
+                            <mat-option class="gSelectOption" *ngFor="let option of ledgerNameArr " [value]="option"
+                                (onSelectionChange)="ledgerSelected($event, option.accCode)">
+                                {{option.AcCodeName}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </div>
+
+
+                    <div class="col-6 mt-2">
+                        <mat-label class="gInputLable">From </mat-label>
+                        <div class="gOuterInput">
+                            <input matInput class="gInnerInput" id="fromDate" [matDatepicker]="picker"
+                                [readonly]="loading" formControlName="fromDate" (change)="datechange('toDate')"
+                                (keydown)="keytab($event)" autocomplete="off">
+                            <mat-datepicker-toggle matSuffix [for]="picker" class="gInputButton">
+                                <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </div>
+                    </div>
+
+                    <div class="col-6  mt-2">
+                        <mat-label class="gInputLable">To </mat-label>
+                        <div class="gOuterInput">
+                            <input matInput class="gInnerInput" id="toDate" [matDatepicker]="picker1"
+                                [readonly]="loading" formControlName="toDate" (change)="datechange('opt1')"
+                                (keydown)="keytab($event)" autocomplete="off">
+                            <mat-datepicker-toggle matSuffix [for]="picker1" class="gInputButton">
+                                <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #picker1></mat-datepicker>
+                        </div>
+                    </div>
+
+                    <div class="col-12 mt-2">
+                        <mat-label class="gInputLable">Report Option 1</mat-label>
+                        <input matInput class="gInnerInput" id="opt1" formControlName="RptOpt1" [matAutocomplete]="rpt1"
+                            (keydown)="keytab($event)" [readonly]="loading" >
+                        <mat-autocomplete autoActiveFirstOption #rpt1="matAutocomplete" class="gAutoCompleteContainer">
+
+                            <mat-option *ngFor="let option of Option1Arr " [value]="option"
+                                class="gSelectOption" (onSelectionChange)="optionSelected($event, 'opt2')">
+                                {{option}}
+                            </mat-option>
+
+                        </mat-autocomplete>
+
+                    </div>
+
+                    <div class="col-12 mt-2" *ngIf="DebtorForm.get('RptOpt1').value === 'Consolidated'">
+                        <mat-label class="gInputLable">Report option 2</mat-label>
+                        <input matInput class="gInnerInput" id="opt2" formControlName="RptOpt2" [matAutocomplete]="rpt2"
+                            (keydown)="keytab($event)" [readonly]="loading" >
+                        <mat-autocomplete autoActiveFirstOption #rpt2="matAutocomplete" class="gAutoCompleteContainer">
+
+                            <mat-option *ngFor="let option of Option2Arr " [value]="option"
+                                class="gSelectOption" (onSelectionChange)="optionSelected($event, 'sumbit')">
+                                {{option}}
+                            </mat-option>
+
+                        </mat-autocomplete>
+                    </div>
+
+                    <div class=" col-12 mt-1 text-center">
+                        <button mat-button class="gSaveButton  mt-4" id="sumbit" type="button" [disabled]="loading"
+                            (click)="FormSubmit()">Submit <mat-icon class="btn-ring"
+                                *ngIf="loading">autorenew</mat-icon> </button>
+                    </div>
+
+       
+            </form>
+            <div class="row mx-2">
+                <div class=" col-12 p-0  ">
+                    <mat-label class="gInputLable"> Shortcuts Keys: </mat-label>
+                </div>
+            
+                    <mat-label class="gInputLable gInputLable1 p-0 col-6 mt-1 " >Alt + A   &nbsp;&nbsp;- &nbsp;&nbsp;Main Selection</mat-label> 
+                    <mat-label class="gInputLable gInputLable1 p-0  col-6 mt-1 ">Alt + S  &nbsp;&nbsp; - &nbsp;&nbsp;Submit </mat-label>
+                    <mat-label class="gInputLable gInputLable1 p-0  col-6 mt-1 ">Esc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    -&nbsp;&nbsp; Go to Back</mat-label>
+                    <mat-label class="gInputLable gInputLable1 p-0 col-6 mt-1 ">Alt + F    &nbsp;&nbsp; - &nbsp;&nbsp;  Search</mat-label>
+                    <mat-label class="gInputLable gInputLable1 p-0 col-6 mt-1 ">Alt + X    &nbsp;&nbsp;-&nbsp;&nbsp;  Exit </mat-label>
+                    <mat-label class="gInputLable gInputLable1 p-0 col-6 mt-1 ">Alt + D    &nbsp;&nbsp;-&nbsp;&nbsp;  XL Download </mat-label>
+
+
+                </div>
+
+        </mat-drawer>
+        <button class="burger" type="button" mat-icon-button (click)="toggleVoucherData(); drawer.toggle()">
+            <mat-icon *ngIf="this.sideNavOpen">keyboard_arrow_left </mat-icon>
+            <mat-icon *ngIf="!this.sideNavOpen">keyboard_arrow_right</mat-icon>
+        </button>
+
+        <!-- [@animImageSlider] -->
+        <div class="example-sidenav-content mx-2" >
+            <div class="row mx-1 chartSection" *ngIf="tableType === 'Monthly'">
+                
+               <div class="col-12 col-md-6 p-xl-0">
+                <div class="row g-6 mb-6">
+                    <div class="col-12 col-xl-6 col-sm-6  mb-1 mt-1 ">
+                        <div class="card shadow border-0">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <span class="gInputLable d-block mb-1">Opening Balance</span>
+                                        <span class="h5 amountTotal mb-0">{{OpeningBalance ?? 0 | gCurrencyPipe}}</span>
+                                        <!-- <span class="h5 amountTotal mb-0">{{OpeningBalance ?? 0 | currency:"USD":"symbol"}}</span> -->
+
+                                    </div>
+                                    <div class="col-auto">
+                                        <div class="icon icon-shape bg-tertiary text-white text-lg rounded-circle">
+                                            <mat-icon> account_balance </mat-icon>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <div class="mb-0 text-sm" >
+                                    <span class="badge badge-pill bg-soft-success text-success me-2" [ngClass]="{'text-success' : prevOpBal >= 0 , 'text-danger': prevOpBal < 0}">
+                                        <i class="fa fa-arrow-up me-1" [ngClass]="{'fa-arrow-up' : prevOpBal >= 0 , 'fa-arrow-down': prevOpBal < 0}"></i>
+
+                                        {{prevOpBal ?? 0}}%
+                                    </span>
+                                    <span class="gInputLable cardLable">Since last year</span>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" col-12 col-xl-6 col-sm-6  mb-1 mt-1">
+                        <div class="card shadow border-0">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <span class="gInputLable d-block mb-1">Closing Balance</span>
+                                        <span class="h5 amountTotal mb-0">{{checlTotalDebitMonthCard(DebitTotal, CreditTotal) ?? 0 | gCurrencyPipe}}</span>
+                                    </div>
+                                    <div class="col-auto">
+                                        <div class="icon icon-shape bg-primary text-white text-lg rounded-circle">
+                                            <mat-icon >payments</mat-icon> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <div class="mb-0 text-sm" >
+                                    <span class="badge badge-pill bg-soft-success text-success me-2" [ngClass]="{'text-success' : prevClBal >= 0 , 'text-danger': prevClBal < 0}">
+                                        <i class="fa fa-arrow-up me-1" [ngClass]="{'fa-arrow-up' : prevClBal >= 0 , 'fa-arrow-down': prevClBal < 0}"></i>
+
+                                        {{prevClBal?? 0}}%
+                                    </span>
+                                    <span class="gInputLable cardLable">Since last year</span>
+                                </div> -->
+                     
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" col-12 col-xl-6 col-sm-6 mb-1 mt-1">
+                        <div class="card shadow border-0">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <span class="gInputLable d-block mb-1">Total Debit </span>
+                                        <span class="h5 amountTotal mb-0">{{DebitTotal ?? 0 | gCurrencyPipe}}</span>
+
+                                    </div>
+                                    <div class="col-auto">
+                                        <div class="icon icon-shape bg-info text-white text-lg rounded-circle">
+                                            <mat-icon>account_balance_wallet</mat-icon>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- <div class="mb-0 text-sm" >
+                                    <span class="badge badge-pill bg-soft-success text-success me-2" [ngClass]="{'text-success' : prevDrTotal >= 0 , 'text-danger': prevDrTotal < 0}">
+
+                                        <i class="fa fa-arrow-up me-1" [ngClass]="{'fa-arrow-up' : prevDrTotal >= 0 , 'fa-arrow-down': prevDrTotal < 0}"></i>
+                                        {{prevDrTotal?? 0}}%
+                                    </span>
+                                    <span class="gInputLable cardLable">Since last year</span>
+                                </div> -->
+            
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" col-12 col-xl-6 col-sm-6  mb-1 mt-1">
+                        <div class="card shadow border-0">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <span class="gInputLable d-block mb-1">Total Credit </span>
+                                        <!-- <span class="h5 amountTotal mb-0">{{CreditTotal ?? 0 |  gCurrencyPipe}}</span> -->
+                                        <span class="h5 amountTotal mb-0">{{ CreditTotal ?? 0| gCurrencyPipe}}</span>
+
+                                    </div>
+                                    <div class="col-auto">
+                                        <div class="icon icon-shape bg-warning text-white text-lg rounded-circle">
+                                          <mat-icon>account_balance_wallet</mat-icon>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <div class="mb-0 text-sm" >
+                                    <span class="badge badge-pill bg-soft-success text-success me-2" [ngClass]="{'text-success' : prevCrTotal >= 0 , 'text-danger': prevCrTotal < 0}">
+                                        <i class="fa fa-arrow-up me-1" [ngClass]="{'fa-arrow-up' : prevCrTotal >= 0 , 'fa-arrow-down': prevCrTotal < 0}"></i>
+
+                                        {{prevCrTotal?? 0}}%
+                                    </span>
+                                    <span class="gInputLable cardLable">Since last year</span>
+                                </div> -->
+                     
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               </div>
+               <div class="col-12 col-md-6">
+                <div class="chart-container">
+                    <canvas  id="myChart" width="400" height="220">{{ chart }}</canvas>
+                </div>
+                </div>
+    
+            </div>
+
+        <!--  =============================================  Monthly table ======================================================-->
+             <div class="gTableSection monthlyTable" *ngIf="tableType === 'Monthly'"  >
+                <div class="gTableActionheaders justify-content-between">
+                    <span *ngIf="datasourceOne.data.length === 0"></span>
+                    <span *ngIf="datasourceOne.data.length >= 0"
+                        class="gInputLable">{{DebtorForm.get('Company').value.company}} &nbsp; |
+                        &nbsp;{{DebtorForm.get('Finbook').value.FbName}} &nbsp;
+                        | &nbsp;{{DebtorForm.get('ledgername').value.AcCodeName}}&nbsp;|
+                        &nbsp;{{DebtorForm.get('fromDate').value | date :'dd-MMM-yyy'}}&nbsp;-
+                        &nbsp;{{DebtorForm.get('toDate').value
+                        | date :'dd-MMM-yyy'}}&nbsp;&nbsp;|&nbsp;Montly Ledger </span>
+                    <div class="d-flex">
+                   
+                        <img Cores px-0 class="png-icon gXlButton curser " src=".\assets\gImg\excel1.png" type="submit"
+                              (click)="downloadXlOne(datasourceOne.data)">
+                    </div>
+
+                </div>
+                <div class="gInnerTable gInnerTable1" >
+                    <table class="gNormalTable-sm table " id="table" #table mat-table [dataSource]="datasourceOne" >
+                        <ng-container *ngFor="let col of monthlyColumn let i = index" [matColumnDef]="col">
+                            <th mat-header-cell  *matHeaderCellDef
+                                [className]="col"
+                                [ngClass]="{'text-end': col ==='DrAmt' || col ==='CrAmt'|| col ==='Balance'}">
+
+                                <ng-container>
+                                    <span *ngIf="col ==='SNo'" style="max-width: 40px !important;">S.No</span>
+                                    <span *ngIf="col ==='MonthsName'">Month</span>
+                                    <span *ngIf="col ==='YearsName'">Year</span>
+                                    <span *ngIf="col ==='CrAmt'">credit</span>
+                                    <span *ngIf="col ==='DrAmt'">Debit</span>
+                                    <span *ngIf="col ==='Balance'">Balance</span>
+                                    <span *ngIf="col ==='View'">View</span>
+
+                                </ng-container>
+
+                            </th>
+                   
+                            <td mat-cell *matCellDef="let row; let idx = index" tabindex="1" (click)="setIndex(idx, i)"(keydown)="rowEnter($event, i, 'Monthly', col, row)"
+                                [ngClass]="{'FirstHeader': row['MonthsName'].startsWith('Opening') , 'text-end': col ==='DrAmt' || col ==='CrAmt'|| col ==='Balance', 'firsttype': col ==='SNo'}"
+                                [className]="col" [ngStyle]="{ 'width' : col !=='MonthsName' ?  '100px' : 'auto' }">
+                                <span *ngIf="col ==='View'" style="min-width: 80px;">
+                                    <button mat-icon-button class="gHandIcon" *ngIf="!row['MonthsName'].startsWith('Opening') " 
+                                    (click)="viewRow(row, 'Monthly');rowClick(i, 'Monthly');" >
+                                        <i class="fa fa-hand-o-right "></i>
+                                    </button>
+                                </span>
+                                <!-- <span *ngIf="col ==='SNo' && row['MonthsName'].startsWith('Opening')" style="max-width: 40px !important;"></span>
+                                <span *ngIf="col ==='SNo' && !row['MonthsName'].startsWith('Opening')" style="max-width: 40px !important;">{{i+1}}</span> -->
+                                <span
+                                *ngIf="col ==='Balance'">
+                                
+                                
+                                {{row['MonthsName'].startsWith('Opening')  ? '':calBalance(datasourceOne.data,row['DrAmt'],row['CrAmt'])| gCurrencyPipe}}</span>
+                                <span  *ngIf="col !=='Balance' && col !=='View' && col !=='DrAmt' && col !=='CrAmt'">{{row[col]}}</span>
+                                <span *ngIf="col ==='DrAmt' || col === 'CrAmt'">{{row[col] | gCurrencyPipe}}</span>
+                                <!-- <span *ngIf="col ==='SNo' && i === 0" style="max-width: 40px !important;"></span>
+                                <span *ngIf="col ==='SNo' && i !== 0" style="max-width: 40px !important;">{{i}}</span>
+                                <span *ngIf="col ==='MonthsName'">{{row[col]}}</span>
+                                <span *ngIf="col === 'YearsName' && i !== 0">{{row[col]}}</span>
+
+                                <span *ngIf="col ==='Balance' && i === 0"></span>
+                                <span
+                                    *ngIf="col ==='Balance' && i !== 0">{{calBalance(datasourceOne.data,row['DrAmt'],row['CrAmt'])|
+                                     gCurrencyPipe}}</span>
+
+                                <span *ngIf="col ==='DrAmt' || col === 'CrAmt'">{{row[col] |
+                                     gCurrencyPipe}}</span>
+                                <span *ngIf="col ==='View'&& i === 0" style="min-width: 80px;">
+                                </span>
+                                <span *ngIf="col ==='View'&& i !== 0" style="min-width: 80px;">
+                                    <button mat-icon-button class="gHandIcon"  (click)="viewRow(row, 'Monthly');rowClick(i, 'Monthly');">
+                                        <i class="fa fa-hand-o-right "></i>
+                                    </button>
+                                </span> -->
+                            </td>
+
+
+                            <td mat-footer-cell *matFooterCellDef
+                                [ngClass]="{'text-end': col ==='DrAmt' || col ==='CrAmt'|| col ==='Balance', 'firsttype': col ==='SNo'}">
+                                <span *ngIf="col ==='SNo'" style="max-width: 40px !important;"></span>
+                                <span *ngIf="col ==='MonthsName'"></span>
+                                <span *ngIf="col ==='YearsName'"> Current Total (Rs)</span>
+                                <span *ngIf="col ==='Balance'"></span>
+                                <span *ngIf="col =='View'"></span>
+                                <span *ngIf="col ==='CrAmt'">{{getTotalCreditMonth(datasourceOne.data) | gCurrencyPipe}}</span>
+                                <span *ngIf="col ==='DrAmt'">{{getTotalDebitMonth(datasourceOne.data) | gCurrencyPipe}}</span>
+                            </td>
+                        </ng-container>
+                        <ng-container *ngFor="let col of monthlyColumnOne" [matColumnDef]="col">
+                            <td mat-footer-cell *matFooterCellDef
+                                [ngClass]="{'text-end': col ==='e' ||col ==='f' || col ==='g' }">
+                                <span *ngIf="col ==='a'" style="max-width: 40px !important;"></span>
+                                <span *ngIf="col ==='b'"></span>
+                                <span *ngIf="col =='c'">Closing Balance (Rs)</span>
+                                <span *ngIf="col =='d'"></span>
+                                <span *ngIf="col =='e'">{{checlTotalDebitMonth(datasourceOne.data) | gCurrencyPipe}}</span>
+                                <span *ngIf="col =='f'">{{checlTotalCreditMonth(datasourceOne.data) | gCurrencyPipe}}</span>
+                                <span *ngIf="col =='g'"></span>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="monthlyColumn"></tr>
+
+                        <tr mat-row *matRowDef="let row;let i = index; columns: monthlyColumn;"
+                            [ngClass]="{'FirstHeader': i === 0 }"  ></tr>
+                     
+                            <tr mat-footer-row *matFooterRowDef="monthlyColumn;sticky: true" class="gtoggleFooter gtoggleFooter1"
+                            [style.display]="datasourceOne.data.length >= 0 ? 'table-row' : 'none'"></tr>
+
+                        <tr mat-footer-row *matFooterRowDef="monthlyColumnOne;sticky: true" class="gtoggleFooter"
+                            [style.display]="datasourceOne.data.length >= 0 ? 'table-row' : 'none'"></tr>
+
+                        <tr class="mat-row" *matNoDataRow>
+                            <td class="mat-cell text-center" [attr.colspan]="monthlyColumn.length+1">
+                                No records found.
+                            </td>
+                        </tr>
+                    </table>
+                    <!-- <div class="SkeltonLoader text-center justify-content-center d-flex" *ngIf="loading">
+                        <mat-spinner></mat-spinner>
+                    </div> -->
+                </div>
+             </div>
+
+       
+        <!--  =============================================  End of Monthly table ======================================================-->
+
+
+         <!--  =============================================  Consolidated table ======================================================-->
+            <div class="gTableSection " *ngIf="tableType === 'Consolidated'"  >
+                <div class="gTableActionheaders justify-content-between">
+                    <span *ngIf="datasourceConsolidated.data.length === 0"></span>
+                    <span *ngIf="datasourceConsolidated.data.length >= 0"
+                        class="gInputLable">{{DebtorForm.get('Company').value.company}} &nbsp; |
+                        &nbsp;{{DebtorForm.get('Finbook').value.FbName}} &nbsp;
+                        | &nbsp;{{DebtorForm.get('ledgername').value.AcCodeName}}&nbsp;|
+                        &nbsp;{{ DetailedStartDate}}&nbsp;-
+                        &nbsp;{{ DetailedEndDate}} &nbsp;&nbsp;|&nbsp;Consolidated Ledger</span>
+                    <div class="d-flex">
+                        <form role="search" class="search-form ml-3">
+                            <input type="search" name="Search" id="search" class="gSearchText1" placeholder="Alt + f"
+                                autocomplete="off" (ngModelChange)="applyFilterConsolidated($event)" [(ngModel)]="searchTempTwo">
+                        </form>
+                        <img Cores px-0 class="png-icon gXlButton curser " src=".\assets\gImg\excel1.png" type="submit"
+                              (click)="downloadXlOne(datasourceConsolidated.data)">
+                    </div>
+
+                </div>
+                <div class="gInnerTable" style="max-height:calc(100vh - 95px);">
+                    <table class="gNormalTable-sm table " id="table" #table mat-table [dataSource]="datasourceConsolidated" matSort>
+                    <ng-container *ngFor="let col of consolidatedColumn let i = index" [matColumnDef]="col">
+                        <th mat-header-cell mat-sort-header *matHeaderCellDef [ngClass]="{'SortHeader': col ==='DrAmt' || col ==='CrAmt'|| col ==='Balance'||col ==='OpCrAmt' || col ==='OpDrAmt'|| col ==='ClsDrAmt'|| col ==='ClsCrAmt'}"
+                            [ngStyle]="{ 'width' : col !=='AcName' ?  '100px' : 'auto' }" [className]="col">
+
+                            <ng-container>
+                                <span *ngIf="col ==='SNo'" style="max-width: 40px !important;">S.No</span>
+
+                                <span *ngIf="col =='AcName'">Particulars</span>
+                                <span *ngIf="col =='AcCode'">Acc Code</span>
+                                <span *ngIf="col =='OpCrAmt'">OpnCr</span>
+                                <span *ngIf="col =='OpDrAmt'">OpnDr </span>
+                                <span *ngIf="col =='CrAmt'">credit</span>
+                                <span *ngIf="col =='ClsDrAmt'">Closing Dr</span>
+                                <span *ngIf="col =='ClsCrAmt'">Closing Cr</span>
+                                <span *ngIf="col =='DrAmt'">Debit</span>
+                                <!-- <span *ngIf="col =='TrnType'">Trans type</span> -->
+                                <span *ngIf="col =='View'">View</span>
+
+                            </ng-container>
+                        </th>
+
+
+                        <td mat-cell *matCellDef="let row; let idx = index"tabindex="1" (click)="setIndex(idx, i)" (keydown)="rowEnter($event, i, 'Consolidated', col, row)"
+                            [ngClass]="{'text-end': col ==='DrAmt' || col ==='CrAmt' || col ==='OpDrAmt' || col ==='OpCrAmt'|| col ==='ClsDrAmt' || col ==='ClsCrAmt' , 'firsttype': col ==='SNo'}"
+                            [className]="col" [ngStyle]="{ 'width' : col !=='AcName' ?   '100px' : 'auto' }" >
+                            <span *ngIf="col ==='SNo'" style="max-width: 40px !important;">{{idx+1}}</span>
+                            <span *ngIf="col ==='AcCode'">{{row[col]}}</span>
+                            <span *ngIf="col === 'AcName' || col==='TrnType'">{{row[col]}}</span>
+                            <span *ngIf="col ==='DrAmt' || col ==='CrAmt'|| col ==='OpCrAmt' || col ==='OpDrAmt'||col ==='ClsDrAmt' || col ==='ClsCrAmt'">{{row[col] | gCurrencyPipe}}</span>
+                            <span *ngIf="col ==='View'" style="min-width: 80px;">
+                                <button mat-icon-button class="gHandIcon"  (click)="setIndex(idx, i);viewRow(row, 'Consolidated');rowClick(i, 'Consolidated')">
+                                    <i class="fa fa-hand-o-right "></i>
+                                </button>
+                            </span>
+                        </td>
+
+                        <td mat-footer-cell *matFooterCellDef
+                            [ngClass]="{'text-end': col ==='DrAmt' || col ==='CrAmt', 'firsttype': col ==='SNo'}"
+                            [className]="col" [ngStyle]="{ 'width' : col !=='AcName' ?  '100px' : 'auto' }">
+                            <span *ngIf="col ==='SNo'" style="max-width: 40px !important;"></span>
+                            <span *ngIf="col ==='AcName'"> Current Total (Rs)</span>
+                            <span *ngIf="col ==='AcCode'"></span>
+                            <span *ngIf="col ==='CrAmt'">{{getTotalCredit(datasourceConsolidated.data) | gCurrencyPipe}}</span>
+                            <span *ngIf="col ==='DrAmt'">{{getTotalDebit(datasourceConsolidated.data) | gCurrencyPipe}}</span>
+                            <span *ngIf="col ==='TrnType'"></span>
+                            <span *ngIf="col =='View'"></span>
+                        </td>
+
+                    </ng-container>
+                    <ng-container *ngFor="let col of consolidatedSecFooter" [matColumnDef]="col">
+                        <td mat-footer-cell *matFooterCellDef
+                            [ngClass]="{'text-end':col ==='g'|| col ==='h'|| col ==='i'|| col ==='j'|| col ==='f', 'firsttype': col ==='a'}"
+                            [className]="col" [ngStyle]="{ 'width' : col !=='c' ?  '100px' : 'auto' }">
+                            <span *ngIf="col ==='a'" style="max-width: 40px !important;"></span>
+                            <span *ngIf="col ==='b'"></span>
+                            <span *ngIf="col =='c'">Closing Balance (Rs)</span>
+                            <!-- <span *ngIf="col =='d'"></span> -->
+                            <span *ngIf="col =='d'"></span>
+                            <span *ngIf="col =='e' && consolidatedSecFooter.length ===  10"></span>
+                            <span *ngIf="col =='f' && consolidatedSecFooter.length ===  10"></span>
+                            <span *ngIf="col =='e' && consolidatedSecFooter.length ===  6">{{checlTotalDebit(datasourceConsolidated.data) |gCurrencyPipe }}</span>
+                            <span *ngIf="col =='f'&& consolidatedSecFooter.length ===  6">{{checlTotalCredit(datasourceConsolidated.data) | gCurrencyPipe }}</span>
+                                <span *ngIf="col =='g' && consolidatedSecFooter.length ===  10">{{checlTotalDebit(datasourceConsolidated.data) | gCurrencyPipe }}</span>
+                                <span *ngIf="col =='h'&& consolidatedSecFooter.length ===  10">{{checlTotalCredit(datasourceConsolidated.data) | gCurrencyPipe }}</span>
+                                    <span *ngIf="col =='i'"></span>
+                                    <span *ngIf="col =='j'"></span>
+                                
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="consolidatedColumn"></tr>
+
+                    <tr mat-row *matRowDef="let row;let i =index; columns: consolidatedColumn;" ></tr>
+                    <tr mat-footer-row *matFooterRowDef="consolidatedColumn;sticky: true"
+                        class="gtoggleFooter gtoggleFooter1"  [style.display]="datasourceConsolidated.data.length >= 0 ? 'table-row' : 'none'"></tr>
+                    <tr mat-footer-row *matFooterRowDef="consolidatedSecFooter;sticky: true"
+                        class="gtoggleFooter gtoggleFooter2"  [style.display]="datasourceConsolidated.data.length >= 0 ? 'table-row' : 'none'"></tr>
+
+                    <tr class="mat-row" *matNoDataRow>
+
+                        <td class="mat-cell text-center" *ngIf="!loading"
+                            [attr.colspan]="consolidatedColumn.length+1">
+                            No records found.
+                        </td>
+
+                    </tr>
+                </table>
+                    </div>
+            </div>
+         <!--  =============================================  End of Consolidated table ======================================================-->
+
+
+
+        <!--  =============================================  Detailed table ======================================================-->
+             <div class="gTableSection " *ngIf="tableType === 'Detailed'"  >
+                <div class="gTableActionheaders justify-content-between" >
+                    <span *ngIf="datasourceDetailed.data.length === 0"></span>
+                    <span *ngIf="datasourceDetailed.data.length >= 0"
+                        class="gInputLable">{{DebtorForm.get('Company').value.company}} &nbsp; |
+                        &nbsp;{{DebtorForm.get('Finbook').value.FbName}} &nbsp;
+                        | &nbsp;{{DebtorForm.get('ledgername').value.AcCodeName}}&nbsp;|
+                        &nbsp;{{DebtorForm.get('fromDate').value | date :'dd-MMM-yyy'}}&nbsp;- &nbsp;{{ DebtorForm.get('toDate').value
+                        | date :'dd-MMM-yyy'}}&nbsp;&nbsp;|&nbsp;Detailed Ledger</span>
+
+                    <div class="d-flex">
+                        <form role="search" class="search-form ml-3">
+                            <input type="search" name="Search" id="search" class="gSearchText1" placeholder="Alt + f"
+                                autocomplete="off" (ngModelChange)="applyFilterDetailed($event)"
+                                [(ngModel)]="searchTempThree">
+                        </form>
+                        <img Cores px-0 class="png-icon gXlButton curser " src=".\assets\gImg\excel1.png" type="submit"
+                              (click)="downloadXlOne(datasourceDetailed.data)">
+                    </div>
+
+
+                </div>
+                <div class="gInnerTable" style="max-height:calc(100vh - 75px);">
+                    <table class="gNormalTable-sm table " id="table" #table mat-table [dataSource]="datasourceDetailed" matSort>
+                        <ng-container *ngFor="let col of detailedColumn let i = index" [matColumnDef]="col">
+                            <th mat-header-cell mat-sort-header *matHeaderCellDef [ngClass]="{'SortHeader': col ==='DrAmt' || col ==='CrAmt'|| col ==='Balance'}"
+                                [ngStyle]="{ 'width' : col !=='Narration' ?  '100px' : 'auto' }" [className]="col">
+
+                                <ng-container>
+                                    <span *ngIf="col ==='SNo'" style="max-width: 40px !important;">S.No</span>
+
+                                    <span *ngIf="col =='Narration'">Particulars</span>
+                                    <span *ngIf="col =='AcDate'">Acc Date</span>
+                                    <span *ngIf="col =='CrAmt'">credit</span>
+                                    <span *ngIf="col =='DrAmt'">Debit</span>
+                                    <span *ngIf="col =='TrnType'">Trans type</span>
+                     
+
+                                </ng-container>
+
+                            </th>
+
+
+                            <td mat-cell *matCellDef="let row; let idx = index"  tabindex="0" (click)="setIndex(idx, i)"
+                                [ngClass]="{'text-end': col ==='DrAmt' || col ==='CrAmt', 'firsttype': col ==='SNo'}"
+                                [className]="col" [ngStyle]="{ 'width' : col !=='Narration' ?  '100px' : 'auto' }">
+                                <span *ngIf="col ==='SNo'" style="max-width: 40px !important;">{{idx+1}}</span>
+                                <span *ngIf="col ==='AcDate'">{{row[col] | date:'dd-MMM-yyyy'}}</span>
+                                <span *ngIf="col === 'Narration' || col==='TrnType'">{{row[col]}}</span>
+                                <span *ngIf="col ==='DrAmt' || col ==='CrAmt'">{{row[col] | gCurrencyPipe}}</span>
+                           
+                            </td>
+                            <td mat-footer-cell *matFooterCellDef
+                                [ngClass]="{'text-end': col ==='DrAmt' || col ==='CrAmt', 'firsttype': col ==='SNo'}"
+                                [className]="col" [ngStyle]="{ 'width' : col !=='Narration' ?  '100px' : 'auto' }">
+                                <span *ngIf="col ==='SNo'" style="max-width: 40px !important;"></span>
+                                <span *ngIf="col ==='Narration'"> Current Total (Rs)</span>
+                                <span *ngIf="col ==='AcDate'"></span>
+                                <span *ngIf="col ==='CrAmt'">{{getTotalCredit(datasourceDetailed.data) | gCurrencyPipe}}</span>
+                                <span *ngIf="col ==='DrAmt'">{{getTotalDebit(datasourceDetailed.data) | gCurrencyPipe}}</span>
+                                <span *ngIf="col ==='TrnType'"></span>
+                       
+                            </td>
+
+                        </ng-container>
+                        <ng-container *ngFor="let col of MonthlySecFooter" [matColumnDef]="col">
+
+                            <td mat-footer-cell *matFooterCellDef
+                                [ngClass]="{'text-end': col ==='e' || col ==='f', 'firsttype': col ==='a'}"
+                                [className]="col" [ngStyle]="{ 'width' : col !=='c' ?  '100px' : 'auto' }">
+                                <span *ngIf="col ==='a'" style="max-width: 40px !important;"></span>
+                                <span *ngIf="col ==='b'"></span>
+                                <span *ngIf="col =='c'">Closing Balance (Rs)</span>
+                                <span *ngIf="col =='d'"></span>
+                                <span *ngIf="col =='e'">{{checlTotalDebit(datasourceDetailed.data) | gCurrencyPipe}}</span>
+                                <span *ngIf="col =='f'">{{checlTotalCredit(datasourceDetailed.data) | gCurrencyPipe}}</span>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="detailedColumn"></tr>
+
+                        <tr mat-row *matRowDef="let row;let i =index; columns: detailedColumn;"></tr>
+                        <tr mat-footer-row *matFooterRowDef="detailedColumn;sticky: true"
+                            class="gtoggleFooter gtoggleFooter1"  [style.display]="datasourceDetailed.data.length >= 0 ? 'table-row' : 'none'"></tr>
+                        <tr mat-footer-row *matFooterRowDef="MonthlySecFooter;sticky: true"
+                            class="gtoggleFooter gtoggleFooter2"  [style.display]="datasourceDetailed.data.length >= 0 ? 'table-row' : 'none'"></tr>
+
+                        <tr class="mat-row" *matNoDataRow>
+
+                            <td class="mat-cell text-center" *ngIf="!loading"
+                                [attr.colspan]="detailedColumn.length+1">
+                                No records found.
+                            </td>
+
+                        </tr>
+                    </table>
+                    <!-- <div class="SkeltonLoader text-center justify-content-center d-flex" *ngIf="loading">
+                        <mat-spinner></mat-spinner>
+                    </div> -->
+                </div>
+            </div>
+
+           
+         <!--  ============================================   End Detailed table ======================================================-->
+        </div>
+    </mat-drawer-container>
+</div>
+
+

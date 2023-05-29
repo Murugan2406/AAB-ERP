@@ -1,0 +1,259 @@
+.btnn {
+    -webkit-border-radius: 23px;
+    -moz-border-radius: 23px;
+    border-radius: 23px;
+    font-family: arial, helvetica, sans-serif;
+    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
+    font-weight: bold;
+    color: #FFFFFF;
+    background-color: rgb(36, 198, 204);
+}
+
+.alert-danger {
+    color: #FFFFFF;
+    background-color: #f169b4;
+    border-color: #800040;
+    text-align: center;
+}
+
+
+/* Absolute Center Spinner */
+
+.loading {
+    position: fixed;
+    z-index: 999;
+    height: 100px;
+    width: 100px;
+    overflow: show;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+
+/* Transparent Overlay */
+
+.loading:before {
+    content: '';
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+h6 {
+    font-family: arial, helvetica, sans-serif;
+    color: #009688;
+    /* color: #1b1f1e; */
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.mat-raised-button {
+    -webkit-border-radius: 23px;
+    -moz-border-radius: 23px;
+    border-radius: 23px;
+    font-family: arial, helvetica, sans-serif;
+    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
+    font-weight: bold;
+    color: #FFFFFF;
+}
+
+.snapshot img {
+    max-width: 250px;
+    max-height: 250px;
+}
+
+a {
+    color: blue;
+    text-decoration: underline;
+    font-size: 14px;
+}
+
+.radius-icon {
+    min-height: 100px;
+    line-height: 100px;
+    background: #f5f5f5;
+}
+
+.radius-icon a {
+    margin: 20px;
+    border-radius: 20px;
+    font-size: 13px;
+    width: 150px;
+    font-weight: bold;
+}
+
+:host ::ng-deep .my-full-screen-dialog {
+    max-width: 100vw !important;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+:host ::ng-deep .my-full-screen-dialog .mat-dialog-container {
+    border-radius: 0;
+    width: 100vw;
+    height: 100vh;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.cdk-global-overlay-wrapper {
+    overflow: auto;
+}
+
+.historyLink {
+    color: var(--red) !important;
+    text-decoration: none;
+    font-size: 20px !important;
+    margin: auto !important;
+}
+
+.historyLink i {
+    font-size: 30px !important;
+}
+
+
+/* Buttons */
+
+.actionBtn {
+    width: 85px;
+    height: 34px;
+    font-size: 15px;
+    line-height: 1;
+    border: 2px solid #26759E;
+    -webkit-box-shadow: #878787 0px 2px 2px;
+    -moz-box-shadow: #878787 0px 2px 2px;
+    box-shadow: #878787 0px 2px 2px;
+    -webkit-border-radius: 23px;
+    -moz-border-radius: 23px;
+    border-radius: 23px;
+    font-family: arial, helvetica, sans-serif;
+    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
+    /* font-weight:bold; */
+    color: #FFFFFF;
+    background-color: #3093C7;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#3093C7), to(#1C5A85));
+    background-image: -webkit-linear-gradient(top, #3093C7, #1C5A85);
+    background-image: -moz-linear-gradient(top, #3093C7, #1C5A85);
+    background-image: -ms-linear-gradient(top, #3093C7, #1C5A85);
+    background-image: -o-linear-gradient(top, #3093C7, #1C5A85);
+    background-image: linear-gradient(to bottom, #3093C7, #1C5A85);
+    // filter: progid: DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#3093C7, endColorstr=#1C5A85);
+}
+
+.actionBtn:hover {
+    border: 2px solid #26759E;
+    background-color: #26759E;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#26759E), to(#133D5B));
+    background-image: -webkit-linear-gradient(top, #26759E, #133D5B);
+    background-image: -moz-linear-gradient(top, #26759E, #133D5B);
+    background-image: -ms-linear-gradient(top, #26759E, #133D5B);
+    background-image: -o-linear-gradient(top, #26759E, #133D5B);
+    background-image: linear-gradient(to bottom, #26759E, #133D5B);
+    // filter: progid: DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#26759E, endColorstr=#133D5B);
+}
+
+.mat-select-panel {
+    margin-top: 5px!important;
+    border-radius: 10px!important;
+    padding: 5px!important;
+}
+
+::ng-deep.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle,
+::ng-deep.mat-radio-outer-circle,
+ ::ng-deep.mat-radio-inner-circle {
+    border-color: #1A194D !important;
+    border-width: 1px !important;
+}
+
+::ng-deep.mat-radio-inner-circle {
+    border-color: #1A194D !important;
+    background-color: #1A194D !important;
+}
+
+::ng-deep.mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element {
+    background-color: rgba(0, 0, 0, .1) !important;
+}
+
+::ng-deep.mat-radio-inner-circle,
+ ::ng-deep.mat-radio-outer-circle {
+    width: 18px !important;
+    height: 18px !important;
+}
+
+::ng-deep.mat-radio-button.mat-radio-disabled .mat-radio-label-content {
+    color: #1A194D!important;
+    cursor: no-drop;
+}
+
+:host:ng-deep .radioContainer.mat-radio-label-content {
+    font-size: 13px;
+    color: #1A194D !important;
+    padding-left: 2px !important;
+}
+
+::ng-deep.mat-dialog-container {
+    padding: 5px !important;
+    border-radius: 15px !important;
+    box-sizing: border-box;
+    overflow: auto;
+    outline: 0;
+    background-color: #ffffff !important;
+    .gDialogContainer {
+        box-shadow: none !important;
+        position: relative;
+        border-radius: 0 0 15px;
+        // background-color: var(--table-actionHeader-bg) !important;
+        box-shadow: 0 8px 32px 0 rgb(31 38 135 / 23%);
+        padding: 10px;
+        backdrop-filter: blur(10px);
+    }
+    .gDialogTitle {
+        background-color: var(--dialog-title-bg);
+        padding: 10px 5px;
+        font-size: 18px !important;
+        margin-bottom: 0 !important;
+        font-weight: 500 !important;
+        font-family: system-ui !important;
+        text-align: center;
+        color: #000;
+        text-transform: capitalize;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 15px 15px 0 0;
+    }
+    .gDialogCloseButton {
+        color: #000;
+        padding: 0;
+        font-weight: 900;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        min-width: 30px;
+        background-color: var(--button-dialog-close-bg-color);
+        line-height: 29px;
+        border: 1px solid transparent;
+        .mat-icon {
+            font-size: 22px;
+            line-height: 24px !important;
+        }
+        .fa {
+            font-size: 22px;
+            line-height: 24px !important;
+        }
+    }
+    .gDialogCloseButton:hover {
+        background-color: var(--button-dialog-close-hover-bg-color);
+        color: #fff;
+    }
+}

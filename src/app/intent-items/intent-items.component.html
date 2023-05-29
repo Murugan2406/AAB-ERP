@@ -1,0 +1,596 @@
+<div *ngIf="progressval == 'indeterminate'" class="loading d-flex align-items-center justify-content-center "
+    style="position: fixed; top:0; bottom: 0; left: 0; right: 0; z-index: 10001 !important; backdrop-filter: blur(2px);">
+    <mat-progress-spinner [mode]="progressval"> </mat-progress-spinner>
+</div>
+
+
+
+<div class="gWrapper gNewWrapper1">
+    <app-header Titleheader="{{headerType}} Item Intent " back="true" (BackClick)="backNavigation()"
+        class=""></app-header>
+
+
+    <div class="content" id="contentnew">
+
+        <div class="row mx-2 justify-content-center gcardContainer1" id="gcardContainer1">
+            <div class='row registerform  p-0' *ngIf="isSelection==='OPTION'">
+                <div class="col-12 col-xl-8   "
+                    [ngClass]="[showItemAdd  && isType === 'Set' ? 'col-12 col-md-6 col-xl-8 mt-xl-2' : 'mt-2',showItemAdd  && isType !== 'Set' ? 'col-12 col-md-9 mt-xl-2' : 'mt-2',
+                !showItemAdd  && isType === 'Set' ? 'col-12 col-md-10 col-xl-8 mt-xl-5' : 'mt-2',!showItemAdd  && isType !== 'Set' ? 'col-12 col-md-10 col-xl-8 mt-xl-5' : 'mt-2', ]">
+
+                    <div class="card newCard row" id='dcCard' [ngClass]="[showItemAdd ?'':'d-flex flex-row']">
+                        <div class="demo img col-12 col-md-6" *ngIf="!showItemAdd">
+
+                            <div class="box">
+                                <div class="hover-point"></div>
+                                <div class="hover-point"></div>
+                                <div class="hover-point"></div>
+                                <div class="hover-point"></div>
+                                <div class="hover-point"></div>
+                                <div class="hover-point"></div>
+                                <div class="hover-point"></div>
+                                <div class="hover-point"></div>
+                                <div class="box-contents"></div>
+                            </div>
+                        </div>
+                        <div class="card-body  col-12 col-md-6" *ngIf="isOption ==='INDENT_SAVE'" [ngClass]="[showItemAdd ?'p-0 w-100':'']">
+                            <div class="gChangeButton">
+                                <button id="view" style="vertical-align:middle" class="gNormalButton gNewButton "
+                                    (click)="toggleform(); " mat-button>View 🔺</button>
+                            </div>
+
+                            <div class="gChangeButton2" *ngIf="showItemAdd">
+                                <button id="view" style="vertical-align:middle" class="gNormalButton gNewButton "
+                                    (click)="showItemAdd = !showItemAdd " mat-button>Back 🔺</button>
+                            </div>
+
+                            <div class="headbox">
+                                <mat-radio-group aria-labelledby="example-radio-group-label" *ngIf="!showItemAdd"
+                                    class="example-radio-group form-group" (change)="changeAssignType($event)">
+                                    <mat-radio-button [checked]="season.value === isType" color="accent"
+                                        class="example-radio-button " *ngFor="let season of assignButton"
+                                        [disabled]="showItemAdd" [value]="season.value">
+                                        {{season.type}}
+                                    </mat-radio-button>
+                                </mat-radio-group>
+                                <mat-radio-group aria-labelledby="example-radio-group-label" *ngIf="showItemAdd"
+                                    class="example-radio-group form-group">
+                                    <mat-radio-button [checked]="true" color="accent" class="example-radio-button "
+                                        [disabled]="showItemAdd">
+                                        Intent Type : {{headerType}}
+                                    </mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+                            <div class="cBody" *ngIf="!showItemAdd">
+
+                                <div class="d-flex row justify-content-between mt-2 mt-md-4 " style="margin-top: 2%;">
+                                    <div class="col-3 col-lg-4 form-group">
+                                    </div>
+                                    <div class="col-9 col-lg-8 form-group">
+                                        <mat-checkbox class="gInputLable" [checked]="isChecked"
+                                            (click)="onclickFullbatch()">
+                                            Load Full Batch</mat-checkbox>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex row justify-content-between mt-2 mt-md-4 ">
+                                    <div class="col-12 col-lg-4 form-group">
+                                        <label class="gInputLable"> Batch Number </label>
+                                    </div>
+                                    <div class="col-12 col-lg-8 form-group">
+
+                                        <input type="text" id="batchNum" class="gNewInput" [(ngModel)]="batch" matInput
+                                            [formControl]="BatchControl" [matAutocomplete]="auto1">
+                                        <mat-autocomplete #auto1="matAutocomplete" class="gAutoCompleteContainer"
+                           >
+                                            <mat-option *ngFor="let item of batches" [value]="item?.brname"
+                                                class="gSelectOption" (onSelectionChange)="changeList(item,'batch')">{{ item?.brname }}
+                                            </mat-option>
+                                        </mat-autocomplete>
+
+                                    </div>
+                                </div>
+
+                                <div class="d-flex row justify-content-between mt-2 mt-md-4 ">
+                                    <div class="col-12 col-lg-4 form-group">
+                                        <label class="gInputLable"> Master Name </label>
+                                    </div>
+                                    <div class="col-12 col-lg-8 form-group">
+
+                                        <input type="text" id="mastername" class="gNewInput" matInput
+                                            [formControl]="MasterControl" [matAutocomplete]="auto2">
+                                        <mat-autocomplete #auto2="matAutocomplete" class="gAutoCompleteContainer"
+                                     >
+                                            <mat-option *ngFor="let item of masters" [value]="item?.brname"
+                                                class="gSelectOption"  (onSelectionChange)="changeList(item,'master')">{{ item?.brname
+                                                }}
+                                            </mat-option>
+                                        </mat-autocomplete>
+
+                                    </div>
+                                </div>
+
+                                <div class="d-flex row justify-content-between mt-2 mt-md-4 "
+                                    *ngIf="isType==='Ind'|| isType==='Sec'">
+                                    <div class="col-12 col-lg-4 form-group">
+                                        <label class="gInputLable" *ngIf="isType==='Ind'"> To Item </label>
+                                        <label class="gInputLable" *ngIf="isType==='Sec'"> To Section </label>
+                                    </div>
+                                    <div class="col-12 col-lg-8 form-group">
+
+                                        <input type="text" id="indentTo" class="gNewInput" matInput
+                                            [formControl]="IndentControl" [matAutocomplete]="auto3">
+                                        <mat-autocomplete #auto3="matAutocomplete" class="gAutoCompleteContainer"
+                                            >
+                                            <mat-option *ngFor="let item of toItems" [value]="item?.brname" 
+                                                class="gSelectOption" (onSelectionChange)="changeList(item,'toItem')">{{ item?.brname
+                                                }}
+                                            </mat-option>
+                                        </mat-autocomplete>
+
+                                    </div>
+                                </div>
+
+                                <div class="d-flex row justify-content-between mt-2 mt-md-4 ">
+                                    <div class="col-12 col-lg-4 form-group"></div>
+                                    <div class="col-12 col-lg-8 form-group">
+                                        <div class="d-flex justify-content-center">
+                                            <div class="p-2 ">
+                                                <button class="linkButtons m-0" id="next" mat-button
+                                                    (click)="selectNextsave()">
+                                                    <i class="fa fa-hand-o-right firstIcon" aria-hidden="true"></i>
+                                                    <span class="gInputLable">Next</span>
+                                                    <i class="fa fa-caret-right" aria-hidden="true"></i>
+                                                </button>
+
+                                            </div>
+                                            <div class="p-2 "></div>
+                                            <div class="p-2 ">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div *ngIf="showItemAdd" class="p-0">
+                            <div class="row m-2 justify-content-between">
+
+
+                                <span class="gInputLable col-12 col-md-4">Batch Number : {{batch}}</span>
+                                <span class="gInputLable col-12 col-md-4">Master Name : {{MasterControl.value}}</span>
+
+                                <span class="gInputLable col-12 col-md-4" *ngIf="isType==='Ind'|| isType==='Sec'">To Item :
+                                    {{IndentControl.value}}</span>
+
+                            </div>
+
+
+                            <div class="mt-2 mt-md-4     " id="ordertype" style="margin-top: 2px;">
+                                <div class="row mx-2">
+
+
+                                    <div class="mb-2  col-xl-2 col-lg-3 col-md-5 col-3">
+                                        <label *ngIf="isType==='Set'" class="gInputLable">Set Code</label>
+                                        <label *ngIf="isType==='Sec'" class="gInputLable">Item Code</label>
+                                        <label *ngIf="isType==='Ind'" class="gInputLable">Item Code</label>
+                                    </div>
+                                    <div class=" mb-2 col-xl-4 col-lg-4 col-md-7 col-9">
+                                        <div class="row">
+                                            <div class="form-group col-10">
+                                                <input type="number" class="gNewInput "
+                                                    (keydown)="enterKeyforCode($event)" id="icode" name="code"
+                                                    [(ngModel)]="sCode" placeholder="Alt + Z" >
+                                            </div>
+                                            <div class="form-group col-2 p-0">
+                                                <button type="button" id="itemDetail" class="InfoButton"
+                                                    (click)="itemCodebyDetails()">
+                                                    <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                                                </button>
+                                                <!-- <button id="itemDetail"class=" gNormalButton gNewButton " style="min-width: 40px !important  ;"  (click)="itemCodebyDetails()">
+                                                <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                                            </button> -->
+                                            </div>
+                                            <!-- <div class="form-group col-3">
+                                            <button id="itemsrch" class=" gNormalButton gNewButton "style="min-width: 50px !important  ;" (click)="openSearch()">
+                                                <i class="fa fa-search" aria-hidden="true"></i>
+                                            </button>
+                                        </div> -->
+                                        </div>
+                                    </div>
+
+                                    <div class=" mb-2 col-xl-2 col-lg-3 col-md-5 col-3">
+                                        <label *ngIf="isType==='Set'" class="gInputLable">Set Name</label>
+                                        <label *ngIf="isType==='Sec'" class="gInputLable">Item Name</label>
+                                        <label *ngIf="isType==='Ind'" class="gInputLable">Item Name</label>
+                                    </div>
+                                    <div class="mb-2 col-xl-4 col-lg-4 col-md-7 col-9">
+                                        <!-- <mat-form-field class="example-full-width"> -->
+                                        <input type="text" id="searchitem" aria-label="Number" matInput
+                                            [formControl]="searchItem" [matAutocomplete]="auto1"
+                                            placeholder="Alt + A" class="gNewInput" id="setName">
+                                        <mat-autocomplete #auto1="matAutocomplete" class="gAutoCompleteContainer">
+                                            <mat-option *ngFor="let item of items" [value]="item?.brname"
+                                                class="gSelectOption" (onSelectionChange)="changeList(item,'search')">{{ item?.brname }}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                        <!-- </mat-form-field> -->
+                                    </div>
+
+
+                                    <div class=" mb-2 col-xl-2 col-lg-3 col-md-5 col-3">
+                                        <label *ngIf="isType==='Set'" class="gInputLable">Set Qty</label>
+                                        <label *ngIf="isType==='Sec'" class="gInputLable">Item Qty</label>
+                                        <label *ngIf="isType==='Ind'" class="gInputLable">Item Qty</label>
+                                    </div>
+                                    <div class=" mb-2 col-xl-4 col-lg-4 col-md-7 col-9">
+                                        <div class="row">
+                                            <div class="form-group col-5">
+                                                <input type="text"
+                                                    [ngClass]="{'input_disabled':isType=='Set' && isOutputchk}"
+                                                    class="gNewInput " id="qty" name="qty" [(ngModel)]="qty"
+                                                    autocomplete="off" (keyup)="qtyKeyup()" [readOnly]="isType=='Set' && isOutputchk"
+                                                    (keypress)="changeValue($event, 'qty', $event.target.value)" (keydown)="enterQty($event)">
+                                            </div>
+                                            <div class="form-group col-5">
+                                                <input type="text" class="gNewInput " id="uom" name="uom"
+                                                    [(ngModel)]="sUom" placeholder="Uom" readonly>
+                                            </div>
+                                            <div class="form-group col-2 p-0">
+                                       
+                                                <button type="button" id="itemAdd" class="InfoButton"
+                                                    (click)="addTolist()">
+                                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                                </button>
+            
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-2  col-xl-2 col-lg-3 col-md-5 col-3" *ngIf="isType==='Set'">
+                                        <label class="gInputLable">Output Qty</label>
+                                    </div>
+                                    <div class=" mb-2 col-xl-4 col-lg-4 col-md-7 col-9" *ngIf="isType==='Set'">
+                                        <div class="row">
+                                            <div class="form-group col-6 col-xl-6">
+                                                <input type="text" [ngClass]="{'input_disabled':!isOutputchk}"
+                                                    class="gNewInput" id="outputqty" name="outputqty" [readonly]="!isOutputchk"
+                                                    [(ngModel)]="outputQty" (keypress)="changeValue($event, 'output', $event.target.value)"
+                                                    (keyup)="outputKeyUp('key')" autocomplete="off">
+                                            </div>
+                                            <div class="col-2 col-lg-2 col-xl-6 ">
+                                                <mat-checkbox class="example-margin mt-2 checkbox-margin gInputLable"
+                                                    [(ngModel)]="isOutputchk"
+                                                    (change)="changeOutput($event.checked)">Output Qty
+                                                </mat-checkbox>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!---------------------------Item selection Start---------------------------------->
+
+
+                            <div class="gTableSection m-2">
+                                <div class="gInnerTable" id="table_list">
+                                    <table class="gNormalTable-sm table">
+                                        <thead>
+                                            <tr>
+                                                <th>Sno</th>
+                                                <th *ngIf="isType==='Set'">Setcode</th>
+                                                <th *ngIf="isType ==='Ind'">Icode</th>
+                                                <th *ngIf="isType ==='Sec'">SecCode</th>
+                                                <th>Particulars</th>
+                                                <th class="text-end">Qty</th>
+                                                
+                                                <th>Uom</th>
+                                                <th style="text-align: center;">Option</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody style="color:#01579b;font-size: 12px;">
+                                            <tr class="noBorder" *ngFor="let items of individuals; let i = index">
+                                                <td>{{i+1}}</td>
+                                                <td>{{items.icode}}</td>
+                                                <td>{{items.iname}}</td>
+                                                <td class="text-end">{{items.iqty}}</td>
+                                                <td>{{items.mment}}</td>
+                                                <td style="text-align: center;">
+                                                    <button mat-icon-button class="gDeleteIcon" (click)="itemRemove(i, items)">
+                                                        <mat-icon>delete</mat-icon>
+                                                    </button>
+
+                                                </td>
+                                            </tr>
+                                            <tr *ngIf="individuals.length ===0">
+                                                <td colspan="6" class="text-center">No record found.</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="d-flex row mb-3 justify-content-center" style="margin-top: 3%;">
+
+
+                                <button class="linkButtons linkButtons2" id="next" mat-button
+                                    (click)="tosaveConfirmation()">
+                                    <i class="fa fa-hand-o-right firstIcon" aria-hidden="true"></i>
+                                    <span class="gInputLable">Send indent to store</span>
+                                    <i class="fa fa-caret-right" aria-hidden="true"></i>
+                                </button>
+                                <button class="linkButtons linkDelete " mat-button (click)="clearIntent()"
+                                    style="width: 100px;">
+                                    <i class="fa fa-close firstIcon" aria-hidden="true"></i>
+                                    <span class="gInputLable">Clear</span>
+                                    <i class="fa fa-caret-right" aria-hidden="true"></i>
+                                </button>
+    
+                                <button type="button" id="itemAdd" class="InfoButton mt-3" [matMenuTriggerFor]="menu1"
+                                    #menuTrigger="matMenuTrigger" (mouseenter)="mouseEnter(menuTrigger)"
+                                    (mouseleave)="mouseLeave(menuTrigger)">
+                                    <i class="fa fa-lightbulb-o" aria-hidden="true"></i>
+                                </button>
+
+                                <mat-menu #menu1="matMenu" [hasBackdrop]="false">
+                                    <div (mouseenter)="mouseEnter(menuTrigger)" (mouseleave)="mouseLeave(menuTrigger)">
+                                        <button mat-menu-item class="gMenuLable1">
+                                            <span class="gMenuLable ">Back&nbsp;: &nbsp;&nbsp; Alt + X </span>
+                                        </button>
+                                        <button mat-menu-item class="gMenuLable1">
+                                            <span class="gMenuLable"> Clear&nbsp;:&nbsp;&nbsp; Alt + C</span>
+                                        </button>
+                                        <button mat-menu-item class="gMenuLable1">
+                                            <span class="gMenuLable"> Save&nbsp;:&nbsp;&nbsp; Alt + S </span>
+                                        </button>
+                                        <button mat-menu-item class="gMenuLable1">
+                                            <span class="gMenuLable"> View&nbsp;: &nbsp;&nbsp; Alt + V</span>
+                                        </button>
+
+                                    </div>
+                                </mat-menu>
+
+                         
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class='col-12 col-md-6 col-xl-4 mt-2 ' *ngIf="showItemAdd  && isType === 'Set'">
+                    <div class="card dcCard" id='dcCard'>
+                        <div *ngIf="isType === 'Set'" class="gTableSection"
+                            style="margin-bottom: 10px;margin-top: 10px;">
+                            <div class="gActionheader">
+                                <span class="gInputLable" style="color: #a2b7f9 !important;">Intent Item Details</span>
+                            </div>
+                            <div class="gInnerTable" id="table_list">
+                                <table class="gNormalTable-sm table itemDetailTable">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Sno</th>
+                                            <th scope="col">Code</th>
+                                            <th scope="col">Item Name</th>
+                                            <th scope="col" style="text-align: right;">Qty</th>
+                                            <th scope="col" style="text-align: right;">Uom</th>
+                                            <!-- <th scope="col" style="text-align: right;">Rate</th> -->
+                                            <!-- <th scope="col" style="text-align: right;">Amount</th> -->
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of rmItems;let i = index">
+                                            <td scope="col">{{i+1}}</td>
+                                            <td scope="col">{{item.ricode}}</td>
+                                            <td scope="col">{{item.riname}}</td>
+                                            <td scope="col" style="text-align: right;">{{item.Issqty | number}}</td>
+                                            <td scope="col" style="text-align: right;">{{item.ruom}}</td>
+                                            <!-- <td scope="col" style="text-align: right;">{{item.rirate}}</td> -->
+                                            <!-- <td scope="col" style="text-align: right;">{{item.rivalue | currency:'INR'}}</td> -->
+                                        </tr>
+                                        <tr *ngIf="rmItems.length ===0">
+                                            <td colspan="6" class="text-center">No record found.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="loginform row p-0">
+
+            
+                    <div class="newCard p-md-4 pb-md-2  col-12  col-md-11 mt-2" [@fadeInOut]>
+                        <div class="gChangeButton">
+                            <button id="view" style="vertical-align:middle"  (click)="toggleform()"
+                                class="gNormalButton gNewButton" mat-raised-button color="accent">Entry 🔺</button>
+                        </div>
+                        <div class="cBody">
+                            <div class="row  justify-content-center" [ngClass]="showSide ? ' ' : 'mx-xl-5 '">
+                                <div [ngClass]="showSide ? 'col-12' : 'col-10  col-md-12 col-xl-9'">
+
+                                    <div class="row">
+                                        <div class="col-12 col-sm-2 col-lg-2 form-group">
+                                            <label class="gInputLable" style="top: 2%;"> From Date
+                                                <strong class="text-danger">*</strong></label>
+                                        </div>
+                                        <div class="col-12 col-sm-3 col-lg-3 form-group">
+                                            <div class="gOuterInput gNewOuterInput">
+                                                <input matInput [matDatepicker]="picker1" class="gNewInput"
+                                                    [max]="today" [(ngModel)]="fromdate" required
+                                                    (keyup)="keyTab($event, 'todate')">
+                                                <mat-datepicker-toggle matSuffix [for]="picker1"
+                                                    class="gInputButton gNewButton">
+                                                    <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                                                </mat-datepicker-toggle>
+                                                <mat-datepicker #picker1></mat-datepicker>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-sm-2 col-lg-2 form-group">
+                                            <label class="gInputLable" style="top: 2%;"> To Date <strong
+                                                    class="text-danger">*</strong></label>
+                                        </div>
+                                        <div class="col-12 col-sm-3 col-lg-3 form-group">
+                                            <div class="gOuterInput gNewOuterInput">
+                                                <input matInput [matDatepicker]="picker2" id="todate" class="gNewInput"
+                                                    [max]="today" [(ngModel)]="todate" required
+                                                    (keyup)="keyTab($event, 'ViewBtn')">
+                                                <mat-datepicker-toggle matSuffix [for]="picker2"
+                                                    class="gInputButton gNewButton">
+                                                    <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                                                </mat-datepicker-toggle>
+                                                <mat-datepicker #picker2></mat-datepicker>
+                                            </div>
+                                        </div>
+                                        <div class="col-3 col-md-1 col-lg-2 form-group d-flex align-items-center">
+                                            <button id="ViewBtn" style="vertical-align:middle;"
+                                                (click)="selectNextView()" class="gNormalButton gViewButton"
+                                                mat-raised-button color="accent">View </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mx-2 mx-md-0">
+
+                                <div class="gTableSection mt-2" id="table_list">
+                                    <div class="gTableActionheaders" style="background-color: #eef4fc !important;">
+                                        <form role="search" class="search-form ml-3">
+                                            <input type="search" name="Search" class="gSearchText" #input
+                                                autocomplete="off" [(ngModel)]="viewSearch" />
+                                        </form>
+
+                                    </div>
+                                    <div class="gInnerTable" style="max-height: calc(100vh - 160px)">
+                            
+                                        <table class="gNormalTable-sm viewTable">
+                                            <thead>
+                                                <tr>
+                                                    <th>Sno</th>
+                                                    <th>BatchNo
+                                                        <i class="fa" (click)="sorts('BatchNo')" [ngClass]="{'fa-sort': column != 'BatchNo', 'fa-sort-asc': (column == 'BatchNo' && isDesc),
+              'fa-sort-desc': (column == 'BatchNo' && !isDesc) }"></i>
+                                                    </th>
+                                                    <th>View</th>
+                                                    <th>trnId<i class="fa" (click)="sorts('trnId')" [ngClass]="{'fa-sort': column != 'trnId', 'fa-sort-asc': (column == 'trnId' && isDesc),
+                                                        'fa-sort-desc': (column == 'trnId' && !isDesc) }"></i></th>
+                                                    <th>Date<i class="fa" (click)="sorts('timenow')" [ngClass]="{'fa-sort': column != 'timenow', 'fa-sort-asc': (column == 'timenow' && isDesc),
+                                                        'fa-sort-desc': (column == 'timenow' && !isDesc) }"></i></th>
+                                                    <th>MasterName<i class="fa" (click)="sorts('MasterName')" [ngClass]="{'fa-sort': column != 'MasterName', 'fa-sort-asc': (column == 'MasterName' && isDesc),
+                                                        'fa-sort-desc': (column == 'MasterName' && !isDesc) }"></i></th>
+                                                    <th>UserName<i class="fa" (click)="sorts('usr')" [ngClass]="{'fa-sort': column != 'usr', 'fa-sort-asc': (column == 'usr' && isDesc),
+                                                        'fa-sort-desc': (column == 'usr' && !isDesc) }"></i></th>
+                                                    <th>Option</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="noBorder" tabindex="1"
+                                                    *ngFor="let items of individuals | orderby: {property: column, direction: direction}|filter:viewSearch; let i = index"
+                                                    [ngClass]="classArrTable[i] ? 'rowClick' : 'rowUnClick'"
+                                                    (keyup)="keyTab1($event, i)">
+                                                    <td>{{i+1}}</td>
+                                                    <td>{{items.BatchNo}}</td>
+                                                    <td>
+                                                        <button mat-icon-button class="gHandIcon"
+                                                            (click)="rowClick(i);viewbyTrn(items.trnId, items.timenow, isType, items)">
+                                                            <i class="fa fa-hand-o-right "></i>
+                                                        </button>
+
+                                                        <span data-bs-toggle="modal" data-bs-target="#scanModal"
+                                                            #scanModalS></span>&nbsp; &nbsp;
+
+                                                    </td>
+                                                    <td>{{items.trnId}}</td>
+                                                    <td>{{items.timenow}}</td>
+                                                    <td> {{items.MasterName}} </td>
+                                                    <td>{{items.usr}}</td>
+                                                    <td>
+                                                        <button mat-icon-button class="gDeleteIcon"
+                                                            (click)="rowClick(i);todeleteConfirmation(items.timenow,isType,items.trnId)">
+                                                            <mat-icon>delete</mat-icon>
+                                                        </button>
+
+                                                    </td>
+                                                </tr>
+                                                <tr *ngIf="individuals.length === 0">
+                                                    <td colspan="7" class="text-center">No record found.</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+            </div>
+
+
+
+        </div>
+    </div>
+    <!-- *ngIf="isSelection==='ITEMVIEW'" -->
+
+
+
+</div>
+
+<!-- gNewModel -->
+<div class="modal " data-bs-backdrop="static" id="scanModal" tabindex="-1" role="dialog"
+    aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered gNewModel">
+        <div class="modal-content card">
+            <div class="modal-header">
+                <span></span>
+                <span class="gInputLable" style="font-size: 16px;">
+                    Detailed View
+                </span>
+
+                <button type="button" class="close InfoButton" id="closebtns" data-bs-dismiss="modal" aria-label="Close"
+                    style="opacity: 1;font-size: 16px;">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+                    <span class="gInputLable col-12 col-md-6">Batch No &nbsp; : &nbsp; {{ModalBatch}}</span>
+                    <span class="gInputLable  col-12 col-md-6"> Transaction Id &nbsp;: &nbsp; {{ModeltrnId}}</span>
+                    <span class="gInputLable  col-12 col-md-6"> Date Time &nbsp;: &nbsp;{{ModalDate}}</span>
+                    <span class="gInputLable  col-12 col-md-6"> Master Name &nbsp;: &nbsp; {{ModelMaster}}</span>
+                    <div class="gTableSection mt-2">
+                        <div class="gInnerTable">
+                            <table class="gNormalTable-sm viewPopUpTable">
+                                <thead>
+                                    <tr>
+                                        <th>Sno</th>
+                                        <th>Item Name</th>
+                                        <th class="text-end">Qty</th>
+                                        <th class="text-end">Pending Qty</th>
+                                        <th>Uom</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="noBorder" *ngFor="let items of items; let i = index">
+                                        <td>{{i+1}}</td>
+                                        <td>{{items.iname}}</td>
+                                        <td class="text-end">{{items.qtyReq}}</td>
+                                        <td class="text-end">{{items.qty}}</td>
+                                        <td> {{items.uom}}</td>
+                                    </tr>
+                                    <tr *ngIf="items.length ===0">
+                                        <td colspan="4" class="text-center">No record found.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>

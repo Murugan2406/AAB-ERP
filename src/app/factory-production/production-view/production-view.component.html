@@ -1,0 +1,100 @@
+
+
+<!-- <div class=" d-flex align-items-center justify-content-center "  *ngIf="progressval == 'indeterminate'"style="position: fixed; top:0; bottom: 0; left: 0; right: 0; z-index: 10001 !important; backdrop-filter: blur(2px);">
+    <mat-spinner></mat-spinner>
+</div> -->
+<div class="loading"  *ngIf="progressval == 'indeterminate'"
+    style="position: fixed; top:0; bottom: 0; left: 0; right: 0; z-index: 10001 !important; backdrop-filter: blur(3px);">
+
+    <div class="pendulum-container">
+
+        <div class="ball-first">
+            <div id="ball-1" class="first"></div>
+            <div id="shadow-1" class="first-shadow"></div>
+        </div>
+        <div id="ball-2"></div>
+
+        <div id="ball-5"></div>
+        <div id="ball-6"></div>
+        <div class="ball-first">
+            <div id="ball-7" class="last"></div>
+            <div id="shadow-2" class="last-shadow"></div>
+        </div>
+    </div>
+
+</div>
+<div class=" mt-2 mx-2 gNewWrapper1">
+    <div class="row mx-2 justify-content-center" style="margin-top: 10px;">
+        <div class="col-5 col-md-1">
+            <label class="gInputLable">From Date</label>
+        </div>
+        <div class="col-7 col-md-2">
+            <!-- <input type="date" [(ngModel)]="viewfrDate" class="gNewInput" id="viewfrdate"
+                name="viewfrdate"> -->
+                <div class="gOuterInput  gNewOuterInput">
+                    <input matInput class="gNewInput" id="fromDate" [matDatepicker]="picker"
+                    [(ngModel)]="viewfrDate" id="viewfrdate"(keyup)="enterKeyEvent($event,'viewtodate')" autocomplete="off">
+                <mat-datepicker-toggle matSuffix [for]="picker" class="gInputButton gNewButton">
+                    <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                </mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                </div>
+        </div>
+        <div class="col-5 col-md-1">
+            <label class="gInputLable">To Date</label>
+        </div>
+        <div class="col-7 col-md-2">
+            <!-- <input type="date" [(ngModel)]="viewtoDate" class="gNewInput" id="viewtodate"
+                name="viewtodate"> -->
+                <div class="gOuterInput  gNewOuterInput">
+                    <input matInput class="gNewInput" id="fromDate" [matDatepicker]="picker2"
+                    [(ngModel)]="viewtoDate" id="viewtodate"(keyup)="enterKeyEvent($event,'save')" autocomplete="off">
+                <mat-datepicker-toggle matSuffix [for]="picker2" class="gInputButton gNewButton">
+                    <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                </mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+                </div>
+        </div>
+        <div class="col-6 col-md-1">
+            <button (click)="viewDataAll()" id="save" class="InfoButton ">
+                <i class="fa fa-arrow-right" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+    <div class="gTableSection mx-2 mt-3">
+        <div class="gTableActionheaders ">
+
+            <form role="search" class="search-form ">
+              <input type="search" name="Search" class="gSearchText" #input
+                  autocomplete="off"
+                  [(ngModel)]="viewSearch1" />
+          </form>
+          </div>
+          <div class="gInnerTable" style="max-height: calc(100vh - 150px);">
+        <table style="width: 100%;" class="gNormalTable-sm table ">
+        <thead>
+            <th style="width: 5%;">Sno</th>
+            <th>Trn No</th>
+            <th>Code</th>
+            <th>Product</th>
+            <th>Weight</th>
+            <th>Uom</th>
+            <th>To</th>
+        </thead>
+        <tbody>
+            <tr *ngFor="let li of viewList|filter:viewSearch1;let i=index">
+                <td style="width: 5%;">{{i+1}}</td>
+                <td>{{li.sno}}</td>
+                <td>{{li.icode}}</td>
+                <td>{{li.iname}}</td>
+                <td>{{li.qty}}</td>
+                <td>{{li.typ}}</td>
+                <td>{{li.tobranch}}</td>
+            </tr>
+            <tr *ngIf="viewList.length === 0">
+                <td colspan="7" class="text-center">No record found</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</div>

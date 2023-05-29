@@ -1,0 +1,7 @@
+<div [formGroup]="form">
+    <mat-radio-group [formControlName]="field.name" class="d-flex gap-3">
+        <mat-radio-button *ngFor="let opt of field.options" required [value]="opt.key" class="example-radio-button" >
+            <span class="gInputLable"> {{opt.label}}</span>
+        </mat-radio-button>
+    </mat-radio-group>
+</div>

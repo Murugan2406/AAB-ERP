@@ -1,0 +1,65 @@
+.linkButtons1{
+  height: 40px;
+  background-color: #ffffff70;
+  margin: 10px 5px ;
+  font-size: 14px;
+  width: 150px !important;
+  border-radius: 25px;
+  box-shadow: 0 0 32px -2px #e6eaf8;
+  color: #3c6aff;
+  padding-left: 1px;
+  transition: all 0.5s;
+  ::ng-deep.mat-button-wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    // transition: all 1s;
+  }
+  .firstIcon{
+    // background-color: #fff;
+    border-radius: 50%;
+    // color: #3c6aff;
+    width: 38px;
+    height: 38px;
+    padding: 12px;
+    transition: all 1s;
+  }
+  ::ng-deep.gInputLable{
+    color: #3c6aff !important;
+    margin-left: -15px !important;
+  }
+}
+
+
+.linkButtons1:hover,.linkButtons1:focus{
+  background-color: #3c6aff;
+  color: #fff;
+  padding-left: 1px;
+  transition: all 0.5s;
+  .firstIcon{
+    background-color: #fff;
+    border-radius: 50%;
+    color: #3c6aff;
+    width: 38px;
+    height: 38px;
+    padding: 12px;
+    transition: all 1s;
+  }
+  ::ng-deep .gInputLable{
+    color: #fff !important;
+    margin-left: -15px !important;
+  }
+}
+.linkDelete:hover,.linkDelete:focus{
+  background-color: #fb6b63;
+  ::ng-deep.gInputLable{
+    color: #fff !important;
+    margin-left: -15px !important;
+  }
+  .firstIcon{
+    color: #fb6b63;
+    font-size: 19px;
+    padding: 10px;
+    padding-left: 8px;
+  }
+}

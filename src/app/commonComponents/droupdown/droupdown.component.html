@@ -1,0 +1,5 @@
+<div [formGroup]="form">
+    <mat-select class="gInnerInput" [id]="field.name" [formControlName]="field.name" (selectionChange)="optionChange($event, field)" [compareWith]="compareFn" >
+        <mat-option class="gSelectOption" *ngFor="let opt of field.options" [value]="opt" >{{opt[opt.key3]}}</mat-option>
+    </mat-select>
+</div>

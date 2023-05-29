@@ -1,0 +1,605 @@
+.toggleFooter {
+    background-color: var(--table-actionHeader-bg) !important;
+
+    td {
+        background-color: transparent;
+        font-weight: 600;
+        border-bottom: none !important;
+        white-space: nowrap;
+        line-height: 22px;
+        height: 22px;
+        text-transform: capitalize;
+        font-family: system-ui;
+        font-size: 12px;
+        padding: 1px 10px !important;
+        color: var(--table-th-color) !important;
+        font-weight: 700 !important;
+        border-bottom: none !important;
+        z-index: 3;
+    }
+}
+
+.gIconButton .mat-icon,
+.gNormalButton .mat-icon {
+    font-size: 18px !important;
+    line-height: 22px !important;
+    font-weight: 600 !important;
+}
+
+.gcardContainer,
+.gTableSection {
+    box-shadow: 0 8px 32px 0 rgb(31 38 135 / 23%);
+    // border: 0.5px solid rgb(31 38 135 / 23%);
+}
+
+.hrline {
+    border-top: 1px dotted var(--button-save-color);
+    padding-top: 20px;
+}
+
+.gInputLable {
+    display: flex;
+    justify-content: space-between;
+}
+
+.gInputButton {
+    ::ng-deep.mat-icon-button {
+        width: 20px !important;
+        height: 18px !important;
+        line-height: 20px !important;
+        color: #fff;
+    }
+}
+
+
+::ng-deep.gDialogBox {
+    resize: both;
+
+    .mat-dialog-container {
+        padding: 5px !important;
+        border-radius: 15px !important;
+        box-sizing: border-box;
+        overflow: auto;
+        outline: 0;
+        background-color: #ffffff !important;
+
+        .gDialogContainer {
+            box-shadow: none !important;
+            position: relative;
+            border-radius: 0 0 15px;
+            // background-color: var(--table-actionHeader-bg) !important;
+            box-shadow: 0 8px 32px 0 rgb(31 38 135 / 23%);
+            padding: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .gDialogTitle {
+            background-color: var(--dialog-title-bg);
+            padding: 2px 5px;
+            font-size: 18px !important;
+            margin-bottom: 0 !important;
+            font-weight: 500 !important;
+            font-family: system-ui !important;
+            text-align: center;
+            color: #000;
+            text-transform: capitalize;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 15px 15px 0 0;
+        }
+
+        .gDialogCloseButton {
+            color: #000;
+            padding: 0;
+            font-weight: 900;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            min-width: 30px;
+            background-color: var(--button-dialog-close-bg-color);
+            line-height: 29px;
+            border: 1px solid transparent;
+
+            .mat-icon {
+                font-size: 22px;
+                line-height: 22px !important;
+            }
+
+            .fa {
+                font-size: 22px;
+                line-height: 22px !important;
+            }
+        }
+
+        .gDialogCloseButton:hover {
+            background-color: var(--button-dialog-close-hover-bg-color);
+            color: #fff;
+        }
+    }
+}
+
+.mainFocus:focus {
+    border: 2px solid var(--input-border-color) !important;
+    box-shadow: 0px 9px 29px var(--button-input-color) !important;
+}
+
+.gSaveButton {
+    border-radius: 15px !important;
+}
+
+.example-spacer {
+    flex: 1 1 auto;
+}
+
+.gSaveButton {
+    mat-icon {
+        font-size: 18px;
+    }
+}
+.gInnerInput{
+    box-sizing: border-box;
+}
+
+.outer-border {
+    border: 1px solid var(--button-save-color) !important;
+    height: 25px !important;
+    border-radius: 10px !important;
+
+    .gInnerInput {
+        height: 23px !important;
+    }
+
+    .gInputButton {
+        height: 24px !important;
+    }
+}
+
+::ng-deep.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle,
+::ng-deep.mat-radio-outer-circle,
+ ::ng-deep.mat-radio-inner-circle {
+    border-color: #1A194D !important;
+    border-width: 1px !important;
+}
+
+::ng-deep.mat-radio-inner-circle {
+    border-color: #1A194D !important;
+    background-color: #1A194D !important;
+}
+
+::ng-deep.mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element {
+    background-color: rgba(0, 0, 0, .1) !important;
+}
+
+::ng-deep.mat-radio-inner-circle,
+ ::ng-deep.mat-radio-outer-circle {
+    width: 18px !important;
+    height: 18px !important;
+}
+
+::ng-deep.mat-radio-button.mat-radio-disabled .mat-radio-label-content {
+    color: #1A194D!important;
+    cursor: no-drop;
+}
+
+:ng-deep .radioContainer.mat-radio-label-content {
+    font-size: 13px;
+    color: #1A194D !important;
+    padding-left: 2px !important;
+}
+
+::ng-deep.mat-progress-spinner svg,
+.mat-progress-spinner {
+    height: 60px !important;
+}
+
+::ng-deep.mat-progress-spinner circle,
+.mat-spinner circle {
+    stroke: var(--button-save-color);
+    stroke-width: 10% !important;
+    stroke-dasharray: 50px !important;
+}
+
+.printScreen {
+
+    ::ng-deep .gNormalTable-sm td,
+    .gNormalTable-sm tr.mat-row {
+        font-size: 9px !important;
+
+    }
+
+    .borderInput,
+    input.mat-input-element {
+        font-size: 11px !important;
+        margin: 0 !important;
+    }
+
+    ::ng-deep.gNormalTable-sm th,
+    .gNormalTable-sm tr.mat-header-row {
+        font-size: 9px !important;
+    }
+}
+
+::ng-deep.gAutoCompleteContainer {
+    padding: 0 !important;
+}
+
+::ng-deep.gSelectOption {
+    margin: 10px 10px !important;
+}
+
+::ng-deep.cdk-overlay-container,
+::ng-deep.header {
+    z-index: 999 !important;
+}
+
+::ng-deep.gModalContent {
+    z-index: 1000 !important;
+}
+
+
+.gTableSection {
+    box-shadow: 0 8px 32px 0 rgb(31 38 135 / 23%);
+
+}
+
+.gIconButton .mat-icon,
+.gSaveButton .mat-icon {
+    font-size: 18px !important;
+    line-height: 22px !important;
+    font-weight: 600 !important;
+}
+
+.redCircle {
+    border: 1px solid #f44336 !important;
+    color: #f44336;
+
+}
+
+.greenCircle {
+    border: 1px solid #449f44 !important;
+    color: #449f44;
+
+}
+
+.borderInput {
+    width: auto !important;
+    font-size: 12px !important;
+    margin-left: -10px !important;
+}
+
+.productName {
+    min-width: 200px;
+}
+.productName1 {
+    min-width: 250px;
+}
+
+
+.AddNewIcon {
+    background-color: var(--button-input-color);
+    border-radius: 50%;
+    color: #fff;
+    margin-left: 5px !important;
+    padding: 1px !important;
+}
+
+.gtoggleFooter {
+    background-color: var(--table-actionHeader-bg) !important;
+    max-height: 25px !important;
+    height: 25px !important;
+
+    td {
+        background-color: var(--table-actionHeader-bg);
+        font-weight: 600;
+        border-bottom: none !important;
+        white-space: nowrap;
+        line-height: 22px;
+        height: 22px;
+        text-transform: capitalize;
+        font-family: system-ui;
+        font-size: 12px;
+        padding: 1px 10px !important;
+        color: #04003a !important;
+        font-weight: 700 !important;
+        border-bottom: none !important;
+        padding-right: 20px !important;
+        position: sticky;
+        bottom: 0;
+    }
+}
+
+.mat-table {
+    width: 100%;
+    display: table;
+}
+
+::ng-deep.mat-menu-panel {
+    min-width: 111px;
+    max-width: revert;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    max-height: calc(100vh - 48px);
+    border-radius: 25px !important;
+    outline: 0;
+    min-height: 64px;
+    padding: 9px;
+    background: #e7eef5;
+    box-shadow: 0 0 16px #bdc0db;
+}
+
+::ng-deep.mat-menu-content:not(:empty) {
+    padding: 0 !important;
+}
+
+::ng-deep button.mat-menu-item {
+    width: 100%;
+    margin: 2px 2px;
+    padding: 0 auto;
+    background-color: white;
+    margin: 9px 0 !important;
+    height: 35px;
+    line-height: 35px;
+    border-radius: 50px;
+    font-family: system-ui;
+    color: #000;
+    font-weight: 500;
+}
+
+.gMenuLable1 {
+    height: 30px !important;
+    line-height: 30px !important;
+    font-size: 13px;
+    min-width: 120px !important;
+}
+
+::ng-deep.mat-menu-item .mat-icon {
+    color: #000;
+}
+
+::ng-deep .mat-bottom-sheet-container-large {
+    max-width: 550px !important;
+    padding: 0 !important;
+    border-radius: 15px 15px 0 0 !important;
+
+}
+
+::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background {
+    background-color: var(--button-save-color) !important;
+}
+
+::ng-deep.mat-checkbox-disabled {
+    opacity: 0.8;
+    cursor: no-drop !important;
+}
+
+button:disabled,
+input:read-only,
+.mat-select-disabled {
+    cursor: no-drop;
+    color: #000000 !important;
+    background-color: #fff8fe94 !important;
+}
+
+.borderLine {
+    border-bottom: 1px dotted #9f9898;
+    padding-bottom: 15px;
+}
+::ng-deep.gSelectOption{
+    margin: 10px 10px !important;
+}
+@media print {
+    @page {
+        margin: 3mm;
+    }
+
+    ::ng-deep .gNormalTable-sm td,
+    .gNormalTable-sm tr.mat-row,
+    ::ng-deep .gNormalTable-sm th,
+    .gNormalTable-sm tr.mat-row {
+        font-size: 7px !important;
+
+    }
+
+}
+
+
+
+
+.loading{
+    //   height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      }
+      .pendulum-container{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      }
+      .ball-first{
+      position: relative;
+      }
+      #ball-1,#ball-2,#ball-3,#ball-4,#ball-5,#ball-6,#ball-7{
+      width: 1em;
+      height: 1em;
+      padding: 0.625rem;
+      border-radius: 50%;
+      // background-color: var(--button-save-color);
+      }
+      #ball-1{
+      background:linear-gradient(to right, #f55e4f, #78c77f);;
+      }
+      #ball-2{
+      background: linear-gradient(to right, #78c77f,#78c77f, #1eb2d4);;
+      position: relative;
+      }
+      
+      #ball-3{
+      // position: relative;
+    //   background-image: linear-gradient(to right, #5f4f5f, #8a484b);
+      }
+      #ball-4{
+      position: relative;
+      // background-image: linear-gradient(to right, #8a484b, #b14239);
+      }
+      #ball-5{
+        background: linear-gradient(to right, #1eb2d4, #1eb2d4);;
+  
+      position: relative;
+      }
+      #ball-6{
+        background: linear-gradient(to right, #1eb2d4,#6fc281, #f6dc19);;
+  
+      position: relative;
+      }
+      #ball-7{
+        background: linear-gradient(to right, #1eb2d4,#f6dc19 ,#f6dc19 ,#f6dc19, #f6dc19);;
+  
+      }
+      #ball-2::before,
+      #ball-3::before,
+      #ball-4::before,
+      #ball-5::before,
+      #ball-6::before{
+      content: '';
+      position: absolute;
+      bottom: -28px;
+      left: 5%;
+      width: 85%;
+      height: 10%;
+      background-color: rgb(119, 119, 119, 0.3);
+      border-radius: 50%;
+      z-index: 100;
+      filter: blur(2px);
+      }
+      
+      #shadow-1, #shadow-2{
+      content: '';
+      position: absolute;
+      bottom: -28px;
+      left: 5%;
+      width: 100%;
+      height: 10%;
+      background-color: rgb(119, 119, 119, 0.3);
+      border-radius: 50%;
+      z-index: 100;
+      filter: blur(2px);
+      }
+      .first{
+      animation: left 0.7s ease-out infinite alternate;
+      }
+      .last{
+      animation: right 0.7s ease-in infinite alternate;
+      }
+      .first-shadow{
+      animation: leftshadow 0.7s ease-out infinite alternate;
+      }
+      .last-shadow{
+      animation:righthadow  0.7s ease-in infinite alternate;
+      }
+      .loader{
+      position: relative;
+      margin-top: 20px;
+      }
+      .loader span{
+      font-size: 22px;
+      color: #3a3837;
+      font-family: system-ui;
+      }
+      @keyframes left{
+      0%,
+      47%{
+        transform: rotate(0) translateX(0);
+      }
+      100%{
+        transform: rotate(50deg) translateX(-5rem);
+      }
+      }
+      @keyframes right{
+      0%
+      {
+        transform: rotate(-50deg) translateX(5rem);
+      }
+      47%,
+      100%{
+        transform: rotate(0) translateX(0);
+      }
+      }
+      
+      @keyframes leftshadow{
+      0%,
+      47%{
+        transform: rotate(0) translateX(0);
+      }
+      100%{
+        transform: rotate(50deg) translateX(-5rem);
+      }
+      }
+      @keyframes righthadow{
+      0%
+      {
+        transform: rotate(-50deg) translateX(5rem);
+      }
+      47%,
+      100%{
+        transform: rotate(0) translateX(0);
+      }
+      }
+      
+      @media only screen and (min-width:769px){
+      .main-content{
+      position: relative;
+      top:159px;
+      }
+      .header{
+      position: fixed;
+      top: 0;
+      z-index: 999 !important;
+      width: 100%;
+      }
+      .footer{
+        position: relative;
+        top: 10em;
+        }
+        .product_tap{
+          margin-top: 2em;
+        }
+      }
+      @media only screen and (max-width:769px){
+      .main-content{
+        position: relative;
+        top:56px;
+      }
+      .header{
+        position: fixed;
+      top: 0;
+      z-index: 999 !important;
+      width: 100%;
+      }
+      .footer{
+        position: relative;
+        top: 7em;
+        }
+      }
+      
+      .rowClick
+{
+  border: none;
+  outline: none;
+  box-shadow: 0px 8px 19px var(--table-tr-hover) !important;
+  td{
+    background-color: #3c6aff1c  !important;
+    color: #000 !important;
+
+  .gEditIcon, .gHandIcon{
+
+    color: #000 !important;
+    border-radius: 50%;
+  }
+  }
+  .stickyR{
+    background-color: #eaefff   !important;
+  }
+}

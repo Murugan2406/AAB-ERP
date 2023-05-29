@@ -1,0 +1,35 @@
+::ng-deep.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle,
+::ng-deep.mat-radio-outer-circle,
+ ::ng-deep.mat-radio-inner-circle {
+    border-color: #1A194D !important;
+    border-width: 1px !important;
+}
+
+::ng-deep.mat-radio-inner-circle {
+    border-color: #1A194D !important;
+    background-color: #1A194D !important;
+}
+
+::ng-deep.mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element {
+    background-color: rgba(0, 0, 0, 1) !important;
+}
+
+::ng-deep.mat-radio-inner-circle,
+ ::ng-deep.mat-radio-outer-circle {
+    width: 18px !important;
+    height: 18px !important;
+}
+
+::ng-deep.mat-radio-button.mat-radio-disabled .mat-radio-label-content {
+    color: #1A194D!important;
+    cursor: no-drop;
+}
+
+::ng-deep.mat-radio-label-content {
+    font-size: 13px;
+    color: #1A194D !important;
+    padding-left: 2px !important;
+}
+::ng-deep.mat-radio-button:focus{
+    background-color: rgba(0, 0, 0, 1) !important;
+}

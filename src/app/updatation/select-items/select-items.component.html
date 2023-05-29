@@ -1,0 +1,176 @@
+<div class=" row mt-1 justify-content-center" id="ordertype">
+    <div class=" gcardContainer">
+        <div class="row gap-2">
+            <div class="  col-12 col-sm-6 col-md-6 col-xl-2 d-flex"> 
+            <button class="gIconButton" mat-button (click)="itemShow()"><i class="fa fa-plus"></i></button>
+            <span class="gInputLable"> &nbsp; Items Selection</span>
+        </div>
+            <!-- <span class="example-spacer"></span> -->
+           
+            <div  *ngIf="!isSearch" class=" col-12 col-sm-6 col-md-6 col-xl-3">
+            <input type="text" id="searchitem" aria-label="Number" matInput [formControl]="searchItem"
+            [matAutocomplete]="auto1" placeholder="Search Item Name" class="gInnerInput-border m-0 p-0" >
+        <mat-autocomplete #auto1="matAutocomplete"
+            class="gAutoCompleteContainer">
+            <mat-option *ngFor="let item of items" [value]="item?.iname"
+             class="gSelectOption"      (onSelectionChange)='getSelectedIcode($event, item)'>{{
+                item?.iname }}</mat-option>
+        </mat-autocomplete>
+    </div>
+    <span class="example-spacer"></span>
+
+        </div>
+        <div class="" *ngIf="isItems">
+
+
+            <div class="row mt-2 mx-1 pt-2 hrline">
+
+                <div class="col-12 col-sm-6 col-md-6 col-xl-6">
+                    <div class="row form-group">
+                        <label class="gInputLable col-sm-12 col-md-4 col-lg-3">
+                            Item Code <strong class="text-danger ng-star-inserted">*</strong></label>
+                        <div class="col-6 col-sm-6 col-md-5 col-lg-5">
+                            <div class="gOuterInput">
+                            <input type="number" class="gInnerInput " (focusput)="this.getItem('ITEM_CODE_SEARCH')" (keyup)="getItemByCode($event)" id="icode"
+                            name="code" [(ngModel)]="itemDetail.icode">
+                            <button id="itemDetail" class="gInputButton " mat-button (click)="getItem('ITEM_CODE_SEARCH')">
+                                <i class="fa fa-angle-double-right" ></i>
+                            </button>
+                        </div>
+                           
+                        </div>
+                        <div class="col-6  col-sm-6 col-md-4 col-lg-3 text-center">
+                        <button id="itemsrch" class="gSaveButton " (click)="openSearch()">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                        </button>
+                        </div>
+                    </div>
+        
+                </div>
+                <div class="col-12 col-sm-6 col-md-6 col-xl-6">
+                    <div class="row form-group">
+                        <label class="gInputLable col-sm-12 col-md-4 col-lg-3">
+                   Item Name<strong class="text-danger ng-star-inserted">*</strong>
+                        </label>
+                        <div class="col-sm-12 col-md-8 col-lg-8">
+                            <input type="text" class="gInnerInput-border " id="iname" name="iname"
+                            [(ngModel)]="itemDetail.iname" readonly>
+                        </div>
+                    </div>
+        
+                </div>
+        
+                <div class="col-12 col-sm-6  col-md-6 col-xl-6">
+                    <div class="row form-group">
+                        <label class="gInputLable col-sm-12 col-md-3 col-lg-3">Item Qty<strong class="text-danger ng-star-inserted">*</strong></label>
+                        <div class=" col-6 col-sm-6 col-md-5 col-lg-5">
+                            <div class="gOuterInput">
+
+                                <input  maxlength="7" inputmode="numeric" pattern="[0-9]" class="gInnerInput"
+                                [(ngModel)]="qty" id="qty" #qtySel name="qty"  (dragleave)="onDragStart($event)"
+                                (keypress)="restrictNumericwithdot($event,itemDetail.mment)"
+                                (keyup)="getEnderQty($event)" autocomplete="off">
+
+                            <!-- <input type="number" class="gInnerInput " id="qty" name="qty" [(ngModel)]="qty"
+                            (keydown)='getEnderQty($event)' onkeypress="return event.charCode >= 48 && event.charCode <= 57"> -->
+                            <button id="addBtn" type="button" class="gInputButton" mat-button (click)="checkValidation('tableAdd')">
+                             
+                                <mat-icon>add</mat-icon> </button>
+
+                        </div>
+                            </div>
+                            <div class=" col-6  col-sm-6 col-md-4 col-lg-3">
+                            <input type="text" class="gInnerInput-border " id="uom" name="uom"
+                            [(ngModel)]="itemDetail.mment" placeholder="Uom" readonly>
+                        </div>
+                           
+                     
+                    </div>
+        
+                </div>
+
+            </div>
+
+        </div>
+        <!-- *ngIf="isItems" -->
+
+<div class="gTableSection mt-1 " id="table_list">
+    <div class="gTableActionheaders">
+        <form role="search" class="search-form ml-3">
+            <input type="search" name="Search" class="gSearchText" #input [(ngModel)]="searchTemp" autocomplete="off">
+        </form>
+        <button mat-button class="gNormalButton" (click)="clear()">Clear</button>
+    </div>
+    <div class="gInnerTable" style="max-height: calc(100vh - 260px);">
+        <table class="gNormalTable-md table">
+            <thead>
+                <tr>
+                    <th style="width: 60px;">S.No</th>
+                    <th style="width: 70px;" sortable="icode">Icode <i class="fa" (click)="sorts('icode')" [ngClass]="{'fa-sort': column != 'icode', 'fa-sort-asc': (column == 'icode' && isDesc),
+                        'fa-sort-desc': (column == 'icode' && !isDesc) }"></i></th>
+                    <th sortable="iname">Particulars <i class="fa" (click)="sorts('iname')" [ngClass]="{'fa-sort': column != 'iname', 'fa-sort-asc': (column == 'iname' && isDesc),
+                        'fa-sort-desc': (column == 'iname' && !isDesc) }"></i></th>
+                    <th style="width: 100px;"  sortable="iqty">QTY <i class="fa" (click)="sorts('iqty')" [ngClass]="{'fa-sort': column != 'iqty', 'fa-sort-asc': (column == 'iqty' && isDesc),
+                        'fa-sort-desc': (column == 'iqty' && !isDesc) }"></i></th>
+                    <th style="width: 70px;"  sortable="mment">Uom <i class="fa" (click)="sorts('mment')" [ngClass]="{'fa-sort': column != 'mment', 'fa-sort-asc': (column == 'mment' && isDesc),
+                        'fa-sort-desc': (column == 'mment' && !isDesc) }"></i></th>
+                    <th style="width: 80px;"  sortable="dcrate">Rate <i class="fa" (click)="sorts('dcrate')" [ngClass]="{'fa-sort': column != 'dcrate', 'fa-sort-asc': (column == 'dcrate' && isDesc),
+                            'fa-sort-desc': (column == 'dcrate' && !isDesc) }"></i></th>
+                    <th style="width: 70px;"  sortable="nagstme">GST% <i class="fa" (click)="sorts('gst')" [ngClass]="{'fa-sort': column != 'gst', 'fa-sort-asc': (column == 'gst' && isDesc),
+                            'fa-sort-desc': (column == 'gst' && !isDesc) }"></i></th>
+                    <th style="width: 70px;"  sortable="cess">Cess% <i class="fa" (click)="sorts('cess')" [ngClass]="{'fa-sort': column != 'cess', 'fa-sort-asc': (column == 'cess' && isDesc),
+                            'fa-sort-desc': (column == 'cess' && !isDesc) }"></i></th>
+                    <th  style="text-align: center;width: 70px;">Option</th>
+                    <th   sortable="value" style="text-align: right;width: 80px;">Amount <i class="fa" (click)="sorts('value')"
+                            [ngClass]="{'fa-sort': column != 'value', 'fa-sort-asc': (column == 'value' && isDesc),
+                            'fa-sort-desc': (column == 'value' && !isDesc) }"></i></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="noBorder"
+                    *ngFor="let items of individuals| orderby: {property: column, direction: direction} | filter:searchTemp;index as i">
+                    <td>{{i+1}}</td>
+                    <td>{{items.icode}}</td>
+                    <td>{{items.iname}}</td>
+                    <td style="max-width: 100px; min-width: 100px;width: 100px;" >
+                        <span style="max-width: 100px; min-width: 100px;width: 100px; " class="d-block" (mouseenter)="hideQty = !hideQty" (mouseleave)="hideQty = !hideQty" *ngIf="!hideQty">{{items.iqty}}</span>
+                        <input  *ngIf="hideQty"  maxlength="7" inputmode="numeric" pattern="[0-9]" class="gInnerInput m-0"
+                        id="qtyedit" min="1" #qtySel  (dragleave)="onDragStart($event)" (focusout)="editqty(i, $event, items.iqty)" 
+                        (keypress)="restrictNumericwithdot($event,items.mment)" [value]="items.iqty ?? 1" >
+                        <!-- <input *ngIf="hideQty" class="gInnerInput  m-0" style="max-width: 100px; min-width: 100px;width: 100px;"
+                                            (focusout)="editqty(i, $event, items.iqty)" onkeypress="return event.charCode >= 48 && event.charCode <= 57" id="qtyedit" min="1"
+                                            [value]="items.iqty"> -->
+                    
+                    
+                    
+                    </td>
+                    <td>{{items.mment}}</td>
+                    <td style="width: 80px;">{{items.dcrate |currency:'INR'}}</td>
+                    <td>{{items.gst}}%</td>
+                    <td>{{items.cess}}</td>
+                    <td>
+                        <button mat-icon-button class="gDeleteIcon" (click)="itemRemove(i)">
+                            <mat-icon>delete</mat-icon></button>
+
+                    </td>
+                    <td class="text-end" style="width: 80px;">{{items.value |currency:'INR'}}</td>
+
+                </tr>
+                <tr class="" *ngIf="individuals.length === 0">
+                    <td [colSpan]="10" class="text-center bold">No Record Found</td>
+
+                </tr>
+                <tr class="gToggleFooter">
+                    <td [colSpan]="9" class="text-end bold">Total Amount</td>
+                    <td [colSpan]="1" class="text-end bold">
+                        {{subtotal |currency:'INR'}}
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+
+</div>

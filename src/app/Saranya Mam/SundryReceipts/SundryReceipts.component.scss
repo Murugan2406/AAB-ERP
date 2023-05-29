@@ -1,0 +1,194 @@
+.toggleFooter {
+  background-color: var(--table-actionHeader-bg) !important;
+  td {
+background-color: transparent;
+      font-weight: 600;
+      border-bottom: none !important;
+      white-space: nowrap;
+      line-height: 22px;
+      height: 22px;
+      text-transform: capitalize;
+      font-family: system-ui;
+      font-size: 12px;
+      padding: 1px 10px !important;
+      color: var(--table-th-color) !important;
+      font-weight: 700 !important;
+      border-bottom: none !important;
+      z-index: 3;
+  }
+}
+
+.gIconButton .mat-icon,
+.gNormalButton .mat-icon {
+  font-size: 18px !important;
+  line-height: 22px !important;
+  font-weight: 600 !important;
+}
+
+.gcardContainer
+{
+
+  box-shadow:0 0px 9px 0 var(--button-save-color);
+  border: 0.5px solid var(--button-save-color);
+}
+.gTableSection{
+  box-shadow: 0 8px 32px 0 rgb(31 38 135 / 23%);
+}
+.hrline{
+ border-top:1px dotted  var(--button-save-color); 
+ padding-top: 20px;
+}
+.gInputLable{
+  color: #000 !important;
+}
+
+.gInputButton {
+   ::ng-deep.mat-icon-button {
+      width: 20px !important;
+      height: 18px !important;
+      line-height: 20px !important;
+      color: #fff;
+  }
+}
+::ng-deep.gDialogBox{
+.mat-dialog-container {
+  padding: 5px !important;
+  border-radius: 15px !important;
+  box-sizing: border-box;
+  overflow: auto;
+  outline: 0;
+  background-color: #ffffff !important;
+  .gDialogContainer {
+      box-shadow: none !important;
+      position: relative;
+      border-radius: 0 0 15px;
+      // background-color: var(--table-actionHeader-bg) !important;
+      box-shadow: 0 8px 32px 0 rgb(31 38 135 / 23%);
+      padding: 10px;
+      backdrop-filter: blur(10px);
+  }
+  .gDialogTitle {
+      background-color: var(--dialog-title-bg);
+      padding: 2px 5px;
+      font-size: 18px !important;
+      margin-bottom: 0 !important;
+      font-weight: 500 !important;
+      font-family: system-ui !important;
+      text-align: center;
+      color: #000;
+      text-transform: capitalize;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 15px 15px 0 0;
+  }
+  .gDialogCloseButton {
+      color: #000;
+      padding: 0;
+      font-weight: 900;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      min-width: 30px;
+      background-color: var(--button-dialog-close-bg-color);
+      line-height: 29px;
+      border: 1px solid transparent;
+      .mat-icon {
+          font-size: 22px;
+          line-height: 29px !important;
+      }
+      .fa {
+          font-size: 22px;
+          line-height: 29px !important;
+      }
+  }
+  .gDialogCloseButton:hover {
+      background-color: var(--button-dialog-close-hover-bg-color);
+      color: #fff;
+  }
+}
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.gSaveButton {
+  mat-icon {
+      font-size: 18px;
+  }
+}
+
+.outer-border {
+  border: 1px solid var(--button-save-color) !important;
+  height: 25px !important;
+  border-radius: 10px !important;
+  .gInnerInput {
+      height: 23px !important;
+  }
+  .gInputButton {
+      height: 24px !important;
+  }
+}
+
+::ng-deep.mat-progress-spinner svg,
+.mat-progress-spinner {
+  height: 60px !important;
+}
+
+::ng-deep.mat-progress-spinner circle,
+.mat-spinner circle {
+  stroke: var(--button-save-color);
+  stroke-width: 10% !important;
+  stroke-dasharray: 50px !important;
+}
+
+.printScreen{
+
+  ::ng-deep .gNormalTable-sm td, .gNormalTable-sm tr.mat-row {
+      font-size: 9px !important;
+
+  }
+  ::ng-deep.gNormalTable-sm th, .gNormalTable-sm tr.mat-header-row{
+      font-size: 9px !important;
+  }
+}
+::ng-deep.gAutoCompleteContainer{
+  padding: 0 !important;
+}
+::ng-deep.gSelectOption{
+  margin: 10px 10px !important;
+}
+
+::ng-deep.gNormalTable-sm tbody tr:focus{
+  border: none;
+  outline: none;
+  box-shadow: 0px 8px 19px var(--table-tr-hover) !important;
+  td{
+  background-color:#f1f1fe !important ; 
+  border: none;
+  outline: none;
+  // font-size: 12px;
+  color: #000;
+  // font-weight: 00;
+  .gHandIcon{
+      color: #000;
+
+  }
+  }
+
+  }
+  ::ng-deep.cdk-overlay-container,   ::ng-deep.header{
+      z-index: 999 !important;
+  }
+  ::ng-deep.gModalContent{
+      z-index: 1000 !important;
+  }
+
+@media print {  
+  @page {
+   
+    margin: 3mm;
+  
+  }
+}

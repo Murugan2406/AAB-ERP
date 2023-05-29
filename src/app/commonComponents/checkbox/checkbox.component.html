@@ -1,0 +1,10 @@
+<section [formGroup]="form">
+    <div [formGroupName]="field.name" class="d-flex gap-2">
+        <div *ngFor="let opt of field.options">
+            <mat-checkbox [formControlName]="opt.key">
+                <span class="gInputLable"> {{opt.label}}</span>
+            </mat-checkbox>
+        </div>
+
+    </div>
+</section>

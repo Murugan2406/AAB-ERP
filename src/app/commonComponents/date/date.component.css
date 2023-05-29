@@ -1,0 +1,6 @@
+::ng-deep .mat-icon-button {
+    font-size: 18px !important;
+    line-height: 0px !important;
+    height: 0 !important;
+    width: 0 !important;
+}

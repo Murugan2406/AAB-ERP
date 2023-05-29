@@ -1,0 +1,387 @@
+<div class="wrapper">
+    <div class="header">
+        <mat-toolbar color="warn">
+            <mat-toolbar-row class="header-nav">
+                <button mat-button (click)="backNavigation()" type="button" [hidden]="toggleContent"> BACK</button>
+                <button mat-button (click)="ontoggleContent()" type="button" [hidden]="!toggleContent"> BACK</button>
+                <span>
+                    <button mat-button (click)="homeNavigate()" type="button">
+                        <mat-icon style="color:#fff;">home</mat-icon>
+                </button>
+                <button mat-button disabled type="button">
+                        <img class="png-icon" src=".\assets\gImg\a2b2.png" style="max-width: 16px; min-width: 56px;">
+                    </button>
+                </span>
+            </mat-toolbar-row>
+        </mat-toolbar>
+    </div>
+
+    <section class="container" [hidden]="toggleContent">
+        <div class="row cardRow">
+
+
+
+            <mat-card>
+
+
+                <form class="form">
+                    <div class="sectionTitle text-center  mb-5">
+                        <label for="" class="formTitle">ESI
+                            FORMS</label>
+                    </div>
+
+                    <div class="form-group row d-flex">
+                        <div class="col-12 col-md-5 col-xl-5 formlables">
+                            <label for="">Type</label>
+                        </div>
+                        <div class=" branchOutInput col-12 col-md-7 col-xl-7">
+
+                            <input class="datepickerInput branchInInput" matInput [formControl]="EsiFormType" id="type" [matAutocomplete]="type">
+                            <mat-autocomplete autoActiveFirstOption #type="matAutocomplete">
+                                <mat-option *ngFor="let option of EsiFormTypeOptions | filter : EsiFormType.value" [value]="option?.val" (onSelectionChange)="typeSelected($event,option?.val)">
+                                    {{option?.val}}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row  d-flex" *ngIf="EsiFormType.value !== 'FORM XV'">
+                        <div class="col-12 col-md-5 col-xl-5 formlables">
+                            <label for=""> Region</label>
+                        </div>
+
+                        <div class=" branchOutInput col-12 col-md-7 col-xl-7">
+                            <input type="text" matInput class="datepickerInput branchInInput" id="Regions" [formControl]="EsiFormRegion" [matAutocomplete]="region">
+                            <mat-autocomplete autoActiveFirstOption #region="matAutocomplete">
+                                <mat-option *ngFor="let option of EsiFormRegionOptions | filter : EsiFormRegion.value" [value]="option.region " (onSelectionChange)="RegionSelected($event,option.region, dp)">
+                                    {{option.region}}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
+                    </div>
+
+                    <div class="form-group row  d-flex" *ngIf="EsiFormType.value === 'FORM XV'">
+                        <div class="col-12 col-md-5 col-xl-5 formlables">
+                            <label for=""> Branch</label>
+                        </div>
+
+                        <div class=" branchOutInput col-12 col-md-7 col-xl-7">
+                            <input type="text" matInput class="datepickerInput branchInInput" id="branch" [formControl]="EsiFormBranch" [matAutocomplete]="branch">
+                            <mat-autocomplete autoActiveFirstOption #branch="matAutocomplete">
+                                <mat-option *ngFor="let option of EsiFormBranchOptions | filter : EsiFormBranch.value" [value]="option.branchname " (onSelectionChange)="branchSelected($event, option.brcode)">
+                                    {{option.branchname}}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row d-flex" *ngIf="EsiFormType.value === 'FORM 6'">
+                        <div class="col-12 col-md-5 col-xl-5 formlables">
+                            <label for="">From</label>
+                        </div>
+
+                        <div class="datpicker col-12 col-md-7 col-xl-7">
+                            <input matInput class="datepickerInput" id="Month" [matDatepicker]="fromDp" [formControl]="FromDate" style="border: none;">
+                            <mat-datepicker-toggle matSuffix [for]="fromDp"></mat-datepicker-toggle>
+                            <mat-datepicker #fromDp startView="year" (monthSelected)="setMonthAndYear($event, fromDp)" panelClass="example-month-picker">
+                            </mat-datepicker>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row d-flex" *ngIf="EsiFormType.value === 'FORM 6'">
+                        <div class="col-12 col-md-5 col-xl-5 formlables">
+                            <label for="">To</label>
+                        </div>
+
+                        <div class="datpicker col-12 col-md-7 col-xl-7">
+                            <input matInput class="datepickerInput" id="Month" [matDatepicker]="Todp" [formControl]="ToDate" style="border: none;">
+                            <mat-datepicker-toggle matSuffix [for]="Todp"></mat-datepicker-toggle>
+                            <mat-datepicker #Todp startView="year" (monthSelected)="setToMonthAndYear($event, Todp)" panelClass="example-month-picker">
+                            </mat-datepicker>
+                        </div>
+                    </div>
+
+                    <div class="form-group row  d-flex" *ngIf="EsiFormType.value === 'FORM 3' || EsiFormType.value === 'FORM 37' ">
+
+                        <div class="col-12 col-md-5 col-xl-5 formlables">
+                            <label for="">Employee Code</label>
+                        </div>
+
+                        <div class=" branchOutInput col-12 col-md-7 col-xl-7">
+                            <input type="text" matInput class="datepickerInput branchInInput" (input)="getEmployeeName($event.target.value)" id="empCode" [formControl]="emplyeeCode" [matAutocomplete]="EmployeeCode">
+
+                            <mat-autocomplete autoActiveFirstOption #EmployeeCode="matAutocomplete">
+                                <mat-option *ngFor="let option of EmlpoyeeNameFilter" [value]="option?.empcode" (onSelectionChange)="setEmpName($event,option.empname, option.gender)">
+                                    {{option.empcode}}
+                                </mat-option>
+
+
+                            </mat-autocomplete>
+                        </div>
+                    </div>
+
+                    <div class="form-group row  d-flex" *ngIf="EsiFormType.value === 'FORM 3' || EsiFormType.value === 'FORM 37' ">
+
+                        <div class="col-12 col-md-5 col-xl-5 formlables">
+                            <label for="">Employee Name</label>
+                        </div>
+
+                        <div class=" branchOutInput col-12 col-md-7 col-xl-7">
+                            <input type="text" matInput class="datepickerInput branchInInput" (input)="getEmployeeName($event.target.value)" id="empName" [formControl]="emplyeename" [matAutocomplete]="autoEmployeeName">
+
+                            <mat-autocomplete autoActiveFirstOption #autoEmployeeName="matAutocomplete">
+                                <mat-option *ngFor="let option of EmlpoyeeNameFilter" [value]="option?.empname" (onSelectionChange)="setEmpCode($event, option.empcode, option.gender)">
+                                    {{option.empname}}
+                                </mat-option>
+
+
+                            </mat-autocomplete>
+                        </div>
+                    </div>
+
+                    <div class="form-group row  d-flex" *ngIf="EsiFormType.value === 'FORM 3'">
+
+                        <div class="col-12 col-md-5 col-xl-5 formlables">
+                            <label for="">Report Type</label>
+                        </div>
+
+                        <div class=" branchOutInput col-12 col-md-7 col-xl-7">
+                            <mat-radio-group class="d-flex " [formControl]="reportType">
+                                <mat-radio-button value="Male">Male</mat-radio-button>
+                                <mat-radio-button value="Female" class="mx-4">Female</mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+                    </div>
+                    <div class="form-group row  d-flex" *ngIf="EsiFormType.value === 'FORM 6'">
+
+                        <div class="col-12 col-md-5 col-xl-5 formlables">
+                            <label for="">Report Type</label>
+                        </div>
+
+                        <div class=" branchOutInput col-12 col-md-7 col-xl-7">
+                            <mat-radio-group class="d-flex " [formControl]="reportType">
+                                <mat-radio-button value="Yes">With Details</mat-radio-button>
+                                <mat-radio-button value="No" class="mx-4">Without Details</mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+                    </div>
+
+                </form>
+                <div class=" actionbuttons justify-content-center ">
+                    <button type="button " [disabled]="loading" mat-raised-button class="buttons " id="submit" (click)="Submit(dialog, EsiFormType.value)"><i class="fa fa-spinner fa-spin" *ngIf="loading " ></i>View</button>
+
+                </div>
+
+            </mat-card>
+
+
+
+        </div>
+    </section>
+
+
+    <ng-template #dialog class="" tabindex="0">
+
+        <div *ngIf="!SuccessResponse">
+            <div *ngIf="ResponseStatus">
+                <div mat-dialog-content class="text-center mat-dialog-content">
+                    {{ResponseStatus}}
+                </div>
+            </div>
+            <div mat-dialog-actions class=" text-center mt-3 mb-0 pb-0 justify-content-center">
+                <button mat-button type="button" class="dialogButton text-center" (click)="onNoClick()">Close</button>
+            </div>
+        </div>
+    </ng-template>
+    <div [hidden]="!toggleContent" class="printPrivew ">
+
+        <div class="col-12 text-end">
+
+
+            <button type="button" mat-icon-button [elementToPrint]="ESIFormReport" ngPrint>
+                <i class="fa fa-print" style="font-size: 20px;color:#000000;" aria-hidden="true"></i>
+            </button>
+
+
+
+        </div>
+        <div #ESIFormReport style="margin-top: -24px;">
+            <div *ngIf="EsiFormType.value === 'FORM 3' ">
+
+                <div class="row ">
+                    <span class="col-12 m-0 text-center"> <b>{{EsiFormType.value}}</b> </span>
+                    <span class="col-12 m-0  text-left">IN DUPLICATE  </span>
+                    <span class="col-12 m-0 text-center"> EMPLOYEES STATE INSURANCE CORPORATION </span>
+                    <span class="col-12 m-0 text-center"> Return of Declaration Forms </span>
+                </div>
+                <div class="row mt-2">
+                    <span class="col-9  text-end">  ( Regulation 14)
+                </span>
+                    <span class="col-6">Name and Address of the Factory or Establishment</span>
+                    <span class="col-6"> <b>{{form3company}},
+                    {{form3add1}},{{form3add2}},{{form3add3}},{{form3City}}
+{{form3Pincode}}</b> </span>
+                    <span class="col-6">Employer's Code No</span>
+                    <span class="col-6">{{form3ESICode}}</span>
+
+
+                    <span class="col-12 mb-4 mt-4">
+
+                    <p> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; I send herewith the declaration Forms in respect of the employees mentioned below hereby declare that every person employed as an employee with in the meaning of Section 2(9) of the Employees State Insurance Act 1948 on {{currentdate  | date : 'dd-MMM-YYY'}}
+                        . In this factory or establishment and in respect of a remuneration not exceeding Rs {{form3ESIExempt}}/- (excluding remuneration for overtime work) per month has been included in this list (Excepting only those in respect of whom declaration
+                        have been sent to the Corporation in the past). </p> 
+                </span>
+                    <span class="col-12 ">Place : &nbsp; {{form3City}} &nbsp;
+                    {{form3Pincode}}</span>
+                    <span class="col-10 ">Date : &nbsp; {{currentdate  | date : 'dd-MMM-YYY'}}</span>
+                    <span class="col-2 mb-3 text-center">Signature</span>
+
+
+                    <div class="form3Atable">
+
+                        <table class="table   mt-3 mb-5">
+
+                            <tr class=" form3A">
+                                <th style="color: #000 !important;font-size: 11px;">S.No</th>
+                                <th style="color: #000 !important;font-size: 11px;">EMP_NO</th>
+                                <th style="color: #000 !important;font-size: 11px;">NAME OF THE EMPLOYEE</th>
+                                <th style="color: #000 !important;font-size: 11px;">DOJ</th>
+                                <th style="color: #000 !important;font-size: 11px;">FATHER/HUSBAND</th>
+                                <th style="color: #000 !important;font-size: 11px;">INS NO</th>
+                            </tr>
+                            <tr class="subform3A">
+                                <td class="text-center">1</td>
+                                <td class="text-center">{{form3EmpNo}}</td>
+                                <td class="text-center">{{form3EmpName}}</td>
+                                <td class="text-center">{{ form3DOJ | date: 'dd-MMM-YYYY'}}</td>
+                                <td class="text-center">{{form3FHName}}</td>
+                                <td class="text-center">{{form3InsNo}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <span class="col-9  mt-4 text-end"></span>
+                    <span class="col-3 mt-4  text-center"> Authorised Signature</span>
+                </div>
+            </div>
+
+            <div *ngIf="EsiFormType.value === 'FORM 37' ">
+
+                <div class="row">
+
+                    <span class="col-12 text-center"> <b>FORM 37</b> </span>
+                    <span class="col-12 text-center"> <b>EMPLOYEE'S STATE INSURANCE CORPORATION</b> </span>
+                    <span class="col-12 text-center">Certificate of Re-employment/ continuing Employment </span>
+                    <span class="col-12 text-center">(To be issues only if condition (i) and (ii) below are satisfied)</span>
+                    <span class="col-12 text-end mt-4"> <b>Code No.{{form3ESICode}}</b> </span>
+                </div>
+                <div class="row dottedLine mt-3 pb-4">
+                    <span class="col-6">Name and Address of the Employer</span>
+                    <span class="col-6">{{form3company}} &nbsp;{{form3add1}} &nbsp;{{form3add2}} &nbsp;
+                    {{form3City}} &nbsp;{{form3Pincode}} &nbsp;</span>
+                    <span class="col-5"> E- Certified Mr./Mrs./Miss <b>{{form3EmpName}}</b></span>
+                    <span class="col-4">S/o / D/o / W/o <b>{{form3FHName}}</b></span>
+                    <span class="col-3">INS. No <b>{{form3InsNo}}</b>   </span>
+
+                    <span class="col-12 mt-4"> (i) has continued to be in employment/has been taken or retaken in employment .He/Her has paid one or more contribution
+                        OR one or more contribution OR one or more contribution in payable* in the   current<b> contribution period which began&nbsp;
+                        {{form3StartDate}}</b>&nbsp; (ii) has paid contributions for not less than half the number of days <b> in the preceding contribution period
+                        which ended on&nbsp; {{form3EndDate}}</b>&nbsp;( *strike out which not applicable)</span>
+                    <span class="col-10 mt-4">DATE : {{currentdate  | date : 'dd-MMM-YYY'}}</span>
+                    <span class="col-2">Signature</span>
+                    <span class="col-12">Note : This certificate is valid for NINE MONTHS from the date indicated under or (ii) above. *if available. </span>
+                </div>
+
+
+                <div class="row">
+
+                    <span class="col-12 text-end"> <b>ESIC 37 Medi 7-A</b> </span>
+                    <span class="col-12 text-center"> <b>Application for Acceptance for Medical Treatment</b> </span>
+                    <span class="col-6"> Mr./Mrs./Miss&nbsp; <b>{{form3EmpName}}</b></span>
+                    <span class="col-6">S/o / D/o / W/o  &nbsp;    <b>{{form3FHName}}</b></span>
+                    <span class="col-6">Insurance No. &nbsp; <b>{{form3InsNo}}</b></span>
+                    <span class="col-6">having been employed</span>
+                    <span class="col-12 text-center">(if available)</span>
+                    <span class="col-12 ">form the date mentioned on reverse (employer's certificate) hereby apply for acceptance by</span>
+                    <span class="col-1 m-0">Dr.</span>
+                    <span class="col-11 m-0" style="display: table-cell; border-bottom: 1px solid #424542;"></span>
+                    <span class="col-12 text-center m-0">(Dispensary)</span>
+                    <span class="col-12 mt-0">I ( was previously / have been continued to be) insured and (was then on the list
+                    /am on your list
+                    ) </span>
+                    <span class="col-12 mb-0">* of Doctor __________________________________________________________________</span>
+                    <span class="col-7 text-center mt-0">(Dispensary)</span>
+
+                    <span class="col-6 m-0">DATE : _______________________</span>
+                    <span class="col-6 text-end m-0">___________________________________________________________</span>
+                    <span class="col-6 mt-0"></span>
+                    <span class="col-6 text-end m-0">Signature or thumb impression of the Insured Person </span>
+                    <span class="col-12 mb-3">I accept this person in my list</span>
+                    <span class="col-6 m-0 mb-0">__________________________________________________________________</span>
+                    <span class="col-6 m-0 mb-0 text-end">Code No.&nbsp; <b>{{form3ESICode}}</b> </span>
+                    <span class="col-6 text-start m-0">Signature of Doctor</span>
+                    <span class="col-6 text-end m-0">(Dispensary)</span>
+                    <span class="col-12 text-center">*Delete whichever is not applicable</span>
+
+                </div>
+
+            </div>
+
+            <div *ngIf="EsiFormType.value === 'FORM XV' && SuccessResponse ">
+
+                <div class="row">
+
+                    <span class="col-12 text-center" style="font-size: 13px !important"> <b>FORM - XV</b> </span>
+                    <span class="col-12 mt-4 text-center" style="font-size: 12px !important;"> Notice of Daily Hours of Work -Rest Interval -Weekly Holiday Etc.{{'{'}}See sub Rule (3) of rule 38 of the Tamil Nadu Catering Establishments Rules (1959){{'}'}}</span>
+
+                    <span class="col-6 mt-4" style="font-size: 12px !important;">Name & Address of the Establishment :</span>
+                    <span class="col-6 mt-4" style="font-size: 12px !important;">{{formXVList[0].Company}} &nbsp; {{formXVList[0].Braddress1}} &nbsp; {{formXVList[0].Braddress2}} - &nbsp;
+                    {{formXVList[0].Brcity}} &nbsp; {{formXVList[0].BrPincode}} &nbsp;
+                </span>
+                    <span class="col-6" style="font-size: 12px !important;">Name of the Employer {{'{'}}Partners{{'}'}} :</span>
+                    <span class="col-6" style="font-size: 12px !important;">{{formXVList[0].companypartners}}</span>
+                    <span class="col-6" style="font-size: 12px !important;">With Residential address :</span>
+                    <span class="col-6" style="font-size: 12px !important;"> {{formXVList[0].PartnerAdd1}} &nbsp; {{formXVList[0].PartnerAdd2}}&nbsp;
+                    {{formXVList[0].PartnerAdd3}} &nbsp; {{formXVList[0].PartnerCity}}&nbsp; {{formXVList[0].PartnerPincode}}</span>
+                </div>
+                <div class="form3Atable">
+                    <table class="table  w-100 mt-4 form5">
+
+                        <tr class=" formXv">
+                            <th>S.No</th>
+                            <th>Name of the Employee</th>
+                            <th>Sex</th>
+                            <th>Father/Husband name</th>
+                            <th style="margin-left: -10px !important;">Work</th>
+                            <th>DOJ</th>
+                            <th>Adult</th>
+                            <th>Shift</th>
+                            <th>Start</th>
+                            <th>Rest</th>
+                            <th>End</th>
+                            <th>Holiday</th>
+                        </tr>
+                        <tr *ngFor="let element of formXVList; let i=index" class="subform3A">
+                            <td>{{i+1}}</td>
+                            <td style="min-width: 200px;">{{element.empname}}</td>
+                            <td class="text-center">{{element.Sex}}</td>
+                            <td style="min-width: 200px;">{{element.fathername}}</td>
+                            <td style="min-width: 80px;">{{element.Work}}</td>
+                            <td style="min-width: 80px;" class="text-center">{{element.DOJ | date : 'dd-MMM-YY'}}</td>
+                            <td class="text-center">Yes</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

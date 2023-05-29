@@ -1,0 +1,935 @@
+<div class="gWrapper version-09/03/2023">
+    <div *ngIf="header == 'RT_TO_SUP'">
+        <app-header back="true" Titleheader="EMPTY CYLINDER RETURN" (BackClick)="backNavigation()"> </app-header>
+    </div>
+    <div *ngIf="header != 'RETURN' && header != 'RT_TO_SUP'">
+        <app-header back="true" Titleheader=" {{header}} ISSUE" (BackClick)="backNavigation()"> </app-header>
+
+    </div>
+    <div *ngIf="header === 'RETURN'">
+        <app-header back="true" Titleheader="GOODS RETURN" (BackClick)="backNavigation()"> </app-header>
+    </div>
+
+    <mat-tab-group (selectedTabChange)="onTabChanged($event.index);"[selectedIndex]="selectedIndex">
+        <mat-tab label="Item Selection">
+            <div class="gContent mx-1 row justify-content-center">
+                <div class="col-12 ">
+                    <div class="gcardContainer   my-1" id="ordertype"
+                        *ngIf="isOption == 'IssueSave' && header == 'RT_TO_SUP'">
+                        <!-- <div class="d-flex justify-content-between">
+                            <div class="d-flex">
+                                <button class="gIconButton" mat-button (click)="itemShow()"><i
+                                        class="fa fa-plus"></i></button>
+                                <span class="gInputLable" style="text-transform: capitalize;"> &nbsp; <b> {{header}}
+                                        Issue
+                                        Information</b></span>
+                            </div>
+                        </div> -->
+                        <div class="row justify-content-between">
+                            <div class="col-12 col-xl-6 d-flex">
+                                <button class="gIconButton" mat-button (click)="itemShow()"><i
+                                        class="fa fa-plus"></i></button>
+                                        <span class="gInputLable"> &nbsp; <b> {{header}} Issue Information</b></span>
+                            </div>
+                            <div class="col-12 col-xl-6 ">
+                     
+                                <span class="gInputLable-12 ">Shortcuts:</span> &nbsp;&nbsp;
+                                <span class="gInputLable-12">Alt+ T - Toggle tab</span> &nbsp;&nbsp;
+                                <span class="gInputLable-12">Alt+ S - Save</span> &nbsp;&nbsp;
+                                <span class="gInputLable-12">Alt+ N - Next</span> &nbsp;&nbsp;
+                                <span class="gInputLable-12">Alt+ X - Exit</span> &nbsp;&nbsp;
+                                <span class="gInputLable-12">Alt+ C - Clear</span> &nbsp;&nbsp;
+                            </div>
+                        </div>
+                        <div class="row mt-2 mx-1 pt-2 hrline" *ngIf="showcontent">
+                            <div class="col-12 col-sm-6  col-md-4 col-xl-3  ">
+                                <div class="row">
+                                    <label class="gInputLable col-12 col-md-6 col-xl-3">Supplier Name</label>
+                                    <div class="col-12 ">
+                                        <input class="gInnerInput" [formControl]="supSearchControl"
+                                            [matAutocomplete]="auto2" id="suppname" name="suppname">
+                                        <mat-autocomplete #auto2="matAutocomplete" [displayWith]="displaySupplier"
+                                           
+                                            class="gAutoCompleteContainer">
+                                            <mat-option *ngFor="let item of suplist" [value]="item"
+                                                class="gSelectOption"  (onSelectionChange)="getSelectsupplier($event, item)">{{ item?.Branch_Name }}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6  col-md-4 col-xl-3  ">
+                                <div class="row">
+                                    <label class="gInputLable col-12 col-md-6 col-xl-3">Vehicle.No</label>
+                                    <div class="col-12 ">
+                                        <input type="text" [(ngModel)]="approvedBy"
+                                            (keydown)="selectEvent($event,'next' )" class="gInnerInput" id="vehnum"
+                                            name="vehnum" autocomplete="off">
+                                    </div>
+                                </div>
+                            </div>
+                
+                        <div class="col-12 col-sm-6  col-md-4 col-xl-3  mt-xl-4  d-flex justify-content-center gap-3 mt-1">
+                            <button id="next" type="button" style="vertical-align:middle;" class="gSaveButton"
+                            (click)="selectNext()">Next </button>
+                            <button mat-button class="gSaveButton col-2" (click)="saveOption1()">Save</button>
+                         
+                        </div>
+                    </div>
+                    </div>
+
+                    <div class="gcardContainer  my-1 " id="ordertype"
+                        *ngIf="isOption === 'IssueSave' && header !== 'RT_TO_SUP'">
+                        <div class="row justify-content-between">
+                            <div class="col-12 col-xl-6 d-flex">
+                                <button class="gIconButton" mat-button (click)="itemShow()"><i
+                                        class="fa fa-plus"></i></button>
+                                        <span class="gInputLable"> &nbsp; <b> {{header}} Issue Information</b></span>
+                            </div>
+                            <div class="col-12 col-xl-6 ">
+                     
+                                <span class="gInputLable ">Shortcuts:</span> &nbsp;&nbsp;
+                                <span class="gInputLable-12">Alt+ T - Toggle tab</span> &nbsp;&nbsp;
+                                <span class="gInputLable-12">Alt+ S - Save</span> &nbsp;&nbsp;
+                                <span class="gInputLable-12">Alt+ N - Next</span> &nbsp;&nbsp;
+                                <span class="gInputLable-12">Alt+ X - Exit</span> &nbsp;&nbsp;
+                                <span class="gInputLable-12">Alt+ C - Clear</span> &nbsp;&nbsp;
+                            </div>
+                        </div>
+                        <div class="row mt-2 mx-1 pt-2 hrline" *ngIf="showcontent">
+                            <!-- <div class="gcardBody row "> -->
+                            <div class="col-12 col-sm-6  col-md-4 col-xl-3 " *ngIf="header !== 'WASTAGE'">
+
+                                <div class="row">
+                                    <label class="gInputLable col-12" *ngIf="header === 'BROKEN'">
+                                        Broken Name </label>
+                                    <label class="gInputLable col-12" *ngIf="header === 'COMPLEMENTORY'"> Customer Name
+                                    </label>
+                                    <label class="gInputLable col-12" *ngIf="header === 'FUEL'">
+                                        Issue To </label>
+                                    <label class="gInputLable col-12" *ngIf="header === 'SAMPLE'">
+                                        Customer Name</label>
+                                    <label class="gInputLable col-12" *ngIf="header === 'STAFF'">
+                                        Issue To </label>
+                                    <label class="gInputLable col-12" *ngIf="header === 'RETURN'">
+                                        Destination </label>
+
+                                    <div class="col-12 ">
+                                        <div class="">
+                                            <input matInput [formControl]="issueControl" [matAutocomplete]="auto"
+                                                id="issueToselect" name="issueToselect" autofocus class="gInnerInput">
+                                            <mat-autocomplete #auto="matAutocomplete" id="matauto" name="matauto"
+                                               class="gAutoCompleteContainer" [displayWith]="displayBr">
+                                                <mat-option *ngFor="let option of issueToList " [value]="option"
+                                                    class="gSelectOption"   (onSelectionChange)='getSelectedCode($event, option)'>
+                                                    {{option.brname}}
+                                                </mat-option>
+                                            </mat-autocomplete>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6  col-md-4 col-xl-3  " *ngIf="header !== 'BROKEN' && header !== 'RETURN'">
+
+                                <div class="row">
+
+                                    <label class="gInputLable col-12 " *ngIf="header === 'COMPLEMENTORY'">Recommanded By
+                                    </label>
+                                    <label class="gInputLable col-12 " *ngIf="header === 'FUEL'">Current Meter </label>
+                                    <label class="gInputLable col-12 " *ngIf="header === 'SAMPLE'">Employee Code
+                                    </label>
+                                    <label class="gInputLable col-12 "
+                                        *ngIf="header === 'STAFF' || header === 'WASTAGE'"> Reason </label>
+
+
+                                    <div class="col-12 "
+                                        *ngIf="header === 'WASTAGE' || header === 'COMPLEMENTORY' || header === 'FUEL' || header === 'STAFF'">
+                                        <input type="text" class="gInnerInput" [(ngModel)]="issueOption" id="isueoption"
+                                            (keydown)="enterIssueOption($event)" (keypress)="changeMeeterValue($event)"
+                                            autocomplete="off">
+                                    </div>
+                                    <div class="col-12 " *ngIf="header === 'SAMPLE'">
+                                        <div class="row ">
+                                            <div class="col-8 ">
+                                                <input type="text" class="gInnerInput " id="empCode"
+                                                    [(ngModel)]="issueOption" (keydown)="enterToempcode($event)"
+                                                    autocomplete="off" autocomplete="off">
+
+                                            </div>
+                                            <div class="col-4 ">
+                                                <button id="itemCheck" class="gSaveButton " (click)="getEmpDetils()">
+                                                    <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="row "
+                                            *ngIf="empname !='' ||empname != null ||empname != undefined  || empname">
+                                            <div class="col-12 ">
+
+                                                <input type="text " *ngIf="empname" readonly class="gInnerInput "
+                                                    [value]="empname" autocomplete="off">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6  col-md-4 col-xl-3  " *ngIf="header === 'RETURN'">
+                                <div class="row">
+                                    <label class="gInputLable col-12 col-md-6  col-xl-3 ">Vehicle No </label>
+                                    <div class="col-12 ">
+                                        <input matInput [formControl]="vehSearchControl" [matAutocomplete]="auto5"
+                                            id="vehicle" name="vehicle" autofocus class="gInnerInput">
+                                        <mat-autocomplete #auto5="matAutocomplete"
+                                             id="matauto2"
+                                            name="matauto2" class="gAutoCompleteContainer"  [displayWith]="displayVehicle">
+                                            <mat-option *ngFor="let option of vehList " [value]="option"
+                                                class="gSelectOption" (onSelectionChange)="selectVeh($event, option)">
+                                                {{option.vehicleno}}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6  col-md-4 col-xl-3  " *ngIf="header !== 'RETURN'">
+                                <div class="row">
+                                    <!-- <div class="col-12 col-md-6  col-xl-3  "> -->
+                                    <label class="gInputLable col-12 col-md-6 col-xl-3"
+                                        *ngIf="header === 'BROKEN' || header === 'COMPLEMENTORY' || header === 'STAFF' || header === 'WASTAGE'">Approved
+                                        By </label>
+                                    <label class="gInputLable col-12 col-md-6 col-xl-3"
+                                        *ngIf="header === 'FUEL'">Current Fuel
+                                        Stock</label>
+                                    <label class="gInputLable col-12 col-md-6 col-xl-3" *ngIf="header === 'SAMPLE' ">
+                                        Reason</label>
+                                    <!-- </div> -->
+                                    <div class="col-12 "
+                                        *ngIf="header === 'BROKEN' || header === 'COMPLEMENTORY' || header === 'STAFF' || header === 'WASTAGE'">
+                                        <div class="d-flex gap-2">
+                                            <input type="text" class="gInnerInput" [(ngModel)]="approvedBy"
+                                                id="approvedBy" name="approvedBy" disabled>
+
+                                            <button id="getApprovedBy" class="gIconButton " mat-button
+                                                (click)="openApprDialog()">
+                                                <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 " *ngIf="header === 'FUEL' || header === 'SAMPLE'">
+                                        <input type="text" class="gInnerInput" [(ngModel)]="approvedBy" id="reason"
+                                            name="reason" (keydown)="enterApprBy($event)"
+                                            (keypress)="changeValue($event)" autocomplete="off">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6  col-md-4 col-xl-3 " *ngIf="header === 'RETURN'">
+                                <div class="row">
+                                    <label class="gInputLable col-12 col-md-6 col-xl-3"> Reason</label>
+                                    <div class="col-12  d-flex gap-3">
+                                        <input type="text" class="gInnerInput" [(ngModel)]="issueOption" id="reason"
+                                            name="reason" (keydown)="enterApprBy($event)" autocomplete="off"
+                                            autocomplete="off">
+                                    </div>
+                                </div>
+                            </div>
+                      
+                        <div class="col-12 col-sm-6  col-md-4 col-xl-3 mt-md-4 d-flex justify-content-center gap-3 mt-1" *ngIf="showcontent">
+                            
+                            <button id="next" type="button" style="vertical-align:middle;" class="gSaveButton"
+                                (click)="selectNext()">Next </button>
+                                <button mat-button class="gSaveButton col-2" (click)="saveOption1()">Save</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <div class="col-12 px-4">
+                    <app-select-items class="p-0" [gisItems]="isItems" [gisOption]="isOption"></app-select-items>
+                </div>
+
+            </div>
+        </mat-tab>
+        <mat-tab label="View">
+            <div class="gcardContainer mx-2 mt-2">
+                <div class="row ">
+                    <div class="col-12 col-sm-6 col-md-4 col-xl-3 d-flex gap-3 justify-content-between mb-2 mb-xl-0">
+                        <label class="gInputLable" style="top: 2%;"> From Date </label>
+                        <div class="gOuterInput">
+                            <input matInput [matDatepicker]="picker1" [max]="today"
+                                (keydown)="selectEvent($event,'toDate' )" (change)="selectFocus('toDate')"
+                                [(ngModel)]="trnFrdate" required class="gInnerInput" id="FromDate">
+
+                            <mat-datepicker-toggle matSuffix [for]="picker1" class="gInputButton">
+                                <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #picker1></mat-datepicker>
+                        </div>
+                    </div>
+                    <div class=" col-12 col-sm-6 col-md-4 col-xl-3 d-flex gap-3 justify-content-between mb-2 mb-xl-0">
+                        <label class="gInputLable" style="top: 2%;"> To Date </label>
+                        <div class="gOuterInput">
+                            <input matInput [matDatepicker]="picker2" id="toDate"
+                                (keydown)="selectEvent($event,'viewNExt' )" (change)="selectFocus('viewNExt')"
+                                [max]="today" [(ngModel)]="trntodate" required class="gInnerInput">
+                            <mat-datepicker-toggle matSuffix [for]="picker2" class="gInputButton">
+                                <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #picker2></mat-datepicker>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-4 col-xl-3 d-flex gap-3 justify-content-between mb-2 mb-xl-0">
+                        <button id="viewNExt" type="button" style="vertical-align:middle" class="gSaveButton"
+                            (click)="getViwelist()">View</button>
+                    </div>
+                </div>
+            </div>
+            <div class="gTableSection m-2 ">
+                <div class="gTableActionheaders">
+                    <form role="search" class="search-form ml-3">
+                        <input type="search" name="Search" class="gSearchText" #input [(ngModel)]="searchTemp"
+                            autocomplete="off">
+                    </form>
+                    <img Cores px-0 class="gXlButton " src=".\assets\gImg\excel1.png" type="submit"
+                        matTooltip="Excel Export" (click)="XLExportBranchMapTable(individuals)">
+                </div>
+                <div class="gInnerTable1 gInnerTable ">
+                    <table width="100" class="gNormalTable-sm table" *ngIf="header === 'RETURN'">
+                        <thead>
+                            <tr>
+                                <th>S.No</th>
+                                <th>Date</th>
+                                <th>TrnNo</th>
+                                <th>Destination Name</th>
+                                <th>VehicleNo</th>
+                                <th>Reason</th>
+                                <th>Time</th>
+                                <th>Print</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let issue of individuals | filter :searchTemp; let i = index">
+                                <td> {{i+1}} </td>
+                                <td> {{issue.todaydate |date:'dd/MM/yyyy'}} </td>
+                                <td> {{issue.TrnNo}} </td>
+                                <td> {{issue.DestiBrname}} </td>             
+                                <td> {{issue.cardno}} </td>           
+                                <td> {{issue.var1}} </td>     
+                                <td> {{issue.TrnTime }} </td>
+                                <td>
+                                    <button mat-icon-button class="gHandIcon"
+                                        (click)="getviweByid(issue.todaydate,issue.TrnNo, printDiv)">
+                                        <mat-icon>print</mat-icon>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button mat-icon-button class="gDeleteIcon" (click)="openDialog(issue.TrnNo, i)">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr *ngIf="loading">
+                                <td colspan="8">
+                                    <div class="SkeltonLoader text-center justify-content-center d-flex">
+                                        <mat-spinner></mat-spinner>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr *ngIf="individuals.length ===0">
+                                <td colspan="8"  class="text-center">No record found</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table width="100" class="gNormalTable-sm table" *ngIf="header === 'STAFF'">
+                        <thead>
+                            <tr>
+                                <th>S.No</th>
+                                <th>Date</th>
+                                <th>TrnNo</th>
+                                <th>Customer</th>
+                                <th>ApprovedBy</th>
+                                <th>Reason</th>
+                                <th>Time</th>
+                                <th>Print</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let issue of individuals | filter :searchTemp; let i = index">
+                                <td> {{i+1}} </td>
+                                <td> {{issue.todaydate |date:'dd/MM/yyyy'}} </td>
+                                <td> {{issue.TrnNo}} </td>
+                                <td> {{issue.DestiBrname}} </td>             
+                                <td> {{issue.sup}} </td>           
+                                <td> {{issue.var1}} </td>     
+                                <td> {{issue.TrnTime }} </td>
+                                <td>
+                                    <button mat-icon-button class="gHandIcon"
+                                        (click)="getviweByid(issue.todaydate,issue.TrnNo, printDiv)">
+                                        <mat-icon>print</mat-icon>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button mat-icon-button class="gDeleteIcon" (click)="openDialog(issue.TrnNo, i)">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr *ngIf="loading">
+                                <td colspan="9">
+                                    <div class="SkeltonLoader text-center justify-content-center d-flex">
+                                        <mat-spinner></mat-spinner>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr *ngIf="individuals.length ===0">
+                                <td colspan="9"  class="text-center">No record found</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table width="100" class="gNormalTable-sm table" *ngIf="header === 'BROKEN'">
+                        <thead>
+                            <tr>
+                                <th>S.No</th>
+                                <th>Date</th>
+                                <th>TrnNo</th>
+                                <th>Broken To</th>
+                                <th>ApprovedBy</th>
+                                <th>Time</th>
+                                <th>Print</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let issue of individuals | filter :searchTemp; let i = index">
+                                <td> {{i+1}} </td>
+                                <td> {{issue.todaydate |date:'dd/MM/yyyy'}} </td>
+                                <td> {{issue.TrnNo}} </td>
+                                <td> {{issue.DestiBrname}} </td>             
+                                <td> {{issue.cardno}} </td>            
+                                <td> {{issue.TrnTime }} </td>
+                                <td>
+                                    <button mat-icon-button class="gHandIcon"
+                                        (click)="getviweByid(issue.todaydate,issue.TrnNo, printDiv)">
+                                        <mat-icon>print</mat-icon>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button mat-icon-button class="gDeleteIcon" (click)="openDialog(issue.TrnNo, i)">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr *ngIf="loading">
+                                <td colspan="8">
+                                    <div class="SkeltonLoader text-center justify-content-center d-flex">
+                                        <mat-spinner></mat-spinner>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr *ngIf="individuals.length ===0">
+                                <td colspan="8"  class="text-center">No record found</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table width="100" class="gNormalTable-sm table" *ngIf="header === 'WASTAGE'">
+                        <thead>
+                            <tr>
+                                <th>S.No</th>
+                                <th>Date</th>
+                                <th>TrnNo</th>
+                                <th>Reason</th>
+                                <th>ApprovedBy</th>
+                                <th>Time</th>
+                                <th>Print</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let issue of individuals | filter :searchTemp; let i = index">
+                                <td> {{i+1}} </td>
+                                <td> {{issue.todaydate |date:'dd/MM/yyyy'}} </td>
+                                <td> {{issue.TrnNo}} </td>
+                                <td> {{issue.var1}} </td>             
+                                <td> {{issue.sup}} </td>            
+                                <td> {{issue.TrnTime }} </td>
+                                <td>
+                                    <button mat-icon-button class="gHandIcon"
+                                        (click)="getviweByid(issue.todaydate,issue.TrnNo, printDiv)">
+                                        <mat-icon>print</mat-icon>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button mat-icon-button class="gDeleteIcon" (click)="openDialog(issue.TrnNo, i)">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr *ngIf="loading">
+                                <td colspan="8">
+                                    <div class="SkeltonLoader text-center justify-content-center d-flex">
+                                        <mat-spinner></mat-spinner>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr *ngIf="individuals.length ===0">
+                                <td colspan="8"  class="text-center">No record found</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table width="100" class="gNormalTable-sm table" *ngIf="header === 'COMPLEMENTORY'">
+                        <thead>
+                            <tr>
+                                <th>S.No</th>
+                                <th>Date</th>
+                                <th>TrnNo</th>
+                                <th>Customer</th>
+                                <th>ApprovedBy</th>
+                                <th>Recommanded By</th>
+                                <th>Time</th>
+                                <th>Print</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let issue of individuals | filter :searchTemp; let i = index">
+                                <td> {{i+1}} </td>
+                                <td> {{issue.todaydate |date:'dd/MM/yyyy'}} </td>
+                                <td> {{issue.TrnNo}} </td>
+                                <td> {{issue.DestiBrname}} </td>    
+                                  
+                                <td> {{issue.cardno}} </td>   
+                                <td>{{issue.cardtype}} </td>          
+                                <td> {{issue.TrnTime }} </td>
+                                <td>
+                                    <button mat-icon-button class="gHandIcon"
+                                        (click)="getviweByid(issue.todaydate,issue.TrnNo, printDiv)">
+                                        <mat-icon>print</mat-icon>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button mat-icon-button class="gDeleteIcon" (click)="openDialog(issue.TrnNo, i)">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr *ngIf="loading">
+                                <td colspan="9">
+                                    <div class="SkeltonLoader text-center justify-content-center d-flex">
+                                        <mat-spinner></mat-spinner>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr *ngIf="individuals.length ===0">
+                                <td colspan="9"  class="text-center">No record found</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    
+                    <table width="100" class="gNormalTable-sm table" *ngIf="header === 'RT_TO_SUP'">
+                        <thead>
+                            <tr>
+                                <th>S.No</th>
+                                <th>Date</th>
+                                <th>TrnNo</th>
+                                <th>Supplier Name</th>
+                                <th>Vehicle.No</th>
+                                <th>Time</th>
+                                <th>Print</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let issue of individuals | filter :searchTemp; let i = index">
+                                <td> {{i+1}} </td>
+                                <td> {{issue.todaydate |date:'dd/MM/yyyy'}} </td>
+                                <td> {{issue.TrnNo}} </td>
+                                <td> {{issue.DestiBrname}} </td>    
+                                <td>{{issue.cardno }}</td>                    
+                                <td> {{issue.TrnTime }} </td>
+                                <td>
+                                    <button mat-icon-button class="gHandIcon"
+                                        (click)="getviweByid(issue.todaydate,issue.TrnNo, printDiv)">
+                                        <mat-icon>print</mat-icon>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button mat-icon-button class="gDeleteIcon" (click)="openDialog(issue.TrnNo, i)">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr *ngIf="loading">
+                                <td colspan="8">
+                                    <div class="SkeltonLoader text-center justify-content-center d-flex">
+                                        <mat-spinner></mat-spinner>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr *ngIf="individuals.length ===0">
+                                <td colspan="8"  class="text-center">No record found</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+
+                    <table width="100" class="gNormalTable-sm table" *ngIf="header === 'SAMPLE'">
+                        <thead>
+                            <tr>
+                                <th>S.No</th>
+                                <th>Date</th>
+                                <th>TrnNo</th>
+                                <th>Customer Name</th>
+                                <th>EmpCode</th>
+                                <th>Reason </th>
+                                <th>Time</th>
+                                <th>Print</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let issue of individuals | filter :searchTemp; let i = index">
+                                <td> {{i+1}} </td>
+                                <td> {{issue.todaydate |date:'dd/MM/yyyy'}} </td>
+                                <td> {{issue.TrnNo}} </td>
+                                <td> {{issue.DestiBrname}} </td>    
+                                <td>{{issue.cardtype }}</td>   
+                                <td>{{issue.cardno }}</td>                  
+                                <td> {{issue.TrnTime }} </td>
+                                <td>
+                                    <button mat-icon-button class="gHandIcon"
+                                        (click)="getviweByid(issue.todaydate,issue.TrnNo, printDiv)">
+                                        <mat-icon>print</mat-icon>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button mat-icon-button class="gDeleteIcon" (click)="openDialog(issue.TrnNo, i)">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr *ngIf="loading">
+                                <td colspan="9">
+                                    <div class="SkeltonLoader text-center justify-content-center d-flex">
+                                        <mat-spinner></mat-spinner>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr *ngIf="individuals.length ===0">
+                                <td colspan="9"  class="text-center">No record found</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+
+                    
+                    <table width="100" class="gNormalTable-sm table" *ngIf="header === 'FUEL'">
+                        <thead>
+                            <tr>
+                                <th>S.No</th>
+                                <th>Date</th>
+                                <th>TrnNo</th>
+                                <th>Vehicle</th>
+                                <th>Current Meter</th>
+                                <th>Current Fuel Stock </th>
+                                <th>Time</th>
+                                <th>Print</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let issue of individuals | filter :searchTemp; let i = index">
+                                <td> {{i+1}} </td>
+                                <td> {{issue.todaydate |date:'dd/MM/yyyy'}} </td>
+                                <td> {{issue.TrnNo}} </td>
+                                <td> {{issue.DestiBrname}} </td>    
+                                <td>{{issue.cardtype}}</td>    
+                                <td>{{issue.cardno}}</td>   
+                                <td> {{issue.TrnTime }}</td>
+                                <td>
+                                    <button mat-icon-button class="gHandIcon"
+                                        (click)="getviweByid(issue.todaydate,issue.TrnNo, printDiv)">
+                                        <mat-icon>print</mat-icon>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button mat-icon-button class="gDeleteIcon" (click)="openDialog(issue.TrnNo, i)">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr *ngIf="loading">
+                                <td colspan="9">
+                                    <div class="SkeltonLoader text-center justify-content-center d-flex">
+                                        <mat-spinner></mat-spinner>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr *ngIf="individuals.length ===0">
+                                <td colspan="9"  class="text-center">No record found</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+
+            <ng-template #printDiv>
+                <div class="gDialogTitle">
+                    <span></span>
+                    <span> {{header}} ISSUE NOTE</span>
+
+                    <button class="gDialogCloseButton" mat-icon-button
+                        (click)="dialog.closeAll();"><mat-icon>close</mat-icon></button>
+
+                </div>
+                <div class="d-flex mx-1 row justify-content-center" style="margin-top: 1%;">
+                    <img src=".\assets\gImg\a2b2.png" class="viewLogo" style="height: 70px; width: 150px;">
+                </div>
+                <div class="d-flex  mx-1 row justify-content-between" style="margin-left: 1px;margin-right: 1px;">
+                    <div class="col-4 " *ngIf="header != 'WASTAGE' && header != 'RT_TO_SUP'">
+                        <div class="d-flex gap-3">
+                            <div class="gInputLable " *ngIf="header === 'BROKEN'"> Broken To: </div>
+                            <div class="gInputLable " *ngIf="header === 'COMPLEMENTORY'||header === 'SAMPLE'">
+                                Customer: </div>
+                            <div class="gInputLable " *ngIf="header === 'STAFF'"> Issue To: </div>
+                            <div class="gInputLable " *ngIf="header === 'FUEL'"> Vehicle: </div>
+                            <div class="gInputLable " *ngIf="header === 'RETURN'"> Destination:
+                            </div>
+                            <div class="gInputLable ">{{datalist[0]?.DestiBrname}}
+                            </div>
+                            <div class=" "></div>
+                        </div>
+                    </div>
+
+                    <div *ngIf="header === 'RT_TO_SUP'" class="col-4 ">
+                        <div class="d-flex gap-3">
+                            <div class="gInputLable "> Supplier: </div>
+                            <div class="gInputLable ">{{datalist[0]?.Supp}} </div>
+                        </div>
+                    </div>
+
+                    <div class="col-4 ">
+                        <div class="d-flex gap-3">
+                            <div class="gInputLable "> Trn No:</div>
+                            <div class="gInputLable ">{{datalist[0]?.TrnNo}}</div>
+                            <div class=" gInputLable"></div>
+                        </div>
+                    </div>
+                    <div class="col-4 ">
+                        <div class="d-flex gap-3">
+                            <div class=" gInputLable"> Date:</div>
+                            <div class="gInputLable ">{{datalist[0]?.todaydate}}
+                                {{datalist[0]?.TrnTime}}
+                            </div>
+                            <div class=" "></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gTableSection" id="table_list">
+                    <table style="table-layout: auto" class="gNormalTable-sm table">
+                        <thead>
+                            <tr>
+                                <th>S.No</th>
+                                <th>Icode</th>
+                                <th>Particulars</th>
+                                <th style="text-align: right">QTY</th>
+                                <th>Uom</th>
+                                <th style="text-align: right">Tray</th>
+                                <th>TUom</th>
+                                <th style="text-align: right">Rate</th>
+                                <th style="text-align: right">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let list of datalist;let i = index" class="noBorder">
+                                <td>{{i+1}}</td>
+                                <td>{{list.icode}}</td>
+                                <td>{{list.iname}}</td>
+                                <td style="text-align: right">{{list.qty}}</td>
+                                <td>{{list.uom}}</td>
+                                <td style="text-align: right">{{list.TrayCnt}}</td>
+                                <td>{{list.TrayUom}}</td>
+                                <td style="text-align: right">{{list.irate |currency:'INR'}}</td>
+                                <td style="text-align: right">{{list.qty*list.irate |currency:'INR'}}</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td></td>
+
+                                <td> <b>Total Items:</b> </td>
+                                <td><b>{{datalist.length}}</b></td>
+                                <td></td>
+                                <td></td>
+                                <td style="text-align: right;border-bottom:2px dashed #DEE2E6;" class="catname">
+                                </td>
+                                <td style="border-bottom:2px dashed #DEE2E6;" class="catname"></td>
+                                <td style="border-bottom:2px dashed #DEE2E6;" class="catname"><b>GrandTotal</b></td>
+                                <td style="text-align: right;border-bottom:2px dashed #DEE2E6;" class="catname">
+                                    <b>{{printTotal |currency:'INR'}}</b>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <div class=" row " style="margin-left: 1px;margin-right: 1px;"
+                    *ngIf="header==='WASTAGE'||header==='STAFF'||header==='SAMPLE'">
+                    <div class="col-12 col-lg-6 col-md-8 d-flex justify-content-between">
+                        <div class=" gInputLable"> Reason</div>
+                        <div class=" gInputLable" *ngIf="header==='WASTAGE'||header==='STAFF'">
+                            {{datalist[0]?.DriverName}}</div>
+                        <div class="gInputLable " *ngIf="header==='SAMPLE'">
+                            {{datalist[0]?.VehicleNo}}</div>
+                        <div class=" "></div>
+                    </div>
+                </div>
+
+                <div class=" row " style="margin-left: 1px;margin-right: 1px;" *ngIf="header === 'RETURN'">
+                    <div class="col-12 col-lg-6 col-md-8 d-flex justify-content-between">
+                        <div class="gInputLable "> Vehicle </div>
+                        <div class=" gInputLable">{{datalist[0]?.VehicleNo}}</div>
+                        <div class=" "></div>
+                    </div>
+                </div>
+
+                <div class=" row " style="margin-left: 1px;margin-right: 1px;"
+                    *ngIf="header === 'COMPLEMENTORY'||header === 'BROKEN'||header === 'WASTAGE'||header==='STAFF' ">
+                    <div class="col-12 col-lg-6 col-md-8 d-flex justify-content-between">
+                        <div class="gInputLable "> Approved By</div>
+                        <div class=" ">{{datalist[0]?.VehicleNo}}</div>
+                        <div class=" "></div>
+                    </div>
+                </div>
+
+                <div class="text-center" style="margin-top: 2%;">
+                    <button mat-button type="button" class="gSaveButton col-2" id="print_btn"  (click)="printDiv02(datalist[0]?.todaydate,datalist[0]?.TrnNo)">Print1</button>
+                    <!-- <button class=" gSaveButton " id="print_btn" [elementToPrint]="print" ngPrint>Print</button> -->
+                </div>
+            </ng-template>
+
+            <div id="Print_Section" #print hidden>
+                <div class="text-center">
+                    <img src=".\assets\gImg\a2b2.png" class="pntLogo">
+                </div>
+                <div class=" pntHead">
+                    {{header}} ISSUE NOTE
+                </div>
+                <div class="d-flex  mx-1 row justify-content-between" style="margin-left: 1px;margin-right: 1px;">
+                    <div class="col-6 " *ngIf="header != 'WASTAGE' && header != 'RT_TO_SUP'">
+                        <div class="d-flex gap-3">
+                            <div class="gInputLable " *ngIf="header === 'BROKEN'"> Broken To: </div>
+                            <div class="gInputLable " *ngIf="header === 'COMPLEMENTORY'||header === 'SAMPLE'">
+                                Customer: </div>
+                            <div class="gInputLable " *ngIf="header === 'STAFF'"> Issue To: </div>
+                            <div class="gInputLable " *ngIf="header === 'FUEL'"> Vehicle: </div>
+                            <div class="gInputLable " *ngIf="header === 'RETURN'"> Destination:
+                            </div>
+                            <div class="gInputLable ">{{datalist[0]?.DestiBrname}}
+                            </div>
+                            <div class=" "></div>
+                        </div>
+                    </div>
+
+                    <div *ngIf="header === 'RT_TO_SUP'" class="col-6 ">
+                        <div class="d-flex gap-3">
+                            <div class="gInputLable "> Supplier: </div>
+                            <div class="gInputLable ">{{datalist[0]?.Supp}} </div>
+                        </div>
+                    </div>
+
+                    <div class="col-6 ">
+                        <div class="d-flex gap-3">
+                            <div class="gInputLable "> Trn No:</div>
+                            <div class="gInputLable ">{{datalist[0]?.TrnNo}}</div>
+                            <div class=" gInputLable"></div>
+                        </div>
+                    </div>
+                    <div class="col-6 ">
+                        <div class="d-flex gap-3">
+                            <div class=" gInputLable"> Date:</div>
+                            <div class="gInputLable ">{{datalist[0]?.todaydate}}
+                                {{datalist[0]?.TrnTime}}
+                            </div>
+                            <div class=" "></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="gTableSection mt-2" id="table_list">
+                    <table style="table-layout: auto" class="table gNormalTable-sm my-2">
+                        <thead>
+                            <tr>
+                                <th>S.No</th>
+                                <th>Icode</th>
+                                <th>Particulars</th>
+                                <th style="text-align: right">QTY</th>
+                                <th>Uom</th>
+                                <th style="text-align: right">Tray</th>
+                                <th>TUom</th>
+                                <th style="text-align: right">Rate</th>
+                                <th style="text-align: right">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let list of datalist; let i = index" class="noBorder">
+                                <td>{{i+1}}</td>
+                                <td>{{list.icode}}</td>
+                                <td>{{list.iname}}</td>
+                                <td style="text-align: right">{{list.qty}}</td>
+                                <td>{{list.uom}}</td>
+                                <td style="text-align: right">{{list.TrayCnt}}</td>
+                                <td>{{list.TrayUom}}</td>
+                                <td style="text-align: right">{{list.irate |currency:'INR'}}</td>
+                                <td style="text-align: right">{{list.qty*list.irate |currency:'INR'}}</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td></td>
+                                <td> <b>Total Items:</b> </td>
+                                <td><b>{{datalist.length}}</b></td>
+                                <td></td>
+                                <td></td>
+                                <td style="text-align: right;border-bottom:2px dashed #DEE2E6;" class="catname">
+                                </td>
+                                <td style="border-bottom:2px dashed #DEE2E6;" class="catname"></td>
+                                <td style="border-bottom:2px dashed #DEE2E6;" class="catname"><b>GrandTotal</b></td>
+                                <td style="text-align: right;border-bottom:2px dashed #DEE2E6;" class="catname">
+                                    <b>{{printTotal |currency:'INR'}}</b>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="d-flex justify-content-start pntUsr mt-4">
+                    <div class=" ">{{dcoutItems.Usr}}</div>
+                </div>
+                <div class="d-flex justify-content-between pntdc" style="font-size: 18px">
+                    <div class=" ">Prepared By</div>
+                    <div class=" ">Checked By</div>
+                    <div class=" ">Passed By</div>
+                    <div class=" ">Receivers Sign and Seal</div>
+                </div>
+                <hr>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+
+
+    <div *ngIf="progressval == 'indeterminate'" class="loading">
+        <mat-progress-spinner [mode]="progressval"> </mat-progress-spinner>
+    </div>
+</div>

@@ -1,0 +1,89 @@
+th.mat-header-cell,
+td.mat-cell,
+td.mat-footer-cell {
+    text-align: left;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 11px;
+    min-width: 40px;
+}
+
+.subtotal {
+    text-align: end;
+    padding-left: 20px;
+    font-size: 11px;
+    font-weight: 800;
+    font-family: system-ui;
+    color: #182739 !important;
+}
+
+td.mat-footer-cell {
+    font-weight: 900;
+    background-color: #85919e;
+    color: #000 !important;
+}
+
+tr.mat-header-row,
+tr.mat-footer-row {
+    height: 29px !important;
+    border-radius: 10px !important;
+    line-height: 25px;
+    border-top: 1px dotted #adadb5 !important;
+    border-bottom: 1px dotted #adadb5 !important;
+}
+
+.mat-datepicker-toggle {
+    color: #000;
+}
+
+tr.mat-row,
+.table-row {
+    height: 29px !important;
+}
+
+th.mat-header-cell,
+td.mat-footer-cell {
+    border-top: 1px dotted #adadb5 !important;
+    border-bottom: 1px dotted #adadb5 !important;
+}
+
+th.mat-header-cell:first-of-type {
+    border-right: none !important;
+    padding: 0;
+    text-align: center;
+}
+
+.table>tbody>tr:last-child {
+    border-top: 1px dotted #adadb5 !important;
+    border-bottom: 1px dotted #adadb5 !important;
+}
+
+.LastRow {
+    font-size: 14px;
+    font-weight: 800 !important;
+    color: #000 !important;
+    border-top: 2px dotted #adadb5 !important;
+    border-bottom: 2px dotted #adadb5 !important;
+}
+
+td.mat-cell {
+    border-bottom-color: #adadb5 !important
+}
+
+.clickable {
+    font-weight: bold;
+    font-size: 14px;
+    border-top: 1px dotted #adadb5 !important;
+    border-bottom: 1px dotted #adadb5 !important;
+}
+
+.clickable td {
+    border-top: 1px dotted #adadb5 !important;
+    border-bottom: 1px dotted #adadb5 !important;
+    cursor: pointer;
+}
+
+tr.mat-footer-row {
+    border-top: 1px dotted #adadb5 !important;
+    border-bottom: 1px dotted #adadb5 !important;
+}

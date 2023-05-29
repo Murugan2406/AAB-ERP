@@ -1,0 +1,26 @@
+.gcardContainer {
+    box-shadow: 0 8px 32px 0 rgb(31 38 135 / 23%);
+    border: 0.5px solid rgb(31 38 135 / 23%);
+}
+
+::ng-deep.mat-snack-bar-container {
+    border-radius: 4px;
+    box-sizing: border-box;
+    display: block;
+    margin: 10px;
+    margin-top: 0px !important;
+    max-width: 41vw !important;
+    min-width: 278px !important;
+    padding: 10px 16px !important;
+    min-height: 35px !important;
+    transform-origin: center;
+    font-size: 12px;
+    background: #000 !important;
+    box-shadow: none;
+    color: #fff;
+    border-radius: 20px !important;
+}
+
+.gInputLable{
+    color: #000 !important;
+  }

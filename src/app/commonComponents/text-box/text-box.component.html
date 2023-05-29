@@ -1,0 +1,5 @@
+<div [formGroup]="form">
+    <input *ngIf="!field.multiline && this.field.type === 'number'" [attr.type]="'text'" class="gInnerInput" (keypress)="Decimal($event)" [id]="field.name" [name]="field.name" [formControlName]="field.name" autocomplete="off">
+    <input *ngIf="!field.multiline && this.field.type !== 'number'" [attr.type]="'text'" class="gInnerInput"  [id]="field.name" [name]="field.name" [formControlName]="field.name" autocomplete="off">
+    <textarea *ngIf="field.multiline" [class.is-invalid]="isDirty && !isValid" [formControlName]="field.name" [id]="field.name" rows="9" class="form-control" autocomplete="off" [placeholder]="field.placeholder"></textarea>
+</div>

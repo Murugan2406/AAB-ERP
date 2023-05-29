@@ -1,0 +1,205 @@
+<div class="wrapper">
+    <div class="header">
+        <mat-toolbar color="warn">
+            <mat-toolbar-row>
+                <button mat-button (click)="OnBackClic()"> BACK</button>
+                <span class="example-spacer"></span>
+                <span class="example-spacer"></span>
+                <button mat-button disabled>
+                    <img class="png-icon" src=".\assets\images\a2b2.png" style="max-width: 56px; min-width: 56px;">
+                </button>
+            </mat-toolbar-row>
+        </mat-toolbar>
+    </div>
+
+    <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="Logout()"> Logout </button>
+    </mat-menu>
+
+    <div *ngIf="ShowEntry_View === 'Entry'" class="content">
+        <div style="text-align: center;font-weight: bold;color: cadetblue;">{{SelectedMenuTitle}}</div>
+        <div id="1" class="ContentWithBorder">
+            <div class="collapse show" >
+                    <div class="row" [hidden]="isSearch" style="top: 5px;">
+                            <mat-form-field class="example-full-width col-12 col-lg-12 col-md-12 col-xl-12  ">
+                                <input type="text" id="searchitem" aria-label="Number" (focusout)="ItemSearchFocusOut()"
+                                    matInput [formControl]="searchItem" [matAutocomplete]="auto1" placeholder="Search Item">
+                                <mat-autocomplete #auto1="matAutocomplete"
+                                    (optionSelected)='getSelectedIcode($event.option.viewValue)'>
+                                    <mat-option style="line-height: 27px;height: 27px;font-size: 14px;"
+                                        *ngFor="let item of items" [value]="item?.iname">{{ item?.iname }}</mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-lg-6 col-md-6 col-xl-6 lcAlignRow">
+                            <div class="row">
+                                <div class="col-4 ">
+                                    <label class="Phy_Lbl">Icode</label>
+                                </div>
+                                <div class="col-4 ">
+                                    <input #txtIcode class="form-control form-control-sm"  matinput
+                                        type="number" required [(ngModel)]="Icode"
+                                        (keypress)="OnIcodeTextChange($event)"
+                                        (keydown.enter)="GetItemDet(txtIcode.value)">
+                                </div>
+                                <div class="col-2">
+                                    <button (click)="GetItem()" type="button" style="width:30px;" class="btn btn-primary btn-sm"><i aria-hidden="true" class="fa fa-angle-double-right"></i></button>
+                                </div>
+                                <div class="col-2">
+                                    <button (click)="selectSearch()" type="button" style="border-radius:20px;" class="btn btn-primary btn-sm"><i aria-hidden="true" class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 col-md-6 col-xl-6 lcAlignRow">
+                            <div class="row">
+                                <div class="col-4 ">
+                                    <label class="Phy_Lbl">Stock As On</label>
+                                </div>
+                                <div class="col-8 ">
+                                    <input type="text" [(ngModel)]="date" class="form-control form-control-sm" id="date"
+                                        name="date" disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-lg-6 col-md-6 col-xl-6 lcAlignRow">
+                            <div class="row">
+                                <div class="col-4 ">
+                                    <label class="Phy_Lbl" style="margin: auto;">Item</label>
+                                </div>
+                                <div class="col-8 ">
+                                    <input class="form-control form-control-sm"
+                                        [(ngModel)]="Itemname_val" type="text" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 col-md-6 col-xl-6 lcAlignRow">
+                            <div class="row">
+                                <div class="col-4 ">
+                                    <label class="Phy_Lbl" style="margin: auto;">Category</label>
+                                </div>
+                                <div class="col-8 ">
+                                    <input type="text" [(ngModel)]="Category" class="form-control form-control-sm"
+                                        id="cat" name="cat" disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-lg-6 col-md-6 col-xl-6 lcAlignRow">
+                            <div class="row">
+                                <div class="col-4 ">
+                                    <label class="Phy_Lbl">PhyQty</label>
+                                </div>
+                                <div class="col-4 ">
+                                    <input type="text" id="txtStock" class="form-control form-control-sm"
+                                         [(ngModel)]="StkCurQty_val"
+                                        (keypress)="OnStockTextChange($event)" (keydown.enter)="UpdateStock()">
+                                </div>
+                                <!-- <div class="col-4 ">
+                                        <button (click)="UpdateStock()" type="button" class="btn btn-primary btn-sm">
+                                            {{SelectionType}}
+                                        </button>
+                                </div> -->
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 col-md-6 col-xl-6 lcAlignRow">
+                            <div class="row">
+                                <div class="col-4 ">
+                                    <label class="Phy_Lbl">Rate</label>
+                                </div>
+                                <div class="col-3 ">
+                                    <input style="font-size: 12px;" class="form-control form-control-sm"
+                                        matInput type="number" [(ngModel)]="Rate" type="text" readonly>
+                                </div>
+                                <div class="col-2 ">
+                                    <label class="Phy_Lbl">Uom</label>
+                                </div>
+                                <div class="col-3 ">
+                                    <input style="font-size: 12px;" class="form-control form-control-sm"
+                                        matInput  [(ngModel)]="Uom_val" type="text" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-lg-6 col-md-6 col-xl-6 lcAlignRow">
+                            <div class="row">
+                                <div class="col-4 ">
+
+                                </div>
+                                <div class="col-4 ">
+                                    <button (click)="UpdateStock()" type="button" class="btn btn-primary btn-sm">
+                                        {{SelectionType}}
+                                    </button>
+                                </div>
+                                <div class="col-4 ">
+                                    <button *ngIf="StkCorrectionType === 'FromPhyCorr'"  (click)="ViewPending()" type="button" class="btn btn-primary btn-sm">
+                                        ViewPending
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="ShowEntry_View === 'View'" class="Viewcontent">
+        <div style="text-align: center;font-weight: bold;color: cadetblue;">Stock Change Request Pending</div>
+        <div id="2" class="DetailContent">
+            <div class="RWCntrl">
+                <div class="tableWrap" *ngIf="select === 'LIST'">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th style="text-align: left;">Status</th>
+                            <th style="text-align: left;">Icode</th>
+                            <th style="text-align: left;">ItemName</th>
+                            <th style="text-align: right;">ReqQty</th>
+                            <th style="text-align: right;">ApprQty</th>
+                            <th style="text-align: left;">Uom</th>
+                            <th style="text-align: right;">Rate</th>
+                            <th style="text-align: left;">ReqUser</th>
+                            <th style="text-align: left;">ReqTime</th>
+                            <th [hidden]="true" style="text-align: left;">Approveddate</th>
+                            <th style="text-align: left;">ApprovedUser</th>
+                            <th style="text-align: left;">ApprovedTime</th>
+                            <th [hidden]="true" style="text-align: left;">TrnNo</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let recordg of List;">
+                            <td style="text-align: left;">{{recordg.flag}}</td>
+                            <td style="text-align: left;">{{recordg.icode}}</td>
+                            <td style="text-align: left;">{{recordg.iname}}</td>
+                            <td style="text-align: right;">{{recordg.Reqqty}}</td>
+                            <td style="text-align: right;">{{recordg.Apprqty}}</td>
+                            <td style="text-align: left;">{{recordg.uom}}</td>
+                            <td style="text-align: right;">{{recordg.rate}}</td>
+                            <td style="text-align: left;">{{recordg.usr}}</td>
+                            <td style="text-align: left;">{{recordg.timenow}}</td>
+                            <td [hidden]="true" style="text-align: left;">{{recordg.Approveddate}}</td>
+                            <td style="text-align: left;">{{recordg.ApprovedUser}}</td>
+                            <td style="text-align: left;">{{recordg.Approvedtime}}</td>
+                            <td [hidden]="true" style="text-align: left;">{{recordg.Trnid}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div *ngIf="progressval == 'indeterminate'" class="loading">
+    <mat-progress-spinner [mode]="progressval">
+    </mat-progress-spinner>
+</div>

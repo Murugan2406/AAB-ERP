@@ -1,0 +1,46 @@
+.form3Advancetable {
+    max-height: 495px !important;
+    overflow-y: scroll !important;
+    -ms-overflow-style: none !important;
+    scrollbar-width: none !important;
+}
+
+.form3Advancetable::-webkit-scrollbar {
+    display: none;
+}
+
+.typeheaderGroup {
+    display: flex;
+    justify-content: space-between;
+}
+
+.typeheaderGroup span {
+    color: #000 !important;
+    margin: 0;
+}
+
+@media print {
+    table {
+        height: 10 in;
+        width: 100%;
+        position: relative;
+    }
+    /* tr.mat-footer-row {
+        display: block;
+        width: 100%;
+        display: flex;
+        justify-content: end;
+        text-align: end;
+        position: absolute;
+        right: 5%;
+        bottom: -3em;
+    } */
+    .addPadding {
+        padding-top: 15px;
+    }
+    a {
+        text-decoration: underline;
+        padding-top: 15px;
+        margin-top: 15px;
+    }
+}

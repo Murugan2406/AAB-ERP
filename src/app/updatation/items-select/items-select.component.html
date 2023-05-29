@@ -1,0 +1,129 @@
+<!-- <form style="margin-top: 2%;">
+
+  <div class="row" [hidden]="isSearch" >
+    <div class="col-12 col-lg-4 col-md-6  serchBox">
+      <mat-form-field class="example-full-width">
+        <input type="text" id ="searchitem" aria-label="Number" matInput [formControl]="searchItem"  [matAutocomplete]="auto1" placeholder="Item Name">
+        <mat-autocomplete #auto1="matAutocomplete" (optionSelected)='getSelectedIcode($event.option.viewValue)'>
+          <mat-option *ngFor="let item of items"  [value]="item?.iname" >{{ item?.iname }}</mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row" style="margin-top: 1%;">
+    <div class="col-4 ">
+      <label class="gInputLable">Item Code</label>
+    </div>
+    <div class="col-8 col-lg-7">
+      <div class="row">
+        <div class="col-6 ">
+          <input type="number"  class="gInnerInput-border" (keydown)="getItemByCode($event)" id="icode" name="code" [(ngModel)]="itemCode" >
+        </div>
+        <div class="col-2 ">
+          <button id="itemDetail" class="gSaveButton " (click)="getItem('ITEM_CODE_SEARCH')">
+            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div class="col-4 ">
+          <button class="gSaveButton " (click)="openSearch()"> Search </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" >
+    <div class="col-4 ">
+      <label class="gInputLable">Item Name</label>
+    </div>
+    <div class="col-8 col-lg-7 ">
+      <input type="text"  class="gInnerInput-border" [(ngModel)]="iname" id="iname" name="iname" readonly>
+    </div>
+  </div>
+
+  <div class="row" style="margin-top: 2%;">
+    <div class="col-4 ">
+      <label class="gInputLable">Item Qty</label>
+    </div>
+    <div class="col-8 col-lg-7">
+      <div class="row ">
+        <div class="col-4 ">
+          <input type="text" class="gInnerInput-border" id="qty" name="qty" [(ngModel)]="qty" (keypress)="changeValue($event)" (keydown)="enterqty($event)">
+        </div>
+        <div class="col-4 ">
+          <input type="text" class="gInnerInput-border" id="uom" name="uom" [(ngModel)]="itemUom"  placeholder="Uom" readonly>
+        </div>
+        <div class="col-4 ">
+          <button class="gSaveButton "  id="additem" (click)="senddata()" *ngIf="Cname === 'Add'"> Add </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form> -->
+
+
+<div class="container gcardContainer" id="ordertype" style="margin-top: 2%;">
+    <div class="d-flex justify-content-center" *ngIf="!isSearch">
+        <div class="p-2  col-xl-3 col-lg-3 col-md-5 col-4"></div>
+        <div class="p-2  col-xl-4 col-lg-4 col-md-7 col-8">
+
+            <input type="text" id="searchitem" aria-label="Number" matInput [formControl]="searchItem" [matAutocomplete]="auto1" placeholder="Item Name" class="gInnerInput-border">
+            <mat-autocomplete #auto1="matAutocomplete" (optionSelected)='getSelectedIcode($event.option.viewValue)' class="gAutoCompleteContainer">
+                <mat-option *ngFor="let item of items" [value]="item?.iname" class="gSelectOption">{{ item?.iname }}</mat-option>
+            </mat-autocomplete>
+
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-center">
+        <div class="p-2  col-xl-3 col-lg-3 col-md-5 col-4">
+            <label class="gInputLable">Item Code</label>
+        </div>
+        <div class="p-2  col-xl-4 col-lg-4 col-md-7 col-8">
+            <div class="row">
+                <div class=" col-6">
+                    <input type="number" class="gInnerInput-border" (keydown)="getItemByCode($event)" id="icode" name="code" [(ngModel)]="itemCode">
+                </div>
+                <div class=" col-3">
+                    <button id="itemDetail" class="gSaveButton " (click)="getItem('ITEM_CODE_SEARCH')">
+                  <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                </button>
+                </div>
+                <div class=" col-3">
+                    <button id="itemsrch" class="gSaveButton " (click)="openSearch()">
+                      <i class="fa fa-search" aria-hidden="true"></i>
+                  </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-center">
+        <div class="p-2  col-xl-3 col-lg-3 col-md-5 col-4">
+            <label class="gInputLable">Item Name</label>
+        </div>
+        <div class="p-2  col-xl-4 col-lg-4 col-md-7 col-8">
+            <input type="text" class="gInnerInput-border" [(ngModel)]="iname" id="iname" name="iname" readonly>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-center">
+        <div class="p-2  col-xl-3 col-lg-3 col-md-5 col-4">
+            <label class="gInputLable">Item Qty</label>
+        </div>
+        <div class="p-2  col-xl-4 col-lg-4 col-md-7 col-8">
+            <div class="row">
+                <div class=" col-5">
+                    <input type="text" class="gInnerInput-border" id="qty" name="qty" [(ngModel)]="qty" (keypress)="changeValue($event)" (keydown)="enterqty($event)">
+                </div>
+                <div class=" col-5">
+                    <input type="text" class="gInnerInput-border" id="uom" name="uom" [(ngModel)]="itemUom" placeholder="Uom" readonly>
+                </div>
+                <div class=" col-2">
+                    <button class="gSaveButton " id="additem" (click)="senddata()" *ngIf="Cname === 'Add'"> Add </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

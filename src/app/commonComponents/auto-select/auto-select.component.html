@@ -1,0 +1,11 @@
+<mat-select class="gInnerInput" name="name" id="ussageName" [formControl]="gformControlName">
+    <input matInput type="text" class="gInnerInput-border" placeholder="Search " [(ngModel)]="searchSelect"
+        (ngModelChange)="inputChange($event)" [ngModelOptions]="{standalone: true}">
+
+    <mat-option disabled style="cursor: no-drop;" *ngIf="gAutoSelectArr.length === 0">No records found</mat-option>
+    <mat-option class="gSelectOption" *ngFor="let element of gAutoSelectArr| filter:searchSelect" [value]="element"
+        (onSelectionChange)="UssageNameSelected($event, element)">
+        {{ element.iname }}
+    </mat-option>
+
+</mat-select>

@@ -1,0 +1,346 @@
+<div class="wrapper">
+    <app-header Titleheader="" back="true" (BackClick)="backNavigation()"></app-header>
+
+    <div class="content" id="contentnew">
+        <div class="example-container">
+            <div class="container-fluid" *ngIf="isSelection === 'VIEWOPTION'">
+                <div class="row justify-content-center m-align">
+                    <div class="card col col-sm-8 col-md-7 col-lg-6 col-xl-6">
+                        <legend class="Pagetitle">
+                            Set Return Request
+                        </legend>
+
+                        <div class="d-flex row justify-content-between" style="margin-top: 1%;">
+                            <div class="col-3 ">
+                                <label class="lablegray"> Type of issue</label>
+                            </div>
+                            <div class="col-9 ">
+                                <select class="form-control form-control-sm" id="seltype" [(ngModel)]="optType">
+                                    <option *ngFor="let typ of optionTypes" [value]="typ.val">{{typ.type}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="d-flex row justify-content-between" style="margin-top: 1%;">
+                            <div class="col-3 ">
+                                <label class="lablegray">From Date</label>
+                            </div>
+                            <div class="col-9 ">
+                                <input type="date" class="form-control form-control-sm" id="fromdate"
+                                    [(ngModel)]="fromdate">
+                            </div>
+                        </div>
+                        <div class="d-flex row justify-content-between" style="margin-top: 1%;">
+                            <div class="col-3 ">
+                                <label class="lablegray">To Date</label>
+                            </div>
+                            <div class="col-9 ">
+                                <input type="date" class="form-control form-control-sm" id="todate"
+                                    [(ngModel)]="todate">
+                            </div>
+                        </div>
+
+                        <div class="d-flex row justify-content-between" style="margin-top: 1%;">
+                            <div class="col-3 "></div>
+                            <div class="col-9 ">
+                                <div class="d-flex justify-content-between">
+                                    <div class="p-2 ">
+                                        <button id="next" (click)="selectViewNext()" style="vertical-align:middle;"
+                                            class="btn btn-primary" mat-raised-button color="accent">View </button>
+                                    </div>
+                                    <div class="p-2 "></div>
+                                    <div class="p-2 ">
+                                        <button id="view" (click)="cancelView()" style="vertical-align:middle"
+                                            class="btn btn-rose" mat-raised-button color="accent">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container-fluid" *ngIf="isSelection === 'OPTION'">
+                <div class="row justify-content-center m-align">
+                    <div class="card col col-sm-8 col-md-7 col-lg-6 col-xl-6">
+                        <legend class="Pagetitle">
+                            Set Return Request
+                        </legend>
+
+                        <div class="d-flex row justify-content-between" style="margin-top: 1%;">
+                            <div class="col-3 ">
+                                <label class="lablegray"> Type of issue</label>
+                            </div>
+                            <div class="col-9 ">
+                                <select class="form-control form-control-sm" id="seltype" [(ngModel)]="optType">
+                                    <option *ngFor="let typ of optionTypes" [value]="typ.val">{{typ.type}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="d-flex row justify-content-between" style="margin-top: 1%;">
+                            <div class="col-3 ">
+                                <label class="lablegray">Batch Number</label>
+                            </div>
+                            <div class="col-9 ">
+                                <input type="text" id="batchNum" aria-label="Number" [formControl]="BatchControl"
+                                    [matAutocomplete]="auto1" class="form-control form-control-sm">
+                                <mat-autocomplete #auto1="matAutocomplete"
+                                    (optionSelected)="changeBatch($event.option.viewValue)">
+                                    <mat-option *ngFor="let item of batches" [value]="item?.brname">{{ item?.brname }}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </div>
+                        </div>
+
+                        <div class="d-flex row justify-content-between" style="margin-top: 1%;">
+                            <div class="col-3 ">
+                                <label class="lablegray"> Master Name</label>
+                            </div>
+                            <div class="col-9 ">
+                                <input type="text" id="mastername" aria-label="Number" [formControl]="MasterControl"
+                                    [matAutocomplete]="auto2" class="form-control form-control-sm">
+                                <mat-autocomplete #auto2="matAutocomplete"
+                                    (optionSelected)="changeMaster($event.option.viewValue)">
+                                    <mat-option *ngFor="let item of masters" [value]="item?.brname">{{ item?.brname }}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </div>
+                        </div>
+
+                        <div class="d-flex row justify-content-between" style="margin-top: 1%;" *ngIf="optType == 'ISSUES_IND'">
+                            <div class="col-3 ">
+                                <label class="lablegray">To Item</label>
+                            </div>
+                            <div class="col-9 ">
+                                <input type="text" id="sectionControl" aria-label="Number" [formControl]="toItemControl"
+                                    [matAutocomplete]="ToItem" class="form-control form-control-sm">
+                                <mat-autocomplete #ToItem="matAutocomplete"
+                                    (optionSelected)="change_ToItemCode($event.option.viewValue)">
+                                    <mat-option *ngFor="let item of toItems" [value]="item?.brname">{{ item?.brname }}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </div>
+                        </div>
+
+
+                        <div class="d-flex row justify-content-between" style="margin-top: 1%;">
+                            <div class="col-3 "></div>
+                            <div class="col-9 ">
+                                <div class="d-flex justify-content-between">
+                                    <div class="p-2 ">
+                                        <button id="next" (click)="selectNext()" style="vertical-align:middle;"
+                                            class="btn btn-primary" mat-raised-button color="accent">Next </button>
+                                    </div>
+                                    <div class="p-2 "></div>
+                                    <div class="p-2 ">
+                                        <button id="view" (click)="selectView()" style="vertical-align:middle"
+                                            class="btn btn-rose" mat-raised-button color="accent">View</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div style="margin-top: 1%;" *ngIf="isSelection==='SAVE'">
+
+                <!----------Item selection Start---------------->
+                <div class="container" id="ordertype" style="margin-top: 2px;">
+                    <div class="d-flex justify-content-center" *ngIf="isSearch">
+                        <div class="p-2  col-xl-3 col-lg-3 col-md-5 col-4"></div>
+                        <div class="p-2  col-xl-4 col-lg-4 col-md-7 col-8">
+                            <mat-form-field class="example-full-width">
+                                <input type="text" id="searchitem" aria-label="Number" matInput
+                                    [formControl]="searchItem" [matAutocomplete]="auto1" placeholder="Enter Name">
+                                <mat-autocomplete #auto1="matAutocomplete"
+                                    (optionSelected)="changeList($event.option.viewValue)">
+                                    <mat-option *ngFor="let item of items" [value]="item?.brname">{{ item?.brname }}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-center">
+                        <div class="p-2  col-xl-3 col-lg-3 col-md-5 col-4">
+                            <label *ngIf="optType==='ISSUES_SET'" class="optionlbl">Set Code</label>
+                            <label *ngIf="optType==='ISSUES_IND'" class="optionlbl">Item Code</label>
+                        </div>
+                        <div class="p-2  col-xl-4 col-lg-4 col-md-7 col-8">
+                            <div class="row">
+                                <div class=" col-6">
+                                    <input type="number" class="form-control form-control-sm " id="icode" name="code"
+                                        [(ngModel)]="sCode">
+                                </div>
+                                <div class=" col-3">
+                                    <button id="itemDetail" class="btnn " (click)="itemCodebyDetails()">
+                                        <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                                <div class=" col-3">
+                                    <button id="itemsrch" class="btnn " (click)="openSearch()">
+                                        <i class="fa fa-search" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-center">
+                        <div class="p-2  col-xl-3 col-lg-3 col-md-5 col-4">
+                            <label *ngIf="optType==='ISSUES_SET'" class="optionlbl">Set Name</label>
+                            <label *ngIf="optType==='ISSUES_IND'" class="optionlbl">Item Name</label>
+                        </div>
+                        <div class="p-2  col-xl-4 col-lg-4 col-md-7 col-8">
+                            <input type="text" class="form-control form-control-sm " [(ngModel)]="sname" id="iname"
+                                name="iname" readonly>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-center">
+                        <div class="p-2  col-xl-3 col-lg-3 col-md-5 col-4">
+                            <label *ngIf="optType==='ISSUES_SET'" class="optionlbl">Set Qty</label>
+                            <label *ngIf="optType==='ISSUES_IND'" class="optionlbl">Item Qty</label>
+                        </div>
+                        <div class="p-2  col-xl-4 col-lg-4 col-md-7 col-8">
+                            <div class="row">
+                                <div class=" col-5">
+                                    <input type="text" class="form-control form-control-sm " id="qty" name="qty"
+                                        [(ngModel)]="qty" (keypress)="changeValue($event)" (keydown)="enterQty($event)">
+                                </div>
+                                <div class=" col-5">
+                                    <input type="text" class="form-control form-control-sm " id="uom" name="uom"
+                                        [(ngModel)]="sUom" placeholder="Uom" readonly>
+                                </div>
+                                <div class=" col-2">
+                                    <button id="addBtn" class="btnn" (click)="addTolist()">Add </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!---------------------------Item selection Start---------------------------------->
+
+                <!-- <div class="table-responsive" id="table_list"> -->
+                <div class="table-responsive" id="table_list"
+                    [ngClass]="{ 'table-scroll': individuals.length >=20 ,'tablehideScroll': 20 > individuals.length }">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Sno</th>
+                                <th *ngIf="optType==='ISSUES_SET'">Setcode</th>
+                                <th *ngIf="optType==='ISSUES_IND'">Icode</th>
+                                <th>Particulars</th>
+                                <th>Qty</th>
+                                <th>Uom</th>
+                                <th style="text-align: center;">Option</th>
+                            </tr>
+                        </thead>
+                        <tbody style="color:#01579b;font-size: 12px;">
+                            <tr class="noBorder" *ngFor="let items of individuals; let i = index">
+                                <td>{{i+1}}</td>
+                                <td>{{items.icode}}</td>
+                                <td>{{items.iname}}</td>
+                                <td>{{items.iqty}}</td>
+                                <td>{{items.mment}}</td>
+                                <td style="text-align: center;">
+                                    <i style="color: rgb(58, 48, 49);" class="material-icons"
+                                        (click)="itemRemove(i)">delete_forever</i>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="d-flex row justify-content-center " style="margin-top: 3%;">
+                    <button id="next" class="btnn col-4" (click)="confirmation()">Send Return Request</button>
+                </div>
+            </div>
+
+
+            <div style="margin-top: 1%;" *ngIf="isSelection==='VIEWLIST'">
+                <div class="table-responsive" id="table_list"
+                    [ngClass]="{ 'table-scroll': List.length >=20 ,'tablehideScroll': 20 > List.length }">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Sno</th>
+                                <th>BatchNo</th>
+                                <th class="text-center">
+                                    <i class="material-icons">double_arrow</i>
+                                </th>
+                                <th>Date</th>
+                                <th>MasterName</th>
+                                <th>UserName</th>
+                                <th style="text-align: center;">
+                                    <i class="material-icons">delete_forever</i>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody style="color:#01579b;font-size: 12px;">
+                            <tr class="noBorder" *ngFor="let items of List; let i = index">
+                                <td>{{i+1}}</td>
+                                <td>{{items.BatchNo}}</td>
+                                <td style="text-align: center;">
+                                    <i class="material-icons"
+                                        (click)="viewByid(items.timenow,items.trnId)">double_arrow</i>
+                                </td>
+                                <td>
+                                    {{items.timenow|date:'dd/MM/yyyy'}}</td>
+                                <td> {{items.MasterName}} </td>
+                                <td>{{items.usr}}</td>
+                                <td style="text-align: center;">
+                                    <i style="color: #b4004e;" class="material-icons"
+                                        (click)="deleteRequest(items.timenow,items.trnId, items.ReqType)">delete_forever</i>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- VIEW BY ID -->
+            <div style="margin-top: 1%;" *ngIf="isSelection==='VIEWDETAILS'">
+                <div class="d-flex" style="margin-right: 1%;font-size: 14px;font-weight: bold;color:#01579b;">
+                    BatchNo: {{individuals[0].BatchNo}} / Type: {{individuals[0].ReqType}} / Date:
+                    {{individuals[0].timenow| date:'dd/MM/yyyy'}}
+                </div>
+
+                <div class="d-flex" style="margin-right: 1%;font-size: 14px;font-weight: bold;color:#01579b">
+                    Master: {{individuals[0].Emaster}} / User: {{individuals[0].usr}}
+                </div>
+
+                <div class="table-responsive" id="table_list"
+                    [ngClass]="{ 'table-scroll': individuals.length >=20 ,'tablehideScroll': 20 > individuals.length }">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Sno</th>
+                                <th>Item Name</th>
+                                <th>Qty</th>
+                                <th>Uom</th>
+                            </tr>
+                        </thead>
+                        <tbody style="color:#01579b;font-size: 12px;">
+                            <tr class="noBorder" *ngFor="let items of individuals; let i = index">
+                                <td>{{i+1}}</td>
+                                <td>{{items.iname}}</td>
+                                <td>{{items.qty}}</td>
+                                <td> {{items.uom}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div *ngIf="progressval == 'indeterminate'" class="loading">
+        <mat-progress-spinner [mode]="progressval"> </mat-progress-spinner>
+    </div>
+</div>

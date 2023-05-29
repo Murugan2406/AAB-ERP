@@ -1,0 +1,413 @@
+
+<div class="loading"  *ngIf="progressval == 'indeterminate'"
+    style="position: fixed; top:0; bottom: 0; left: 0; right: 0; z-index: 10001 !important; backdrop-filter: blur(3px);">
+
+    <div class="pendulum-container">
+
+        <div class="ball-first">
+            <div id="ball-1" class="first"></div>
+            <div id="shadow-1" class="first-shadow"></div>
+        </div>
+        <div id="ball-2"></div>
+
+        <div id="ball-5"></div>
+        <div id="ball-6"></div>
+        <div class="ball-first">
+            <div id="ball-7" class="last"></div>
+            <div id="shadow-2" class="last-shadow"></div>
+        </div>
+    </div>
+
+</div>
+<div class="gWrapper gNewHeader">
+  <app-header Titleheader="Store Issue"></app-header>
+
+
+  <mat-drawer-container class="example-container" autosize>
+    <mat-drawer #drawer class="example-sidenav" [mode]="sidebarMode" [opened]="sideNavOpen" hasBackdrop="true">
+        <div class=" text-end" *ngIf="this.sidebarMode === 'over'">
+            <button mat-button class="sidnavCloseButton" type="button" z
+                (click)="drawer.toggle()"><mat-icon>close</mat-icon></button>
+        </div>
+
+  
+      
+        
+    <div class="row mx-1 justify-content-center" >
+      <div class="col-12 mt-3">
+        <label class="gInputLable">Batch</label>
+
+        <input type="text" [matAutocomplete]="auto1" [formControl]="batchnumControl" id="batchno" name="batchno"
+          class=" gNewInput">
+        <mat-autocomplete #auto1="matAutocomplete" (optionSelected)='getSelectedBatch($event.option.viewValue)' class="gAutoCompleteContainer gNewAuto">
+          <mat-option *ngFor="let item of batchList" [value]="item?.BatchName" class="gSelectOption">
+            {{item?.BatchName}}</mat-option>
+        </mat-autocomplete>
+      </div>
+      <div class="col-12 mt-3">
+        <label class="gInputLable">Item Icode</label>
+<div class="gOuterInput  gNewOuterInput">
+        <input type="text" [(ngModel)]="icode" (keydown)="icodeEnterEvet($event,'viewfrdate')"
+          (keypress)="OnlyNumericDecimal($event)" class=" gNewInput" id="icode" name="icode">
+          <button (click)="getIcodeDetails()" id="itmloadBtn" mat-button class="gInputButton gNewButton">
+            <mat-icon>keyboard_arrow_right</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <div class="col-12 mt-3">
+        <label class="gInputLable">Item Name</label>
+
+      
+        <input type="text" [matAutocomplete]="auto3" [formControl]="itemControl" id="item" name="item"
+          class=" gNewInput">
+        <mat-autocomplete #auto3="matAutocomplete" (optionSelected)='getItemToIcode($event.option.viewValue)' class="gAutoCompleteContainer gNewAuto">
+          <mat-option *ngFor="let item of itemList" [value]="item?.iname" class="gSelectOption">
+            {{item?.iname}}</mat-option>
+        </mat-autocomplete>
+</div>
+      <div class="col-12 mt-3">
+        <label class="gInputLable">From Date</label>
+        <div class="gOuterInput  gNewOuterInput">
+          <input matInput class="gNewInput" id="fromDate" [matDatepicker]="picker"
+          [(ngModel)]="fromdate" (keydown)="enterKeyEvent($event,'viewtodate')" autocomplete="off">
+      <mat-datepicker-toggle matSuffix [for]="picker" class="gInputButton gNewButton">
+          <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+      </mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      </div>
+      </div>
+      <div class="col-12 mt-3">
+        <label class="gInputLable">To Date</label>
+        <div class="gOuterInput  gNewOuterInput">
+          <input matInput class="gNewInput" id="viewtodate" [matDatepicker]="picker2"
+          [(ngModel)]="todate" (keydown)="enterKeyEvent($event,'loadBtn')" autocomplete="off">
+      <mat-datepicker-toggle matSuffix [for]="picker2" class="gInputButton gNewButton">
+          <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+      </mat-datepicker-toggle>
+      <mat-datepicker #picker2></mat-datepicker>
+      </div>
+
+        <!-- <input type="date" [(ngModel)]="todate" (keydown)="enterKeyEvent($event,'loadBtn')"
+          class=" gNewInput" id="viewtodate" name="viewtodate"> -->
+      </div>
+      <div class="col-12 text-center mt-5">
+        <button mat-button (click)="getIssue()" id="loadBtn"  type="button" class="linkButtons col-2">
+    
+          <mat-icon class="firstIcon" style="font-size: 16px;">visibility</mat-icon>
+          <span class="gInputLable">View</span>
+          <i class="fa fa-caret-right" aria-hidden="true"></i>
+      </button>
+        <!-- <button (click)="getIssue()" id="loadBtn" class="gSaveButton gNewSaveButton">View</button> -->
+      </div>
+
+      <div class="col-12 ">
+        <button (click)="existApp()"  mat-button class="ExitIcon">
+          <i class="fa fa-sign-out" aria-hidden="true"  style="font-size: 18px;"></i>
+         &nbsp;&nbsp; Exit App</button>
+
+
+         
+         <button type="button" mat-button class=" tips d-flex gap-1" [matMenuTriggerFor]="menu1"
+         #menuTrigger="matMenuTrigger" (mouseenter)="mouseEnter(menuTrigger)" style="width: 100px;"
+         (mouseleave)="mouseLeave(menuTrigger)">
+         <i class="fa fa-lightbulb-o firstIcon"  style="font-size: 18px;"></i>
+        Page tips
+         <!-- <i class="fa fa-caret-right" aria-hidden="true"></i> -->
+        </button>
+      </div>
+    </div>
+
+
+
+    <mat-menu #menu1="matMenu" [hasBackdrop]="false">
+      <div (mouseenter)="mouseEnter(menuTrigger)" (mouseleave)="mouseLeave(menuTrigger)">
+          <button mat-menu-item class="gMenuLable1">
+              <span class="gMenuLable ">Back&nbsp;: &nbsp;&nbsp; Alt + X </span>
+          </button>
+     
+          <button mat-menu-item class="gMenuLable1">
+              <span class="gMenuLable"> Clear&nbsp;:&nbsp;&nbsp; Alt + C</span>
+          </button>
+    
+          <button mat-menu-item class="gMenuLable1">
+              <span class="gMenuLable"> View&nbsp;: &nbsp;&nbsp; Alt + V</span>
+          </button>
+
+          <button mat-menu-item class="gMenuLable1">
+              <span class="gMenuLable"> Toggle Sidebar&nbsp;: &nbsp;&nbsp; Alt + A</span>
+          </button>
+      </div>
+  </mat-menu>
+
+  </mat-drawer>
+  <button class="burger" type="button" mat-icon-button (mouseenter)="drawer.open()" (click)="drawer.toggle()">
+  <mat-icon *ngIf="this.sideNavOpen">keyboard_arrow_left </mat-icon>
+  <mat-icon *ngIf="!this.sideNavOpen">keyboard_arrow_right</mat-icon>
+</button>
+
+    <div class="row mx-2 justify-content-center" >
+      <div class="col-12 col-xl-10">
+      <div class="gTableSection   ">
+      <div class="gInnerTable mt-2">
+        <table class=" gNormalTable-sm table ">
+          <thead  >
+            <tr >
+              <th  class="firstCol">Sno</th>
+              <th>BatchNo</th>
+              <th>NoSetIndent</th>
+              <th>NoSetIssue</th>
+              <th>NoSetReturn</th>
+              <th>ExpPrdn</th>
+              <th class="lastCol">Produced</th>
+            </tr>
+          </thead>
+          <tbody  >
+            <tr *ngFor="let li of List;let i = index">
+              <td  >{{i+1}}</td>
+              <td>{{li.OutletName}}</td>
+              <td>{{li.OutletName}}</td>
+              <td>{{li.OutletName}}</td>
+              <td>{{li.OutletName}}</td>
+              <td>{{li.OutletName}}</td>
+              <td >{{li.OutletName}}</td>
+            </tr>
+            <tr *ngIf="List.length===0">
+              <td colspan="7" class="text-center">No record found.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      </div>
+    </div>
+    <div class="col-12 col-xl-6">
+      <div class="gTableSection mt-3  mt-xl-5"  >
+        <div class="gTableActionheaders justify-content-start  gInputLable" >
+          SF.PRODUCTION
+        </div>
+       
+
+      <div class="gInnerTable">
+        <table class=" gNormalTable-sm table ">
+          <thead  >
+            <tr class="diff_table">
+              <th  class="firstCol">Sno</th>
+              <th>EntryDate</th>
+              <th>Barcode</th>
+              <th>Qty</th>
+              <th>Uom</th>
+              <th>EntryTime</th>
+              <th class="lastCol">EntryUser</th>
+            </tr>
+          </thead>
+          <tbody  >
+            <tr *ngFor="let li of sf_production;let i = index">
+              <td  >{{i+1}}</td>
+              <td>{{li.TrnNo_billdate}}</td>
+              <td>{{li.NoSets_Barcode}}</td>
+              <td>{{li.ExpPrdn_Qty}}</td>
+              <td>{{li.RecdBy_uom}}</td>
+              <td>{{li.timenow}}</td>
+              <td>{{li.Usr}}</td>
+            </tr>
+            <tr *ngIf="sf_production.length===0">
+              <td colspan="7" class="text-center">No record found.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>    
+      </div>
+      <div class="col-12 col-xl-6">
+        <div class="gTableSection mt-3  mt-xl-5"  >
+          <div class="gTableActionheaders justify-content-start  gInputLable" >
+          STORE ISSUE//STORE ISSUE TO BATCH NO
+        </div>
+
+        <div class="gInnerTable">
+          <table class=" gNormalTable-sm table ">
+            <thead  >
+              <tr class="diff_table">
+                <th  class="firstCol">Sno</th>
+                <th>Trnno</th>
+                <th>NoSets</th>
+                <th>ExpPrdn</th>
+                <th>EntryUser</th>
+                <th class="lastCol">EntryTime</th>
+              </tr>
+              
+            </thead>
+            <tbody  >
+              <tr *ngFor="let li of store_issue;let i = index">
+                <td  >{{i+1}}</td>
+                <td>{{li.TrnNo_billdate}}</td>
+                <td>{{li.NoSets_Barcode}}</td>
+                <td>{{li.ExpPrdn_Qty}}</td>
+                <td>{{li.Usr}}</td>
+                <td>{{li.timenow}}</td>
+              </tr>
+              <tr *ngIf="store_issue.length===0">
+                <td colspan="6" class="text-center">No record found.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div> 
+           </div>
+
+
+
+      <div class="col-12 col-xl-6">
+        <div class="gTableSection mt-3  mt-xl-5"  >
+          <div class="gTableActionheaders justify-content-start  gInputLable" >
+            SF STOCK AVAILABLE IN HAND AT BATCH NO
+          </div>
+          
+
+        <div class="gInnerTable">
+          <table class=" gNormalTable-sm table ">
+            <thead  >
+              <tr class="diff_table">
+                <th  class="firstCol">Sno</th>
+                <th>SfCode</th>
+                <th>Sf ProductName</th>
+                <th class="lastCol">CurStock</th>
+              </tr>
+            </thead>
+            <tbody  >
+              <tr *ngFor="let li of sf_items_stockbalview;let i = index">
+                <td  >{{i+1}}</td>
+                <td>{{li.TrnNo_billdate}}</td>
+                <td>{{li.NoSets_Barcode}}</td>
+                <td>{{li.ExpPrdn_Qty}}</td>
+              </tr>
+              <tr *ngIf="sf_items_stockbalview.length===0">
+                <td colspan="4" class="text-center">No record found.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>    
+        </div>
+      <div class="col-12 col-xl-6">
+        <div class="gTableSection mt-3  mt-xl-5"  >
+          <div class="gTableActionheaders justify-content-start  gInputLable" >
+            FG PRODUCTION
+          </div>
+          
+
+        <div class="gInnerTable">
+          <table class=" gNormalTable-sm table ">
+            <thead  >
+              <tr class="diff_table">
+                <th  class="firstCol">Sno</th>
+                <th>EntryDate</th>
+                <th>Barcode</th>
+                <th>Qty</th>
+                <th>Uom</th>
+                <th>EntryTime</th>
+                <th class="lastCol">EntryUser</th>
+              </tr>
+            </thead>
+            <tbody  >
+              <tr *ngFor="let li of fg_production;let i = index">
+                <td  >{{i+1}}</td>
+                <td>{{li.TrnNo_billdate}}</td>
+                <td>{{li.NoSets_Barcode}}</td>
+                <td>{{li.ExpPrdn_Qty}}</td>
+                <td>{{li.RecdBy_uom}}</td>
+                <td>{{li.timenow}}</td>
+                <td>{{li.Usr}}</td>
+              </tr>
+              <tr *ngIf="fg_production.length===0">
+                <td colspan="7" class="text-center">No record found.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>        </div>
+
+
+      <div class="col-12 col-xl-6">
+        <div class="gTableSection mt-3  mt-xl-5"  >
+          <div class="gTableActionheaders justify-content-start  gInputLable" >
+            SF.STOCK AUTO ISSUE DETAILS FROM DAY END CLOSING
+          </div>
+          
+
+        <div class="gInnerTable ">
+          <table class=" gNormalTable-sm table ">
+            <thead  >
+              <tr class="diff_table">
+                <th  class="firstCol">Sno</th>
+                <th>EntryDate</th>
+                <th>Qty</th>
+                <th>Uom</th>
+                <th>EntryTime</th>
+                <th class="lastCol">EntryUser</th>
+              </tr>
+            </thead>
+            <tbody  >
+              <tr *ngFor="let li of store_issue;let i = index">
+                <td  >{{i+1}}</td>
+                <td>{{li.TrnNo_billdate}}</td>
+                <td>{{li.ExpPrdn_Qty}}</td>
+                <td>{{li.RecdBy_uom}}</td>
+                <td>{{li.timenow}}</td>
+                <td>{{li.Usr}}</td>
+              </tr>
+              <tr *ngIf="store_issue.length===0">
+                <td colspan="6" class="text-center">No record found.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>        </div>
+      <div class="col-12 col-xl-6">
+        <div class="gTableSection mt-3  mt-xl-5"  >
+          <div class="gTableActionheaders justify-content-start  gInputLable" >
+            DIRECT SF.STOCK[PRODUCTION] ENTERED DETAILS AT DAY END
+          </div>
+         
+
+        <div class="gInnerTable">
+          <table class=" gNormalTable-sm table ">
+            <thead  >
+              <tr class="diff_table">
+                <th  class="firstCol">Sno</th>
+                <th>EntryDate</th>
+                <th>Barcode</th>
+                <th>Qty</th>
+                <th>Uom</th>
+                <th>EntryTime</th>
+                <th class="lastCol">EntryUser</th>
+              </tr>
+            </thead>
+            <tbody  >
+              <tr *ngFor="let li of production;let i = index">
+                <td  >{{i+1}}</td>
+                <td>{{li.TrnNo_billdate}}</td>
+                <td>{{li.NoSets_Barcode}}</td>
+                <td>{{li.ExpPrdn_Qty}}</td>
+                <td>{{li.RecdBy_uom}}</td>
+                <td>{{li.timenow}}</td>
+                <td>{{li.Usr}}</td>
+              </tr>
+              <tr *ngIf="production.length===0">
+                <td colspan="7" class="text-center">No record found.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>        </div>
+
+    </div>
+
+    </mat-drawer-container>
+    </div>
+
+
+    <!-- <div class=" d-flex align-items-center justify-content-center "  *ngIf="progressval == 'indeterminate'"style="position: fixed; top:0; bottom: 0; left: 0; right: 0; z-index: 10001 !important; backdrop-filter: blur(2px);">
+      <mat-spinner></mat-spinner>
+  </div> -->
+

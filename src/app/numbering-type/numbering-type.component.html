@@ -1,0 +1,189 @@
+<div class=" d-flex align-items-center justify-content-center " *ngIf="loading"
+    style="position: fixed; top:0; bottom: 0; left: 0; right: 0; z-index: 10001 !important; backdrop-filter: blur(2px);">
+    <mat-spinner></mat-spinner>
+</div>
+
+
+<div class="gWrapper">
+
+
+    <app-header Titleheader="Numbering Type"></app-header>
+
+    <mat-drawer-container class="example-container" autosize>
+
+
+
+
+        <div class=" mx-2 mt-1 example-sidenav-content">
+            <div class="row mx-2">
+                <div class="d-flex col-12 col-sm-6 col-md-6 col-xl-5 gap-2" *ngIf="this.globals.gclientServer === 'Server'">
+                    <mat-label class="gInputLable" style="min-width: 100px;">Company Name</mat-label>
+                    <input class="gInnerInput" #autoCompleteInput [matAutocomplete]="autocmpsingle" matInput
+                        [formControl]="Company" #company (input)="filterCmp($event.target.value)" readonly="{{this.globals.gclientServer === 'Client'}}">
+                    <mat-autocomplete autoActiveFirstOption class=" gAutoCompleteContainer" id="autocmpsingle"
+                        #autocmpsingle="matAutocomplete" [displayWith]="companyCmp">
+                        <mat-option class=" gSelectOption"
+                            *ngFor="let option of CampNameListArr | filter:company.compname" [value]="option"
+                            (onSelectionChange)="ItemSelected($event, 'company')">
+                            {{option.compname}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </div>
+                <div class="d-flex col-12 col-sm-6 col-md-6 col-xl-5 gap-2" *ngIf="this.globals.gclientServer !== 'Server'">
+                    <mat-label class="gInputLable" style="min-width: 100px;">Company Name</mat-label>
+                    <div class="gOuterInput w-100">
+                    <input class="gInnerInput" #autoCompleteInput [matAutocomplete]="autocmpsingle" matInput
+                        [formControl]="Company" #company (input)="filterCmp($event.target.value)" readonly="{{this.globals.gclientServer === 'Client'}}">
+                    <mat-autocomplete autoActiveFirstOption class=" gAutoCompleteContainer" id="autocmpsingle"
+                        #autocmpsingle="matAutocomplete" [displayWith]="companyCmp">
+                        <mat-option class=" gSelectOption"
+                            *ngFor="let option of CampNameListArr | filter:company.compname" [value]="option"
+                            (onSelectionChange)="ItemSelected($event, 'company')">
+                            {{option.compname}}
+                        </mat-option>
+                    </mat-autocomplete>
+                    <button mat-button (click)="getTableData()"
+                    class="gInputButton"><mat-icon>refresh</mat-icon></button>
+                    </div>
+
+                </div>
+
+                <div class="d-flex col-12 col-sm-6 col-md-6 col-xl-4 gap-2" *ngIf="this.globals.gclientServer === 'Server'">
+                    <mat-label class="gInputLable" style="min-width: 100px;">Trn Category</mat-label>
+                    <div class="gOuterInput w-100">
+                        <mat-select [formControl]="TrnCategory" class="gInnerInput" id="category">
+                            <mat-option class="gSelectOption" *ngFor="let option of TrnList" [value]="option"
+                                (onSelectionChange)="ItemSelected($event, 'category')">
+                                {{option.TrnCategory}}</mat-option>
+                        </mat-select>
+
+
+                        <button mat-button (click)="getTableData()"
+                            class="gInputButton"><mat-icon>refresh</mat-icon></button>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="gTableSection mt-1">
+
+                <div class="gTableActionheaders ">
+
+
+                    <form role="search" class="search-form ml-3">
+                        <input type="search" name="Search" class="gSearchText" id="search" #input autocomplete="off"
+                            [(ngModel)]="viewSearch" />
+                    </form>
+
+
+                </div>
+
+                <div class="gInnerTable" style="max-height: calc(100vh - 110px);">
+                    <table class="gNormalTable-sm table">
+                        <thead>
+                            <tr>
+                                <ng-container *ngFor="let header of HeaderList">
+                                    <th *ngIf="header !=='Action'">
+                                        {{header}}
+                                    </th>
+                                    <th *ngIf="header ==='Action'" style="max-width: 150px;position: sticky;right: 0;">
+                                        {{header}}
+                                    </th>
+                                </ng-container>
+
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr *ngFor="let data of NumericReport|filter:viewSearch; let i = index" tabindex="0"
+                                [ngClass]="classArrTable[i] ? 'rowClick' : 'rowUnClick'" (click)="rowClick(i)"
+                                (keydown)="rowEnter($event, data)">
+                                <td>{{i+1}}</td>
+                                <td>{{data.TrnType}}</td>
+                                <td>{{data.PreFix1}}{{data.PreFix2}}{{data.brcodeStr}}{{data.Sno}}</td>
+                                <td>{{data.PreFix1}}</td>
+                                <td>{{data.PreFix2}}</td>
+                                <td>{{data.Sno}}</td>
+                                <td>{{data.brcodeStr}}</td>
+                                <td style="max-width: 150px;position: sticky;right: 0;">
+                                    <button mat-icon-button class="gEditIcon" id="{{data.TrnType}}"
+                                        (click)="EditRow(data);drawer.toggle()">
+                                        <mat-icon>edit</mat-icon></button>
+
+                                </td>
+
+                            </tr>
+                            <tr *ngIf="NumericReport.length === 0">
+                                <td [colSpan]="HeaderList.length" class="text-center">No record found.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <mat-drawer #drawer class="example-sidenav" mode="over" position="end">
+            <div class=" text-center mat-body py-3">
+                <div class="d-flex justify-content-between align-items-baseline  mx-2">
+                    <span></span>
+                    <span class="gInputLable ">Update Numbering Type Value</span>
+                    <button mat-button class="sidnavCloseButton bg-white" id="close" type="button"
+                        (click)=" drawer.toggle()"><mat-icon>close</mat-icon></button>
+                </div>
+
+            </div>
+            <form [formGroup]="NumericForm" id="masterForm" class="masterForm row mt-3 mx-1">
+
+                <div class="row mx-1 ">
+                    <div class=" col-12 mt-2">
+                        <mat-label class="gInputLable">Running Format &nbsp;: &nbsp;
+                                {{runningFormat}}</mat-label>
+
+                    </div>
+
+                    <div class=" col-12  mt-3">
+                        <mat-label class="gInputLable">Transaction Type</mat-label>
+                        <input class="gInnerInput" (keydown)="keytab($event, 'prefix1')" id="trnType"
+                            formControlName="trnType" matInput readonly>
+                    </div>
+                    <div class=" col-12  mt-2">
+                        <mat-label class="gInputLable">PreFix -1</mat-label>
+                        <input class="gInnerInput" (keydown)="keytab($event,'prefix2')" id="prefix1"
+                            formControlName="prefix1" matInput autocomplete="off">
+                    </div>
+                    <div class=" col-12  mt-2">
+                        <mat-label class="gInputLable">PreFix -2</mat-label>
+                        <input class="gInnerInput" (keydown)="keytab($event, 'sno')" id="prefix2"
+                            formControlName="prefix2" matInput autocomplete="off">
+                    </div>
+                    <div class=" col-6  mt-2">
+                        <mat-label class="gInputLable">Sno</mat-label>
+                        <input type="number" class="gInnerInput" (keydown)="keytab($event, 'brcodeStr')" id="sno"
+                            formControlName="sno" matInput autocomplete="off">
+                    </div>
+
+                    <div class=" col-6  mt-2">
+                        <mat-label class="gInputLable">Recommanded Sno</mat-label>
+                        <div class="gOuterInput gOuterInput1">
+                            <input class="gInnerInput" (keydown)="keytab($event, 'brcodeStr')" id="sno"
+                                [(ngModel)]="RecommandedSNO" [ngModelOptions]="{standalone: true}" matInput readonly>
+                            <button mat-button class="gInputButton" matTooltip="Click to update" (click)="useIt()">
+                                <mat-icon>touch_app</mat-icon></button>
+                        </div>
+                    </div>
+                    <div class=" col-12  mt-2">
+                        <mat-label class="gInputLable">BrCode Str</mat-label>
+                        <input type="text" class="gInnerInput" (keydown)="keytab($event, 'submit')" id="brcodeStr"
+                            formControlName="brcodeStr" matInput autocomplete="off">
+                    </div>
+                    <div class=" col-12  mt-4 text-center">
+                        <button type="button" mat-button id="submit" class="gSaveButton"
+                            (click)="UpdateNumberingType()">
+                            Update
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </mat-drawer>
+    </mat-drawer-container>
+</div>

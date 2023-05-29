@@ -1,0 +1,257 @@
+<div class="gWrapper">
+  <app-header Titleheader="Update Component" back="true" (BackClick)="backClicked()"></app-header>
+  <div class="circle"></div>
+  <div class="circle1"></div>
+  <div class="circle2"></div>
+  <div class="row mx-1">
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 my-3 text-center " routerLinkActive="active">
+      <button mat-button class="router" routerLink="/Updatation/orderinvoice">
+        <span class="material-icons">
+          send_time_extension
+        </span> <br>
+        <span class="gInputLable" style="text-align: center;">
+        Order Invoice</span>
+      </button>
+    </div>
+
+     
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 my-3 text-center " routerLinkActive="active">
+      <button mat-button class="router" routerLink="/Updatation/set-return">
+        <span class="material-icons">
+          send_time_extension
+        </span> <br>
+        <span class="gInputLable" style="text-align: center;">
+Set Return   </span>   </button>
+    </div>
+    
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 my-3 text-center " routerLinkActive="active">
+      <button mat-button class="router" routerLink="/Updatation/stock-report">
+        <span class="material-icons">
+          send_time_extension
+        </span> <br>
+        <span class="gInputLable" style="text-align: center;">
+         Stock Report</span>
+      </button>
+    </div>
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 my-3 text-center " routerLinkActive="active">
+      <button mat-button class="router" routerLink="/Updatation/employeeWelfare">
+        <span class="material-icons">
+          send_time_extension
+        </span> <br>
+        <span class="gInputLable" style="text-align: center;">
+         Employee Welfare</span>
+      </button>
+    </div>
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 my-3 text-center " routerLinkActive="active">
+      <button mat-button class="router" (click)="dcINOUTRoute('ISSUES_BR', '/Updatation/do-out')">
+        <span class="material-icons">
+          send_time_extension
+        </span> <br>
+        <span class="gInputLable" style="text-align: center;">
+          DC-out</span>
+      </button>
+    </div>
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 my-3 text-center " routerLinkActive="active">
+      <button mat-button class="router" (click)="dcINOUTRoute('DcIn', '/Updatation/do-in')">
+        <span class="material-icons">
+          send_time_extension
+        </span> <br>
+        <span class="gInputLable" style="text-align: center;">
+          DC-in</span>
+      </button>
+    </div>
+
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 my-3 text-center" routerLinkActive="active">
+      <button mat-button class="router" routerLink="/Updatation/set-issue">
+        <span class="material-icons">
+          send_time_extension
+        </span>
+        <br>
+        <span class="gInputLable font-weight-bold  text-uppercase mb-1" style="text-align: center;">
+          Set Issue
+        </span>
+      </button>
+    </div>
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 my-3 text-center" routerLinkActive="active">
+      <button mat-button class="router" routerLink="/Updatation/customersalesReport">
+        <span class="material-icons">
+          send_time_extension
+        </span>
+        <br>
+        <span class="gInputLable font-weight-bold  text-uppercase mb-1" style="text-align: center;">
+          Cusotomer Sales Report
+        </span>
+      </button>
+    </div>
+
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 my-3 text-center" routerLinkActive="active">
+      <button mat-button class="router" routerLink="/Updatation/SalesReport">
+        <span class="material-icons">
+          send_time_extension
+        </span>
+        <br>
+        <span class="gInputLable font-weight-bold  text-uppercase mb-1" style="text-align: center;">
+          Sales Report
+        </span>
+      </button>
+    </div>
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 my-3 text-center" routerLinkActive="active">
+      <button mat-button class="router" routerLink="/Updatation/RmsSalesReport">
+        <span class="material-icons">
+          send_time_extension
+        </span>
+        <br>
+        <span class="gInputLable font-weight-bold  text-uppercase mb-1" style="text-align: center;">
+          RMS Sales Report
+        </span>
+      </button>
+    </div>
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 my-3 text-center" routerLinkActive="active">
+      <button mat-button class="router" routerLink="/Updatation/SecProdIssue">
+        <span class="material-icons">
+          send_time_extension
+        </span>
+        <br>
+        <span class="gInputLable font-weight-bold  text-uppercase mb-1" style="text-align: center;">
+          Section Common Prod Issue
+        </span>
+      </button>
+    </div>
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 my-3 text-center" routerLinkActive="active">
+      <button mat-button class="router" (click)="gmainRouting1('ISSUES_VEHICLE')">
+        <span class="material-icons">
+          send_time_extension
+        </span>
+        <span class="gInputLable font-weight-bold  text-uppercase mb-1" style="text-align: center;">
+          ISSUES_VEHICLE</span>
+      </button>
+    </div>
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 my-3 text-center" routerLinkActive="active">
+      <button mat-button class="router" (click)="gmainRouting1('ISSUES_RETURN')">
+        <span class="material-icons">
+          send_time_extension
+        </span>
+        <span class="gInputLable font-weight-bold  text-uppercase mb-1" style="text-align: center;">
+          UPDATED_ISSUES_RETURN</span>
+      </button>
+    </div>
+
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 my-3 text-center" routerLinkActive="active">
+      <button mat-button class="router" (click)="gmainRouting('ISSUES_FREE_STAFFISS')">
+        <span class="material-icons">
+          send_time_extension
+        </span>
+        <span class="gInputLable font-weight-bold  text-uppercase mb-1" style="text-align: center;">
+          ISSUES_FREE_STAFFISS</span>
+      </button>
+    </div>
+
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 my-3 text-center" routerLinkActive="active">
+      <button mat-button class="router" (click)="gmainRouting('ISSUES_BROKEN')">
+        <span class="material-icons">
+          send_time_extension
+        </span>
+        <span class="gInputLable font-weight-bold  text-uppercase mb-1" style="text-align: center;">
+          ISSUES_BROKEN</span>
+      </button>
+    </div>
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 my-3 text-center" routerLinkActive="active">
+      <button mat-button class="router" (click)="gmainRouting('ISSUES_WASTAGE')">
+        <span class="material-icons">
+          send_time_extension
+        </span>
+        <span class="gInputLable font-weight-bold  text-uppercase mb-1" style="text-align: center;">
+          ISSUES_WASTAGE</span>
+      </button>
+    </div>
+
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 my-3 text-center" routerLinkActive="active">
+      <button mat-button class="router" (click)="gmainRouting('ISSUES_FREE')">
+        <span class="material-icons">
+          send_time_extension
+        </span>
+        <span class="gInputLable font-weight-bold  text-uppercase mb-1" style="text-align: center;">
+          ISSUES_FREE</span>
+      </button>
+    </div>
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 my-3 text-center" routerLinkActive="active">
+      <button mat-button class="router" (click)="gmainRouting('RT_TO_SUP')">
+        <span class="material-icons">
+          send_time_extension
+        </span>
+        <span class="gInputLable font-weight-bold  text-uppercase mb-1" style="text-align: center;">
+          RT_TO_SUP</span>
+      </button>
+    </div>
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 my-3 text-center" routerLinkActive="active">
+      <button mat-button class="router" (click)="gmainRouting('ISSUES_SAMPLE')">
+        <span class="material-icons">
+          send_time_extension
+        </span>
+        <span class="gInputLable font-weight-bold  text-uppercase mb-1" style="text-align: center;">
+          ISSUES_SAMPLE</span>
+      </button>
+    </div>
+
+
+
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 my-3 text-center " routerLinkActive="active">
+      <button mat-button class="router" routerLink="/Updatation/goods-Issues">
+        <span class="material-icons">
+          send_time_extension
+        </span> <br>
+        <span class="gInputLable" style="text-align: center;">
+          goods-Issues</span>
+      </button>
+    </div>
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 my-3 text-center " routerLinkActive="active">
+      <button mat-button class="router" routerLink="/Updatation/item-select">
+        <span class="material-icons">
+          send_time_extension
+        </span> <br>
+        <span class="gInputLable" style="text-align: center;">
+          item-select</span>
+      </button>
+    </div>
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 my-3 text-center " routerLinkActive="active">
+      <button mat-button class="router" routerLink="/Updatation/face-api">
+        <span class="material-icons">
+          send_time_extension
+        </span> <br>
+        <span class="gInputLable" style="text-align: center;">
+          face-api</span>
+      </button>
+    </div>
+
+
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 my-3 text-center " routerLinkActive="active">
+      <button mat-button class="router" routerLink="/Updatation/common-authority">
+        <span class="material-icons">
+          send_time_extension
+        </span> <br>
+        <span class="gInputLable" style="text-align: center;">
+          common-authority</span>
+      </button>
+    </div>
+
+
+  </div>
+
+
+</div>

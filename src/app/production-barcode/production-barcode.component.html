@@ -1,0 +1,173 @@
+
+
+
+
+<div class="loading"  *ngIf="progressval == 'indeterminate'"
+    style="position: fixed; top:0; bottom: 0; left: 0; right: 0; z-index: 10001 !important; backdrop-filter: blur(3px);">
+
+    <div class="pendulum-container">
+
+        <div class="ball-first">
+            <div id="ball-1" class="first"></div>
+            <div id="shadow-1" class="first-shadow"></div>
+        </div>
+        <div id="ball-2"></div>
+
+        <div id="ball-5"></div>
+        <div id="ball-6"></div>
+        <div class="ball-first">
+            <div id="ball-7" class="last"></div>
+            <div id="shadow-2" class="last-shadow"></div>
+        </div>
+    </div>
+
+</div>
+
+<div class="gWrapper gNewWrapper1">
+    <app-header Titleheader="Production Barcode - [Mech]"></app-header>
+    <div class="content">
+        <div class="container-fluid mt-2 mt-md-5">
+            <div class="row justify-content-center text-align align-content-center mt-xl-5">
+                <div class="newCard col-11 col-md-10 col-xl-7 mt-xl-5">
+                    <div class="row ">
+                       
+
+                        <div class="col-12 col-md-6 d-flex justify-content-center">
+                            <div class="demo img">
+                                <!-- <input type="checkbox" id="mask-switch"><label for="mask-switch">show hover point.</label> -->
+                                <div class="box">
+                                  <div class="hover-point"></div>
+                                  <div class="hover-point"></div>
+                                  <div class="hover-point"></div>
+                                  <div class="hover-point"></div>
+                                  <div class="hover-point"></div>
+                                  <div class="hover-point"></div>
+                                  <div class="hover-point"></div>
+                                  <div class="hover-point"></div>
+                                  <div class="box-contents"></div>
+                                </div>
+                              </div>
+                            
+                        </div>
+                        <div class="col-12 col-md-6" style="padding-bottom: 10px;">
+                            <div class="row">
+                            <div class="col-12 mt-2">
+                                <label class="gInputLable">Batch No</label>
+                            </div>
+                            <div class="col-12">
+                                <input type="text" [matAutocomplete]="auto1" [formControl]="batchnumControl" id="batchno"
+                                    name="batchno" class="gNewInput"
+                                    [readonly]="_defaultData.prdn_master == 'Scan'"
+                                    [ngClass]="{'disable-input':_defaultData.prdn_master == 'Scan'}">
+                                <mat-autocomplete #auto1="matAutocomplete">
+                                    <mat-option *ngFor="let item of batch_list" [value]="item?.BatchName">
+                                        {{item?.BatchName}}</mat-option>
+                                </mat-autocomplete>
+                            </div>
+    
+                            <div class="col-12 mt-2">
+                                <label class="gInputLable">Item Code</label>
+                            </div>
+                            <div class="col-12">
+                                <input type="text" [(ngModel)]="icode" id="icode" name="icode" autocomplete="off"
+                                    (keyup)="enterKeyEvent($event, 'icode')" class="gNewInput"
+                                    [readonly]="_defaultData.prdn_master == 'Scan'"
+                                    [ngClass]="{'disable-input':_defaultData.prdn_master == 'Scan'}">
+                            </div>
+    
+                            <div class="col-12 mt-2">
+                                <label class="gInputLable">Item Name</label>
+                            </div>
+                            <div class="col-12">
+                                <input type="text" [matAutocomplete]="auto3" [formControl]="itemControl" id="item"
+                                    name="item" class="gNewInput" [readonly]="_defaultData.prdn_master == 'Scan'"
+                                    [ngClass]="{'disable-input':_defaultData.prdn_master == 'Scan'}">
+                                <mat-autocomplete #auto3="matAutocomplete"
+                                    (optionSelected)='getItem($event.option.viewValue)'>
+                                    <mat-option *ngFor="let item of itemList" [value]="item?.iname">
+                                        {{item?.iname}}</mat-option>
+                                </mat-autocomplete>
+                            </div>
+    
+                            <div class="col-12 mt-2">
+                                <label class="gInputLable">No of barcodes</label>
+                            </div>
+                            <div class="col-12">
+                                <input type="text" [(ngModel)]="count" id="icount" name="icount" autocomplete="off"
+                                    (keypress)="OnlyNumericDecimal($event)" (keyup)="enterKeyEvent($event, 'count')"
+                                    class="gNewInput">
+                            </div>
+                            <div class="col-6 mt-4">
+                                <button class="linkButtons" mat-button (click)="generateBarcode()" id="generate">
+                                    <i class="fa fa-hand-o-right firstIcon" aria-hidden="true"></i>
+                                    <span class="gInputLable">Generae</span>
+                                    <i class="fa fa-caret-right" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                            <div class="col-6 mt-4">
+                                <button class="linkButtons linkDelete" mat-button (click)="clearRcds()">
+                                    <i class="fa fa-hand-o-right firstIcon" aria-hidden="true"></i>
+                                    <span class="gInputLable">Clear</span>
+                                    <i class="fa fa-caret-right" aria-hidden="true"></i>
+                                </button>
+                               
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                 
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade bd-example-modal-sm" data-bs-backdrop="static" id="scanModal" tabindex="-1" role="dialog"
+        aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered gNewModel">
+            <div class="modal-content card">
+                <div class="modal-header">
+                    <span></span>
+                    <span class="gInputLable" style="font-size: 16px;">
+                        Scan Set Issues Qrcode / Barcode
+                    </span>
+               
+                    <button type="button" class="close InfoButton" id="closebtns" data-bs-dismiss="modal"
+                     aria-label="Close" style="opacity: 1;font-size: 16px;">
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    
+                    <div class="row">
+                        <div class="col-12 col-xl-6 d-flex justify-content-center">
+                            <img [src]="scannerImg" style="height: 250px;">
+                        </div>
+                        <div class="col-12 col-xl-6">
+
+                            <label class="gInputLable">Barcode / QRcode </label>
+
+                            <input type="text" [(ngModel)]="_barcode" id="scanBarcode" name="scanBarcode"
+                                (keydown)="enterKeyEvent($event, 'scanBarcode')" class="gNewInput text-center"style="font-size: 22px;
+                                padding: 10px;"
+                                autocomplete="off">
+                            <mat-checkbox [(ngModel)]="is_Sf_item"  (change)="onSfChange()" class="gInputLable mt-2">Semi Finished
+                            </mat-checkbox>
+
+                            <button mat-button (click)="getBarcodeDetails()" type="button" class="linkButtons mt-3 ">
+                    
+                                <mat-icon class="firstIcon" style="font-size: 16px;">save</mat-icon>
+                                <span class="gInputLable">Validate</span>
+                                <i class="fa fa-caret-right" aria-hidden="true"></i>
+                            </button>
+       
+                    </div>
+           
+                 
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+</div>

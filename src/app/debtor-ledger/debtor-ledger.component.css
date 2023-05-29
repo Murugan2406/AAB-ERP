@@ -1,0 +1,291 @@
+/* @import url("https://fonts.googleapis.com/css2?family=Oswald:wght@300;400&display=swap"); */
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  background-color: white;
+  overflow-y: auto;
+}
+.headflex {
+  background-color: #ff5733;
+  position: fixed;
+  text-align: center;
+}
+:host ::ng-deep .mat-toolbar.mat-warn {
+  background-color: #0073bb;
+  background: linear-gradient(180deg, #0073bb 0, #193482);
+}
+.header {
+  flex: 0 0 auto;
+  background: #aaa;
+}
+.content {
+  flex: 1 1 auto;
+  overflow-x: hidden;
+}
+.example-container {
+  display: flex;
+  flex-direction: column;
+}
+.example-container > * {
+  width: 100%;
+}
+.example-spacer {
+  flex: 1 1 auto;
+  color: white;
+  text-align: center;
+}
+.card {
+  box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
+  border: 0;
+  margin: 15px;
+  padding: 15px;
+}
+
+button.mat-focus-indicator.mat-flat-button.mat-button-base {
+  background-color: #169edf;
+  background: linear-gradient(180deg, #0073bb 0, #169edf);
+  color: #fff;
+}
+/* background: linear-gradient(
+  180deg
+  , #0c71ba91 0, #48608d); */
+.title {
+  margin: 8px;
+  font-family: sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  background: -webkit-linear-gradient(#431f11, #0dffd1);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.title1 {
+  margin: 8px;
+  font-family: sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  background: -webkit-linear-gradient(#ee0d74f2, #908391);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.table {
+  position: relative;
+  border-collapse: collapse;
+  width: 100%;
+  color: #2c096e;
+}
+.fixed-header {
+  height: 85vh;
+  overflow-y: auto;
+}
+.fixed-header th{
+  position: sticky;
+  top:0;
+  z-index:1;
+  background-color:white;
+}
+.pointer{
+  cursor: pointer;
+}
+.table tr.active td {
+  background-color: #69a3b5ad!important;
+  color: #fff;
+}
+.datepicker-footer{
+  float: right;
+  margin-top: -30px;
+  margin-bottom: 9px;
+  margin-right: 9px;
+}
+.table.Monthly th {
+  background: linear-gradient( 179deg,white 0, white);
+  /* background: linear-gradient( 179deg, #d6d3d3 0, var(--light)); */
+  color: #2d25a9;
+  font-weight: 500;
+}
+.table.cons th, th.text-end {
+  background: linear-gradient(  179deg,white 0, white);
+  color: #2d2d34;
+  font-weight: 500;
+}
+.table.det th {
+  background: linear-gradient( 179deg, white 0,white);
+  /* background: linear-gradient( 179deg, #d6d3d3 0, var(--light)); */
+  color: #2d2d34;
+  font-weight: 500;
+}
+.table td,
+.table th {
+  padding: 2px 5px 2px 5px;
+  vertical-align: middle;
+  font-size: 12px;
+  max-width: 250px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.table.Monthly td,.table.Monthly th{
+  padding: 5px 5px 5px 5px;
+  /* vertical-align: middle;
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; */
+}
+
+.heading {
+  margin: 7px 0 0px;
+  font-size: 12px;
+  color: #3b47c8;
+  font-family: sans-serif;
+  font-weight: 600;
+}
+.mat-option{
+  height: 30px!important;
+  font-size: 11px;
+  font-weight: 500;
+  font-family: sans-serif;
+}
+i.fa.fa-file-excel-o {
+  color: #399b39;
+  font-size: 22px;
+  margin-top: 5px;
+  margin-bottom: 4px;
+}
+.next-icon {
+  font-size: 16px;
+}
+.monthview {
+  width: 100%;
+  height: 100%;
+  padding-right: 7px;
+  padding-left: 7px;
+  margin-right: auto;
+  margin-left: auto;
+  background-color: #8bb7ca4f;
+  /* background-color: rgb(236 251 10 / 12%); */
+}
+.Accounts2 {
+  width: 100%;
+  padding-right: 7px;
+  padding-left: 7px;
+  margin-right: auto;
+  margin-left: auto;
+  background-color:  rgb(44 128 233 / 22%);
+}
+.Accounts3 {
+  width: 100%;
+  padding-right: 7px;
+  padding-left: 7px;
+  margin-right: auto;
+  margin-left: auto;
+  background-color: rgb(109 254 154 / 13%);
+}
+
+.fixed-header::-webkit-scrollbar{
+  height: 8px;
+  width: 8px;
+}
+.fixed-header::-webkit-scrollbar-thumb{
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+  box-shadow:inset 0 0 6px rgba(0,0,0,0.5);
+}
+.fixed-header::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  box-shadow:inset 0 0 6px rgba(0,0,0,0.3);
+  border-radius: 10px;
+}
+.mat-option {
+  font-size: 13px;
+}
+.spinner-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+mat-spinner {
+  margin-top: -2px;
+  margin-left: 8px;
+  display: inline-flex;
+  background-color: transparent;
+}
+.mat-spinner-color:host ::ng-deep circle{
+  stroke: #FFFFFF !important;
+  }
+mat-spinner + span {
+  padding-right: 15px;
+}
+.mi{
+  font-size: 14px;
+  vertical-align: middle;
+}
+.loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.modal-dialog {
+  overflow-y: initial !important;
+  top: 0;
+  margin: 8rem auto;
+  max-width: 85%;
+}
+.modal-content{
+  background-color: #eff1f3;
+  overflow: hidden;
+}
+.modal-body {
+  position: relative;
+  overflow-y: auto;
+  max-height: 478px;
+  padding: 15px;
+}
+.modalitem .modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border-bottom: 0;
+  border-top-left-radius: calc(0.3rem - 1px);
+  border-top-right-radius: calc(0.3rem - 1px);
+}
+
+.backdrop {
+  background-color: rgba(0, 0, 0, 0.6);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 1;
+}
+h5.modal-title {
+  font-family: Roboto, "Helvetica Neue" sans-serif;
+  font-size: 15px;
+  margin: 0;
+  color: #0d3d8b;
+  font-weight: 600;
+}
+.table.detail th {
+  background: linear-gradient(
+    145deg, #636da0 0,#7079a5 );
+        color: white;
+        font-weight: 500;
+}
+
+.label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #0e1679;
+}
+
+.caption{
+  font-size: 12px;
+  font-weight: 400;
+  color: black;
+}

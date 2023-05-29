@@ -1,0 +1,185 @@
+<div class="wrapper">
+    <div class="header">
+        <mat-toolbar color="warn">
+            <mat-toolbar-row class="header-nav">
+                <button mat-button (click)="backNavigation()" type="button" [hidden]="toggleContent"> BACK</button>
+                <button mat-button (click)="onNoClick()" type="button" [hidden]="!toggleContent"> BACK</button>
+                <span>
+                    <button mat-button (click)="homeNavigate()" type="button">
+                        <mat-icon style="color:#fff;">home</mat-icon>
+                </button>
+                <button mat-button disabled type="button">
+                        <img class="png-icon" src=".\assets\gImg\a2b2.png" style="max-width: 16px; min-width: 56px;">
+                    </button>
+                </span>
+            </mat-toolbar-row>
+        </mat-toolbar>
+    </div>
+
+    <section class="container" [hidden]="toggleContent">
+        <div class="row cardRow">
+
+
+
+            <mat-card>
+
+
+                <form class="form">
+                    <div class="sectionTitle text-center  mb-5">
+                        <label for="" class="formTitle">Form-IV-EE
+                            </label>
+                    </div>
+                    <div class="form-group row d-flex">
+                        <div class="col-12 col-md-5 col-xl-5 formlables">
+                            <label for="">Month</label>
+                        </div>
+
+                        <div class="datpicker col-12 col-md-3 col-xl-3">
+                            <input matInput class="datepickerInput" id="Month" [matDatepicker]="month" [formControl]="Month" style="border: none;">
+                            <mat-datepicker-toggle matSuffix [for]="month"></mat-datepicker-toggle>
+                            <mat-datepicker #month startView="year" (monthSelected)="setToMonthAndYear($event, month)" panelClass="example-month-picker">
+                            </mat-datepicker>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row  d-flex">
+                        <div class="col-12 col-md-5 col-xl-5 formlables">
+                            <label for=""> Region</label>
+                        </div>
+
+                        <div class=" branchOutInput col-12 col-md-7 col-xl-7">
+                            <input type="text" matInput class="datepickerInput branchInInput" id="Regions" [formControl]="Region" [matAutocomplete]="region">
+                            <mat-autocomplete autoActiveFirstOption #region="matAutocomplete">
+                                <mat-option *ngFor="let option of RegionOptions | filter : Region.value" [value]="option.pfregion " (onSelectionChange)="RegionSelected($event, option.pfregion)">
+                                    {{option.pfregion}}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
+                    </div>
+
+                    <div class="form-group row  d-flex">
+                        <div class="col-12 col-md-5 col-xl-5 formlables">
+                            <label for=""> Branch</label>
+                        </div>
+
+                        <div class=" branchOutInput col-12 col-md-7 col-xl-7">
+                            <input type="text" matInput class="datepickerInput branchInInput" id="branch" [formControl]="Branch" [matAutocomplete]="branch">
+                            <mat-autocomplete autoActiveFirstOption #branch="matAutocomplete">
+                                <mat-option *ngFor="let option of BranchOptions | filter : Branch.value" [value]="option.BranchName " (onSelectionChange)="branchSelected($event, option.Brcode)">
+                                    {{option.BranchName}}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row  d-flex">
+                        <div class="col-12 col-md-5 col-xl-5 formlables">
+                            <label for=""> Festival</label>
+                        </div>
+
+                        <div class=" branchOutInput col-12 col-md-7 col-xl-7">
+                            <input type="text" matInput class="datepickerInput branchInInput" id="Festival" [formControl]="festival" [matAutocomplete]="Festival">
+                            <mat-autocomplete autoActiveFirstOption #Festival="matAutocomplete">
+                                <mat-option *ngFor="let option of FestivalOptions | filter : festival.value" [value]="option.Reason " (onSelectionChange)="festivalSelected($event, option.Holiday)">
+                                    {{option.Reason ? option.Reason : 'Nil'}}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
+                    </div>
+                </form>
+                <div class=" actionbuttons justify-content-center ">
+                    <button type="button " [disabled]="loading" mat-raised-button class="buttons " id="submit" (click)="Submit(dialog)"><i class="fa fa-spinner fa-spin" *ngIf="loading " ></i> &nbsp;View</button>
+
+                </div>
+
+            </mat-card>
+
+        </div>
+    </section>
+
+    <ng-template #dialog class="" tabindex="0">
+
+        <div *ngIf="!SuccessResponse">
+            <div *ngIf="ResponseStatus">
+                <div mat-dialog-content class="text-center mat-dialog-content">
+                    {{ResponseStatus}}
+                </div>
+            </div>
+            <div mat-dialog-actions class=" text-center mt-3 mb-0 pb-0 justify-content-center">
+                <button mat-button type="button" class="dialogButton text-center" (click)="onCloseDialog()">Close</button>
+            </div>
+        </div>
+
+    </ng-template>
+
+    <div [hidden]="!toggleContent" class="printPrivew">
+        <div class="col-12 text-end">
+
+            <button type="button " mat-icon-button [elementToPrint]="printFile" ngPrint>
+                <i class="fa fa-print" style="font-size: 20px;color:#000000;" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div #printFile class="" style="margin-top: -40px;">
+            <div class="row ">
+                <span class="col-12  text-center"> <p><b>FORM NO IV-EE</b></p>  </span>
+                <span class="col-12 m-0  text-center">[See Rule 18 of the Tamil Nadu Catering Establishments Rules,1959]</span>
+
+                <span class="col-12 mt-4">
+                    <p> &nbsp;&nbsp; <b>NOTICE TO THE EMPLOYEE </b> under sub-clause[a] of sub-section[4] of section 11 , Under
+                        sub-clause[I] of clause[a] of sub-section 11 of the Tamil Nadu Catering Establishments Act, 1958
+                        [Tamil Nadu Act XIII of 1958], the following employee is hereby require to work on
+                         <b>{{responseFestivalDate | date:'dd-MMM-YYYY'}}</b>
+                         which is a holiday allowed under sub-section [2] of section 11 of the Act. He is further required to
+                        give his/her option in writing whether he/she prefers to be paid for such holidays on which he/she works</p>
+                </span>
+
+
+
+                <span class="col-12 mt-3">
+                    [1] Twice the wages *****&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [ or ] 
+                </span>
+                <span class="col-12 ">
+                    [2] wages for such day and avail himself/herself of a substituted holiday with wages on any other day
+                </span>
+
+                <span class="col-12 ">
+                   <b>{{companyName}} <br>{{add1}}&nbsp;&nbsp;{{add2}}&nbsp;&nbsp;{{city}}&nbsp;&nbsp;{{pincode}}</b>
+                </span>
+                <span class="col-12 ">
+                    DATED AT &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>{{responseFestivalDate | date:'dd-MMM-YYYY'}} </b>&nbsp;&nbsp;&nbsp;&nbsp; <b>{{festival.value}}</b>
+                </span>
+                <span class="col-12 ">
+                    TO THE ASST.INSPECTOR OF LABOUR
+                </span>
+
+            </div>
+
+
+            <div class="form3Atable">
+
+                <table class="table  mt-3 mb-5">
+
+                    <tr class=" form3A">
+                        <th style="color: #000 !important;font-size: 11px;">S.No</th>
+                        <th style="color: #000 !important;font-size: 11px;">Empcode</th>
+                        <th style="color: #000 !important;font-size: 11px;">NAME OF THE EMPLOYEE</th>
+                        <th style="color: #000 !important;font-size: 11px;">SIGNATURE OF THE EMPLOYEE</th>
+                    </tr>
+                    <tr class="subform3A" *ngFor="let ele of form4EEList; let i =index">
+                        <td>{{i+1}}</td>
+                        <td>{{ele.empcode}}</td>
+                        <td>{{ele.Empname}}</td>
+                        <td></td>
+
+                    </tr>
+
+                </table>
+            </div>
+            <div class="row mt-3">
+                <span class="col-9  text-end"></span>
+                <span class="col-3  text-center">SIGNATURE OF THE EMPLOYER</span>
+            </div>
+        </div>
+    </div>

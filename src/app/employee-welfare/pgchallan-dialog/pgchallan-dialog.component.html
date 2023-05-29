@@ -1,0 +1,75 @@
+<h4 class="text-center bold" *ngIf="Title === 'DifferenceWithValue'"> Difference found</h4>
+
+<div *ngIf="set === 'set1'">
+    <div mat-dialog-content class="text-center mat-dialog-content" *ngIf="Title === 'UAN not found'">
+        UAN number Not fount for Following {{Employees.length}} Employee(s)
+    </div>
+
+    <div mat-dialog-content class="text-center mat-dialog-content" *ngIf="Title === 'Success'">
+        {{Employees.length}} Entries are available, Do you want to download ?
+    </div>
+    <div mat-dialog-content class="text-center mat-dialog-content" *ngIf="Title === 'Salary process'">
+        First do the Salary process
+    </div>
+    <div mat-dialog-content class="text-center mat-dialog-content" *ngIf="Title === 'DifferenceFound'">
+        Difference Found in selected fields
+    </div>
+    <div mat-dialog-content class="text-center mat-dialog-content" *ngIf="Title === 'empty'">
+        Data Not available in selected fields
+    </div>
+    <div mat-dialog-content class="text-center mat-dialog-content" *ngIf="Title === 'aleadyCompleted'">
+        PF Process Already Completed
+    </div>
+    <div mat-dialog-content class="text-center mat-dialog-content" *ngIf="Title === 'DifferenceWithValue' || Title === 'UAN not found' ">
+        <section tabindex="0" #TABLE class="m-0">
+            <table mat-table #table [dataSource]="dataSource">
+                <ng-container [matColumnDef]="column" *ngFor="let column of displayedColumns; ">
+                    <th mat-header-cell *matHeaderCellDef style="color: #000 !important;font-size: 11px;"> {{column}} </th>
+                    <td mat-cell *matCellDef="let element ;let i = index" style="text-align: left !important;color: #000"> {{element[column] ? element[column] : i+1}} </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+                <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+            </table>
+        </section>
+    </div>
+
+
+</div>
+
+<div *ngIf="set === 'set2'">
+    <div mat-dialog-content class="text-center mat-dialog-content" *ngIf="Title === 'UAN not found'">
+        UAN number Not fount for {{Employees.length}} Employee(s)
+    </div>
+
+    <div mat-dialog-content class="text-center mat-dialog-content" *ngIf="Title === 'Success'">
+        {{Employees.length}} Entries are available
+    </div>
+    <div mat-dialog-content class="text-center mat-dialog-content" *ngIf="Title === 'Salary process'">
+        First do the Salary process
+    </div>
+    <div mat-dialog-content class="text-center mat-dialog-content" *ngIf="Title === 'DifferenceFound'">
+        Difference Found in selected fields
+    </div>
+    <div mat-dialog-content class="text-center mat-dialog-content" *ngIf="Title === 'empty'">
+        No records found in selected fields
+    </div>
+</div>
+
+
+<div *ngIf="set === 'empty'">
+    <div mat-dialog-content class="text-center mat-dialog-content" *ngIf="Title === 'empty'">
+        No records found in selected fields
+    </div>
+</div>
+<div mat-dialog-actions class="dialogAction text-center mb-1" *ngIf="set === 'set1'">
+    <button mat-button type="button" class="buttons" (click)="onNoClick()">Close</button>
+    <button mat-button cdkFocusInitial type="submit" *ngIf="Title === 'UAN not found'" class="buttons" (click)="XLExport()">Export to XL</button>
+</div>
+
+<div mat-dialog-actions class="dialogAction text-center mb-1" *ngIf="set === 'empty'">
+    <button mat-button type="button" class="buttons" (click)="onNoClick()">Close</button>
+</div>
+<div mat-dialog-actions class="dialogAction text-center " *ngIf="set === 'set2' && Title === 'empty' ">
+    <button mat-button type="button" class="buttons" (click)="onNoClick()">Close</button>
+</div>

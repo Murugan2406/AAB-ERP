@@ -1,0 +1,232 @@
+
+.gcardContainer {
+    box-shadow: 0 0px 8px 0 rgb(31 38 135 / 43%);
+    padding:10px;
+    // border: 0.5px solid var(--button-save-color);
+}
+
+
+.gInnerInput-border {
+    border: 1px solid var(--button-save-color);
+}
+
+::ng-deep.gInputButton {
+    .mat-icon-button {
+        width: 30px !important;
+        height: 18px !important;
+        line-height: 20px !important;
+    }
+}
+
+.gInnerTable1 {
+    max-height: calc(100vh - 180px);
+}
+::ng-deep.mat-tab-labels{
+    justify-content: center !important;
+}
+.gContent {
+    padding: 5px 0px;
+    margin: 5px;
+    border-radius: 10px;
+    background: #FFFFFF;
+    border-radius: 8px;
+    box-shadow: 0px 8px 19px rgb(223 223 253 / 60%);
+}
+.gInputLable{
+    min-width: max-content !important;
+}
+
+.gContent1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+    // min-height: calc(100vh - 30px);
+}
+
+input:disabled {
+    color: rgba(0, 0, 0, 0.685) !important;
+    background-color: #c7d1d1a8  !important;
+}
+::ng-deep input:read-only {
+  background-color: #c7d1d1a8 !important;
+}
+
+
+::ng-deep.mat-dialog-container {
+    padding: 5px !important;
+    border-radius: 15px !important;
+    box-sizing: border-box;
+    overflow: auto;
+    outline: 0;
+    background-color: #ffffff !important;
+    .gDialogContainer {
+        box-shadow: none !important;
+        position: relative;
+        border-radius: 0 0 15px;
+        // background-color: var(--table-actionHeader-bg) !important;
+        box-shadow: 0 8px 32px 0 rgb(31 38 135 / 23%);
+        padding: 10px;
+        backdrop-filter: blur(10px);
+    }
+    .gDialogTitle {
+        background-color: var(--dialog-title-bg);
+        padding: 10px 5px;
+        font-size: 18px !important;
+        margin-bottom: 0 !important;
+        font-weight: 500 !important;
+        font-family: system-ui !important;
+        text-align: center;
+        color: #000;
+        text-transform: capitalize;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 15px 15px 0 0;
+    }
+    .gDialogCloseButton {
+        color: #000;
+        padding: 0;
+        font-weight: 900;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        min-width: 30px;
+        background-color: var(--button-dialog-close-bg-color);
+        line-height: 29px;
+        border: 1px solid transparent;
+        .mat-icon {
+            font-size: 22px;
+            line-height: 29px !important;
+        }
+        .fa {
+            font-size: 22px;
+            line-height: 29px !important;
+        }
+    }
+    .gDialogCloseButton:hover {
+        background-color: var(--button-dialog-close-hover-bg-color);
+        color: #fff;
+    }
+}
+
+
+
+::ng-deep.mat-tab-label-active {
+    font-weight: 800 !important;
+    font-family: system-ui;
+    opacity: 1 !important;
+}
+
+::ng-deep.mat-tab-label-content,
+::ng-deep.mat-tab-label {
+    font-family: system-ui !important;
+    height: 30px !important;
+}
+
+::ng-deep.mat-tab-label-active {
+    font-weight: 700;
+}
+
+::ng-deep.mat-tab-body-content {
+    /* height: 100%; */
+    overflow: hidden !important;
+}
+
+::ng-deep.mat-tab-group.mat-primary .mat-ink-bar,
+::ng-deep.mat-tab-nav-bar.mat-primary .mat-ink-bar {
+    background-color: var(--button-input-hover-color) !important;
+}
+
+.hrline{
+    border-top: 1px dotted var(--button-save-color);
+    }
+    
+.gcardContainer
+{
+
+  border: 0.5px solid var(--button-save-color);
+
+    border: 0.5px solid var(--button-save-color);
+}
+.gTableSection{
+    box-shadow: 0 8px 32px 0 rgb(31 38 135 / 23%);
+    /* border: 0.5px solid var(--button-save-color); */
+
+}
+.example-spacer {
+    flex: 1 1 auto;
+  }
+
+  ::ng-deep.gDialogBox{
+    .mat-dialog-container {
+        padding: 5px !important;
+        border-radius: 15px !important;
+        box-sizing: border-box;
+        overflow: auto;
+        outline: 0;
+        background-color: #ffffff !important;
+        .gDialogContainer {
+            box-shadow: none !important;
+            position: relative;
+            border-radius: 0 0 15px;
+            // background-color: var(--table-actionHeader-bg) !important;
+            box-shadow: 0 8px 32px 0 rgb(31 38 135 / 23%);
+            padding: 10px;
+            backdrop-filter: blur(10px);
+        }
+        .gDialogTitle {
+            background-color: var(--dialog-title-bg);
+            padding: 2px 5px;
+            font-size: 18px !important;
+            margin-bottom: 0 !important;
+            font-weight: 500 !important;
+            font-family: system-ui !important;
+            text-align: center;
+            color: #000;
+            text-transform: capitalize;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 15px 15px 0 0;
+        }
+        .gDialogCloseButton {
+            color: #000;
+            padding: 0;
+            font-weight: 900;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            min-width: 30px;
+            background-color: var(--button-dialog-close-bg-color);
+            line-height: 37px;
+            border: 1px solid transparent;
+            .mat-icon {
+                font-size: 22px;
+                line-height: 22px !important;
+            }
+            .fa {
+                font-size: 22px;
+                line-height: 22px !important;
+            }
+        }
+        .gDialogCloseButton:hover {
+            background-color: var(--button-dialog-close-hover-bg-color);
+            color: #fff;
+        }
+    }
+    }
+
+    
+
+    ::ng-deep.mat-progress-spinner svg,
+    .mat-progress-spinner {
+        height: 60px !important;
+    }
+    
+    ::ng-deep.mat-progress-spinner circle,
+    .mat-spinner circle {
+        stroke: var(--button-save-color);
+        stroke-width: 10% !important;
+        stroke-dasharray: 50px !important;
+    }

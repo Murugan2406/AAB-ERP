@@ -1,0 +1,89 @@
+<mat-sidenav-container>
+  <mat-sidenav-content>
+    <mat-toolbar color="warn" class="position-fixed">
+      <button mat-button (click)="backNavigation()"> BACK</button>
+      <span style="text-align: center;font-size: 16px;" class="mat-spacer"> REPORTS </span>
+      <img class="pull-right" src=".\assets\gImg\a2b2.png" style="max-width: 56px; min-width: 56px;">
+    </mat-toolbar>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+<br>
+<div class="content">
+  <div class=" row">
+    <div class=" col-xl-3 col-lg-3 col-md-4 col-6 form-group">
+      <label for="pwd" class="text-muted">DepartMent</label><bR>
+      <select class="form-control form-control-sm custom-select custom-select-sm" name="selectDept" [(ngModel)]="dept" id="pwd"
+        (change)="onChangeDept($event.target)">
+        <option *ngFor="let dept of DepartMents" selected="dept===dept.deptname" [value]="dept.deptname">
+          {{dept.deptname}}</option>
+      </select>
+    </div>
+    <div class=" col-xl-3 col-lg-3 col-md-4 col-6 form-group">
+      <label class="text-muted" for="email">Subject </label><bR>
+      <select class="form-control form-control-sm custom-select custom-select-sm" id="Subject" (change)="onChangeSubject($event.target)">
+        <option selected>ALL </option>
+        <option class="form-select" *ngFor='let jds of Subjects'>{{jds.ListofJds}}</option>
+      </select>
+    </div>
+    <div class="  col-xl-2  col-lg-2 col-md-4 col-6 form-group">
+      <label class="text-muted" for="startDate">Start Date</label>
+      <input type=date class="form-control form-control-sm form-select" name="startDate" [(ngModel)]="startDate"
+        (change)="onChangeStart($event.target)" id="startDate">
+    </div>
+    <div class="   col-xl-2 col-lg-2  col-md-4 col-6 form-group">
+      <label class="text-muted" for="endDate">End Date</label>
+      <input type=date class="form-control form-control-sm form-select" name="endDate" [(ngModel)]="endDate"
+        (change)="onChangeEnd($event.target)" id="endDate">
+    </div>
+    <div class=" col-xl-1 col-lg-1 col-md-2 col-3 form-group" style="margin-top: auto;margin-bottom: auto;">
+      <button type="submit" (click)="getFilter()" class="btn btn-primary btn-sm btn-filter">
+        View</button>
+    </div>
+    <div class=" col-xl-1 col-lg-1 col-md-1 col-3 form-group" style="margin-top: auto;margin-bottom: auto;">
+      <button type="submit" class="btn btn-success btn-sm " (click)="exportAsXLSX()">
+        <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div class=" col-xl-3 col-lg-3  col-md-4 col-6 form-group" *ngIf="dept!='select'">
+      <label class="text-muted">Department</label>
+      <p style="color: #3C8DBC">{{dept}}</p>
+    </div>
+  </div>
+  <div class="row" style="margin-left: 0.5%;margin-right: 1%">
+    <div class="table-responsive">
+      <table class="table table-bordered tableBodyScroll table-sm table-hover shadow-sm p-3 mb-5 bg-white rounded">
+        <thead>
+          <tr>
+            <th scope="col">Subject</th>
+            <th scope="col">Created</th>
+            <th scope="col">Unassigned</th>
+            <th scope="col">Open</th>
+            <th scope="col">In Progress</th>
+            <th scope="col">Aproval Pending</th>
+            <th scope="col">Resolved</th>
+            <th scope="col">Closed</th>
+          </tr>
+        </thead>
+        <tbody style="font-size: 12px">
+          <tr *ngFor="let boardTable of dashbordTable">
+            <td (click)="goToTickets(boardTable.Subjects, 'ALL')">{{boardTable.Subjects}}</td>
+              <td (click)="goToTickets(boardTable.Subjects, 'ALL')">{{boardTable.CreatedT}}</td>
+              <td (click)="goToTickets(boardTable.Subjects, 'UnAssigned')">{{boardTable.Unassigned}}</td>
+              <td (click)="goToTickets(boardTable.Subjects, 'Open')">{{boardTable.OpenTicket}}</td>
+              <td (click)="goToTickets(boardTable.Subjects, 'In-progress')">{{boardTable.Inprogress}}</td>
+              <td (click)="goToTickets(boardTable.Subjects, 'ApprovalPending')">{{boardTable.ApprovalPending}}</td>
+              <td (click)="goToTickets(boardTable.Subjects, 'Resolved')">{{boardTable.ResolvedT}}</td>
+              <td (click)="goToTickets(boardTable.Subjects, 'Closed')">{{boardTable.ClosedT}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- LOADING ICON -->
+<div *ngIf="progressval == 'indeterminate'" class="loading">
+  <mat-progress-spinner [mode]="progressval">
+  </mat-progress-spinner>
+</div>
+<!-- LOADING ICON -->

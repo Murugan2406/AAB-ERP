@@ -1,0 +1,1550 @@
+<div class=" d-flex align-items-center justify-content-center " *ngIf="Loading"
+    style="position: fixed; top:0; bottom: 0; left: 0; right: 0; z-index: 10001 !important; backdrop-filter: blur(2px);">
+    <mat-spinner></mat-spinner>
+</div>
+<div class="gWrapper">
+    <app-header *ngIf="GMenu !== 'OpeningBalApprove' && showNormalJv" Titleheader="Opening Balance" back="true"
+        (BackClick)="BackClickedFromNormal()"></app-header>
+    <app-header *ngIf="GMenu !== 'OpeningBalApprove' && showViewJv" Titleheader="View Opening Balance" back="true"
+        (BackClick)="BackClickedFromNormal()"></app-header>
+    <app-header *ngIf="GMenu === 'OpeningBalApprove'" back="true" (BackClick)="BackClicked()"
+        Titleheader="{{SectionTitle}}"></app-header>
+
+    <div *ngIf="showViewJv" #AMCMasterView [@enterAnimation]>
+
+        <div class="gDialogContainer mt-2 mx-3">
+
+
+
+
+            <form [formGroup]="viewJVForm" *ngIf="ShowViewForm" [@fadeInOut]>
+                <div class="row mx-1">
+                    <div class="col-12 col-sm-6 col-md-6 col-lg-5">
+                        <div class="d-flex flex-column gap-0">
+
+
+
+                            <div class="row form-group">
+                                <mat-label class="gInputLable col-sm-12 col-md-4 col-xl-4">Company Name <strong
+                                        class="text-danger ng-star-inserted">*</strong> </mat-label>
+                                <div class="col-sm-12 col-md-8 col-lg-8">
+                                    <input type="text" id="Company" matInput formControlName="Company"
+                                        class="gInnerInput" (keydown)="keytab($event, 'Finbook')"
+                                        [matAutocomplete]="company" (input)="filterCmp($event.target.value)">
+                                    <mat-autocomplete #company="matAutocomplete" class="gAutoCompleteContainer"
+                                        [displayWith]="displayCmp">
+                                        <mat-option (onSelectionChange)="cmpSelectedView($event, company)"
+                                            class="gSelectOption" *ngFor="let company of CompanyArr"
+                                            [value]="company ">{{ company.company }}</mat-option>
+                                    </mat-autocomplete>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <mat-label class="gInputLable col-sm-12 col-md-4 col-xl-4">Finbook Name <strong
+                                        class="text-danger ng-star-inserted">*</strong> </mat-label>
+                                <div class="col-sm-12 col-md-8 col-lg-8">
+                                    <input type="text" class="gInnerInput" name="finBookName" id="finBookName"
+                                        formControlName="finBookName" autocomplete="off"
+                                        (input)="FilterFinbook($event.target.value, 'three')"
+                                        (keydown)="keytab($event, 'viewCostCenter')" [matAutocomplete]="fbName" />
+                                    <mat-autocomplete #fbName="matAutocomplete" class="gAutoCompleteContainer"
+                                        [displayWith]="displayFb">
+                                        <mat-option class="gSelectOption" *ngFor="let fb of FbThreeArr" [value]="fb"
+                                            (onSelectionChange)="viewFbchange($event,'view')">{{ fb.FbName }}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <mat-label class="gInputLable col-sm-12 col-md-4 col-xl-4">Cost Center <strong
+                                        class="text-danger ng-star-inserted">*</strong> </mat-label>
+                                <div class="col-12 col-sm-12 col-md-8 col-lg-8">
+                                    <input type="text" class="gInnerInput" name="costCenter" id="viewCostCenter"
+                                        formControlName="costCenter" autocomplete="off"
+                                        (input)="getViewBranchName($event.target.value)"
+                                        [matAutocomplete]="autoBranchName" (keydown)="keytab($event, 'fromDate')" />
+                                    <mat-autocomplete #autoBranchName="matAutocomplete" class="gAutoCompleteContainer"
+                                        [displayWith]="displayBr">
+                                        <mat-option class="gSelectOption" *ngFor="let branchName of AllBranchList"
+                                            [value]="branchName">
+                                            {{branchName.brcode}} - {{branchName.brname }}</mat-option>
+                                    </mat-autocomplete>
+                                </div>
+                            </div>
+                            <!-- (onSelectionChange)="viewBrchange($event,branchName)" -->
+
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+                        <div class="d-flex flex-column gap-0">
+                            <div class="row form-group">
+                                <label class="gInputLable col-sm-12 col-md-4 col-xl-5">From Date <strong
+                                        class="text-danger ng-star-inserted">*</strong> </label>
+                                <div class="col-sm-12 col-md-8 col-xl-7">
+                                    <div class="gOuterInput ">
+                                        <input class="gInnerInput" matInput id="fromDate" name="fromDate"
+                                            formControlName="fromDate" (keydown)="keytab($event, 'toDate')"
+                                            [matDatepicker]="picker1" (change)="SubmitViewJv(this.viewJVForm) " />
+                                        <mat-datepicker-toggle matSuffix [for]="picker1" class="gInputButton">
+                                            <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #picker1></mat-datepicker>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                            <div class="row form-group mb-2">
+                                <label class="gInputLable col-sm-12 col-md-4 col-xl-5">To Date <strong
+                                        class="text-danger ng-star-inserted">*</strong> </label>
+                                <div class="col-sm-12 col-md-8 col-xl-7">
+                                    <div class="gOuterInput ">
+                                        <input class="gInnerInput" matInput id="toDate" name="toDate"
+                                            formControlName="toDate" (keydown)="keytab($event, 'status')"
+                                            [matDatepicker]="picker2" (change)="SubmitViewJv(this.viewJVForm)" />
+                                        <mat-datepicker-toggle matSuffix [for]="picker2" class="gInputButton">
+                                            <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #picker2></mat-datepicker>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-md-6 col-lg-4">
+                        <div class="d-flex flex-column gap-0">
+                            <div class="row form-group">
+                                <mat-label class="gInputLable col-sm-12 col-md-4 col-xl-4">Status <strong
+                                        class="text-danger ng-star-inserted">*</strong> </mat-label>
+                                <div class="col-12 col-sm-12 col-md-8 col-lg-8">
+                                    <mat-select class="gInnerInput" id="status" formControlName="status"
+                                        (selectionChange)="selectApprovalStatus($event, 'view')">
+                                        <mat-option class="gSelectOption" *ngFor="let status of receiptStatus"
+                                            [value]="status">
+                                            {{ status }}
+                                        </mat-option>
+                                    </mat-select>
+                                </div>
+                            </div>
+                            <div class="row form-group  mt-1">
+                                <mat-label class="gInputLable col-sm-12 col-md-4 col-xl-4 text-start">Tran Type<strong
+                                        class="text-danger ng-star-inserted">*</strong> </mat-label>
+                                <div class="col-12 col-sm-12 col-md-8 col-lg-8 text-start">
+                                    <div class="gOuterInput ">
+                                        <mat-select class="gInnerInput" id="entrType" formControlName="tranType"
+                                            (selectionChange)="selectTranType($event, 'view')">
+                                            <mat-option class="gSelectOption" *ngFor="let eType of entryTypes"
+                                                [value]="eType">
+                                                {{ eType.VoucherType }}
+                                            </mat-option>
+                                        </mat-select>
+                                        <button type="button" mat-button class="gInputButton" id="ViewDialogbutton"
+                                            (click)="SubmitViewJv(viewJVForm)">
+                                            <mat-icon>autorenew</mat-icon>
+
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <section class="gTableSection mx-1 mt-1">
+                <div class="gTableActionheaders">
+                    <form role="search" class="search-form ml-3">
+                        <input type="search" name="Search" class="gSearchText" #input autocomplete="off"
+                            [(ngModel)]="viewSearch"  id="search"/>
+                    </form>
+                    <button mat-button class="gIconButton" (click)="toggleFormView()" *ngIf="!ShowViewForm"
+                        [ngClass]="{ 'redCircle': viewJVForm.invalid ,'greenCircle': !viewJVForm.invalid } ">
+                        🔻
+                    </button>
+                    <button mat-button class="gIconButton" (click)="toggleFormView()" *ngIf="ShowViewForm"
+                        [ngClass]="{ 'redCircle': viewJVForm.invalid ,'greenCircle': !viewJVForm.invalid } "
+                        style="line-height: 9px !important">
+                        🔺
+
+                    </button>
+                </div>
+                <div class="gInnerTable" style="max-height: calc(100vh - 150px);">
+                    <table class="gNormalTable-sm table" id="viewTable" width="100%">
+                        <thead>
+                            <tr>
+                                <th>S.No</th>
+                                <th>Acc Date</th>
+                                <th *ngIf="viewJVForm?.get('costCenter')?.value?.brname === 'ALL'">Cost
+                                    Center
+                                </th>
+                                <th>
+                                    View</th>
+                                <th>VoucherNo</th>
+
+                                <th>Transaction Date</th>
+                                <th>WStatus</th>
+                                <!-- <th>Re Use</th> -->
+                                <th>DC Status</th>
+                                <th>CreatedUsr</th>
+                                <th>CreatedTime</th>
+                                <th>More</th>
+
+                                <th style="text-align: right;">Receipt Amt</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngIf="DataSource.length === 0 && !Viewloading">
+                                <td colspan="12" class="text-center">No record found.</td>
+                            </tr>
+                            <tr *ngFor="
+                    let data of DataSource | filter: viewSearch;
+                    let i = index " tabindex="0">
+                                <td>{{ i + 1 }}</td>
+                                <td>{{ data.AccDate }}</td>
+                                <td *ngIf="viewJVForm?.get('costCenter')?.value?.brname === 'ALL'">{{ data.brname }}
+                                </td>
+                                <td>
+                                    <button mat-icon-button (click)="JVDetails(data, 'JVView', i)" class="gHandIcon">
+                                        <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+                                    </button>
+                                </td>
+                                <td>{{ data.VoucherNo }}</td>
+
+                                <td>{{ data.ttime }}</td>
+                                <td>{{ data.WStatus }}</td>
+                                <!-- <td>
+                                    <button mat-icon-button (click)="JVDetails(data, 'JvReEntry', i)" class="gHandIcon">
+                                        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
+                                    </button>
+                                </td> -->
+                                <td>{{ data.ReceiptStatus }}</td>
+                                <td>{{ data.CreatedUsr }}</td>
+                                <td>{{ data.CreatedTime|date:'dd-MMM-YYYY hh:mm:ss a' }}</td>
+                                <td><button mat-icon-button (click)="JVHistory(data, i)" class="gHandIcon">
+                                        <mat-icon>launch</mat-icon>
+                                    </button>
+                                </td>
+                                <td style="text-align: right;">{{ data.ReceiptAmt | currency:"INR":"symbol" }}</td>
+
+                            </tr>
+                            <tr *ngIf="Viewloading">
+                                <td [colSpan]="12" *ngIf="viewJVForm?.get('costCenter')?.value?.brname === 'ALL'">
+                                    <div class="SkeltonLoader text-center justify-content-center d-flex">
+                                        <mat-spinner></mat-spinner>
+                                    </div>
+                                </td>
+                                <td [colSpan]="11" *ngIf="viewJVForm?.get('costCenter')?.value?.brname !== 'ALL'">
+                                    <div class="SkeltonLoader text-center justify-content-center d-flex">
+                                        <mat-spinner></mat-spinner>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </div>
+    </div>
+    <div *ngIf="showNormalJv" [@enterAnimation]>
+
+        <div class="gcardContainer m-2 mx-3">
+            <div class="row justify-content-end">
+
+                <div
+                    [ngClass]="OnlyView && Authorized === 'AUTHORIZED' && !ReverseJv ? 'col-12 col-xl-12 d-flex' : 'col-12 col-xl-7 d-flex'">
+                    <button mat-button class="gIconButton"
+                        [ngClass]="{ 'redCircle': NoteInformationForm.invalid ,'greenCircle': !NoteInformationForm.invalid } "
+                        (click)="  this.NoteInformation  = !this.NoteInformation" *ngIf="!NoteInformation">
+                        <mat-icon style="line-height: 19px !important">add</mat-icon>
+                    </button>
+                    <button mat-button class="gIconButton"
+                        [ngClass]="{ 'redCircle': NoteInformationForm.invalid ,'greenCircle': !NoteInformationForm.invalid  } "
+                        (click)="  this.NoteInformation  = !this.NoteInformation" *ngIf="NoteInformation">
+                        <mat-icon style="line-height: 9px !important">minimize</mat-icon>
+                    </button> <span class="gInputLable"> &nbsp; &nbsp;<b>Note Information</b></span>
+                    <span class="gInputLable"> &nbsp; &nbsp;<b>&nbsp;
+                            {{VoucherName}} &nbsp;&nbsp;&nbsp;&nbsp; {{WStatus}} &nbsp;&nbsp;&nbsp;&nbsp;
+                            {{ReceiptStatus}}</b></span>
+                </div>
+
+                <div
+                    [ngClass]="OnlyView && Authorized === 'AUTHORIZED' && !ReverseJv ? 'col-12 col-xl-12 d-flex gap-2 text-end justify-content-end' : 'col-12 col-xl-5 d-flex gap-2 text-end justify-content-end'">
+
+                    <mat-menu #menu1="matMenu" [hasBackdrop]="false">
+                        <div (mouseenter)="mouseEnter(menuTrigger)" (mouseleave)="mouseLeave(menuTrigger)">
+                            <button mat-menu-item class="gMenuLable1">
+                                <span class="gMenuLable ">Exit: &nbsp;&nbsp; Alt + X </span>
+                            </button>
+                            <button mat-menu-item class="gMenuLable1" *ngIf="this.GMenu !== 'OpeningBalApprove'">
+                                <span class="gMenuLable"> Clear:&nbsp;&nbsp; Alt + C</span>
+                            </button>
+                            <button mat-menu-item class="gMenuLable1" *ngIf="this.GMenu !== 'OpeningBalApprove'">
+                                <span class="gMenuLable"> Save:&nbsp;&nbsp; Alt + S </span>
+                            </button>
+                            <button mat-menu-item class="gMenuLable1" *ngIf="this.GMenu !== 'OpeningBalApprove'">
+                                <span class="gMenuLable"> View: &nbsp;&nbsp; Alt + V</span>
+                            </button>
+                            <button mat-menu-item class="gMenuLable1" *ngIf="this.GMenu !== 'OpeningBalApprove'">
+                                <span class="gMenuLable"> Delete&nbsp;: &nbsp;&nbsp; Alt + D</span>
+                            </button>
+                            <button mat-menu-item class="gMenuLable1" *ngIf="this.GMenu === 'OpeningBalApprove'">
+                                <span class="gMenuLable"> Reject&nbsp;: &nbsp;&nbsp; Alt + R</span>
+                            </button>
+                            <button mat-menu-item class="gMenuLable1" *ngIf="this.GMenu === 'OpeningBalApprove'">
+                                <span class="gMenuLable"> Approve&nbsp;: &nbsp;&nbsp; Alt + A</span>
+                            </button>
+                            <button mat-menu-item class="gMenuLable1" *ngIf="this.GMenu !== 'OpeningBalApprove'">
+                                <span class="gMenuLable"> Acc Posting&nbsp;: &nbsp;&nbsp; Alt + A</span>
+                            </button>
+                        </div>
+                    </mat-menu>
+                
+
+                    <button type="button" mat-button class="gSaveButton"
+                        *ngIf="GMenu !== 'OpeningBalApprove' && OnlyView && Authorized === 'AUTHORIZED' && ReverseGivenFlag === 'No' && !ReverseJv"
+                        (click)="ReverselJv1(JVRejectReverse)">
+                        <mat-icon style="font-size: 20px;">restore</mat-icon> Reversal JV
+                    </button>
+
+                    <button type="button" mat-button class="gSaveButton" id="accPost"
+                        *ngIf="OnlyView && Authorized === 'AUTHORIZED' && !ReverseJv" (click)="JVACCPosting()">
+                        <mat-icon style="font-size: 20px;">launch</mat-icon>
+                        Account Posting
+                    </button>
+                    <button type="button" mat-button class="gSaveButton"
+                        *ngIf="GMenu !== 'OpeningBalApprove' && OnlyView && Authorized === 'AUTHORIZED'&& !ReverseJv"
+                        (click)="PrintJV(printJournalVoucher)">
+                        <mat-icon style="font-size: 20px;"><mat-icon>print</mat-icon></mat-icon> Print
+                    </button>
+
+                    <button type="button" id="ResetButton" mat-button class="gSaveButton" (click)="ResetJV()"
+                        *ngIf="GMenu !== 'OpeningBalApprove'">
+
+                        <mat-icon>refresh</mat-icon>
+                        Clear
+                    </button>
+                    <button type="button" mat-button class="gSaveButton" id="aprbtn"
+                        *ngIf="!showApproveJv && GMenu === 'OpeningBalApprove' && curStatusFresh && showAppRejectButton"
+                        (click)="ApproveJV()">
+                        <mat-icon style="font-size: 20px;">check</mat-icon> Approve
+                    </button>
+                    <button type="button" mat-button class="gDeleteButton" id="rjtbtn"
+                        *ngIf="!showApproveJv && GMenu === 'OpeningBalApprove' && curStatusFresh && showAppRejectButton "
+                        (click)="RejectJV1(JVRejectReverse)">
+                        <mat-icon style="font-size: 20px;">cancel</mat-icon> Reject
+                    </button>
+
+
+                    <button type="button" mat-button class="gDeleteButton" id="deleteBtn"
+                        *ngIf="IsFresh && !OnlyView && GMenu !== 'OpeningBalApprove'&& ActionMode === 'Edit'"
+                        (click)="DeleteJv()">
+                        <mat-icon style="font-size: 20px;">delete</mat-icon> Delete
+                    </button>
+
+
+                    <button type="button" id="SaveButton" mat-button class="gSaveButton"
+                        *ngIf="!OnlyView && GMenu !== 'OpeningBalApprove' && ActionMode === 'Edit' "
+                        (click)="SaveJv('update')">
+                        <mat-icon>save</mat-icon> Update
+                    </button>
+
+                    <button type="button" id="SaveButton" mat-button class="gSaveButton"
+                        *ngIf="!OnlyView && GMenu !== 'OpeningBalApprove' && ActionMode !== 'Edit' "
+                        (click)="SaveJv('save')">
+                        <mat-icon>save</mat-icon> Save
+                    </button>
+
+                    <button type="button" mat-button class="gSaveButton " id="ViewButton"
+                        *ngIf="GMenu !== 'OpeningBalApprove'" (click)="ViewJv(JvView)">
+                        <mat-icon>remove_red_eye</mat-icon>
+                        View
+                    </button>
+
+                </div>
+                <div *ngIf="NoteInformation" [@fadeInOut]>
+                    <form [formGroup]="NoteInformationForm" class="row mt-2 mx-1">
+                        <div class="col-12 col-sm-6 col-md-6 col-xl-4 ">
+                            <div class="row form-group">
+                                <label class="gInputLable col-sm-12 col-md-4 col-lg-4" for="company">Company<strong
+                                        class="text-danger ng-star-inserted">*</strong> </label>
+                                <div class="col-sm-12 col-md-8 col-lg-8">
+                                    <input type="text" id="Company" matInput formControlName="Company"
+                                        class="gInnerInput" (keydown)="keytab($event, 'Finbook')"
+                                        [matAutocomplete]="company" (input)="filterCmp($event.target.value)"
+                                        style="font-size: 12px !important;">
+                                    <mat-autocomplete #company="matAutocomplete" class="gAutoCompleteContainer"
+                                        [displayWith]="displayCmp">
+                                        <mat-option (onSelectionChange)="cmpSelected($event, company)"
+                                            class="gSelectOption" *ngFor="let company of CompanyArr"
+                                            [value]="company ">{{ company.company
+                                            }}</mat-option>
+                                    </mat-autocomplete>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-12 col-sm-6 col-md-6 col-xl-4 ">
+                            <div class="row form-group">
+                                <label class="gInputLable col-sm-12 col-md-4 col-lg-4" for="finbook">Finbook <strong
+                                        class="text-danger ng-star-inserted">*</strong> </label>
+                                <div class="col-sm-12 col-md-8 col-lg-8">
+                                    <input type="text" class="gInnerInput" name="Finbook" id="Finbook"
+                                        formControlName="Finbook" autocomplete="off"
+                                        (input)="FilterFinbook($event.target.value, 'one')"
+                                        (keydown)="keytab($event, 'warehouse')" [matAutocomplete]="fbName"
+                                        autocomplete="off" />
+                                    <mat-autocomplete #fbName="matAutocomplete" class="gAutoCompleteContainer"
+                                        [displayWith]="displayFb">
+                                        <mat-option (onSelectionChange)="FocusNext($event, 'warehouse')"
+                                            class="gSelectOption" *ngFor="let fb of FbOneArr" [value]="fb ">{{ fb.FbName
+                                            }}</mat-option>
+                                    </mat-autocomplete>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-6 col-md-6 col-xl-4 ">
+                            <div class="row form-group">
+                                <label class="gInputLable col-sm-12 col-md-4 col-lg-4" for="warehouse">Warehouse<strong
+                                        class="text-danger ng-star-inserted">*</strong> </label>
+                                <div class="col-sm-12 col-md-8 col-lg-8">
+                                    <input matInput class="gInnerInput borderInput" type="text"
+                                        style="min-width: 100% !important;" formControlName="warehouse"
+                                        [matAutocomplete]="autoBranchName"
+                                        (input)="getTableLocation($event.target.value)" id="warehouse" />
+                                    <mat-autocomplete #autoBranchName="matAutocomplete" class="gAutoCompleteContainer"
+                                        [displayWith]="displayBr">
+                                        <mat-option class="gSelectOption" *ngFor="let branchName of TableBrList"
+                                            [value]="branchName" (onSelectionChange)="tablSelected($event, 'AcCode')">
+                                            {{ branchName.brcode}} - {{ branchName.brname}}</mat-option>
+                                    </mat-autocomplete>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-6 col-xl-4 ">
+                            <div class="row form-group">
+                                <label class="gInputLable col-sm-12 col-md-4 col-lg-4" for="noteType">Account Type
+                                    <strong class="text-danger ng-star-inserted">*</strong> </label>
+                                <div class="col-sm-12 col-md-8 col-lg-8">
+                                    <mat-select class="gInnerInput" id="accType" formControlName="accType"
+                                        [compareWith]="compareFn1">
+                                        <mat-option class="gSelectOption"
+                                            (onSelectionChange)="FocusNext($event, 'trnType')"
+                                            *ngFor="let accType of accTypes" [value]="accType">{{ accType.AccountType }}
+                                        </mat-option>
+                                    </mat-select>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-12 col-sm-6 col-md-6 col-xl-4 ">
+                            <div class="row form-group">
+                                <label class="gInputLable col-sm-12 col-md-4 col-lg-4" for="noteType">Trn Type <strong
+                                        class="text-danger ng-star-inserted">*</strong> </label>
+                                <div class="col-sm-12 col-md-8 col-lg-8">
+                                    <mat-select class="gInnerInput" id="trnType" formControlName="trnType"
+                                        [compareWith]="compareFn2">
+                                        <mat-option class="gSelectOption"
+                                            (onSelectionChange)="FocusNext($event, 'finyear')"
+                                            *ngFor="let trnType of trnTypes" [value]="trnType">{{ trnType.TrnType }}
+                                        </mat-option>
+                                    </mat-select>
+                                </div>
+                            </div>
+                        </div>
+<!-- 
+                        <div class="col-12 col-sm-6 col-md-6 col-xl-4">
+                            <div class="row form-group">
+                                <label class="gInputLable col-sm-12 col-md-4 col-lg-4" for="finyear">FinYear<strong
+                                        class="text-danger ng-star-inserted">*</strong> </label>
+                                <div class="col-sm-12 col-md-8 col-lg-8 ">
+                                    <div class="gOuterInput">
+
+                                        <mat-select class="gInnerInput" id="finyear" formControlName="finyear"
+                                            [compareWith]="compareFn3">
+                                            <mat-option (onSelectionChange)="tablSelected($event, 'Accdate')"
+                                                class="gSelectOption" *ngFor="let finyear of finyearList"
+                                                [value]="finyear ">{{ finyear.fyear
+                                                }}</mat-option>
+                                        </mat-select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+
+
+
+                        <div class="col-12 col-sm-6 col-md-6 col-xl-4 ">
+                            <div class="row form-group">
+                                <label class="gInputLable col-sm-12 col-md-4 col-lg-4" for="Accdate">Accounting
+                                    Date<strong class="text-danger ng-star-inserted">*</strong> </label>
+                                <div class="col-sm-12 col-md-8 col-lg-5">
+                                    <div class="gOuterInput">
+                                        <input class="gInnerInput" matInput id="Accdate" formControlName="Accdate"
+                                            (keydown)="keytab($event, 'Company')" [matDatepicker]="picker" />
+                                        <mat-datepicker-toggle matSuffix [for]="picker" class="gInputButton">
+                                            <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #picker></mat-datepicker>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                
+                        <div class="col-12 col-sm-6 col-md-6 col-xl-4 ">
+                            <div class="row form-group">
+                                <label class="gInputLable col-sm-12 col-md-4 col-lg-4" for="AcCode">Account Code<strong
+                                        class="text-danger ng-star-inserted">*</strong> </label>
+                                <div class="col-sm-12 col-md-8 col-lg-8">
+
+                                    <input type="text" matInput formControlName="AcCode" class="gInnerInput" id="AcCode"
+                                        (input)="getAcCode($event.target.value, 1)"
+                                        (keydown)="keytab($event, 'totalAmt')" [matAutocomplete]="acccode">
+                                    <mat-autocomplete #acccode="matAutocomplete" class="gAutoCompleteContainer"
+                                        [displayWith]="displayAc">
+                                        <mat-option class="gSelectOption" *ngFor="let account of AccCodeList"
+                                            [value]="account" (onSelectionChange)="tablSelected2($event, 'totalAmt',account)">
+                                            {{ account.AcCode}} - {{ account.AcName}}</mat-option>
+                                    </mat-autocomplete>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-12 col-sm-6 col-md-6 col-xl-4 ">
+                            <div class="row form-group">
+                                <label class="gInputLable col-sm-12 col-md-4 col-lg-4" for="totalAmt">Total
+                                    Amount<strong class="text-danger ng-star-inserted">*</strong> </label>
+                                <div class="col-sm-12 col-md-8 col-lg-5">
+                                    <div class="gOuterInput">
+                                        <input type="number" id="totalAmt" matInput formControlName="totalAmt"
+                                            class="gInnerInput" (keydown)="keytab($event, 'WHCode')" autocomplete="off">
+                                        <label class="gInputButton" style="font-size: 12px;">
+                                            INR</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="gcardContainer m-2 mx-3">
+            <div class="row justify-content-between">
+
+                <div class="col-12 col-sm-12 col-md-6 col-xl-7 d-flex">
+                    <button mat-button class="gIconButton"
+                        [ngClass]="{ 'redCircle': AccTableData.length === 0 ,'greenCircle': AccTableData.length > 0 } "
+                        (click)="  this.ShowForm  = false" *ngIf="!ShowForm">
+                        <mat-icon style="line-height: 9px !important">minimize </mat-icon>
+                    </button>
+                    <button mat-button class="gIconButton"
+                        [ngClass]="{ 'redCircle': AccTableData.length === 0 ,'greenCircle': AccTableData.length > 0  } "
+                        (click)="this.ShowForm  = false" *ngIf="ShowForm">
+                        <mat-icon style="line-height: 19px !important">add</mat-icon>
+                    </button> <span class="gInputLable"> &nbsp; &nbsp;<b>Accounting Information</b></span>&nbsp;
+                    &nbsp;&nbsp; &nbsp;
+                    <br>
+                    <mat-radio-group class="d-flex align-items-center " [formControl]="MapOption" *ngIf="!OnlyView" (click)="ShowForm = true">
+                        <mat-radio-button value="Individual" id="mapping" required class="gInputLable mx-4">Individual Entry</mat-radio-button>
+                        <mat-radio-button value="Bulk" required class="mx-2" class="gInputLable">BulkEntry</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+                <div class="row mx-1" *ngIf="MapOption.value === 'Bulk' && ShowForm">
+
+                    <div class="col-12 my-1 text-center ">
+                        <button type="button" mat-button class="gNormalButton  mx-1" (click)="browsebutton()">
+                            <mat-icon>attachment</mat-icon> &nbsp;Browse XL
+                        </button>
+                        <input type="file" [(ngModel)]="inputValue" hidden id="import" accept=".xlsx, .xls"
+                            (change)="onFileChange($event, debitBulkTemp)">
+    
+    
+                        <button mat-button class="gNormalButton mx-1 my-0" (click)="previewclick()">
+                            <mat-icon>save_alt</mat-icon>
+                            &nbsp;
+                            Template
+                        </button>
+    
+                    </div>
+                </div>
+
+
+                <form [formGroup]="AccInfoForm" class="row mt-2 mx-1" *ngIf="ShowForm && MapOption.value === 'Individual'" [@fadeInOut]>
+
+                    <div class="col-12 col-sm-6 col-md-6 col-xl-4 ">
+                        <div class="row form-group">
+                            <label class="gInputLable col-sm-12 col-md-4 col-lg-4" for="WHCode">Warehouse Code
+                                <strong class="text-danger ng-star-inserted">*</strong> </label>
+                            <div class="col-sm-12 col-md-8 col-lg-8">
+
+                                <input matInput class="gInnerInput borderInput" type="text"
+                                    style="min-width: 100% !important;" formControlName="WHCode"
+                                    [matAutocomplete]="autoBranchName" (input)="getTableLocation($event.target.value)"
+                                    id="WHCode" />
+                                <mat-autocomplete #autoBranchName="matAutocomplete" class="gAutoCompleteContainer"
+                                    [displayWith]="displayBr">
+                                    <mat-option class="gSelectOption" *ngFor="let branchName of TableBrList"
+                                        [value]="branchName" (onSelectionChange)="tablSelected($event, 'GLCode')">
+                                        {{ branchName.brcode}} - {{ branchName.brname}}</mat-option>
+                                </mat-autocomplete>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-md-6 col-xl-4 ">
+                        <div class="row form-group">
+                            <label class="gInputLable col-sm-12 col-md-4 col-lg-4" for="GLCode">GL Account Code<strong class="text-danger ng-star-inserted">*</strong> </label>
+                            <div class="col-sm-12 col-md-8 col-lg-8">
+
+                                <input type="text" id="GLCode" matInput formControlName="GLCode" class="gInnerInput"
+                                    (keydown)="keytab($event, 'SupCode')" [matAutocomplete]="GLacccode"
+                                    (input)="getAcCode($event.target.value, 2)">
+                                <mat-autocomplete #GLacccode="matAutocomplete" class="gAutoCompleteContainer"
+                                    [displayWith]="displayAc">
+                                    <mat-option class="gSelectOption" *ngFor="let account of GLAccCodeList"
+                                        [value]="account" (onSelectionChange)="tablSelected1($event, 'SupCode', account)">
+                                        {{ account.AcCode}} - {{ account.AcName}}</mat-option>
+                                </mat-autocomplete>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-12 col-sm-6 col-md-6 col-xl-4 ">
+                        <div class="row form-group">
+                            <label class="gInputLable col-sm-12 col-md-4 col-lg-4" for="SupCode">Supplier
+                                Code<strong class="text-danger ng-star-inserted">*</strong> </label>
+                            <div class="col-sm-12 col-md-8 col-lg-5">
+
+                                <div class="gOuterInput">
+                                    <input type="number" class="gInnerInput" name="SupCode" id="SupCode"
+                                        formControlName="SupCode" autocomplete="off" min="1"
+                                        (keydown)="keyEnter($event, $event.target.value)" />
+                                    <button class="gInputButton" type="button" mat-button
+                                        *ngIf="!this.AccInfoForm.disabled"
+                                        (click)="suplierCodeenter( AccInfoForm.get('SupCode').value, 'normal', $event )">
+                                        <mat-icon *ngIf="!subcodeloading">send</mat-icon>
+                                        <mat-icon *ngIf="subcodeloading" class="rotate">cached</mat-icon>
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-12 col-sm-6 col-md-6 col-xl-4 ">
+                        <div class="row form-group">
+                            <label class="gInputLable col-sm-12 col-md-4 col-lg-4" for="SupName">Supplier
+                                Name<strong class="text-danger ng-star-inserted">*</strong> </label>
+                            <div class="col-sm-12 col-md-8 col-lg-8">
+
+                                <input type="text" class="gInnerInput" name="SupName" id="SupName"
+                                    formControlName="SupName" autocomplete="off"
+                                    (keydown)="keytab($event, 'supplierAddress')" [matAutocomplete]="autoSupName"
+                                    (input)="filterSupliername($event.target.value)" />
+                                <mat-autocomplete #autoSupName="matAutocomplete" class="gAutoCompleteContainer"
+                                    [displayWith]="displaySuplier">
+                                    <mat-option class="gSelectOption" *ngFor="let supplier of SupplierNameArr"
+                                        (onSelectionChange)="supplierSelected($event,supplier)" [value]="supplier">
+                                        {{supplier.supcode}} - {{supplier.SupName}}</mat-option>
+                                </mat-autocomplete>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class=" col-12 col-sm-6 col-md-6 col-xl-4">
+                        <div class="row form-group">
+                            <label for="supplierAddress" class="gInputLable col-sm-12 col-md-4 col-lg-4">Supplier
+                                Address<strong class="text-danger ng-star-inserted">*</strong></label>
+                            <div class="col-sm-12 col-md-8 col-lg-8">
+                                <!-- <input type="text" class="gInnerInput" name="supplierAddress" id="supplierAddress"
+                                    formControlName="supplierAddress" autocomplete="off" readonly /> -->
+                                <mat-select class="gInnerInput" id="supplierAddress" formControlName="supplierAddress"
+                                    disabled>
+                                    <mat-option class="gSelectOption" *ngFor="let poLocation of poLocationList"
+                                        [value]="poLocation.SLocCode"
+                                        (onSelectionChange)="setsupstate($event,poLocation)">
+                                        {{poLocation.SLocCode}}-{{poLocation.Statename}},{{poLocation.City}}
+
+                                    </mat-option>
+                                </mat-select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" col-12 col-sm-6 col-md-6 col-xl-4">
+                        <div class="row form-group">
+                            <label for="supplierState" class="gInputLable col-sm-12 col-md-4 col-lg-4">Supplier
+                                State<strong class="text-danger ng-star-inserted">*</strong></label>
+                            <div class="col-sm-12 col-md-8 col-lg-8">
+                                <input type="text" class="gInnerInput" name="supplierState" id="supplierState"
+                                    formControlName="supplierState" autocomplete="off" readonly />
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-12 col-sm-6 col-md-6 col-xl-4 ">
+                        <div class="row form-group">
+                            <label class="gInputLable col-sm-12 col-md-4 col-lg-4" for="InvNo">Invoice No<strong
+                                    class="text-danger ng-star-inserted">*</strong> </label>
+                            <div class="col-sm-12 col-md-8 col-lg-8">
+                                <input type="text" id="InvNo" matInput formControlName="InvNo" class="gInnerInput"
+                                    (keydown)="keytab($event, 'InvAmt')" autocomplete="off">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-12 col-sm-6 col-md-6 col-xl-4 ">
+                        <div class="row form-group">
+                            <label class="gInputLable col-sm-12 col-md-4 col-lg-4" for="InvAmt">Invoice
+                                Amount<strong class="text-danger ng-star-inserted">*</strong> </label>
+                            <div class="col-sm-12 col-md-8 col-lg-5">
+                                <div class="gOuterInput">
+                                    <input type="number" id="InvAmt" matInput formControlName="InvAmt"
+                                        class="gInnerInput" (keydown)="keytab($event, 'InvDate')">
+                                    <label class="gInputButton" style="font-size: 12px;">
+                                        INR</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-md-6 col-xl-4 ">
+                        <div class="row form-group">
+                            <label class="gInputLable col-sm-12 col-md-4 col-lg-4" for="InvDate">Invoice Date<strong
+                                    class="text-danger ng-star-inserted">*</strong> </label>
+                            <div class="col-sm-12 col-md-8 col-lg-5">
+                                <div class="gOuterInput">
+                                    <input class="gInnerInput" matInput id="InvDate" formControlName="InvDate"
+                                        (keydown)="keytab($event, 'OutstandingAmt')" [matDatepicker]="picker2" />
+                                    <mat-datepicker-toggle matSuffix [for]="picker2" class="gInputButton">
+                                        <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #picker2></mat-datepicker>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-md-6 col-xl-4 ">
+                        <div class="row form-group">
+                            <label class="gInputLable col-sm-12 col-md-4 col-lg-4" for="OutstandingAmt">OutStanding
+                                Amt<strong class="text-danger ng-star-inserted">*</strong> </label>
+                            <div class="col-sm-12 col-md-8 col-lg-5">
+                                <div class="gOuterInput">
+                                    <input type="number" id="OutstandingAmt" matInput formControlName="OutstandingAmt"
+                                        class="gInnerInput" (keydown)="keytab($event, 'PayTerm')">
+                                    <label class="gInputButton" style="font-size: 12px;">
+                                        INR</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-md-6 col-xl-4 ">
+                        <div class="row form-group">
+                            <label class="gInputLable col-sm-12 col-md-4 col-lg-4" for="PayTerm">PayTerm<i
+                                    style="font-size: 11px;">(In days)</i><strong
+                                    class="text-danger ng-star-inserted">*</strong> </label>
+                            <div class="col-sm-12 col-md-8 col-lg-8">
+                                <input type="number" id="PayTerm" matInput formControlName="PayTerm" class="gInnerInput"
+                                    (keydown)="keytab($event, 'Narration')" autocomplete="off">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-6 col-xl-4 ">
+                        <div class="row form-group">
+                            <label class="gInputLable col-sm-12 col-md-4 col-lg-4" for="Narration">Narration<strong
+                                    class="text-danger ng-star-inserted">*</strong> </label>
+                            <div class="col-sm-12 col-md-8 col-lg-5">
+                                <div class="gOuterInput">
+                                    <input type="text" id="Narration" matInput formControlName="Narration"
+                                        class="gInnerInput" (keydown)="keytab($event, 'submit')" autocomplete="off">
+                                    <button mat-button type="button" class="gInputButton" id="submit"
+                                        (click)="AddAcInfoToble()">
+                                        <mat-icon>add</mat-icon></button>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-8 col-lg-3">
+
+                                <button mat-button (click)="resetAcForm();" id="addbtn" type="button"
+                                class="gSaveButton"><mat-icon>refresh</mat-icon>Reset</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+
+
+            </div>
+            <div class="mx-1">
+
+                <div class="gTableSection mt-2 ">
+
+                    <div class="gTableActionheaders">
+                        <form role="search" class="search-form ml-3">
+                            <input type="search" name="Search" class="gSearchText" #input autocomplete="off"
+                                [(ngModel)]="viewSearch" id="search" />
+                        </form>
+                        <img Cores px-0 class="gXlButton " src=".\assets\gImg\excel1.png" type="submit" matTooltip="Excel Export" (click)="XLExportBranchMapTable(AccTableData)">
+                        
+                        <button type="button" mat-button class="gSaveButton" [matMenuTriggerFor]="menu1"
+                        #menuTrigger="matMenuTrigger" >💡 Shortcuts</button>
+                    </div>
+
+                    <div class="gInnerTable">
+                        <table class="gNormalTable-sm table">
+                            <thead>
+                                <tr>
+                                    <th *ngFor="let header of HeaderList" class="{{header}}">
+                                        {{header}}
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr *ngFor="let data of AccTableData | filter:viewSearch;let i = index"
+                                [ngClass]="classArrTable[i] ? 'rowClick' : 'rowUnClick'">
+                                    <td>{{i+1}}</td>
+                                    <td>{{data.WHCode.brcode}} - {{data.WHCode.brname}}</td>
+                                    <td>{{data.GLCode.AcCode}} - {{data.GLCode.AcName}}</td>
+                                    <td>{{data.SupName.supcode}} - {{data.SupName.SupName}}</td>
+                                    <td>{{data.supplierAddress}}</td>
+                                    <td>{{data.supplierState}}</td>
+                                    <td>{{data.InvNo}}</td>
+                                    <td>{{data.InvAmt | currency:"INR":"symbol"}}</td>
+                                    <td>{{data.InvDate | date:'dd-MMM-yyyy'}}</td>
+                                    <td>{{data.OutstandingAmt | currency:"INR":"symbol"}}</td>
+                                    <td>{{data.PayTerm}}</td>
+                                    <td>{{data.Narration}}</td>
+                                    <td style="text-align: right;position: sticky;right: 0;" class="bg-white stickyR">
+                                        <button mat-icon-button class="gEditIcon" *ngIf="!OnlyView"
+                                        (click)="editTableDate(data, i, 'edit')"><mat-icon>edit</mat-icon></button>
+                                        <button mat-icon-button class="gHandIcon" *ngIf="!OnlyView">
+                                            <i (click)="editTableDate(data, i, 'reuse')" class="fa fa-hand-o-left"></i>
+                                        </button>
+                                        <button *ngIf="!OnlyView" mat-icon-button class="gDeleteIcon"
+                                            (click)="removdatafromTable(i, data.GLCode.AcName)">
+                                            <mat-icon>delete</mat-icon></button>
+                                        <button *ngIf="OnlyView" mat-icon-button class="gDeleteIcon">
+                                            <mat-icon>not_interested</mat-icon></button>
+                                    </td>
+                                </tr>
+
+
+                                <tr *ngIf="AccTableData.length === 0">
+                                    <td [colSpan]="HeaderList.length" class="text-center">No record found.</td>
+                                </tr>
+                                <tr class="gtoggleFooter">
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td *ngIf="AccTableData.length===0"></td>
+                                    <td *ngIf="AccTableData .length>0">Grand Total</td>
+                                    <td></td>
+                                    <td *ngIf="AccTableData.length===0"></td>
+                                    <td *ngIf="AccTableData.length>0">{{totalInvAmt() | currency:"INR":"symbol"}}</td>
+                                    <td></td>
+                                    <td *ngIf="AccTableData.length===0"></td>
+                                    <td *ngIf="AccTableData.length>0">{{totalOutStAmt() | currency:"INR":"symbol"}}</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="stickyEnd">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+
+
+            </div>
+
+
+
+        </div>
+    </div>
+    <div *ngIf="showApproveJv" class="mx-1 mx-3" [@enterAnimation]>
+
+        <div class="gDialogContainer m-1" *ngIf="ShowViewForm">
+            <form [formGroup]="JVApprovalForm" [@fadeInOut]>
+                <div class="row">
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-4">
+                        <div class="d-flex flex-column gap-0">
+                            <div class="row form-group">
+                                <label class="gInputLable col-sm-12 col-md-12 col-lg-4">Company Name <strong
+                                        class="text-danger ng-star-inserted">*</strong> </label>
+                                <div class="col-sm-12 col-md-12 col-lg-8">
+
+                                    <input type="text" id="Company" matInput formControlName="companyName"
+                                        class="gInnerInput" (keydown)="keytab($event, 'Finbook')"
+                                        [matAutocomplete]="company" (input)="filterCmp($event.target.value)">
+                                    <mat-autocomplete #company="matAutocomplete" class="gAutoCompleteContainer"
+                                        [displayWith]="displayCmp">
+                                        <mat-option (onSelectionChange)="cmpSelectedApprove($event, company, 'approve')"
+                                            class="gSelectOption" *ngFor="let company of CompanyArr"
+                                            [value]="company ">{{ company.company }}</mat-option>
+                                    </mat-autocomplete>
+
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <mat-label class="gInputLable col-sm-12 col-md-12 col-lg-4">Fin Book<strong
+                                        class="text-danger ng-star-inserted">*</strong> </mat-label>
+                                <div class="col-sm-12 col-md-12 col-lg-8">
+                                    <input type="text" class="gInnerInput" matInput id="finBookName1"
+                                        formControlName="finBookName"
+                                        (input)="FilterFinbook($event.target.value, 'Approve')"
+                                        (keydown)="keytab($event, 'approvalFromDate')" [matAutocomplete]="fbName1" />
+                                    <mat-autocomplete #fbName1="matAutocomplete" class="gAutoCompleteContainer"
+                                        [displayWith]="displayFb">
+                                        <mat-option (onSelectionChange)="viewFbchange($event,'app' )"
+                                            class="gSelectOption" *ngFor="let fb of JvAprFilterList" [value]="fb">{{
+                                            fb.FbName }}</mat-option>
+                                    </mat-autocomplete>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="d-flex flex-column gap-0">
+                            <div class="row form-group">
+                                <label class="gInputLable col-sm-12 col-md-12 col-lg-4">From Date<strong
+                                        class="text-danger ng-star-inserted">*</strong> </label>
+                                <div class="col-sm-12 col-md-12 col-lg-6 gOuterInput">
+
+                                    <input class="gInnerInput" matInput id="approvalFromDate" formControlName="fromDate"
+                                        (keydown)="keytab($event, 'approvalToDate')"
+                                        (change)="ViewApprovalJV(JVApprovalForm)" [matDatepicker]="picker1" />
+                                    <mat-datepicker-toggle matSuffix [for]="picker1" class="gInputButton">
+                                        <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #picker1></mat-datepicker>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label class="gInputLable col-sm-12 col-md-12 col-lg-4">To Date<strong
+                                        class="text-danger ng-star-inserted">*</strong> </label>
+                                <div class="col-sm-12 col-md-12 col-lg-6 gOuterInput">
+
+                                    <input class="gInnerInput" matInput id="approvalToDate" formControlName="toDate"
+                                        (keydown)="keytab($event, 'status')" [matDatepicker]="picker2"
+                                        (change)="ViewApprovalJV(JVApprovalForm)" />
+                                    <mat-datepicker-toggle matSuffix [for]="picker2" class="gInputButton">
+                                        <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #picker2></mat-datepicker>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="d-flex flex-column gap-0">
+                            <div class="row form-group">
+                                <mat-label class="gInputLable col-sm-12 col-md-12 col-lg-4">Status<strong
+                                        class="text-danger ng-star-inserted">*</strong> </mat-label>
+                                <div class="col-sm-12 col-md-12 col-lg-8">
+                                    <mat-select class="gInnerInput statusModel" size="5" id="status"
+                                        formControlName="status"
+                                        (selectionChange)="selectApprovalStatus($event, 'app')">
+                                        <mat-option class="gSelectOption" *ngFor="let status of receiptStatusApp"
+                                            [value]="status">
+                                            {{ status }}
+                                        </mat-option>
+                                    </mat-select>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <mat-label class="gInputLable col-sm-12 col-md-12 col-lg-4">Entry Type<strong
+                                        class="text-danger ng-star-inserted">*</strong> </mat-label>
+                                <div class="col-sm-12 col-md-12 col-lg-8">
+
+                                    <mat-select class="gInnerInput statusModel" size="5" id="entrType"
+                                        formControlName="reverseEntry"
+                                        (selectionChange)="selectTranType($event, 'app')">
+                                        <mat-option class="gSelectOption" *ngFor="let eType of entryTypes"
+                                            [value]="eType">
+                                            {{ eType.VoucherType }}
+                                        </mat-option>
+                                    </mat-select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-3 col-lg-1">
+                        <div class="d-flex flex-column gap-0">
+                            <div class="row form-group">
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                                    <button type="button" mat-button class="gNormalButton" id="ViewDialogbutton"
+                                        id="button" (click)="ViewApprovalJV(JVApprovalForm)">
+                                        <mat-icon>remove_red_eye</mat-icon>
+                                        View
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <section class="gTableSection mt-1">
+            <div class="gTableActionheaders">
+                <form role="search" class="search-form">
+                    <input type="search" name="Search" id="search" class="gSearchText" #input autocomplete="off"
+                        [(ngModel)]="viewSearch" />
+                </form>
+                <button mat-button class="gIconButton" (click)="toggleFormView()" *ngIf="!ShowViewForm"
+                    [ngClass]="{ 'redCircle': JVApprovalForm.invalid ,'greenCircle': !JVApprovalForm.invalid } ">
+                    🔻
+
+                </button>
+                <button mat-button class="gIconButton" (click)="toggleFormView()" *ngIf="ShowViewForm"
+                    [ngClass]="{ 'redCircle': JVApprovalForm.invalid ,'greenCircle': !JVApprovalForm.invalid } "
+                    style="line-height: 9px !important;">🔺
+                </button>
+            </div>
+            <div class="gInnerTable" style="max-height: calc(100vh - 145px);">
+                <table class="gNormalTable-sm table" id="ApprovalTable" width="100%">
+                    <thead>
+                        <tr>
+                            <th>S.No</th>
+                            <th>Transaction Date</th>
+                            <th>View</th>
+                            <th>Transaction Id</th>
+                            <th>WStatus</th>
+                            <th>DCStatus</th>
+                            <th>Created User</th>
+                            <th>From Location</th>
+
+                            <th>Approved Date</th>
+                            <th>Approved User</th>
+                            <th>Reject Reason</th>
+                            <th>Receipt Amt</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngIf="ApprovalTableArr.length === 0 && !approveLoad">
+                            <td colspan="16" class="text-center"> No record found.</td>
+                        </tr>
+                        <tr *ngFor="
+        let data of ApprovalTableArr | filter: viewSearch;
+        let i = index" tabindex="0">
+                            <td>{{ i + 1 }}</td>
+                            <td>{{ data.Time }}</td>
+                            <td>
+                                <button mat-icon-button class="gHandIcon">
+                                    <i (click)="approvalJVDetails(data, i)" class="fa fa-hand-o-right"
+                                        aria-hidden="true"></i>
+                                </button>
+
+                            </td>
+                            <td>{{ data.Trnid }}</td>
+                            <td>{{ data.WStatus }}</td>
+                            <td>{{ data.VStatus }}</td>
+
+                            <td>{{ data.usr }}</td>
+                            <td>{{ data.FromLocation }}</td>
+
+                            <td>{{ data.ApprovalTime || 'nil'}}</td>
+                            <td>{{ data.ApprovalUsr || 'nil'}}</td>
+                            <td>{{ data.RejectedReason || 'nil'}}</td>
+                            <td>{{ data.ReceiptAmt | currency:"INR":"symbol" }}</td>
+
+                        </tr>
+                        <tr *ngIf="approveLoad">
+                            <td [colSpan]="16">
+                                <div class="SkeltonLoader text-center justify-content-center d-flex">
+                                    <mat-spinner></mat-spinner>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                </table>
+
+            </div>
+        </section>
+
+    </div>
+</div>
+
+
+<ng-template #debitBulkTemp>
+    <div class="gDialogTitle">
+        <span></span>
+        <span class="">Opening Balance Bulk Upload</span>
+
+        <button type="button" id="submit" mat-button class="gDialogCloseButton" (click)="dialog.closeAll()">
+            <mat-icon style="list-style: 22px !important">close</mat-icon>
+        </button>
+    </div>
+
+    <div class="gDialogContainer">
+        <!--   ============================ tab1 ============================================== -->
+        <div class="row">
+
+            <div class="col-12 my-1 text-center ">
+                <button type="button" mat-button class="gSaveButton  mx-1" (click)="browsebutton()">
+                    <mat-icon>attachment</mat-icon> &nbsp;
+                    Browse XL
+                </button>
+                <input type="file" [(ngModel)]="inputValue" hidden id="import" accept=".xlsx, .xls"
+                    (change)="onFileChange($event, invalidBrCode)">
+
+
+                <button mat-button class="gSaveButton mx-1 my-0" (click)="previewclick()">
+
+                    <mat-icon>save_alt</mat-icon> &nbsp;
+                    Template
+
+                </button>
+
+            </div>
+        </div>
+
+        <div class="gDialogContainer p-0 mt-2">
+            <div class="gTableSection">
+                <div class="gTableActionheaders justify-content-center">
+                    <span class="gInputLable" *ngIf="InvalidText === ''">💡 Sample XL Data Format (Reference purpose
+                        only)
+                    </span>
+                    <span class="gInputLable" *ngIf="InvalidText !== ''">{{InvalidText}}</span>
+                </div>
+                <div class="gInnerTable" style="max-height: calc(100vh - 157px)">
+                    <table mat-table #table [dataSource]="BulkDataSource" class="table gNormalTable-sm">
+                        <ng-container [matColumnDef]="column" *ngFor="let column of bulkHeader; ">
+                            <th mat-header-cell *matHeaderCellDef class="">
+                                <span *ngIf="invalidAccArr.length > 0"> {{column === 'SNo' ? 'Row.No' :column }}</span>
+                                <span *ngIf="invalidAccArr.length === 0"> {{column === 'SNo' ? 'S.No' :column }}</span>
+
+                            </th>
+                            <td mat-cell *matCellDef="let element ;let i=index " class="">
+                                <span *ngIf="column === 'SNo'">{{i+1}}</span>
+                                <span *ngIf="column !== 'SNo'">{{element[column] ? element[column] : 'null'}}</span>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="bulkHeader " class="">
+                        </tr>
+                        <tr mat-row *matRowDef="let row; columns: bulkHeader; " class=""></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</ng-template>
+
+
+<ng-template #JVRejectReverse let-data>
+    <div class="gDialogTitle">
+        <span></span>
+        <span class="">Opening Balance {{data}}</span>
+        <button type="button" id="submit" class="gDialogCloseButton" (click)="dialog.closeAll()">&#x2715;</button>
+    </div>
+    <div class="gDialogContainer">
+
+        <div class="row">
+
+            <div class="row form-group">
+                <mat-label class="gInputLable col-sm-12 col-md-4 col-lg-4">Reason for {{data}}</mat-label>
+                <div class="col-sm-12 col-md-7 col-lg-7">
+                    <input class="gInnerInput-border" id="reasonInput" #message [formControl]="Reason"
+                        (keydown)="keytab($event, 'rejectbutton')" />
+                </div>
+            </div>
+            <br>
+            <div class="text-center d-flex gap-3 justify-content-center mt-4">
+
+                <button type="button" *ngIf="data === 'Reversel'" mat-button class="gSaveButton" id="rejectbutton"
+                    (click)="rejectSR('Reverse', Reason.value)">
+                    Reverse
+                </button>
+                <button *ngIf="data !== 'Reversel'" type="button" mat-button class="gSaveButton" id="rejectbutton"
+                    (click)="rejectSR('Reject', Reason.value)">
+                    Reject
+                </button>
+                <button type="button" mat-button class="gDeleteButton" (click)="dialog.closeAll()">
+                    Cancel
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+</ng-template>
+
+
+<div class="modal fade" id="reqStatusVendorModal" #content tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+
+        <div class="modal-content  gModalContent">
+
+
+
+            <div class="gDialogTitle">
+
+                <span></span>
+                <span>Detiled View</span>
+
+                <button type="button" id="submit" class="gDialogCloseButton" data-bs-dismiss="modal">
+
+                    <mat-icon>close</mat-icon>
+
+                </button>
+
+            </div>
+
+            <div class="modal-body gDialogContainer p-1">
+
+                <div class="d-flex align-items-center justify-content-center">
+
+                    <label class="gInputLable"> Req Usr : {{JVHistoryArr[0]?.ReqUsr}} | Date & Time :
+                        {{JVHistoryArr[0]?.ReqTime}}</label>
+
+                </div>
+
+                <div class="gTableSection">
+
+                    <div class="gInnerTable">
+
+                        <table class="gNormalTable-sm table">
+
+                            <thead class="tblhead">
+
+                                <tr>
+                                    <th>Sno </th>
+
+                                    <th>Level</th>
+                                    <th>Trn No</th>
+
+                                    <th>Status</th>
+
+                                    <th>Approved Usr</th>
+
+                                    <th>Approved Date & Time</th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                <tr *ngFor="let reqStatus of JVHistoryArr;let i=index">
+
+                                    <td>{{i+1}}</td>
+
+                                    <td>{{reqStatus.LevelType}}</td>
+
+                                    <td>{{reqStatus.TrnNo}}</td>
+
+                                    <td>{{reqStatus.CurStatus}}</td>
+
+                                    <td>{{reqStatus.ApprovalUsr}}</td>
+
+                                    <td>{{reqStatus.ApprovalTime}}</td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                    <div class="text-center" *ngIf="JVHistoryArr?.length === 0">
+
+                        <p class="para p-4">No records found!</p>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- preview file -->
+<ng-template #printJournalVoucher let-data>
+    <div class="mx-2">
+        <div class="row">
+            <div class="col-6">
+            </div>
+            <div class="col-6 d-flex gap-3 justify-content-end">
+                <button type="button" style="float: right" mat-icon-button class="gNormalButton1"
+                    [elementToPrint]="printSRFile" ngPrint>
+                    <mat-icon>print</mat-icon>
+                </button>
+
+                <button mat-icon-button class="gIconButton" (click)="dialog.closeAll()">&#x2715;</button>
+
+
+            </div>
+        </div>
+
+
+        <div #printSRFile class="printScreen">
+            <div class="row mx-2">
+                <div class="col-4">
+                    <img [src]="data.CmpLogo">
+                </div>
+                <div class="col-8">
+                    <h4 style="text-align: left; margin: 0px; font-weight: bold;font-size: large;">
+                        {{ data.Company }}
+                    </h4>
+                    <h6 style="text-align: left; font-size: 12px; ">
+                        {{ data.add1 }}, {{ data.add2 }},{{ data.add3 }}, {{ data.States }}, Pin: {{ data.pincode }} Ph:
+                        {{
+                        data.tin }}
+                        <br> Web: {{ data.RegOffWebsite }}
+                        <br>
+                        <span
+                            style="text-align: left; margin: 0px; font-weight: bold;font-size: larger; text-transform: capitalize;">GSTIN:
+                            {{ data.tin }}</span>
+                    </h6>
+                </div>
+
+            </div>
+
+            <div class="row mx-2 mt-4">
+                <h5 style="text-align: center; font-weight: bolder mb-0 mb-2 gInputLable"><b>Opening Balance</b></h5>
+
+
+                <div class="mb-2 d-flex mt-2 justify-content-between">
+                    <spanc class="gInputLable"> <b> Note Information</b></spanc>
+                    <span class="gInputLable"> <b>{{VoucherName}}</b> </span>
+                </div>
+                <br>
+                <form [formGroup]="NoteInformationForm" class="row   ">
+                    <div class="col-6 col-sm-6 col-md-6 col-xl-4 ">
+                        <div class="row form-group">
+                            <label class="gInputLable col-6 col-sm-12 col-md-4 col-lg-5" for="noteType">Account
+                                Type<strong class="">:</strong>
+                            </label>
+                            <div class="col-6 col-sm-12 col-md-8 col-lg-7">
+                                <div class="gInputLable">
+                                    {{NoteInformationForm.get('accType').value.AccountType}}
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-6 col-md-6 col-xl-4 ">
+                        <div class="row form-group">
+                            <label class="gInputLable col-6 col-sm-12 col-md-4 col-lg-5" for="noteType">Trn Type <strong
+                                    class="">:</strong> </label>
+                            <div class="col-6 col-sm-12 col-md-8 col-lg-7">
+                                <div class="gInputLable">
+                                    {{NoteInformationForm.get('trnType').value.TrnType}}
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-6 col-md-6 col-xl-4">
+                        <div class="row form-group">
+                            <label class="gInputLable col-6 col-sm-12 col-md-4 col-lg-5" for="finyear">FinYear<strong
+                                    class="">:</strong> </label>
+                            <div class="col-6 col-sm-12 col-md-8 col-lg-7 ">
+                                <div class="gInputLable">
+                                    {{NoteInformationForm.get('finyear').value.fyear}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-6 col-md-6 col-xl-4 ">
+                        <div class="row form-group">
+                            <label class="gInputLable col-6 col-sm-12 col-md-4 col-lg-5" for="Accdate">Accounting
+                                Date<strong class="">:</strong> </label>
+                            <div class="col-6 col-sm-12 col-md-8 col-lg-5">
+                                <div class="gInputLable">
+                                    {{NoteInformationForm.get('Accdate').value |date:'dd-MM-yyyy'}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-6 col-xl-4 ">
+                        <div class="row form-group">
+                            <label class="gInputLable col-3 col-sm-12 col-md-4 col-lg-5" for="company">Company<strong
+                                    class="">:</strong> </label>
+                            <div class="col-8 col-sm-12 col-md-8 col-lg-7">
+                                <div class="gInputLable">
+                                    {{NoteInformationForm.get('Company').value.company}}
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-6 col-md-6 col-xl-4 ">
+                        <div class="row form-group">
+                            <label class="gInputLable col-6 col-sm-12 col-md-4 col-lg-5" for="finbook">Finbook <strong
+                                    class="">:</strong> </label>
+                            <div class="col-6 col-sm-12 col-md-8 col-lg-7">
+                                <div class="gInputLable">
+                                    {{NoteInformationForm.get('Finbook').value.FbName}}
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-6 col-md-6 col-xl-4 ">
+                        <div class="row form-group">
+                            <label class="gInputLable col-6 col-sm-12 col-md-4 col-lg-5"
+                                for="warehouse">Warehouse<strong class="">:</strong> </label>
+                            <div class="col-6 col-sm-12 col-md-8 col-lg-7">
+                                <div class="gInputLable">
+                                    {{NoteInformationForm.get('warehouse').value.brname}}
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-6 col-md-6 col-xl-4 ">
+                        <div class="row form-group">
+                            <label class="gInputLable col-6 col-sm-12 col-md-4 col-lg-5" for="AcCode">Account
+                                Code<strong class="">:</strong> </label>
+                            <div class="col-6 col-sm-12 col-md-8 col-lg-7">
+                                <div class="gInputLable">
+                                    {{NoteInformationForm.get('AcCode').value.AcName}}
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-6 col-md-6 col-xl-4 ">
+                        <div class="row form-group">
+                            <label class="gInputLable col-6 col-sm-12 col-md-4 col-lg-5" for="totalAmt">Total
+                                Amount<strong class="">:</strong> </label>
+                            <div class="col-6 col-sm-12 col-md-8 col-lg-7">
+                                <div class="gInputLable">
+                                    {{NoteInformationForm.get('totalAmt').value}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="row ">
+                <div class="mt-3  col-12 col-xl-12">
+                    <section class="gTableSection">
+                        <div class="gTableActionheaders">
+                            <div class="col-12 text-start">
+                                <span class="gInputLable"> <b>Accounting Information</b> </span>
+                            </div>
+                        </div>
+                        <div class="gInnerTable">
+                            <table class="gNormalTable-sm table">
+                                <thead>
+                                    <tr>
+                                        <th *ngFor="let header of HeaderListPrint" style="font-size: 7px;">
+                                            {{header}}
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr *ngFor="let data of AccTableData | filter:viewSearch;let i = index">
+                                        <td style="font-size: 7px;">{{i+1}}</td>
+                                        <td style="font-size: 7px;"> {{data.WHCode.brcode}} - {{data.WHCode.brname}}
+                                        </td>
+                                        <td style="font-size: 7px;">{{data.GLCode.AcCode}} - {{data.GLCode.AcName}}</td>
+                                        <td style="font-size: 7px;">{{data.SupName.supcode}} - {{data.SupName.SupName}}
+                                        </td>
+
+                                        <td style="font-size: 7px;">{{data.InvNo}}</td>
+                                        <td style="font-size: 7px;">{{data.InvAmt | currency:"INR":"symbol"}}</td>
+                                        <td style="font-size: 7px;">{{data.InvDate | date:'dd-MMM-yyyy'}}</td>
+                                        <td style="font-size: 7px;">{{data.OutstandingAmt | currency:"INR":"symbol"}}
+                                        </td>
+                                        <td style="font-size: 7px;">{{data.PayTerm}}</td>
+                                        <td style="font-size: 7px;">{{data.Narration}}</td>
+
+                                    </tr>
+
+
+                                    <tr *ngIf="AccTableData.length === 0">
+                                        <td [colSpan]="HeaderListPrint.length" class="text-center">No record found.</td>
+                                    </tr>
+                                    <tr class="gtoggleFooter">
+                                        <td></td>
+                                        <td></td>
+
+                                        <td></td>
+                                        <td *ngIf="AccTableData.length===0"></td>
+                                        <td *ngIf="AccTableData .length>0" style="font-size: 7px;">Grand Total</td>
+                                        <td></td>
+                                        <td *ngIf="AccTableData.length===0"></td>
+                                        <td *ngIf="AccTableData.length>0" style="font-size: 7px;">{{totalInvAmt() |
+                                            currency:"INR":"symbol"}}</td>
+                                        <td></td>
+                                        <td *ngIf="AccTableData.length===0"></td>
+                                        <td *ngIf="AccTableData.length>0" style="font-size: 7px;">{{totalOutStAmt() |
+                                            currency:"INR":"symbol"}}</td>
+                                        <td></td>
+                                        <td></td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </section>
+                </div>
+
+            </div>
+
+            <div class="row mb -2" style="margin-top: 30px">
+                <div class="col-6">
+                    <div class="row">
+                        <div class="col-12 gInputLable">Data Entered By</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 gInputLable">{{ data.User }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 gInputLable">
+                            [ {{ date | date: "yyyy-MM-dd hh:mm:ss a":"+0530" }} ]
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 gInputLable">Verified By</div>
+            </div>
+        </div>
+    </div>
+</ng-template>

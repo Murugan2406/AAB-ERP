@@ -1,0 +1,109 @@
+<section class="gWrapper">
+    <app-header Titleheader=" Item Swap"></app-header>
+
+    <div class="sectionContainerFinbook1 mt-1 banner row">
+        <form class=" col-12 col-md-6  col-xl-4 my-2 ">
+
+
+            <div class="row  form-group m-0">
+                <section class="gTableSection ltableSection">
+                    <div class="gTableActionheaders lTableActionheaders">
+                        <div class="col-12 col-md-6  d-flex gap-2 px-xl-3 gInputLable">
+                            Mapped Items
+                        </div>
+                        <div class="col-12 col-md-6 d-flex justify-content-end">
+                            <form role="search" class="search-form ml-3">
+                                <input type="search" name="Search" [ngClass]="{'gSearchText': searchTempOne === '', 'gSearchText1':searchTempOne!=='' }" autocomplete="off" (ngModelChange)="applyFilterOne($event)" [(ngModel)]="searchTempOne">
+                            </form>
+                            <img Cores px-0 class="png-icon gXlButton curser " src=".\assets\gImg\excel1.png" type="submit" matTooltip="Excel Export" (click)="downloadXlOne()">
+                        </div>
+                    </div>
+
+                    <app-table-list [maxHeight]="110" [TableName]="'gNormalTable-sm'" [displayedColumns]="displayedColumnsOne" [columnHeaders]="columnHeadersOne" [loading]="loadingOne" [gDataSource]="datasourceOne" (viewClicked)="viewRow($event)">
+                    </app-table-list>
+                </section>
+
+            </div>
+
+
+
+        </form>
+
+        <div class="my-2 col-12 col-md-6 col-12 col-xl-8 mobileView">
+
+            <section class="gTableSection ltableSection">
+                <div class="gTableActionheaders lTableActionheaders">
+                    <div class=" col-12 col-md-6 d-flex gap-2 px-xl-3">
+                        <label class="gInputLable" style="min-width: fit-content;">Item Name</label>
+                        <div class=" gOuterInput w-100">
+                            <input class="gInnerInput" #autoCompleteInput [matAutocomplete]="autocmpsingle" [formControl]="ItemName" matInput>
+                            <mat-autocomplete autoActiveFirstOption class=" gAutoCompleteContainer" id="autocmpsingle" #autocmpsingle="matAutocomplete" [displayWith]="displayItem">
+                                <mat-option class=" gSelectOption" *ngFor="let option of ItemList" [value]="option" (onSelectionChange)="ItemSelected($event)">
+                                    {{option.iname}}
+                                </mat-option>
+                            </mat-autocomplete>
+                            <button mat-button class="gInputButton" (click)="ItemRefresh()">
+
+                                <mat-icon>sync</mat-icon>
+                            </button>
+
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 d-flex justify-content-end">
+                        <form role="search" class="search-form ml-3">
+                            <input type="search" name="Search" [ngClass]="{'gSearchText': searchTemp === '', 'gSearchText1':searchTemp!=='' }" #input autocomplete="off" (ngModelChange)="applyFilter($event)" [(ngModel)]="searchTemp">
+                        </form>
+                        <img Cores px-0 class="png-icon gXlButton curser " src=".\assets\gImg\excel1.png" type="submit" matTooltip="Excel Export" (click)="downloadXl()">
+                        <button mat-button class="gNormalButton" (click)="CreateNewItem(createItem)">Create</button>
+                    </div>
+                </div>
+
+                <app-table-list [maxHeight]="110" [TableName]="'gNormalTable-sm'" [displayedColumns]="displayedColumns" [columnHeaders]="columnHeaders" [loading]="loading" [gDataSource]="datasource" (deleteClicked)="deleteRow($event)">
+                </app-table-list>
+
+            </section>
+
+        </div>
+    </div>
+    <ng-template #createItem>
+
+        <div class="gDialogTitle">
+            <span></span>
+            <span class="">Add Item</span>
+            <button type="button" id="close" class="gDialogCloseButton" (click)="dialog.closeAll()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+
+        <div class="gDialogContainer">
+            <form [formGroup]="CreateItemForm" class="row ">
+                <div class="col-12 mt-3">
+                    <label for="">Main Item name</label>
+                    <input type="text" matInput disabled readonly formControlName="MainItem" class="gInnerInput-border">
+                </div>
+                <div class="col-12 mt-3">
+                    <label for="">Item Code (Numbers Only)</label>
+                    <input type="text" matInput formControlName="ItemCode" class="gInnerInput-border" (keypress)="Decimal($event)" autocomplete="off" (keydown)="itemcodeselected($event)">
+                </div>
+                <div class="col-12 mb-2 mt-3">
+                    <label for="">Item Name</label>
+                    <input type="text" formControlName="ItemName" class="gInnerInput-border" #autoCompleteInput [matAutocomplete]="autoIname">
+                    <mat-autocomplete autoActiveFirstOption class=" gAutoCompleteContainer" id="autoIname" #autoIname="matAutocomplete">
+                        <mat-option class=" gSelectOption" *ngFor="let option of SubItemList" [value]="option.iname" (onSelectionChange)="SubItemSelected($event, option)">
+                            {{option.iname}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </div>
+
+
+                <div class="col-12 my-3 d-flex text-center justify-content-center">
+                    <button type="button" id="submit" mat-button class="gSaveButton" (click)="submitDialog()">Save</button>
+
+
+                </div>
+
+            </form>
+        </div>
+    </ng-template>
+
+</section>
